@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Default Risk Decision Support — Case Study | Loh Kah Meng</title>
+<meta name="description" content="A 12-model benchmark on 29.9 million LendingClub records, where an obvious leak was removed and a suspiciously perfect score that remained was investigated and explained rather than just reported.">
+<link rel="canonical" href="https://lohkahmeng-portfolio.netlify.app/project-3-loan-default-risk.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://lohkahmeng-portfolio.netlify.app/project-3-loan-default-risk.html">
+<meta property="og:title" content="Loan Default Risk Decision Support — Case Study | Loh Kah Meng">
+<meta property="og:description" content="A 12-model benchmark on 29.9 million LendingClub records, where an obvious leak was removed and a suspiciously perfect score that remained was investigated and explained rather than just reported.">
+<meta property="og:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Loan Default Risk Decision Support — Case Study | Loh Kah Meng">
+<meta name="twitter:description" content="A 12-model benchmark on 29.9 million LendingClub records, where a suspiciously perfect score was investigated and explained rather than just reported.">
+<meta name="twitter:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "AI-Powered Loan Default Risk Decision Support System",
+  "description": "A 12-model benchmark on 29.9 million LendingClub records, where an obvious leak was removed and a remaining perfect score was investigated and explained rather than just reported.",
+  "author": { "@type": "Person", "name": "Loh Kah Meng", "url": "https://lohkahmeng-portfolio.netlify.app/" },
+  "url": "https://lohkahmeng-portfolio.netlify.app/project-3-loan-default-risk.html"
+}
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / Loan Default Risk</div>
+    <div class="tag tag-yellow">Finance &middot; Full Case Study</div>
+    <h1>AI-Powered Loan Default Risk Decision Support System</h1>
+    <p class="lede">Twelve models were benchmarked on 29.9 million LendingClub records to answer a narrower
+      question than "will this loan default": will this application even be graded at all — the first real
+      checkpoint before any question of default risk. The champion model scored a suspicious-looking 1.000
+      across every metric. This case study doesn't hide that number or wave it away — it explains exactly
+      where it comes from.</p>
+
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo — modeling, Power BI, desktop app</div></div>
+      <div class="meta-item"><div class="k">Dataset</div><div class="v">LendingClub accepted + rejected loans, 29.9M records</div></div>
+      <div class="meta-item"><div class="k">Stack</div><div class="v">Python, scikit-learn, LightGBM, CatBoost, XGBoost, Tkinter, Power BI</div></div>
+      <div class="meta-item"><div class="k">Production model</div><div class="v">Decision Tree — chosen for speed and interpretability</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="prose reveal">
+      <h3>A binary question before a risk score</h3>
+      <p>The dataset is a combined LendingClub accepted-and-rejected loan file, 29,907,694 records — LendingClub's
+        public "accepted" applications (the ones that went through full underwriting and received a credit
+        grade) merged with its public "rejected" applications (auto-declined, never graded). Rather than
+        jumping straight to predicting default risk, the project first asks a simpler, earlier question:
+        will an application receive a grade at all, formulated as binary classification — <strong>No
+        Grade</strong> versus Graded. Twelve classification models were benchmarked on it: Decision Tree,
+        Random Forest, Extra Trees, Logistic Regression, Naive Bayes, KNN, SGD, Ridge Classifier, LightGBM,
+        AdaBoost, CatBoost, and XGBoost.</p>
+
+      <p>An early pass benchmarked these models with the human-assigned credit <strong>Grade</strong> included
+        as a feature — and that version leaked in an obvious way: Grade is only ever assigned to applications
+        that get graded, so a model that can see Grade is answering a circular question. That leak was caught
+        and removed. The production feature set — <strong>NO_GRADE</strong> — was deliberately restricted to
+        three financial fields only: Loan Amount, Annual Income, and DTI (debt-to-income ratio), forcing every
+        model to find real signal in ordinary underwriting parameters instead of the label in disguise.</p>
+
+      <h3>Twelve models, one clear winner on paper</h3>
+      <p>On the NO_GRADE feature set, Decision Tree came out on top with a perfect 1.000000 across accuracy,
+        precision, recall, F1, and ROC-AUC — training in 10.857 seconds and predicting in 0.157 seconds.
+        Random Forest and LightGBM scored nearly as well but were far more expensive: Random Forest took
+        432.9 seconds to train, and AdaBoost (LightGBM's boosting sibling in this benchmark) took 2,128.8
+        seconds. KNN also scored near-perfect but was disqualified from production consideration outright —
+        its prediction time on the full dataset was 2,631 seconds, unusable for anything resembling a live
+        decision.</p>
+
+      <div class="callout">
+        <strong>The metric that would have misled a less careful comparison:</strong> Ridge Classifier posted
+        a high ROC-AUC of 0.999979 — on paper, close to the champion. But its recall was only 0.116939 and its
+        F1 just 0.209392, meaning it missed the overwhelming majority of the class it needed to catch once a
+        real decision threshold was applied. Ridge was designated the "worst" model in the comparison despite
+        the impressive-looking AUC — the same lesson Project 2 and Project 4 each surface in their own way: a
+        single headline metric can look strong while the model underneath is close to useless for the actual
+        decision.
+      </div>
+
+      <table class="data-table">
+        <thead><tr><th>Model</th><th>Accuracy / ROC-AUC</th><th>Train time</th><th>Outcome</th></tr></thead>
+        <tbody>
+          <tr class="best"><td>Decision Tree</td><td class="num">1.000000</td><td class="num">10.857s</td><td>Selected &mdash; perfect score, fastest by far</td></tr>
+          <tr><td>Random Forest</td><td class="num">&asymp;1.000</td><td class="num">432.9s</td><td>Near-perfect, too slow to justify over DT</td></tr>
+          <tr><td>AdaBoost</td><td class="num">&asymp;1.000</td><td class="num">2,128.8s</td><td>Near-perfect, far too slow</td></tr>
+          <tr><td>KNN</td><td class="num">&asymp;1.000</td><td class="num">&mdash;</td><td>Disqualified &mdash; 2,631s prediction time on full data</td></tr>
+          <tr><td>Ridge Classifier</td><td class="num">0.999979 AUC</td><td class="num">&mdash;</td><td>Worst &mdash; recall 0.117, F1 0.209 despite the AUC</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <strong>A perfect score, explained rather than defended.</strong> A 1.000 across every metric is
+        exactly the kind of number this site's whole philosophy says to interrogate, not celebrate — so it
+        was. Feature-importance output for the champion model put <code>annual_inc</code> at 0.9999999697,
+        with <code>loan_amnt</code> and <code>dti</code> essentially at zero: the tree is, in practice, a
+        single split on "is annual income zero." Checking why: in the raw data, 100% of the 27,648,741
+        No&#8209;Grade rows have <code>annual_inc == 0.00</code>, versus only 8 of the 2,258,953 Graded rows.
+        That single fact separates the two classes almost perfectly on its own.
+        This isn't circular in the way the Grade leak was, because it isn't a coincidence of how the dataset
+        was assembled &mdash; it's a real fact about LendingClub's own process. An application only has its
+        income verified once it proceeds to full underwriting, which is the same event as being graded.
+        Whether income was ever collected is information a live system would already have before deciding
+        whether to grade an application, so the model is using a legitimate, available signal &mdash; it's
+        just an unusually decisive one, and the near-perfect score reflects that rather than a modeling error.
+      </div>
+
+      <h3>Validated at production scale, not just on a benchmark</h3>
+      <p>Two separate checks confirmed the result held up outside the benchmark split. First, the champion and
+        the worst model were re-run on the full 29.9-million-row dataset, and the same ranking held at
+        production scale, not just on a held-out sample. Second, a more pointed test: the original,
+        Grade-containing dataset was fed into the Grade-blind NO_GRADE champion model, and it still reproduced
+        historical approve/reject decisions with near-perfect accuracy — proof the model was correctly
+        ignoring a column it was never trained on, not quietly relying on it through some backdoor in the
+        data pipeline.</p>
+
+      <h3>From benchmark to a working demo</h3>
+      <p>The champion Decision Tree and the worst-performing Ridge Classifier were built into a side-by-side
+        desktop demo with identical inputs, to make the practical stakes of model choice concrete rather than
+        abstract. On one real test scenario &mdash; a $100,000 loan request against $100,000 annual income and
+        a DTI of 1 &mdash; the two models disagreed outright: the champion approved it, Ridge rejected it. The
+        same applicant, two different outcomes, depending entirely on which model was making the call. The
+        report frames a human-AI workflow on top of this: routine applications get an instant AI-driven
+        decision, while complex or policy-sensitive cases escalate to a human loan officer rather than being
+        auto-decided.</p>
+
+      <div class="callout">
+        <strong>What this doesn't claim:</strong> a perfect score on "will this application be graded" is not
+        the same claim as "will this loan default" &mdash; the No&#8209;Grade question is an earlier, coarser
+        checkpoint, and this project is explicit about that distinction rather than blurring the two. This is
+        also a candidate for the browser-based rebuild described elsewhere on this site, once the No&#8209;Grade
+        and default-risk questions can be shown side by side as clearly in a live demo as they are in this
+        write-up.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

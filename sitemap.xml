@@ -17,6 +17,10 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://lohkahmeng-portfolio.netlify.app/project-3-loan-default-risk.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://lohkahmeng-portfolio.netlify.app/project-4-telco-churn.html</loc>
     <priority>0.8</priority>
   </url>
