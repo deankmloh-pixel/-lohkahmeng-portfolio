@@ -22,6 +22,7 @@
   --red: #e34948;
   --magenta: #e87ba4;
   --orange: #eb6834;
+  --gold: #ab8a3f;
 
   --good: #0ca30c;
 
@@ -259,6 +260,39 @@ h2 {
 
 .pillar h3 { font-size: 18px; margin: 0 0 10px; letter-spacing: -0.01em; }
 .pillar p { font-size: 15px; color: var(--text-secondary); margin: 0; }
+
+/* ---------------------------------------------------------------------- */
+/* Pento-Helix framework                                                   */
+/* ---------------------------------------------------------------------- */
+
+.helix-block { margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--hairline); }
+.helix-head h3 { font-size: 20px; margin: 0 0 10px; letter-spacing: -0.01em; }
+.helix-head p { font-size: 15.5px; color: var(--text-secondary); max-width: 68ch; margin: 0 0 24px; }
+
+.helix-pillars { display: flex; flex-direction: column; gap: 10px; }
+
+.helix-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.helix-num { font-size: 13px; font-weight: 700; color: var(--blue); flex-shrink: 0; min-width: 20px; }
+
+.helix-row.constant {
+  background: color-mix(in srgb, var(--gold) 10%, var(--surface-2));
+  border-color: color-mix(in srgb, var(--gold) 35%, var(--hairline));
+  color: var(--text-primary);
+}
+.helix-row.constant .helix-num { color: var(--gold); }
+
+.helix-note { font-size: 13.5px; color: var(--text-muted); margin-top: 16px; max-width: 68ch; }
 
 /* ---------------------------------------------------------------------- */
 /* Project cards                                                           */
