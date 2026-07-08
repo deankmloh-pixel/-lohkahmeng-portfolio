@@ -63,6 +63,17 @@
       same story: adherence isn't random, and one of the five models tested didn't actually work, which
       turned out to be worth reporting rather than hiding.</p>
 
+    <div class="button-row">
+      <a href="https://adherence-target-app-usrshqskth5hxgs69djjpu.streamlit.app" target="_blank" rel="noopener" class="btn btn-primary">Try the live app →</a>
+    </div>
+
+    <p class="lede">Why this matters beyond the model: non-adherence isn't just a per-patient outcome.
+      Aggregated across a scheme or a population, it's a leading indicator of downstream cost and
+      complications that insurers, hospitals, and health ministries can act on before a patient shows up in
+      the acute-care system. That's especially true in aging-population health systems, where
+      chronic-disease management — diabetes, hypertension — is exactly the kind of long-tail cost that
+      early, targeted intervention can meaningfully reduce.</p>
+
     <div class="meta-row">
       <div class="meta-item"><div class="k">Role</div><div class="v">Solo — data modeling, Power BI, ML</div></div>
       <div class="meta-item"><div class="k">Dataset</div><div class="v">Mendeley Data pharmacy claims (CC0), 24,084 patients</div></div>
@@ -139,10 +150,20 @@
         reported as one, not dressed up as a finished production system.
       </div>
 
-      <p>No trained model or app code survives from this project's original working session — only the Power
-        BI files and the feature-importance outputs. A rebuilt version, if it happens, would mean retraining
-        the Gradient Boosting model from the same public dataset rather than reviving anything that already
-        exists.</p>
+      <div class="callout">
+        <strong>Update (July 2026):</strong> a browser-based version of this tool is now live —
+        <a href="https://adherence-target-app-usrshqskth5hxgs69djjpu.streamlit.app" target="_blank" rel="noopener">try it here</a>.
+        Since no trained model or app code survived from the original working session, all five models were
+        retrained from scratch on the recovered dataset rather than reviving anything that already existed —
+        the retrained Random Forest's feature importances matched the original project's output to several
+        decimal places, and Logistic Regression reproduced the same collapse-to-majority-class failure
+        described above, both signals that the rebuild is faithful to the original analysis. Only Gradient
+        Boosting, Random Forest, and Extra Trees are offered for live prediction; Decision Tree and Logistic
+        Regression are shown on the app's own comparison tab for transparency but excluded from live use —
+        Logistic Regression for the reason above, Decision Tree because a single tree's path-based confidence
+        can look misleadingly certain on an individual patient. This remains a testing wrapper, not a
+        validated clinical or underwriting tool.
+      </div>
     </div>
   </div>
 </section>
