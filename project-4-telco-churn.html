@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telco Churn Advisory System — Case Study | Loh Kah Meng</title>
+<meta name="description" content="A 9-model churn benchmark where the highest-accuracy model wasn't the one picked for production — the winner was chosen by matching a business threshold, not a leaderboard number.">
+<link rel="canonical" href="https://lohkahmeng-portfolio.netlify.app/project-4-telco-churn.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://lohkahmeng-portfolio.netlify.app/project-4-telco-churn.html">
+<meta property="og:title" content="Telco Churn Advisory System — Case Study | Loh Kah Meng">
+<meta property="og:description" content="A 9-model churn benchmark where the highest-accuracy model wasn't the one picked for production — the winner was chosen by matching a business threshold, not a leaderboard number.">
+<meta property="og:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Telco Churn Advisory System — Case Study | Loh Kah Meng">
+<meta name="twitter:description" content="A 9-model churn benchmark where the winner was chosen by matching a business threshold, not a leaderboard number.">
+<meta name="twitter:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Telco Churn Advisory System",
+  "description": "A 9-model churn benchmark where the production model was chosen by matching a business threshold, not the highest accuracy.",
+  "author": { "@type": "Person", "name": "Loh Kah Meng", "url": "https://lohkahmeng-portfolio.netlify.app/" },
+  "url": "https://lohkahmeng-portfolio.netlify.app/project-4-telco-churn.html"
+}
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / Telco Churn</div>
+    <div class="tag tag-magenta">Marketing &middot; Full Case Study</div>
+    <h1>AI-Powered Marketing Decision Support System for Customer Retention</h1>
+    <p class="lede">Nine models were benchmarked to predict customer churn on IBM's Telco dataset. The model
+      with the highest accuracy wasn't the one that went into production — because accuracy wasn't the
+      question that mattered. The question was which model's behavior matched a real business threshold, and
+      that's a different exercise entirely.</p>
+
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo — modeling, Power BI, desktop app</div></div>
+      <div class="meta-item"><div class="k">Dataset</div><div class="v">IBM/Kaggle Telco Churn, 7,043 customers</div></div>
+      <div class="meta-item"><div class="k">Stack</div><div class="v">Python, scikit-learn, XGBoost, CatBoost, Tkinter, Power BI</div></div>
+      <div class="meta-item"><div class="k">Production model</div><div class="v">SVM — chosen over higher-accuracy alternatives</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="prose reveal">
+      <h3>Nine models, and the obvious winner wasn't chosen</h3>
+      <p>The dataset is the standard IBM/Kaggle Telco Customer Churn set — 7,043 customers, 29 fields, a
+        26.54% churn rate, mean tenure 32.37 months, mean monthly charge $64.76. Nine classification
+        algorithms were benchmarked for the core churn prediction task (Decision Tree, Random Forest, Logistic
+        Regression, LinearSVC, MLP, NuSVC, SVM, XGBoost, CatBoost), alongside two supporting models: an SVR
+        regressor to predict tenure, and a OneClassSVM for anomaly screening.</p>
+
+      <p>At the default 0.5 decision threshold, CatBoost posted the best raw accuracy (81.05%), with XGBoost
+        and CatBoost tied for the best ROC-AUC (&asymp;0.854). NuSVC badly underperformed — 40.5% accuracy,
+        ROC-AUC of just 0.169 — and was ruled out immediately. On paper, CatBoost or XGBoost looked like the
+        obvious choice.</p>
+
+      <div class="callout">
+        <strong>Neither was picked.</strong> Instead of taking the leaderboard at face value, the team first
+        went back to the Power BI dashboard and found a real crossover point in the data: satisfaction and
+        churn rate cross at roughly 40 months of tenure — a business-meaningful threshold, not a modeling
+        artifact. Each candidate model has its own internal "cross-point" — the tenure value at which its
+        predicted churn probability crosses the decision boundary. SVM's cross-point landed at 41 months, the
+        closest match to the business threshold of any model tested. SVM was picked for that reason, not
+        because it had the best accuracy.
+      </div>
+
+      <table class="data-table">
+        <thead><tr><th>Model</th><th>Accuracy</th><th>ROC-AUC</th><th>Cross-point (months)</th><th>Selected?</th></tr></thead>
+        <tbody>
+          <tr><td>CatBoost</td><td class="num">81.05%</td><td class="num">&asymp;0.854</td><td class="num">&mdash;</td><td>No &mdash; 12.5h train time</td></tr>
+          <tr><td>XGBoost</td><td class="num">&asymp;80%</td><td class="num">&asymp;0.854</td><td class="num">&mdash;</td><td>No &mdash; 23.6h train time</td></tr>
+          <tr class="best"><td>SVM</td><td class="num">80.6%</td><td class="num">0.847</td><td class="num">41</td><td>Yes &mdash; closest to the 40-month business threshold</td></tr>
+          <tr><td>NuSVC</td><td class="num">40.5%</td><td class="num">0.169</td><td class="num">&mdash;</td><td>No &mdash; ruled out immediately</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size: 13.5px; color: var(--text-muted); margin-top: -8px;">SVM's full metrics: 80.6%
+        accuracy, 66.3% precision, 54.3% recall, 59.7% F1, 84.7% ROC-AUC — and the best best-threshold F1
+        (0.646) of any model tested, not just the closest cross-point.</p>
+
+      <p>There was a practical factor behind the decision too, not just the philosophical one: XGBoost took
+        roughly 23.6 hours to train on this dataset and CatBoost roughly 12.5 hours, against a fraction of
+        that for SVM and LinearSVC. A model that takes a day to retrain is a real operational cost, and it
+        stacked on top of, not instead of, the cross-point reasoning above.</p>
+
+      <h3>A companion regression model</h3>
+      <p>SVR was selected as the tenure-prediction model that pairs with the SVM classifier, and it fit
+        extremely well: R&sup2; = 0.9998, MAE of 0.19 months, predicting a best tenure of 55.00079 against an
+        actual value of 55. Together, the two models let the system flag not just <em>whether</em> a customer
+        is likely to churn, but roughly <em>when</em> in their tenure that risk peaks.</p>
+
+      <h3>From models to a working tool</h3>
+      <p>Both models were built into a working desktop application — the <strong>Telco AI Target Prediction
+        Application</strong> (part of the AI-CRDSS decision-support suite) — that loads a customer CSV,
+        classifies churn risk, predicts tenure, filters and ranks customers by risk, and exports results to
+        CSV, Excel, PDF, or Power BI. It's already been run against real data: a production batch on 6 July
+        2026 flagged 2,720 of 7,043 customers (38.6%) against the 40/55-month thresholds.</p>
+
+      <div class="callout">
+        <strong>What it doesn't do yet:</strong> the current tool is CSV-only input, desktop-only with no
+        cloud access, has no multi-user authentication, no automated retraining, and limited per-prediction
+        explainability. A four-stage roadmap is already scoped: SHAP-based explainability, an audit/database
+        layer, enterprise Power BI analytics integration, and a full cloud/API/Docker deployment. This project
+        is a candidate for the browser-based rebuild described elsewhere on this site, once the explainability
+        layer is in place — a churn score without a reason attached to it is exactly the kind of black-box
+        output this site's whole philosophy pushes against.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

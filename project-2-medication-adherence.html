@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medication Adherence &amp; Claims Analysis — Case Study | Loh Kah Meng</title>
+<meta name="description" content="A star-schema claims data model and a 5-model adherence benchmark on 24,084 diabetes and hypertension patients — including an honest look at a model that quietly failed.">
+<link rel="canonical" href="https://lohkahmeng-portfolio.netlify.app/project-2-medication-adherence.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://lohkahmeng-portfolio.netlify.app/project-2-medication-adherence.html">
+<meta property="og:title" content="Medication Adherence & Claims Analysis — Case Study | Loh Kah Meng">
+<meta property="og:description" content="A star-schema claims data model and a 5-model adherence benchmark on 24,084 diabetes and hypertension patients — including an honest look at a model that quietly failed.">
+<meta property="og:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Medication Adherence & Claims Analysis — Case Study | Loh Kah Meng">
+<meta name="twitter:description" content="A star-schema claims data model and a 5-model adherence benchmark on 24,084 diabetes and hypertension patients.">
+<meta name="twitter:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Medication Adherence & Healthcare Claims Analysis",
+  "description": "A star-schema claims data model and a 5-model adherence benchmark on 24,084 diabetes and hypertension patients.",
+  "author": { "@type": "Person", "name": "Loh Kah Meng", "url": "https://lohkahmeng-portfolio.netlify.app/" },
+  "url": "https://lohkahmeng-portfolio.netlify.app/project-2-medication-adherence.html"
+}
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / Medication Adherence</div>
+    <div class="tag tag-aqua">Healthcare &middot; Full Case Study</div>
+    <h1>Medication Adherence &amp; Healthcare Claims Analysis</h1>
+    <p class="lede">A look at which diabetes and hypertension patients skip their medications, and what that
+      costs — built on public, de-identified pharmacy claims data. The dashboard and models both point at the
+      same story: adherence isn't random, and one of the five models tested didn't actually work, which
+      turned out to be worth reporting rather than hiding.</p>
+
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo — data modeling, Power BI, ML</div></div>
+      <div class="meta-item"><div class="k">Dataset</div><div class="v">Mendeley Data pharmacy claims (CC0), 24,084 patients</div></div>
+      <div class="meta-item"><div class="k">Stack</div><div class="v">Python, pandas, scikit-learn, Power BI / DAX</div></div>
+      <div class="meta-item"><div class="k">Best model</div><div class="v">Gradient Boosting — 81.98% accuracy</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="prose reveal">
+      <h3>From raw claims to a usable model</h3>
+      <p>The source is a public, de-identified dataset of pharmacy claims (Kanyongo, Moyo, Ezugwu &amp; Fonou
+        Dombeu, Mendeley Data, DOI 10.17632/zkp7sbbx64.2, CC0 license) — a hypertension table of roughly
+        218,816 records and a diabetes table of roughly 52,616 records, each with 41 columns. Raw claims data
+        is not analysis-ready: it was merged with coverage and complication reference tables (neurology,
+        ophthalmology, physician visits, dialysis) down to a final analytical set of 24,084 patients and 11
+        predictor features, organized into a star schema — a fact table of patient claims joined to dimension
+        tables for patients, coverage, and complications — the same kind of structure a BI tool can query
+        efficiently and a model can consume directly.</p>
+
+      <p>That schema underpins a four-page Power BI dashboard that moves through the problem in order: risk
+        identification, segmentation, intervention prioritization, then predictive analytics — rather than
+        putting every chart on one page and letting the viewer figure out the story themselves.</p>
+
+      <h3>What the data actually shows</h3>
+      <p>59.85% of patients (14,415 of 24,084) were non-adherent to their prescribed medication. Hypertension
+        patients made up 80.05% of the population, and the 50&ndash;59 age band was the largest single cohort
+        at 26.65%. The number worth sitting with: non-adherent patients carried roughly 2.5&times; the average
+        annual claims cost of adherent ones — non-adherence isn't just a clinical problem, it shows up
+        directly in cost.</p>
+
+      <h3>Five models, one honest failure</h3>
+      <p>Five classifiers were benchmarked on an 80/20 split — a 4,817-patient held-out test set. Four of them
+        landed in a reasonable 78.66%&ndash;81.98% accuracy range. The fifth didn't work at all.</p>
+
+      <div class="callout">
+        <strong>Logistic Regression collapsed.</strong> It predicted the majority class for every single
+        patient — 0% precision, 0% recall, 0% F1 for the adherent class — while still reporting 59.85%
+        "accuracy," because 59.85% of patients actually were non-adherent. A model that never predicts the
+        minority class can still look reasonable on accuracy alone, which is exactly why accuracy by itself
+        is a misleading headline number, and exactly why this gets reported here instead of quietly dropped
+        from the comparison.
+      </div>
+
+      <table class="data-table">
+        <thead><tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th></tr></thead>
+        <tbody>
+          <tr><td>Logistic Regression</td><td class="num">59.85%*</td><td class="num">0.000</td><td class="num">0.000</td><td class="num">0.000</td></tr>
+          <tr><td>Decision Tree</td><td class="num">78.66%</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr>
+          <tr><td>Extra Trees</td><td class="num">&asymp;80%</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr>
+          <tr><td>Random Forest</td><td class="num">&asymp;81%</td><td class="num">&mdash;</td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr>
+          <tr class="best"><td>Gradient Boosting</td><td class="num">81.98%</td><td class="num">0.738</td><td class="num">0.855</td><td class="num">0.792</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size: 13.5px; color: var(--text-muted); margin-top: -8px;">*Logistic Regression's accuracy
+        is the majority-class baseline, not a meaningful score — see above. Precision/recall/F1 weren't
+        separately reported for every mid-table model in the original analysis; the comparison focuses on
+        accuracy for those and full metrics for the champion.</p>
+
+      <h3>What actually drives non-adherence</h3>
+      <p>Feature importance from the Random Forest model was dominated by two variables: total claim units
+        (42.97%) and annual claim amount (33.71%) — together over 76% of the model's predictive power. Age
+        was a distant third at 14.76%, and every demographic or coverage variable individually contributed
+        under 2%. In plain terms: claims volume and cost history predict future adherence far better than who
+        the patient is.</p>
+
+      <div class="callout">
+        <strong>What this doesn't claim:</strong> the analysis is a single medical scheme in a single
+        geography, a one-year snapshot rather than longitudinal data, and feature importance describes
+        association, not causation. Currency units in the source data aren't specified. No hyperparameter
+        tuning or class-rebalancing was applied to any of the five models — this is a first-pass benchmark,
+        reported as one, not dressed up as a finished production system.
+      </div>
+
+      <p>No trained model or app code survives from this project's original working session — only the Power
+        BI files and the feature-importance outputs. A rebuilt version, if it happens, would mean retraining
+        the Gradient Boosting model from the same public dataset rather than reviving anything that already
+        exists.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

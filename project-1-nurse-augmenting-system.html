@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nurse Augmenting System — Case Study | Loh Kah Meng</title>
+<meta name="description" content="A heart-failure readmission clinical decision-support system built on a hand-engineered clinical score and eight independently trained models that converged on the same five predictors — read as corroboration, not coincidence.">
+<link rel="canonical" href="https://lohkahmeng-portfolio.netlify.app/project-1-nurse-augmenting-system.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://lohkahmeng-portfolio.netlify.app/project-1-nurse-augmenting-system.html">
+<meta property="og:title" content="Nurse Augmenting System — Case Study | Loh Kah Meng">
+<meta property="og:description" content="A heart-failure readmission clinical decision-support system built on a hand-engineered clinical score and eight independently trained models that converged on the same five predictors.">
+<meta property="og:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Nurse Augmenting System — Case Study | Loh Kah Meng">
+<meta name="twitter:description" content="A heart-failure readmission clinical decision-support system built on a hand-engineered clinical score and eight independently trained models that converged on the same five predictors.">
+<meta name="twitter:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Nurse Augmenting System — Heart Failure Readmission Clinical Decision Support",
+  "description": "A hand-engineered clinical score and eight independently trained models that converged on the same five predictors of 30-day heart-failure readmission.",
+  "author": { "@type": "Person", "name": "Loh Kah Meng", "url": "https://lohkahmeng-portfolio.netlify.app/" },
+  "url": "https://lohkahmeng-portfolio.netlify.app/project-1-nurse-augmenting-system.html"
+}
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / Nurse Augmenting System</div>
+    <div class="tag tag-aqua">Healthcare &middot; Full Case Study</div>
+    <h1>Nurse Augmenting System — Heart Failure Readmission Prediction</h1>
+    <p class="lede">A clinical decision-support system built under the AEGIS research programme (Artificial
+      Intelligence Guided Engineering System), whose founding rule is the same one this whole site is built
+      on: AI augments a clinician's judgment, it does not replace it. The question here was narrow and real —
+      which heart-failure patients are likely to be readmitted within 30 days — and the interesting part
+      isn't any one model's accuracy. It's that eight independently built models, using completely different
+      mathematics, all pointed at the same answer.</p>
+
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo — clinical feature design, ML, prototype app</div></div>
+      <div class="meta-item"><div class="k">Dataset</div><div class="v">Heart-failure clinical records, MIT-affiliated hospital</div></div>
+      <div class="meta-item"><div class="k">Stack</div><div class="v">Python, pandas, scikit-learn, LightGBM, Tkinter</div></div>
+      <div class="meta-item"><div class="k">Headline finding</div><div class="v">8/8 models converged on the same top 5 predictors</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="prose reveal">
+      <h3>A score before a model</h3>
+      <p>Most clinical ML projects start by throwing raw measurements at a model and seeing what sticks. This
+        one started differently: before touching machine learning at all, the first step was clinical
+        exploratory data analysis, followed by hand-engineering a composite feature called the <strong>Heart
+        Clinical Abnormality Score (HCAS)</strong> — a single number that summarizes cardiovascular severity
+        from routine measurements a nurse or clinician would already have on hand (blood pressure, heart
+        rate, BNP, creatinine, sodium, and related vitals). The reasoning: a model built on a clinically
+        meaningful summary is easier to trust and easier to explain than one built purely on whatever raw
+        columns happened to be in the spreadsheet.</p>
+
+      <p>Only after HCAS existed as a feature did model-building start. Eight independent classifiers were
+        trained and compared on identical data and metrics, deliberately spanning very different mathematical
+        approaches so that any agreement between them couldn't be explained by shared assumptions: Logistic
+        Regression, Random Forest, CatBoost, SVM, XGBoost, an Explainable Boosting Machine, LightGBM, and a
+        Stacking Ensemble that combines several of the others.</p>
+
+      <div class="callout">
+        <strong>The finding that mattered:</strong> all eight models, despite spanning linear, tree-based,
+        kernel, boosting, and ensemble methods, independently converged on the same five top predictors of
+        30-day readmission: medication adherence, BNP, HCAS, age, and distance to hospital. Eight different
+        ways of looking at the same data reaching the same conclusion is a stronger signal than any single
+        model's leaderboard score — it reads as the models corroborating clinical reasoning, not discovering
+        something clinicians didn't already suspect.
+      </div>
+
+      <h3>Eight models, one conclusion</h3>
+      <table class="data-table">
+        <thead><tr><th>Model</th><th>Family</th><th>Role in this project</th></tr></thead>
+        <tbody>
+          <tr><td>Logistic Regression</td><td>Linear</td><td>Baseline, interpretable coefficients</td></tr>
+          <tr class="best"><td>Random Forest</td><td>Tree ensemble</td><td>Selected as the production model</td></tr>
+          <tr><td>CatBoost</td><td>Gradient boosting</td><td>Convergence check</td></tr>
+          <tr><td>SVM</td><td>Kernel method</td><td>Convergence check</td></tr>
+          <tr><td>XGBoost</td><td>Gradient boosting</td><td>Convergence check</td></tr>
+          <tr><td>Explainable Boosting Machine</td><td>Generalized additive</td><td>Convergence check</td></tr>
+          <tr><td>LightGBM</td><td>Gradient boosting</td><td>Convergence check</td></tr>
+          <tr><td>Stacking Ensemble</td><td>Meta-ensemble</td><td>Convergence check</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size: 13.5px; color: var(--text-muted); margin-top: -8px;">This project deliberately
+        reports on agreement across models rather than a single accuracy/ROC-AUC leaderboard number — the
+        clinical claim being tested was "do independent methods agree," not "which model scores highest."</p>
+
+      <h3>From score to system</h3>
+      <p>Random Forest was carried forward into a working prototype — the <strong>AEGIS Clinical Decision
+        Support System</strong>, a desktop application that takes a patient's routine measurements as input,
+        computes HCAS internally without ever surfacing it to the user, and returns an interpretable
+        readmission-risk score. The clinician never needs to know a composite score is running underneath;
+        they see the inputs they'd already collect and a risk assessment they can act on.</p>
+
+      <p>Because this sits inside a broader research programme rather than a one-off script, the project
+        also carries a five-stage IP protection plan (ownership, invention disclosure, separating what's
+        patentable from what's a trade secret from what's copyrightable, an innovation blueprint, and a
+        commercialization step) and four possible paths to real-world use: a SaaS offering for hospital
+        systems, licensing to nursing homes, a government/public-health deployment, and a direct-to-consumer
+        version. None of these are built yet — they're the deliberate next steps once the clinical case for
+        the model is solid, which is exactly the order this project did things in: score first, model second,
+        product last.</p>
+
+      <div class="callout">
+        This project is being rebuilt as a browser-based demo so the risk-scoring logic can be tried without
+        installing anything locally. The demo will make clear which of the eight models it's actually running
+        live versus which were part of the original convergence analysis — a distinction worth being precise
+        about rather than blurring.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
