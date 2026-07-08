@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lohkahmeng-portfolio.netlify.app/sitemap.xml
