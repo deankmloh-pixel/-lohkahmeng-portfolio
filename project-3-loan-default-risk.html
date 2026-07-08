@@ -64,6 +64,10 @@
       across every metric. This case study doesn't hide that number or wave it away — it explains exactly
       where it comes from.</p>
 
+    <div class="button-row">
+      <a href="https://loan-screening-target-app-mcvq49qruyxjjxj6kfwb6q.streamlit.app" target="_blank" rel="noopener" class="btn btn-primary">Try the live app →</a>
+    </div>
+
     <div class="meta-row">
       <div class="meta-item"><div class="k">Role</div><div class="v">Solo — modeling, Power BI, desktop app</div></div>
       <div class="meta-item"><div class="k">Dataset</div><div class="v">LendingClub accepted + rejected loans, 29.9M records</div></div>
@@ -161,10 +165,23 @@
       <div class="callout">
         <strong>What this doesn't claim:</strong> a perfect score on "will this application be graded" is not
         the same claim as "will this loan default" &mdash; the No&#8209;Grade question is an earlier, coarser
-        checkpoint, and this project is explicit about that distinction rather than blurring the two. This is
-        also a candidate for the browser-based rebuild described elsewhere on this site, once the No&#8209;Grade
-        and default-risk questions can be shown side by side as clearly in a live demo as they are in this
-        write-up.
+        checkpoint, and this project is explicit about that distinction rather than blurring the two.
+      </div>
+
+      <div class="callout">
+        <strong>Update (July 2026):</strong> a browser-based version of this demo is now live —
+        <a href="https://loan-screening-target-app-mcvq49qruyxjjxj6kfwb6q.streamlit.app" target="_blank" rel="noopener">try it here</a>.
+        It pairs the champion Decision Tree with LightGBM, the runner-up model, rather than the Ridge
+        Classifier used in the original desktop demo's champion-vs-worst comparison — a deliberate change,
+        since a live decision-support tool is better served by comparing the champion against a credible
+        second opinion than against a model already known to underperform. Both models still predict the
+        earlier, coarser No&#8209;Grade question described above, not loan default risk itself, and the app
+        carries that distinction forward explicitly. It also surfaces a limitation directly rather than
+        hiding it: because <code>annual_inc == 0</code> is such a dominant signal on this restricted feature
+        set, the model doesn't meaningfully sanity-check Loan Amount or DTI for plausibility — an extreme
+        loan amount against a modest income will still predict Approved as long as income is non-zero.
+        That's inherent to the three-field NO_GRADE feature set, not a bug, and Grade can't be added to fix
+        it without leaking the very outcome the earlier checkpoint is meant to predict.
       </div>
     </div>
   </div>
