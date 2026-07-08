@@ -16,4 +16,8 @@
     <loc>https://lohkahmeng-portfolio.netlify.app/about.html</loc>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://lohkahmeng-portfolio.netlify.app/prof-dhanjoo-ghista.html</loc>
+    <priority>0.5</priority>
+  </url>
 </urlset>
