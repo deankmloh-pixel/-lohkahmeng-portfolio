@@ -489,6 +489,9 @@ footer {
 .footer-links a { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
 .footer-links a:hover { color: var(--text-primary); }
 
+.footer-brand { display: flex; flex-direction: column; gap: 12px; }
+.footer-mark { height: 34px; width: auto; }
+
 .copyright { font-size: 13px; color: var(--text-muted); }
 
 /* ---------------------------------------------------------------------- */
