@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workforce Income Analytics — Case Study | Loh Kah Meng</title>
+<meta name="description" content="A unified master dataset of 48,790 U.S. Census records powering a Power BI analytics layer and four tuned ML classifiers (up to 0.928 ROC-AUC) predicting high-income status.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / Workforce Income Analytics</div>
+    <div class="tag tag-blue">Featured &middot; Full Case Study</div>
+    <h1>AI-Powered Workforce Income Analytics &amp; Decision Support System</h1>
+    <p class="lede">A single, governed master dataset of 48,790 U.S. adults — built once, used everywhere —
+      feeding both a Power BI analytics layer for human exploration and four tuned ML classifiers for
+      automated scoring. The goal wasn't just to predict who earns more than $50K; it was to make the
+      <em>why</em> legible to a non-technical decision-maker.</p>
+
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo — data engineering, BI, ML</div></div>
+      <div class="meta-item"><div class="k">Dataset</div><div class="v">UCI Adult Census Income (48,790 rows)</div></div>
+      <div class="meta-item"><div class="k">Stack</div><div class="v">Python, pandas, scikit-learn, XGBoost, Power BI / DAX</div></div>
+      <div class="meta-item"><div class="k">Best model</div><div class="v">XGBoost — 0.928 ROC-AUC</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="prose reveal">
+      <h3>The problem with two datasets</h3>
+      <p>The starting brief called for two things that are easy to build separately and dangerous to build
+        separately: a Power BI dashboard for exploring workforce demographics, and ML models predicting
+        income bracket. The tempting shortcut is two datasets — one imputed and encoded for modeling, one
+        left more readable for BI. I deliberately avoided that. Two datasets drift: a fix applied to one
+        never reaches the other, and by the second refresh cycle "the data" means two different things
+        depending on who you ask.</p>
+      <p>Instead, everything here traces back to one governed pipeline (<code>build_master_dataset.py</code>)
+        that produces a single master table, <code>adult_master.csv</code> / <code>.parquet</code> — 48,790
+        rows, 26 columns. Power BI reads the human-readable <code>income_bracket</code> and categorical
+        columns directly; the ML pipeline reads the numeric <code>income_target</code> flag and the same
+        underlying predictors. One source of truth, two consumers.</p>
+
+      <div class="callout">
+        <strong>Design principle:</strong> missing categorical values ('?' in the raw source — workclass
+        5.73%, occupation 5.75%, native_country 1.75%) are never imputed or guessed. Each is relabeled
+        <code>Unknown</code> and paired with a boolean <code>*_was_missing</code> flag, so the fact that a
+        value was missing stays fully auditable instead of being silently smoothed over.
+      </div>
+
+      <h3>What the dashboard is for</h3>
+      <p>The Power BI layer isn't a KPI wall — it's built around one reusable DAX pattern,
+        <code>High Income Rate vs Overall</code>, that can drop onto any breakdown (occupation, education,
+        region, work-hours category) and immediately show whether that segment sits above or below the
+        population baseline. Twenty measures in total, plus three sort-key columns so categories like
+        "Part-time (&lt;20)" through "Overtime (60+)" render in logical rather than alphabetical order.</p>
+
+      <h3>What actually predicts income</h3>
+      <p>Rather than trust a single model's built-in feature importance, I computed permutation importance
+        across all four tuned models on a held-out sample and looked for agreement. The signal was
+        consistent: relationship status and marital status dominate, followed by capital gains, education,
+        age, occupation, and hours worked.</p>
+
+      <div class="bar-list reveal">
+        <div class="bar-row"><div class="label">Relationship / Marital status</div><div class="bar-track"><div class="bar-fill" style="width:100%; background:var(--blue);"></div></div><div class="val">Top</div></div>
+        <div class="bar-row"><div class="label">Capital gain</div><div class="bar-track"><div class="bar-fill" style="width:78%; background:var(--aqua);"></div></div><div class="val">High</div></div>
+        <div class="bar-row"><div class="label">Education (years)</div><div class="bar-track"><div class="bar-fill" style="width:66%; background:var(--yellow);"></div></div><div class="val">High</div></div>
+        <div class="bar-row"><div class="label">Age</div><div class="bar-track"><div class="bar-fill" style="width:58%; background:var(--violet);"></div></div><div class="val">Moderate</div></div>
+        <div class="bar-row"><div class="label">Occupation</div><div class="bar-track"><div class="bar-fill" style="width:52%; background:var(--magenta);"></div></div><div class="val">Moderate</div></div>
+        <div class="bar-row"><div class="label">Hours per week</div><div class="bar-track"><div class="bar-fill" style="width:44%; background:var(--orange);"></div></div><div class="val">Moderate</div></div>
+      </div>
+      <p style="font-size: 13.5px; color: var(--text-muted); margin-top: -8px;">Relative ranking from permutation importance averaged across logistic regression, random forest, HistGradientBoosting, and XGBoost — not a single model's opinion.</p>
+
+      <p>Two findings were worth calling out explicitly to a non-technical reader rather than leaving buried
+        in a model file. Married individuals — specifically the "Husband" and "Wife" relationship
+        categories — show a high-income rate near 45&ndash;47%, against roughly 1.5% for adults still
+        classified as someone's child, a gap that reflects age and career-stage confounding as much as
+        marital status itself. And <code>fnlwgt</code>, a U.S. Census sampling weight included in the raw
+        data, has effectively zero correlation with income (Pearson r = &minus;0.006) — it was excluded from
+        modeling entirely rather than left in to add noise.</p>
+
+      <h3>Modeling approach</h3>
+      <p>Four classifiers were tuned via <code>RandomizedSearchCV</code> with stratified cross-validation,
+        using the dataset's original train/test split (32,537 / 16,253 rows) to stay comparable with the
+        historical UCI benchmark. Categorical features were handled natively where the model supported it
+        (HistGradientBoosting, XGBoost) rather than blown out with one-hot encoding.</p>
+    </div>
+
+    <table class="data-table reveal">
+      <thead>
+        <tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>ROC-AUC</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Logistic Regression</td><td class="num">81.1%</td><td class="num">0.567</td><td class="num">0.845</td><td class="num">0.679</td><td class="num">0.907</td></tr>
+        <tr><td>Random Forest</td><td class="num">81.7%</td><td class="num">0.575</td><td class="num">0.863</td><td class="num">0.690</td><td class="num">0.917</td></tr>
+        <tr><td>HistGradientBoosting</td><td class="num">87.3%</td><td class="num">0.776</td><td class="num">0.652</td><td class="num">0.708</td><td class="num">0.927</td></tr>
+        <tr class="best"><td>XGBoost</td><td class="num">83.4%</td><td class="num">0.604</td><td class="num">0.865</td><td class="num">0.712</td><td class="num">0.928</td></tr>
+      </tbody>
+    </table>
+
+    <div class="prose reveal">
+      <p><strong>On the recommendation:</strong> XGBoost edges out HistGradientBoosting on ROC-AUC (0.928 vs
+        0.927) — but that's the wrong reason to call it the clear winner. HistGB actually has better
+        accuracy, precision, and error rate; XGBoost's class-rebalancing (<code>scale_pos_weight</code>)
+        trades precision for recall, catching more true high earners at the cost of more false positives.
+        Which one is "better" depends on whether the downstream decision punishes missed opportunities or
+        wasted outreach more — a business question, not a modeling one, and I said so rather than picking a
+        winner by a 0.001 margin.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

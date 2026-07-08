@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loh Kah Meng — AI Systems for Human Decision-Making</title>
+<meta name="description" content="Portfolio of Loh Kah Meng: AI-powered decision support systems in healthcare, workforce analytics, credit risk, and customer retention — built around the idea that AI should make people better decision-makers, not replace them.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work" class="active">Work</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="eyebrow">Decision Support Systems &middot; AI &amp; Data Science</div>
+    <h1>AI that makes people better decision-makers — not AI that decides for them.</h1>
+    <p class="lede">I build systems that sit next to human judgment, not in front of it: transparent models,
+      honest uncertainty, and interfaces that explain themselves. This site collects that work — from a
+      workforce income analytics platform built on 48,790 U.S. Census records to decision-support systems
+      for healthcare, credit risk, and customer retention.</p>
+    <div class="button-row">
+      <a href="#work" class="btn btn-primary">See the work</a>
+      <a href="#philosophy" class="btn btn-secondary">Read the philosophy</a>
+    </div>
+  </div>
+</header>
+
+<section id="philosophy">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-label">Philosophy</div>
+      <h2>On Human&ndash;AI Relationship</h2>
+      <p>Every project on this site is built on the same working belief: the goal of applied AI is not to
+        replace a person's judgment but to make that judgment sharper, faster, and better informed. A model
+        that quietly makes the call is a liability. A model that shows its reasoning, flags what it doesn't
+        know, and hands a clear decision back to a human — that's a tool worth trusting.</p>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar reveal">
+        <div class="pillar-num">01</div>
+        <h3>Augment, don't replace</h3>
+        <p>Systems are designed as decision <em>support</em> — surfacing patterns, risks, and probabilities
+          for a human to weigh, rather than issuing verdicts a person is expected to accept on faith.</p>
+      </div>
+      <div class="pillar reveal">
+        <div class="pillar-num">02</div>
+        <h3>Transparency over accuracy theater</h3>
+        <p>A model's headline metric is never the whole story. Every project here documents what the data
+          can't tell you — missingness, top-coding, sampling bias — alongside what the model gets right.</p>
+      </div>
+      <div class="pillar reveal">
+        <div class="pillar-num">03</div>
+        <h3>Built for the person who has to act</h3>
+        <p>A dashboard nobody reads and a model nobody trusts are the same failure. Every system is designed
+          around the actual decision-maker: what they need to see, in language they already use.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-label">Selected Work</div>
+      <h2>Five decision-support systems, one working principle</h2>
+      <p>One project is built out end-to-end as a full case study — data pipeline, BI layer, and tuned ML
+        models. The other four are in progress; their write-ups will follow the same standard.</p>
+    </div>
+
+    <div class="project-grid">
+
+      <article class="project-card featured reveal">
+        <div>
+          <div class="tag tag-blue">Featured &middot; Full Case Study</div>
+          <h3>AI-Powered Workforce Income Analytics &amp; Decision Support System</h3>
+          <p>A unified master dataset (48,790 U.S. Census records) feeding both a Power BI analytics layer
+            and four tuned ML classifiers predicting high-income status — built to show, not just predict,
+            which factors actually drive income outcomes.</p>
+          <div class="stack">
+            <span class="chip">Python / pandas</span>
+            <span class="chip">scikit-learn</span>
+            <span class="chip">XGBoost</span>
+            <span class="chip">Power BI / DAX</span>
+          </div>
+          <a href="project-5-workforce-income.html" class="card-link">View case study
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-value good">0.928</div>
+            <div class="stat-label">Best ROC-AUC (XGBoost)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">87.3%</div>
+            <div class="stat-label">Best accuracy (HistGB)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">48,790</div>
+            <div class="stat-label">Individuals modeled</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card reveal">
+        <div class="tag tag-aqua">Healthcare</div>
+        <h3>Nurse Augmenting System for Biomedical Intelligence and Personalized Care Augmentation</h3>
+        <p>A decision-support system designed to give nurses faster, better-contextualized information at
+          the point of care. Full write-up in progress.</p>
+        <a href="other-projects.html" class="card-link">Coming soon
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </article>
+
+      <article class="project-card reveal">
+        <div class="tag tag-yellow">Finance</div>
+        <h3>AI-Powered Loan Default Risk Decision Support System</h3>
+        <p>Built on LendingClub loan data — a risk-scoring system aimed at giving credit officers a clearer,
+          explainable view of default risk. Full write-up in progress.</p>
+        <a href="other-projects.html" class="card-link">Coming soon
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </article>
+
+      <article class="project-card reveal">
+        <div class="tag tag-magenta">Marketing</div>
+        <h3>AI-Powered Marketing Decision Support System for Customer Retention</h3>
+        <p>Built on IBM's Telco Customer Churn dataset — surfacing which customers are at risk and why, to
+          support retention teams rather than automate them away. Full write-up in progress.</p>
+        <a href="other-projects.html" class="card-link">Coming soon
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </article>
+
+      <article class="project-card reveal">
+        <div class="tag tag-muted">Project 2</div>
+        <h3>Details coming soon</h3>
+        <p>A fifth system rounding out this portfolio. Scope and write-up to follow.</p>
+        <a href="other-projects.html" class="card-link">Coming soon
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    <ul class="footer-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
