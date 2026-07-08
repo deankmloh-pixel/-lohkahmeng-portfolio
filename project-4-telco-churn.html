@@ -63,6 +63,10 @@
       question that mattered. The question was which model's behavior matched a real business threshold, and
       that's a different exercise entirely.</p>
 
+    <div class="button-row">
+      <a href="https://telco-target-app-rmjhag77cpkimema5gcanl.streamlit.app" target="_blank" rel="noopener" class="btn btn-primary">Try the live app →</a>
+    </div>
+
     <div class="meta-row">
       <div class="meta-item"><div class="k">Role</div><div class="v">Solo — modeling, Power BI, desktop app</div></div>
       <div class="meta-item"><div class="k">Dataset</div><div class="v">IBM/Kaggle Telco Churn, 7,043 customers</div></div>
@@ -129,13 +133,15 @@
         2026 flagged 2,720 of 7,043 customers (38.6%) against the 40/55-month thresholds.</p>
 
       <div class="callout">
-        <strong>What it doesn't do yet:</strong> the current tool is CSV-only input, desktop-only with no
-        cloud access, has no multi-user authentication, no automated retraining, and limited per-prediction
-        explainability. A four-stage roadmap is already scoped: SHAP-based explainability, an audit/database
-        layer, enterprise Power BI analytics integration, and a full cloud/API/Docker deployment. This project
-        is a candidate for the browser-based rebuild described elsewhere on this site, once the explainability
-        layer is in place — a churn score without a reason attached to it is exactly the kind of black-box
-        output this site's whole philosophy pushes against.
+        <strong>Update (July 2026):</strong> a browser-based version of this tool is now live —
+        <a href="https://telco-target-app-rmjhag77cpkimema5gcanl.streamlit.app" target="_blank" rel="noopener">try it here</a>
+        — running the same SVM/SVR pipeline described above, no install required. That closes the deployment
+        gap from the original roadmap, but the substance gaps are unchanged: it still runs against a fixed CSV
+        snapshot rather than accepting a general file upload, the role selector is a UI convenience rather than
+        real multi-user authentication, there's no automated retraining, and per-prediction explainability (the
+        planned SHAP layer) hasn't been added yet. A churn score without a reason attached to it is exactly the
+        kind of black-box output this site's whole philosophy pushes against — that piece, along with an
+        audit/database layer and enterprise Power BI analytics integration, is still ahead.
       </div>
     </div>
   </div>
