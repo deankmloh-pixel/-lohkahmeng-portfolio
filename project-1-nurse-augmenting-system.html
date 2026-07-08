@@ -65,6 +65,16 @@
       isn't any one model's accuracy. It's that eight independently built models, using completely different
       mathematics, all pointed at the same answer.</p>
 
+    <div class="button-row">
+      <a href="https://nas-target-app-3k9ypclrup4mpc2w4uqjwv.streamlit.app" target="_blank" rel="noopener" class="btn btn-primary">Try the live app →</a>
+    </div>
+
+    <p class="lede">Why this matters beyond the model: readmission risk isn't just a per-patient number.
+      Aggregated across a ward or a region, the same signal becomes a resource-planning input — beds,
+      staffing, and follow-up capacity a hospital or health ministry can forecast against, rather than
+      discover after the fact. That planning use case matters most in aging-population health systems, where
+      readmission pressure compounds faster than capacity does.</p>
+
     <div class="meta-row">
       <div class="meta-item"><div class="k">Role</div><div class="v">Solo — clinical feature design, ML, prototype app</div></div>
       <div class="meta-item"><div class="k">Dataset</div><div class="v">Heart-failure clinical records, MIT-affiliated hospital</div></div>
@@ -137,10 +147,16 @@
         product last.</p>
 
       <div class="callout">
-        This project is being rebuilt as a browser-based demo so the risk-scoring logic can be tried without
-        installing anything locally. The demo will make clear which of the eight models it's actually running
-        live versus which were part of the original convergence analysis — a distinction worth being precise
-        about rather than blurring.
+        <strong>Update (July 2026):</strong> a browser-based version of this tool is now live —
+        <a href="https://nas-target-app-3k9ypclrup4mpc2w4uqjwv.streamlit.app" target="_blank" rel="noopener">try it here</a>
+        — running three of the eight models from the convergence analysis: the production Random Forest,
+        LightGBM, and Logistic Regression, selectable side-by-side. The other five (CatBoost, SVM, XGBoost,
+        the Explainable Boosting Machine, and the Stacking Ensemble) were part of the original convergence
+        study but aren't wired into this demo. The HCAS composite score is computed internally using a
+        faithful reconstruction of the original methodology — the exact original scoring script no longer
+        exists among the project files, so this is disclosed rather than presented as ground truth. This
+        remains an exploratory tool, not a validated clinical device: it has not gone through clinical trial
+        or regulatory review, and should not be used for real patient care decisions.
       </div>
     </div>
   </div>
