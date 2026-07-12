@@ -350,6 +350,7 @@ h2 {
 .tag-aqua    { color: var(--aqua);    background: color-mix(in srgb, var(--aqua) 14%, transparent); }
 .tag-yellow  { color: #9a6f00;        background: color-mix(in srgb, var(--yellow) 18%, transparent); }
 .tag-magenta { color: #b0517a;        background: color-mix(in srgb, var(--magenta) 18%, transparent); }
+.tag-violet  { color: var(--violet);  background: color-mix(in srgb, var(--violet) 14%, transparent); }
 .tag-muted   { color: var(--text-muted); background: var(--surface-3); }
 
 .project-card h3 { font-size: 19px; margin: 0 0 10px; letter-spacing: -0.01em; }
@@ -452,6 +453,8 @@ h2 {
   margin: 24px 0;
 }
 .callout strong { color: var(--text-primary); }
+.callout.warn { border-left-color: var(--orange); }
+.callout.good { border-left-color: var(--good); }
 
 table.data-table {
   width: 100%;
@@ -480,6 +483,43 @@ table.data-table tr.best td { font-weight: 700; color: var(--text-primary); }
 .bar-track { background: var(--surface-3); border-radius: 999px; height: 10px; overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 999px; background: var(--blue); }
 .bar-row .val { font-size: 13px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------------------- */
+/* Timeline (model-benchmarking passes, etc.)                              */
+/* ---------------------------------------------------------------------- */
+
+.timeline { margin: 24px 0; border-left: 2px solid var(--hairline); padding-left: 24px; }
+.timeline-item { margin-bottom: 26px; position: relative; }
+.timeline-item::before {
+  content: "";
+  position: absolute; left: -29.5px; top: 4px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--blue); border: 2px solid var(--surface-1);
+}
+.timeline-item .tk { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--blue); margin-bottom: 6px; }
+.timeline-item h4 { font-size: 16px; margin: 0 0 6px; letter-spacing: -0.005em; }
+.timeline-item p { font-size: 14.5px; color: var(--text-secondary); margin: 0; }
+
+/* ---------------------------------------------------------------------- */
+/* App banner (live-tool call-to-action on case-study pages)               */
+/* ---------------------------------------------------------------------- */
+
+.app-banner {
+  background: linear-gradient(135deg, #0b1220 0%, #16233a 100%);
+  border-radius: var(--radius);
+  padding: 36px;
+  color: #fff;
+  margin: 28px 0;
+}
+.app-banner h3 { color: #fff; font-size: 20px; margin: 0 0 10px; }
+.app-banner p { color: #b7c4d6; font-size: 15px; margin: 0 0 20px; max-width: 60ch; }
+.app-banner .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.app-banner .btn-app {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 20px; border-radius: 999px; font-size: 14px; font-weight: 700;
+  background: #fff; color: #0b1220;
+}
+.app-banner .btn-app.pending { background: rgba(255,255,255,0.1); color: #b7c4d6; border: 1px dashed rgba(255,255,255,0.3); }
 
 /* ---------------------------------------------------------------------- */
 /* Coming soon                                                             */
