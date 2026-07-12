@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS Orbital Watch — Case Study | Loh Kah Meng</title>
+<meta name="description" content="An advance-warning system for satellite collision risk, built on ESA's Kelvins Collision Avoidance dataset (13,154 events) — an eight-model benchmark across four increasingly rigorous passes, culminating in a deployed, human-in-the-loop application (0.9814 ROC-AUC champion model).">
+<link rel="canonical" href="https://lohkahmeng-portfolio.netlify.app/project-6-aegis-orbital-watch.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://lohkahmeng-portfolio.netlify.app/project-6-aegis-orbital-watch.html">
+<meta property="og:title" content="AEGIS Orbital Watch — Case Study | Loh Kah Meng">
+<meta property="og:description" content="An advance-warning system for satellite collision risk, built on ESA's Kelvins Collision Avoidance dataset (13,154 events) — an eight-model benchmark across four increasingly rigorous passes, culminating in a deployed, human-in-the-loop application (0.9814 ROC-AUC champion model).">
+<meta property="og:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AEGIS Orbital Watch — Case Study | Loh Kah Meng">
+<meta name="twitter:description" content="An advance-warning system for satellite collision risk, built on ESA's Kelvins Collision Avoidance dataset — eight models benchmarked, deployed as a human-in-the-loop app.">
+<meta name="twitter:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "AEGIS Orbital Watch: an advance-warning system for satellite collision risk",
+  "description": "An advance-warning system for satellite collision risk, built on ESA's Kelvins Collision Avoidance dataset (13,154 events) — an eight-model benchmark across four increasingly rigorous passes, culminating in a deployed, human-in-the-loop application (0.9814 ROC-AUC champion model).",
+  "author": { "@type": "Person", "name": "Loh Kah Meng", "url": "https://lohkahmeng-portfolio.netlify.app/" },
+  "url": "https://lohkahmeng-portfolio.netlify.app/project-6-aegis-orbital-watch.html"
+}
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#work">Work</a> / AEGIS Orbital Watch</div>
+    <div class="tag tag-violet">Featured &middot; Full Case Study &middot; Deployed</div>
+    <h1>AEGIS Orbital Watch: an advance-warning system for satellite collision risk</h1>
+    <p class="lede">Project 6 turns ESA's public Collision Avoidance (Kelvins) dataset into a working
+      decision-support tool — from a rebuilt dataset and a disciplined EDA record, through an eight-model
+      benchmark run across four increasingly rigorous passes, to a deployed, human-in-the-loop application
+      that puts the winning model directly in front of the person who has to act on it.</p>
+
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo — data engineering, ML, application</div></div>
+      <div class="meta-item"><div class="k">Dataset</div><div class="v">ESA Kelvins Collision Avoidance (13,154 events)</div></div>
+      <div class="meta-item"><div class="k">Stack</div><div class="v">Python, pandas, XGBoost, FastAPI, vanilla JS</div></div>
+      <div class="meta-item"><div class="k">Champion model</div><div class="v">XGBoost, FULL mode — 0.9814 ROC-AUC</div></div>
+      <div class="meta-item"><div class="k">Status</div><div class="v">Deployed — two-lens application</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="prose reveal">
+      <p>Given a predicted close approach between two objects in orbit, should an operator treat it as
+        <strong>actionable</strong> — worth reviewing and possibly maneuvering for — or is it safe to leave to
+        routine monitoring? That's the decision this project builds toward: not a black-box verdict, but a
+        transparent, honestly-benchmarked signal a human reviewer can trust and act on.</p>
+
+      <h3>The data</h3>
+      <p>Source: ESA's Kelvins Collision Avoidance Challenge — 162,634 raw Conjunction Data Message (CDM) rows,
+        each one a snapshot of a predicted close approach that gets refreshed as tracking data refines. The
+        dataset was rebuilt to one row per event (the CDM closest to actual closest approach, the most refined
+        assessment available), giving <strong>13,154 events across 108 columns</strong>. The target —
+        <code>actionable</code> — is a binary flag (risk &gt; &minus;6 on a log&#8321;&#8320; collision-probability
+        scale), chosen over regression because 63% of last-CDM rows sit at a reporting floor that's a censoring
+        artifact, not a real measurement. Positive rate: <strong>2.77%</strong> (365 of 13,154 events).</p>
+
+      <h3>What the data actually shows</h3>
+      <p>Mahalanobis distance — a covariance-normalized version of miss distance — turned out to be the single
+        strongest discriminator: an 8&times; gap between actionable events (mean 51) and non-actionable ones
+        (mean 402). Risk also varies sharply by the type of object involved:</p>
+
+      <div class="bar-list reveal">
+        <div class="bar-row"><div class="label">Rocket body</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red)"></div></div><div class="val">6.51%</div></div>
+        <div class="bar-row"><div class="label">Unknown</div><div class="bar-track"><div class="bar-fill" style="width:53.8%;background:var(--yellow)"></div></div><div class="val">3.50%</div></div>
+        <div class="bar-row"><div class="label">Debris</div><div class="bar-track"><div class="bar-fill" style="width:41.8%;background:var(--yellow)"></div></div><div class="val">2.72%</div></div>
+        <div class="bar-row"><div class="label">Payload</div><div class="bar-track"><div class="bar-fill" style="width:9.2%;background:var(--aqua)"></div></div><div class="val">0.60%</div></div>
+      </div>
+      <p style="font-size:13.5px;color:var(--text-muted);margin-top:-8px;">Actionable rate by chaser object type. Payload's low rate survives a distance-band control — its full physical mechanism remains an open question, documented rather than papered over.</p>
+
+      <h3>Two controlled experiments, one clear answer</h3>
+      <p>Following the same disciplined pattern as the Workforce Income Analytics project: every feature-set
+        comparison changes exactly one variable, so the result reflects the feature set alone.
+        <strong>Experiment A (Baseline):</strong> the full 102-feature raw set. <strong>Experiment B
+        (Curated):</strong> 14 domain-selected features an operator would actually reason about. Experiment A
+        beat Experiment B on <em>every</em> one of five models, on both ROC-AUC and F1, without exception —
+        removing 88 features cost XGBoost a 26% relative drop in F1. The cause was traceable: the single most
+        important feature in the winning model (target orbital inclination) wasn't in the curated list at all.</p>
+    </div>
+
+    <table class="data-table reveal">
+      <thead><tr><th>Model</th><th>ROC-AUC (A)</th><th>ROC-AUC (B)</th><th>Best-F1 (A)</th><th>Best-F1 (B)</th></tr></thead>
+      <tbody>
+        <tr class="best"><td>XGBoost</td><td class="num">0.9794</td><td class="num">0.9184</td><td class="num">0.596</td><td class="num">0.438</td></tr>
+        <tr><td>CatBoost</td><td class="num">0.9720</td><td class="num">0.9135</td><td class="num">0.574</td><td class="num">0.430</td></tr>
+        <tr><td>Random Forest</td><td class="num">0.9725</td><td class="num">0.9171</td><td class="num">0.538</td><td class="num">0.377</td></tr>
+        <tr><td>Logistic Regression</td><td class="num">0.8763</td><td class="num">0.8653</td><td class="num">0.301</td><td class="num">0.274</td></tr>
+        <tr><td>SVM</td><td class="num">0.8753</td><td class="num">0.7454</td><td class="num">0.301</td><td class="num">0.182</td></tr>
+      </tbody>
+    </table>
+
+    <div class="prose reveal">
+      <h3>Four passes, each more rigorous than the last</h3>
+      <p>Model selection didn't stop at the first result that looked good — it moved through four distinct
+        passes, each one catching something the last one missed.</p>
+    </div>
+
+    <div class="timeline reveal">
+      <div class="timeline-item">
+        <div class="tk">Pass 1</div>
+        <h4>First real benchmark — and a decisive leakage catch</h4>
+        <p>Five algorithms, fixed hyperparameters. A correlation-only leakage check had cleared two alternative
+          risk columns as "weakly correlated" — retraining with them included pushed ROC-AUC to a suspicious
+          1.0000. Both columns were excluded from every model after that.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="tk">Pass 2</div>
+        <h4>The real Model Execution Framework, SHORT mode</h4>
+        <p>Re-run with genuine GridSearchCV hyperparameter search rather than fixed defaults. XGBoost and
+          CatBoost emerged as the top two, essentially tied at the Recall&ge;80% operating point.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="tk">Pass 3</div>
+        <h4>Extending to eight models</h4>
+        <p>Extra Trees, LightGBM, and HistGradientBoosting joined the field. LightGBM landed a genuine podium
+          finish — 2nd of all eight models by both ROC-AUC and Best-F1.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="tk">Pass 4</div>
+        <h4>FULL execution mode, on real hardware</h4>
+        <p>The three strongest models trained with full-scale hyperparameter grids. This pass also caught and
+          fixed a real checkpoint bug that could have silently shipped a stale model as a genuine retrain — see
+          "Engineering rigor" below.</p>
+      </div>
+    </div>
+
+    <table class="data-table reveal">
+      <thead><tr><th>Rank</th><th>Model</th><th>Test ROC-AUC</th><th>Precision @ 80%+ Recall</th><th>Recall</th></tr></thead>
+      <tbody>
+        <tr class="best"><td>1</td><td>XGBoost (FULL)</td><td class="num">0.9814</td><td class="num">39.9%</td><td class="num">80.8%</td></tr>
+        <tr><td>2</td><td>LightGBM (FULL)</td><td class="num">0.9791</td><td class="num">37.7%</td><td class="num">83.6%</td></tr>
+        <tr><td>3</td><td>CatBoost (FULL)</td><td class="num">0.9702</td><td class="num">33.9%</td><td class="num">80.8%</td></tr>
+      </tbody>
+    </table>
+
+    <div class="prose reveal">
+      <h3>The champion: XGBoost, FULL execution mode</h3>
+      <p>Evaluated at the Recall&ge;80% operating point — a deliberate product decision for an advance-warning
+        system, where missing a real actionable event costs more than an extra manual review.</p>
+    </div>
+
+    <div class="stat-row reveal">
+      <div class="stat-box"><div class="stat-value good">0.9814</div><div class="stat-label">Test ROC-AUC</div></div>
+      <div class="stat-box"><div class="stat-value">39.9%</div><div class="stat-label">Precision @ threshold</div></div>
+      <div class="stat-box"><div class="stat-value">80.8%</div><div class="stat-label">Recall (59 / 73 real events)</div></div>
+    </div>
+    <div class="callout good reveal">
+      <strong>Hyperparameters:</strong> n_estimators=600 &middot; max_depth=7 &middot; learning_rate=0.01 &middot;
+      min_child_weight=3 &middot; subsample=0.8 &middot; colsample_bytree=1.0 &middot; gamma=0.1 &middot;
+      operating threshold&nbsp;&asymp;&nbsp;0.09, evaluated on a genuinely held-out 2,631-event test set.
+    </div>
+
+    <div class="prose reveal">
+      <h3>Beyond the classifier: the Bangkok Highway Index</h3>
+      <p>A second, complementary research thread: how does the orbital environment's aggregate risk change as
+        the rocket-body population grows? Scoped deliberately to rocket bodies — spent upper stages, directly
+        countable from launch cadence — and fit to three confirmed real data points.</p>
+    </div>
+
+    <table class="data-table reveal">
+      <thead><tr><th>Scenario</th><th>Growth &times;</th><th>Rocket bodies</th><th>Aggregate risk</th></tr></thead>
+      <tbody>
+        <tr><td>2015&ndash;19 baseline</td><td class="num">1&times;</td><td class="num">1,869</td><td class="num">&minus;4.27</td></tr>
+        <tr><td>Real 2025 launch cadence</td><td class="num">3.39&times;</td><td class="num">&asymp;6,336</td><td class="num">&minus;3.74</td></tr>
+        <tr class="best"><td>Megaconstellation scenario</td><td class="num">535&times;</td><td class="num">&asymp;1M</td><td class="num">&minus;1.54</td></tr>
+      </tbody>
+    </table>
+
+    <div class="prose reveal">
+      <p>Worldwide launches climbed from a 95.6/year average (2015&ndash;19) to 324 in 2025 — a real, already-
+        happened 3.39&times; increase, not a projection. At today's real cadence, aggregate risk sits around
+        &minus;3.74: a modest, real shift. The named threshold — &minus;2, "as congested as a Bangkok highway
+        in space" — sits well short of today, but past the real, researched 535&times; scenario the model is
+        capped at, keeping the tool honest about what's happened versus what's merely possible.</p>
+
+      <h3>The application: AEGIS Orbital Watch</h3>
+      <p>A real, working two-lens application — not a mock-up. A FastAPI backend serves both a live scoring
+        endpoint and the frontend from a single process.</p>
+      <p><strong>Lens 1 — Bangkok Highway Index</strong> (shown first, built for public awareness): an
+        interactive growth-scenario dial letting a non-technical viewer drag from today's real traffic level up
+        to the real, researched worst case and feel the difference — rocket-body count, actionable close calls
+        per year, and a visible "crisis mode" once the named threshold is crossed.</p>
+      <p><strong>Lens 2 — Live Conjunction Alert</strong> (the operational lens): upload a CDM batch as CSV and
+        score it live against the real, trained FULL-mode XGBoost model — verified end-to-end, reproducing the
+        model's own logged probabilities to within floating-point noise. Each row carries a "Your Call" control
+        so a human reviewer can record their own judgment independently of the model, with a live summary of
+        where they agree or differ — the system surfaces the signal, the operator decides.</p>
+    </div>
+
+    <div class="app-banner reveal">
+      <h3>Try AEGIS Orbital Watch</h3>
+      <p>The live web version is up — open it below to try both lenses. It's hosted on a free-tier instance,
+        so the first load after a period of inactivity can take 30&ndash;60 seconds to wake up.</p>
+      <div class="btn-row">
+        <a href="https://aegis-orbital-watch.onrender.com" class="btn-app" target="_blank" rel="noopener">Open AEGIS Orbital Watch &rarr;</a>
+      </div>
+    </div>
+
+    <div class="prose reveal">
+      <h3>Engineering rigor: what went wrong, and how it was caught</h3>
+      <p>A decision-support system earns trust not by being flawless on the first attempt, but by catching its
+        own mistakes before they reach the person relying on it.</p>
+    </div>
+
+    <div class="callout warn reveal">
+      <strong>Checkpoint bug:</strong> the FULL-mode training pipeline's SHORT/FULL mismatch guard was
+      structurally broken — the very first FULL-mode attempt silently reused a stale SHORT-mode model instead
+      of retraining. Found, root-caused, and fixed at the source; every FULL-mode result was re-verified as a
+      genuine retrain afterward.
+    </div>
+    <div class="callout warn reveal">
+      <strong>Leakage diagnostic reversal:</strong> a correlation-only check had cleared two columns as safe.
+      Actually retraining with them included exposed a decisive leak (ROC-AUC 1.0) — caught before it reached a
+      reported model.
+    </div>
+    <div class="callout good reveal">
+      <strong>End-to-end verification:</strong> the deployed model's predictions were checked against the
+      model's own logged ground truth (not a locally re-derived split, which turned out to have its own
+      reproducibility trap) — reproducing logged probabilities to within floating-point noise before shipping.
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
