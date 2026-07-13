@@ -56,7 +56,7 @@
 <header class="page-header">
   <div class="container">
     <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#work">Work</a> / Predictive Maintenance</div>
-    <div class="tag tag-violet">Featured &middot; Full Case Study &middot; App Ready</div>
+    <div class="tag tag-violet">Featured &middot; Full Case Study &middot; Deployed</div>
     <h1>AI-Powered Predictive Maintenance Decision Support System</h1>
     <p class="lede">Project 7 turns the AI4I 2020 predictive-maintenance dataset into a working early-warning
       tool — from a disciplined, leakage-free problem setup, through an eight-model benchmark run across two
@@ -68,7 +68,7 @@
       <div class="meta-item"><div class="k">Dataset</div><div class="v">AI4I 2020 Predictive Maintenance (10,000 machines)</div></div>
       <div class="meta-item"><div class="k">Stack</div><div class="v">Python, pandas, scikit-learn, Flask</div></div>
       <div class="meta-item"><div class="k">Champion model</div><div class="v">Random Forest — 0.9766 ROC-AUC</div></div>
-      <div class="meta-item"><div class="k">Status</div><div class="v">App ready — Render deployment pending</div></div>
+      <div class="meta-item"><div class="k">Status</div><div class="v">Deployed — live on Render</div></div>
     </div>
   </div>
 </header>
@@ -188,10 +188,11 @@
 
     <div class="app-banner reveal">
       <h3>Try the Predictive Maintenance app</h3>
-      <p>The live web version is being deployed on Render — check back shortly for a working link to the
-        technician form and the JSON API.</p>
+      <p>Enter a machine's six readings and get a live failure-risk verdict from the trained Random Forest
+        model, served as a Flask app. It's on Render's free tier, so the first request after a period of
+        inactivity can take ~30–60 seconds to wake the instance — that's the host spinning up, not a fault.</p>
       <div class="btn-row">
-        <a href="#" class="btn-app pending">Live app &mdash; coming online soon</a>
+        <a href="https://aegis-project7-predictive-maintenance.onrender.com" class="btn-app" target="_blank" rel="noopener">Open the live app &rarr;</a>
       </div>
     </div>
 
