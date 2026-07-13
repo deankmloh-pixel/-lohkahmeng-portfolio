@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Powered Predictive Maintenance — Case Study | Loh Kah Meng</title>
+<meta name="description" content="A predictive-maintenance decision-support system on the AI4I 2020 dataset (10,000 machines) — an eight-model benchmark across two controlled feature-engineering experiments, target-leakage removed by design, and a Flask early-warning app. Champion Random Forest: 0.9766 ROC-AUC, 80.9% recall at the advance-warning threshold.">
+<link rel="canonical" href="https://lohkahmeng-portfolio.netlify.app/project-7-predictive-maintenance.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://lohkahmeng-portfolio.netlify.app/project-7-predictive-maintenance.html">
+<meta property="og:title" content="AI-Powered Predictive Maintenance — Case Study | Loh Kah Meng">
+<meta property="og:description" content="An eight-model predictive-maintenance benchmark on AI4I 2020 — two controlled feature-engineering experiments, target-leakage removed by design, and a Flask early-warning app. Champion Random Forest: 0.9766 ROC-AUC.">
+<meta property="og:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI-Powered Predictive Maintenance — Case Study | Loh Kah Meng">
+<meta name="twitter:description" content="An eight-model predictive-maintenance benchmark on AI4I 2020, with target-leakage removed by design and a Flask early-warning app.">
+<meta name="twitter:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "AI-Powered Predictive Maintenance Decision Support System",
+  "description": "An eight-model predictive-maintenance benchmark on the AI4I 2020 dataset across two controlled feature-engineering experiments, with target-leakage removed by design and a Flask early-warning application. Champion Random Forest: 0.9766 ROC-AUC, 80.9% recall at the advance-warning threshold.",
+  "author": { "@type": "Person", "name": "Loh Kah Meng", "url": "https://lohkahmeng-portfolio.netlify.app/" },
+  "url": "https://lohkahmeng-portfolio.netlify.app/project-7-predictive-maintenance.html"
+}
+</script>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#work">Work</a> / Predictive Maintenance</div>
+    <div class="tag tag-violet">Featured &middot; Full Case Study &middot; App Ready</div>
+    <h1>AI-Powered Predictive Maintenance Decision Support System</h1>
+    <p class="lede">Project 7 turns the AI4I 2020 predictive-maintenance dataset into a working early-warning
+      tool — from a disciplined, leakage-free problem setup, through an eight-model benchmark run across two
+      controlled feature-engineering experiments, to a Flask application that puts a calibrated failure-risk
+      verdict in front of the technician who has to act on it.</p>
+
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo — data engineering, ML, application</div></div>
+      <div class="meta-item"><div class="k">Dataset</div><div class="v">AI4I 2020 Predictive Maintenance (10,000 machines)</div></div>
+      <div class="meta-item"><div class="k">Stack</div><div class="v">Python, pandas, scikit-learn, Flask</div></div>
+      <div class="meta-item"><div class="k">Champion model</div><div class="v">Random Forest — 0.9766 ROC-AUC</div></div>
+      <div class="meta-item"><div class="k">Status</div><div class="v">App ready — Render deployment pending</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="prose reveal">
+      <p>Given a live snapshot of a machine's operating conditions — temperatures, speed, torque, tool wear —
+        should a maintenance team pull it for inspection now, or is it safe to keep running? That's the
+        decision this project builds toward: not a black-box stop/go, but a transparent, honestly-benchmarked
+        early-warning signal, deliberately tuned to catch real failures before they happen even at the cost of
+        a few extra inspections.</p>
+
+      <h3>The data</h3>
+      <p>Source: the <strong>AI4I 2020 Predictive Maintenance dataset</strong> — 10,000 machine records, each
+        with a product quality <code>Type</code> (L / M / H) and five process readings: air temperature,
+        process temperature, rotational speed, torque, and tool wear. The target, <code>Machine failure</code>,
+        is a binary flag. It is a deliberately <strong>imbalanced</strong> problem: only
+        <strong>3.39%</strong> of machines fail (339 of 10,000) — which is exactly why headline accuracy is a
+        trap here (a "never fails" model scores 96.6%) and why the whole project is built around recall and
+        threshold choice instead. The dataset is synthetic, so this is a validation of the modelling approach,
+        not a production maintenance controller — a distinction kept explicit rather than glossed over.</p>
+    </div>
+
+    <div class="callout warn reveal">
+      <strong>Target leakage, removed by design:</strong> the raw file ships five failure-mode flags — TWF,
+      HDF, PWF, OSF, RNF — whose logical OR <em>is</em> the definition of the <code>Machine failure</code>
+      target. Feeding any of them to the model would be near-deterministic leakage dressed up as skill, so all
+      five were excluded from every model from the start. They are reserved for a possible future
+      root-cause / multi-label study, never as inputs to the failure classifier.
+    </div>
+
+    <div class="prose reveal">
+      <h3>Two controlled experiments, one clear answer</h3>
+      <p>Following the same one-variable-at-a-time discipline as the Workforce Income and AEGIS Orbital Watch
+        projects, feature engineering was tested as a controlled experiment.
+        <strong>Experiment A (Baseline):</strong> the six raw inputs only.
+        <strong>Experiment B (Engineered):</strong> the same six plus two derived features —
+        <code>Temperature_Difference</code> (process minus air temperature, the thermal gradient the machine is
+        working against) and <code>Power</code> (a speed–temperature load-interaction term). The result was the
+        opposite of Project 6, where the raw set had won: here the two engineered features
+        <strong>improved F1 for seven of the eight models</strong> — dramatically for the tree ensembles — and
+        reshuffled the leaderboard, lifting <strong>Random Forest from 4th in Experiment A to champion in
+        Experiment B</strong>.</p>
+    </div>
+
+    <table class="data-table reveal">
+      <thead><tr><th>Model</th><th>ROC-AUC (A)</th><th>ROC-AUC (B)</th><th>F1 (A)</th><th>F1 (B)</th></tr></thead>
+      <tbody>
+        <tr class="best"><td>Random Forest</td><td class="num">0.9668</td><td class="num">0.9766</td><td class="num">0.731</td><td class="num">0.841</td></tr>
+        <tr><td>LightGBM</td><td class="num">0.9748</td><td class="num">0.9758</td><td class="num">0.769</td><td class="num">0.836</td></tr>
+        <tr><td>Extra Trees</td><td class="num">0.9735</td><td class="num">0.9774</td><td class="num">0.582</td><td class="num">0.816</td></tr>
+        <tr><td>XGBoost</td><td class="num">0.9716</td><td class="num">0.9755</td><td class="num">0.769</td><td class="num">0.807</td></tr>
+        <tr><td>HistGradientBoosting</td><td class="num">0.9711</td><td class="num">0.9651</td><td class="num">0.739</td><td class="num">0.794</td></tr>
+        <tr><td>CatBoost</td><td class="num">0.9699</td><td class="num">0.9746</td><td class="num">0.707</td><td class="num">0.780</td></tr>
+        <tr><td>Support Vector Machine</td><td class="num">0.9468</td><td class="num">0.9719</td><td class="num">0.542</td><td class="num">0.700</td></tr>
+        <tr><td>Logistic Regression</td><td class="num">0.8994</td><td class="num">0.8998</td><td class="num">0.177</td><td class="num">0.175</td></tr>
+      </tbody>
+    </table>
+
+    <div class="prose reveal">
+      <h3>The eight-model benchmark (Experiment B)</h3>
+      <p>Every model was tuned with a genuine hyperparameter search inside the same reusable AI Model Execution
+        Framework used across Projects 5 and 6 — not fixed defaults. Ranked at the default 0.50 threshold on a
+        held-out test set:</p>
+    </div>
+
+    <table class="data-table reveal">
+      <thead><tr><th>Rank</th><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>ROC-AUC</th></tr></thead>
+      <tbody>
+        <tr class="best"><td>1</td><td>Random Forest</td><td class="num">0.990</td><td class="num">0.914</td><td class="num">0.779</td><td class="num">0.841</td><td class="num">0.9766</td></tr>
+        <tr><td>2</td><td>LightGBM</td><td class="num">0.990</td><td class="num">0.944</td><td class="num">0.750</td><td class="num">0.836</td><td class="num">0.9758</td></tr>
+        <tr><td>3</td><td>Extra Trees</td><td class="num">0.989</td><td class="num">0.895</td><td class="num">0.750</td><td class="num">0.816</td><td class="num">0.9774</td></tr>
+        <tr><td>4</td><td>XGBoost</td><td class="num">0.989</td><td class="num">0.941</td><td class="num">0.706</td><td class="num">0.807</td><td class="num">0.9755</td></tr>
+        <tr><td>5</td><td>HistGradientBoosting</td><td class="num">0.987</td><td class="num">0.862</td><td class="num">0.735</td><td class="num">0.794</td><td class="num">0.9651</td></tr>
+        <tr><td>6</td><td>CatBoost</td><td class="num">0.987</td><td class="num">0.873</td><td class="num">0.706</td><td class="num">0.780</td><td class="num">0.9746</td></tr>
+        <tr><td>7</td><td>Support Vector Machine</td><td class="num">0.982</td><td class="num">0.808</td><td class="num">0.618</td><td class="num">0.700</td><td class="num">0.9719</td></tr>
+        <tr><td>8</td><td>Logistic Regression</td><td class="num">0.967</td><td class="num">0.583</td><td class="num">0.103</td><td class="num">0.175</td><td class="num">0.8998</td></tr>
+      </tbody>
+    </table>
+
+    <div class="prose reveal">
+      <h3>The champion: Random Forest, tuned for advance warning</h3>
+      <p>Random Forest led the field on F1 and MCC while staying within a whisker of the best ROC-AUC. But the
+        default 0.50 cutoff is the wrong operating point for an early-warning tool on a 3.4%-failure target —
+        it under-calls real failures. Scanning the threshold, dropping it to <strong>0.38</strong> pushes
+        recall past the 80% line while precision barely moves — the deliberate product choice for a system
+        where a missed failure costs far more than an extra inspection.</p>
+    </div>
+
+    <div class="stat-row reveal">
+      <div class="stat-box"><div class="stat-value good">0.9766</div><div class="stat-label">Test ROC-AUC</div></div>
+      <div class="stat-box"><div class="stat-value">90.2%</div><div class="stat-label">Precision @ threshold</div></div>
+      <div class="stat-box"><div class="stat-value">80.9%</div><div class="stat-label">Recall @ advance-warning threshold</div></div>
+    </div>
+    <div class="callout good reveal">
+      <strong>Champion configuration:</strong> Random Forest &middot; n_estimators=266 &middot; max_depth=10
+      &middot; criterion=entropy &middot; min_samples_split=2 &middot; min_samples_leaf=1 &middot;
+      bootstrap=True &middot; operating threshold&nbsp;&asymp;&nbsp;0.38 (lowered from the default 0.50 to cross
+      80% recall: recall 80.9%, precision 90.2%, F1 0.853), evaluated on a held-out test set.
+    </div>
+
+    <div class="prose reveal">
+      <h3>The application: a technician-facing early-warning tool</h3>
+      <p>The trained model is served as a small <strong>Flask</strong> app — not a notebook, an actual working
+        tool. A technician enters the six machine readings (the form pre-fills with typical "normal operation"
+        values so a busy operator nudges from a sane baseline rather than typing six numbers cold), and the app
+        computes the two engineered features server-side and returns a probability.</p>
+      <p>Crucially, the output is <strong>not a bare 0/1</strong>. It maps the probability onto a three-band,
+        human-actionable verdict anchored on the model's tuned threshold — <span style="color:var(--red);font-weight:600;">RED</span>
+        "schedule inspection", <span style="color:var(--gold,#B8860B);font-weight:600;">AMBER</span> "monitor
+        closely", <span style="color:var(--green,#2F6B45);font-weight:600;">GREEN</span> "routine" — so a
+        reading just under the alarm line reads differently from one nowhere near it. A JSON
+        <code>/api/predict</code> endpoint and a <code>/api/health</code> check are included for programmatic
+        use. The system surfaces the risk; the person decides.</p>
+    </div>
+
+    <div class="app-banner reveal">
+      <h3>Try the Predictive Maintenance app</h3>
+      <p>The live web version is being deployed on Render — check back shortly for a working link to the
+        technician form and the JSON API.</p>
+      <div class="btn-row">
+        <a href="#" class="btn-app pending">Live app &mdash; coming online soon</a>
+      </div>
+    </div>
+
+    <div class="prose reveal">
+      <h3>Engineering rigor: honest choices on an imbalanced target</h3>
+      <p>On a 3.4%-failure dataset the easy path is to report 99% accuracy and stop. This project does the
+        opposite at every turn.</p>
+    </div>
+
+    <div class="callout warn reveal">
+      <strong>Leakage removed before modelling, not after:</strong> the five failure-mode flags that define the
+      target were excluded up front — the single most important integrity decision on this dataset, and the
+      difference between a real 0.98 ROC-AUC and a meaningless 1.0.
+    </div>
+    <div class="callout warn reveal">
+      <strong>Accuracy deliberately ignored as the headline:</strong> selection was driven by F1, MCC, and a
+      recall-first operating point, because on a 3.4% base rate accuracy rewards a model that never predicts a
+      failure. The threshold was moved off the default 0.50 for exactly this reason.
+    </div>
+    <div class="callout good reveal">
+      <strong>The failure was reported, not hidden:</strong> Logistic Regression managed only 10.3% recall
+      (F1 0.175) — it simply could not model this target. It stays in the published leaderboard in last place
+      rather than being quietly dropped, because an honest benchmark includes the models that lost.
+    </div>
+    <div class="callout good reveal">
+      <strong>The shipped model was verified byte-for-byte:</strong> after packaging, the deployed
+      <code>random_forest_model.pkl</code> was re-checked by SHA-256 against the trained artifact to confirm no
+      corruption between training and deployment.
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

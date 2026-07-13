@@ -130,10 +130,10 @@
   <div class="container">
     <div class="section-head reveal">
       <div class="section-label">Selected Work</div>
-      <h2>Six decision-support systems, one working principle</h2>
-      <p>Two projects are built out end-to-end as full case studies — one closed with a validated framework,
-        one deployed as a live, working tool. The other four all have full write-ups below too — real data,
-        transparent methods, and an honest account of what each model can and can't tell you.</p>
+      <h2>Seven decision-support systems, one working principle</h2>
+      <p>Three projects are built out end-to-end as full case studies — one closed with a validated framework,
+        and two built as working, human-facing applications. The other four all have full write-ups below too —
+        real data, transparent methods, and an honest account of what each model can and can't tell you.</p>
     </div>
 
     <div class="project-grid">
@@ -202,6 +202,42 @@
           <div class="stat-box">
             <div class="stat-value">48,790</div>
             <div class="stat-label">Individuals modeled</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card featured reveal">
+        <div>
+          <div class="tag tag-violet">Featured &middot; Full Case Study &middot; App Ready</div>
+          <h3>AI-Powered Predictive Maintenance Decision Support System</h3>
+          <p>An eight-model benchmark on the AI4I 2020 dataset (10,000 machines, a 3.4% failure rate), run
+            across two controlled experiments — where two engineered features lifted every model and decided
+            the champion. The five built-in failure-mode flags were removed first to prevent target leakage,
+            and the operating threshold was tuned for advance warning, not headline accuracy. A Flask app puts
+            the model behind a technician-facing form with a red / amber / green verdict.</p>
+          <div class="stack">
+            <span class="chip">Python / pandas</span>
+            <span class="chip">scikit-learn</span>
+            <span class="chip">Random Forest</span>
+            <span class="chip">Flask</span>
+            <span class="chip">Feature engineering</span>
+          </div>
+          <a href="project-7-predictive-maintenance.html" class="card-link">View case study
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-value good">0.9766</div>
+            <div class="stat-label">Test ROC-AUC (Random Forest)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">80.9%</div>
+            <div class="stat-label">Recall @ advance-warning threshold</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">10,000</div>
+            <div class="stat-label">Machines modeled</div>
           </div>
         </div>
       </article>
