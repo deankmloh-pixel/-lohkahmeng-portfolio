@@ -61,9 +61,9 @@
     <div class="eyebrow">Decision Support Systems &middot; AI &amp; Data Science</div>
     <h1>AI that makes people better decision-makers — not AI that decides for them.</h1>
     <p class="lede">I build systems that sit next to human judgment, not in front of it: transparent models,
-      honest uncertainty, and interfaces that explain themselves. This site collects that work — from a
-      workforce income analytics platform built on 48,790 U.S. Census records to decision-support systems
-      for healthcare, credit risk, and customer retention.</p>
+      honest uncertainty, and interfaces that explain themselves. At the center is a mission — augmenting the
+      people who care for patients — with the same principle proven across workforce, credit, aerospace, and
+      customer-retention decisions.</p>
     <div class="button-row">
       <a href="#work" class="btn btn-primary">See the work</a>
       <a href="#philosophy" class="btn btn-secondary">Read the philosophy</a>
@@ -130,11 +130,66 @@
   <div class="container">
     <div class="section-head reveal">
       <div class="section-label">Selected Work</div>
-      <h2>Seven decision-support systems, one working principle</h2>
-      <p>Three projects are built out end-to-end as full case studies — one closed with a validated framework,
-        and two built as working, human-facing applications. The other four all have full write-ups below too —
-        real data, transparent methods, and an honest account of what each model can and can't tell you — plus
-        a preview of the next system now in the pipeline.</p>
+      <h2>Seven decision-support systems — human-centered care at the heart</h2>
+      <p>Every system here rests on one belief: AI should make people better decision-makers, not replace
+        them. That belief has a home — the <strong>Nurse Augmenting System</strong>, human-centered patient
+        care and the core of the AEGIS programme. The rest prove the same principle holds across domains: two
+        are deployed as live, working apps, and all carry honest, full write-ups of what each model can and
+        can't tell you.</p>
+    </div>
+
+    <!-- ===================== GROUP 1: THE CORE ===================== -->
+    <div class="section-head reveal" style="margin-top:44px;">
+      <div class="section-label">The Core</div>
+      <h2>Nurse Augmenting System — the heart of the work</h2>
+      <p>The Pento&#8209;Helix vertex: augmenting the people who care for patients, never replacing their
+        judgment. Two studies in human-centered healthcare, built under the AEGIS research programme in the
+        tradition of Prof. Dhanjoo N. Ghista.</p>
+    </div>
+
+    <div class="project-grid">
+
+      <article class="project-card reveal" style="border-top:3px solid var(--aqua,#2E8B84);">
+        <div class="tag tag-aqua">Healthcare &middot; Core Project</div>
+        <h3>Nurse Augmenting System for Biomedical Intelligence and Personalized Care Augmentation</h3>
+        <p>Eight independently trained models — spanning linear, tree, kernel, boosting, and ensemble methods
+          — converged on the same five predictors of 30-day heart-failure readmission. A hand-engineered
+          clinical score (HCAS), not raw accuracy, was the point.</p>
+        <div style="display:flex;gap:22px;flex-wrap:wrap;margin:16px 0 6px;">
+          <div><div style="font-size:20px;font-weight:700;">8 / 8</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">models agree on<br>the top 5 predictors</div></div>
+          <div><div style="font-size:20px;font-weight:700;">5</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">predictors in the<br>HCAS clinical score</div></div>
+          <div><div style="font-size:20px;font-weight:700;">30-day</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">readmission<br>window</div></div>
+        </div>
+        <a href="project-1-nurse-augmenting-system.html" class="card-link">View case study
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </article>
+
+      <article class="project-card reveal" style="border-top:3px solid var(--aqua,#2E8B84);">
+        <div class="tag tag-aqua">Healthcare &middot; Core Project</div>
+        <h3>Medication Adherence &amp; Healthcare Claims Analysis</h3>
+        <p>A star-schema claims model and a five-model adherence benchmark on 24,084 diabetes and hypertension
+          patients — surfacing that non-adherent patients cost 2.5&times; more, and including an honest report
+          of the one model, out of five, that quietly failed.</p>
+        <div style="display:flex;gap:22px;flex-wrap:wrap;margin:16px 0 6px;">
+          <div><div style="font-size:20px;font-weight:700;color:var(--green,#2F6B45);">81.98%</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">champion accuracy<br>(Gradient Boosting)</div></div>
+          <div><div style="font-size:20px;font-weight:700;">2.5&times;</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">claims cost of a<br>non-adherent patient</div></div>
+          <div><div style="font-size:20px;font-weight:700;">24,084</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">patients<br>modeled</div></div>
+        </div>
+        <a href="project-2-medication-adherence.html" class="card-link">View case study
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </article>
+
+    </div>
+
+    <!-- ===================== GROUP 2: DEPLOYED & WORKING ===================== -->
+    <div class="section-head reveal" style="margin-top:44px;">
+      <div class="section-label">Deployed &amp; Working</div>
+      <h2>Systems that ship — and one built to raise the alarm</h2>
+      <p>Two live, human-in-the-loop apps you can use right now. AEGIS Orbital Watch is the outreach signal — a
+        small voice on satellite-collision risk in a very large ocean. Predictive Maintenance is the working
+        proof the pipeline runs end to end.</p>
     </div>
 
     <div class="project-grid">
@@ -145,7 +200,8 @@
           <h3>AEGIS Orbital Watch: Advance-Warning System for Satellite Collision Risk</h3>
           <p>Built on ESA's Kelvins Collision Avoidance dataset (13,154 events) — an eight-model benchmark
             across four increasingly rigorous passes, culminating in a deployed, human-in-the-loop app that
-            scores live conjunction data and lets an operator record their own call alongside the model's.</p>
+            scores live conjunction data and lets an operator record their own call alongside the model's.
+            Built to raise awareness of a growing orbital problem.</p>
           <div class="stack">
             <span class="chip">Python / pandas</span>
             <span class="chip">XGBoost</span>
@@ -168,41 +224,6 @@
           <div class="stat-box">
             <div class="stat-value">13,154</div>
             <div class="stat-label">Conjunction events modeled</div>
-          </div>
-        </div>
-      </article>
-
-      <article class="project-card featured reveal">
-        <div>
-          <div class="tag tag-blue">Featured &middot; Closed &middot; Framework Validated</div>
-          <h3>AI-Powered Workforce Income Analytics &amp; Decision Support System</h3>
-          <p>A unified master dataset (48,790 U.S. Census records) feeding a Power BI analytics layer and a
-            reusable AI framework that benchmarked five ML algorithms across two feature-engineering
-            experiments — closed once the champion model reached the published literature ceiling for this
-            benchmark.</p>
-          <div class="stack">
-            <span class="chip">Python / pandas</span>
-            <span class="chip">scikit-learn</span>
-            <span class="chip">XGBoost</span>
-            <span class="chip">CatBoost</span>
-            <span class="chip">Power BI / DAX</span>
-          </div>
-          <a href="project-5-workforce-income.html" class="card-link">View case study
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
-        </div>
-        <div class="stat-row">
-          <div class="stat-box">
-            <div class="stat-value good">92.79%</div>
-            <div class="stat-label">Champion ROC-AUC (XGBoost)</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value">87.96%</div>
-            <div class="stat-label">Champion accuracy (XGBoost)</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value">48,790</div>
-            <div class="stat-label">Individuals modeled</div>
           </div>
         </div>
       </article>
@@ -243,15 +264,51 @@
         </div>
       </article>
 
-      <article class="project-card reveal">
-        <div class="tag tag-aqua">Healthcare</div>
-        <h3>Nurse Augmenting System for Biomedical Intelligence and Personalized Care Augmentation</h3>
-        <p>Eight independently trained models — spanning linear, tree, kernel, boosting, and ensemble methods
-          — converged on the same five predictors of heart-failure readmission. A hand-engineered clinical
-          score, not raw accuracy, was the point.</p>
-        <a href="project-1-nurse-augmenting-system.html" class="card-link">View case study
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
+    </div>
+
+    <!-- ===================== GROUP 3: THE METHOD, ACROSS DOMAINS ===================== -->
+    <div class="section-head reveal" style="margin-top:44px;">
+      <div class="section-label">The Method, Across Domains</div>
+      <h2>The same discipline in workforce, finance, and marketing</h2>
+      <p>The reusable AEGIS framework, applied and validated on public datasets in three more domains — same
+        rigor, same honesty about what each model can and can't do.</p>
+    </div>
+
+    <div class="project-grid">
+
+      <article class="project-card featured reveal">
+        <div>
+          <div class="tag tag-blue">Featured &middot; Closed &middot; Framework Validated</div>
+          <h3>AI-Powered Workforce Income Analytics &amp; Decision Support System</h3>
+          <p>A unified master dataset (48,790 U.S. Census records) feeding a Power BI analytics layer and a
+            reusable AI framework that benchmarked five ML algorithms across two feature-engineering
+            experiments — closed once the champion model reached the published literature ceiling for this
+            benchmark.</p>
+          <div class="stack">
+            <span class="chip">Python / pandas</span>
+            <span class="chip">scikit-learn</span>
+            <span class="chip">XGBoost</span>
+            <span class="chip">CatBoost</span>
+            <span class="chip">Power BI / DAX</span>
+          </div>
+          <a href="project-5-workforce-income.html" class="card-link">View case study
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-value good">92.79%</div>
+            <div class="stat-label">Champion ROC-AUC (XGBoost)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">87.96%</div>
+            <div class="stat-label">Champion accuracy (XGBoost)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">48,790</div>
+            <div class="stat-label">Individuals modeled</div>
+          </div>
+        </div>
       </article>
 
       <article class="project-card reveal">
@@ -275,28 +332,19 @@
         </a>
       </article>
 
-      <article class="project-card reveal">
-        <div class="tag tag-aqua">Healthcare</div>
-        <h3>Medication Adherence &amp; Healthcare Claims Analysis</h3>
-        <p>A star-schema claims model on 24,084 diabetes and hypertension patients — including an honest
-          report of the one model, out of five, that quietly failed.</p>
-        <a href="project-2-medication-adherence.html" class="card-link">View case study
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-      </article>
-
-      <article class="project-card reveal" style="border-style:dashed;">
-        <div class="tag tag-blue">Aerospace &middot; In Progress</div>
-        <h3>Predictive Remaining-Useful-Life (RUL) System for Turbofan Engines</h3>
-        <p>The regression companion to the Predictive Maintenance project: not "will it fail?" but "how many
-          cycles of life are left?" Built on NASA's C-MAPSS turbofan degradation simulation — a reusable
-          pipeline benchmarking eight regressors across NASA's four turbofan datasets, with an asymmetric
-          scoring rule that penalizes dangerous late predictions harder than early ones. Full case study
-          coming soon.</p>
-        <span class="card-link" style="opacity:.55;cursor:default;">Case study in progress &middot; coming soon</span>
-      </article>
-
     </div>
+
+    <!-- ===================== UPCOMING-PROJECT BANNER ===================== -->
+    <div class="reveal" style="margin-top:48px;border-radius:12px;padding:26px 30px;background:var(--lightblue,#EDF2F8);border:1px solid var(--line,#D8E1EA);border-left:5px solid var(--gold,#B8860B);">
+      <span style="display:inline-block;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#ffffff;background:var(--gold,#B8860B);padding:3px 12px;border-radius:20px;margin-bottom:12px;">Coming soon &middot; In the pipeline</span>
+      <h2 style="margin:0 0 8px;">Predictive Remaining-Useful-Life (RUL) for NASA turbofan engines</h2>
+      <p style="margin:0;max-width:860px;color:var(--text-muted,#5C7086);">The regression companion to
+        Predictive Maintenance — not "will it fail?" but "how many cycles of life are left?" A reusable
+        pipeline benchmarking eight regressors across NASA's four C-MAPSS turbofan datasets, with an
+        asymmetric scoring rule that penalizes dangerous late predictions harder than early ones. Full case
+        study in progress.</p>
+    </div>
+
   </div>
 </section>
 
