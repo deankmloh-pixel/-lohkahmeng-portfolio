@@ -5,39 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nurse Augmenting System — Case Study | Loh Kah Meng</title>
 <meta name="description" content="A heart-failure readmission clinical decision-support system built on a hand-engineered clinical score and eight independently trained models that converged on the same five predictors — read as corroboration, not coincidence.">
-<link rel="canonical" href="https://lohkahmeng-portfolio.netlify.app/project-1-nurse-augmenting-system.html">
-
+<link rel="canonical" href="https://aegishumanai.com/project-1-nurse-augmenting-system.html">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://lohkahmeng-portfolio.netlify.app/project-1-nurse-augmenting-system.html">
+<meta property="og:url" content="https://aegishumanai.com/project-1-nurse-augmenting-system.html">
 <meta property="og:title" content="Nurse Augmenting System — Case Study | Loh Kah Meng">
 <meta property="og:description" content="A heart-failure readmission clinical decision-support system built on a hand-engineered clinical score and eight independently trained models that converged on the same five predictors.">
-<meta property="og:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image" content="https://aegishumanai.com/assets/nas-capacity-gap.jpg">
+<meta property="og:image:width" content="1424">
+<meta property="og:image:height" content="752">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Nurse Augmenting System — Case Study | Loh Kah Meng">
 <meta name="twitter:description" content="A heart-failure readmission clinical decision-support system built on a hand-engineered clinical score and eight independently trained models that converged on the same five predictors.">
-<meta name="twitter:image" content="https://lohkahmeng-portfolio.netlify.app/assets/og-image.png">
-
+<meta name="twitter:image" content="https://aegishumanai.com/assets/nas-capacity-gap.jpg">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "Nurse Augmenting System — Heart Failure Readmission Clinical Decision Support",
   "description": "A hand-engineered clinical score and eight independently trained models that converged on the same five predictors of 30-day heart-failure readmission.",
-  "author": { "@type": "Person", "name": "Loh Kah Meng", "url": "https://lohkahmeng-portfolio.netlify.app/" },
-  "url": "https://lohkahmeng-portfolio.netlify.app/project-1-nurse-augmenting-system.html"
+  "author": { "@type": "Person", "name": "Loh Kah Meng", "url": "https://aegishumanai.com/" },
+  "url": "https://aegishumanai.com/project-1-nurse-augmenting-system.html"
 }
 </script>
-
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <nav class="site-nav">
   <div class="container">
     <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
@@ -52,29 +47,30 @@
     </button>
   </div>
 </nav>
-
 <header class="page-header">
   <div class="container">
     <div class="breadcrumb"><a href="index.html">Home</a> / Work / Nurse Augmenting System</div>
     <div class="tag tag-aqua">Healthcare &middot; Full Case Study</div>
     <h1>Nurse Augmenting System — Heart Failure Readmission Prediction</h1>
+    <figure class="hero-image" style="margin:18px 0 10px;">
+      <img src="assets/nas-capacity-gap.jpg"
+           alt="The capacity gap: nurse practitioners scale clinical capacity faster and more cheaply than doctors — 6-7 years and $50K-$150K to train a nurse practitioner versus 10-16 years and $160K-$500K for a doctor. Scaling health systems with nurses as the lever; augmentation, not replacement."
+           style="width:100%;height:auto;border-radius:12px;display:block;" loading="lazy">
+    </figure>
     <p class="lede">A clinical decision-support system built under the AEGIS research programme (Artificial
       Intelligence Guided Engineering System), whose founding rule is the same one this whole site is built
       on: AI augments a clinician's judgment, it does not replace it. The question here was narrow and real —
       which heart-failure patients are likely to be readmitted within 30 days — and the interesting part
       isn't any one model's accuracy. It's that eight independently built models, using completely different
       mathematics, all pointed at the same answer.</p>
-
     <div class="button-row">
       <a href="https://nas-target-app-3k9ypclrup4mpc2w4uqjwv.streamlit.app" target="_blank" rel="noopener" class="btn btn-primary">Try the live app →</a>
     </div>
-
     <p class="lede">Why this matters beyond the model: readmission risk isn't just a per-patient number.
       Aggregated across a ward or a region, the same signal becomes a resource-planning input — beds,
       staffing, and follow-up capacity a hospital or health ministry can forecast against, rather than
       discover after the fact. That planning use case matters most in aging-population health systems, where
       readmission pressure compounds faster than capacity does.</p>
-
     <div class="meta-row">
       <div class="meta-item"><div class="k">Role</div><div class="v">Solo — clinical feature design, ML, prototype app</div></div>
       <div class="meta-item"><div class="k">Dataset</div><div class="v">Heart-failure clinical records, MIT-affiliated hospital</div></div>
@@ -83,7 +79,6 @@
     </div>
   </div>
 </header>
-
 <section>
   <div class="container">
     <div class="prose reveal">
@@ -96,13 +91,11 @@
         rate, BNP, creatinine, sodium, and related vitals). The reasoning: a model built on a clinically
         meaningful summary is easier to trust and easier to explain than one built purely on whatever raw
         columns happened to be in the spreadsheet.</p>
-
       <p>Only after HCAS existed as a feature did model-building start. Eight independent classifiers were
         trained and compared on identical data and metrics, deliberately spanning very different mathematical
         approaches so that any agreement between them couldn't be explained by shared assumptions: Logistic
         Regression, Random Forest, CatBoost, SVM, XGBoost, an Explainable Boosting Machine, LightGBM, and a
         Stacking Ensemble that combines several of the others.</p>
-
       <div class="callout">
         <strong>The finding that mattered:</strong> all eight models, despite spanning linear, tree-based,
         kernel, boosting, and ensemble methods, independently converged on the same five top predictors of
@@ -111,7 +104,6 @@
         model's leaderboard score — it reads as the models corroborating clinical reasoning, not discovering
         something clinicians didn't already suspect.
       </div>
-
       <h3>Eight models, one conclusion</h3>
       <table class="data-table">
         <thead><tr><th>Model</th><th>Family</th><th>Role in this project</th></tr></thead>
@@ -129,14 +121,12 @@
       <p style="font-size: 13.5px; color: var(--text-muted); margin-top: -8px;">This project deliberately
         reports on agreement across models rather than a single accuracy/ROC-AUC leaderboard number — the
         clinical claim being tested was "do independent methods agree," not "which model scores highest."</p>
-
       <h3>From score to system</h3>
       <p>Random Forest was carried forward into a working prototype — the <strong>AEGIS Clinical Decision
         Support System</strong>, a desktop application that takes a patient's routine measurements as input,
         computes HCAS internally without ever surfacing it to the user, and returns an interpretable
         readmission-risk score. The clinician never needs to know a composite score is running underneath;
         they see the inputs they'd already collect and a risk assessment they can act on.</p>
-
       <p>Because this sits inside a broader research programme rather than a one-off script, the project
         also carries a five-stage IP protection plan (ownership, invention disclosure, separating what's
         patentable from what's a trade secret from what's copyrightable, an innovation blueprint, and a
@@ -145,7 +135,6 @@
         version. None of these are built yet — they're the deliberate next steps once the clinical case for
         the model is solid, which is exactly the order this project did things in: score first, model second,
         product last.</p>
-
       <div class="callout">
         <strong>Update (July 2026):</strong> a browser-based version of this tool is now live —
         <a href="https://nas-target-app-3k9ypclrup4mpc2w4uqjwv.streamlit.app" target="_blank" rel="noopener">try it here</a>
@@ -161,7 +150,6 @@
     </div>
   </div>
 </section>
-
 <footer>
   <div class="container footer-row">
     <div class="footer-brand">
@@ -176,7 +164,6 @@
     </ul>
   </div>
 </footer>
-
 <script src="script.js"></script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
