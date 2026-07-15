@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turbofan Remaining Useful Life — Case Study | Loh Kah Meng</title>
+<meta name="description" content="Project 8 turns NASA's C-MAPSS turbofan run-to-failure data into a remaining-useful-life predictor — an eight-regressor benchmark run separately across all four degradation regimes, ranked by RMSE and the NASA prognostics score, with an interactive engine that ages in real time. Pre-emptive maintenance for propulsion engines: act before failure, not after.">
+<link rel="canonical" href="https://aegishumanai.com/project-8-turbofan-rul.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://aegishumanai.com/project-8-turbofan-rul.html">
+<meta property="og:title" content="Turbofan Remaining Useful Life — Case Study | Loh Kah Meng">
+<meta property="og:description" content="An eight-regressor RUL benchmark on NASA C-MAPSS, run separately across all four degradation regimes and ranked by RMSE and the NASA prognostics score — with an interactive turbofan that ages in real time.">
+<meta property="og:image" content="https://aegishumanai.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Turbofan Remaining Useful Life — Case Study | Loh Kah Meng">
+<meta name="twitter:description" content="An eight-regressor RUL benchmark on NASA C-MAPSS with an interactive turbofan that ages in real time — pre-emptive maintenance for jet engines.">
+<meta name="twitter:image" content="https://aegishumanai.com/assets/og-image.png">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Turbofan Remaining Useful Life — Prognostics & Pre-emptive Maintenance",
+  "description": "An eight-regressor remaining-useful-life benchmark on the NASA C-MAPSS turbofan dataset, run separately across all four degradation regimes and ranked by RMSE and the NASA asymmetric prognostics score, wrapped in an interactive engine-health explorer.",
+  "author": { "@type": "Person", "name": "Loh Kah Meng", "url": "https://aegishumanai.com/" },
+  "url": "https://aegishumanai.com/project-8-turbofan-rul.html"
+}
+</script>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ---- Project 8: self-contained interactive turbofan (scoped .rulx-) ---- */
+.rulx-card{
+  position:relative; overflow:hidden; border-radius:16px; margin:8px 0 6px;
+  padding:18px 20px 20px;
+  background:radial-gradient(120% 140% at 30% 0%,#132030 0%,#0b1420 60%,#080d15 100%);
+  border:1px solid #22303f; color:#dfe8f2;
+  font-family:-apple-system,"Segoe UI",Roboto,system-ui,sans-serif;
+}
+.rulx-badge{ position:absolute; top:16px; right:20px; text-align:right; }
+.rulx-state{ font-size:.72rem; letter-spacing:.16em; font-weight:800; }
+.rulx-num{ font-size:2.6rem; font-weight:800; line-height:1; }
+.rulx-sub{ font-size:.7rem; letter-spacing:.14em; font-weight:700; color:#7f92a6; }
+.rulx-svg{ width:100%; height:auto; display:block; }
+.rulx-spin{ transform-origin:118px 150px; animation:rulx-rot 0.4s linear infinite; }
+@keyframes rulx-rot{ to{ transform:rotate(360deg); } }
+.rulx-flame{ animation:rulx-flick 1.1s ease-in-out infinite alternate; }
+@keyframes rulx-flick{ from{ opacity:.5; } to{ opacity:1; } }
+.rulx-cap{ font-size:.82rem; color:#9fb0c4; margin:6px 2px 12px; }
+.rulx-bar{ position:relative; height:26px; border-radius:13px; background:#1c2733;
+  overflow:hidden; border:1px solid #2b3947; }
+.rulx-fill{ height:100%; width:60%; border-radius:13px; transition:width .35s cubic-bezier(.22,.9,.3,1); }
+.rulx-line{ position:absolute; top:-4px; bottom:-4px; left:16%; width:2px; background:#e0503a; opacity:.9; }
+.rulx-lab{ display:flex; justify-content:space-between; font-size:.72rem; color:#8ea0b4; margin-top:6px; }
+.rulx-now{ font-weight:700; }
+.rulx-note{ font-size:.72rem; color:#8ea0b4; margin-top:4px; }
+.rulx-controls{ display:flex; align-items:center; gap:14px; margin-top:16px; flex-wrap:wrap; }
+.rulx-slider{ -webkit-appearance:none; appearance:none; height:6px; border-radius:3px;
+  background:#2b3947; flex:1 1 220px; outline:none; }
+.rulx-slider::-webkit-slider-thumb{ -webkit-appearance:none; width:18px; height:18px; border-radius:50%;
+  background:#dfe8f2; border:2px solid #0b1420; cursor:pointer; }
+.rulx-slider::-moz-range-thumb{ width:18px; height:18px; border-radius:50%; background:#dfe8f2;
+  border:2px solid #0b1420; cursor:pointer; }
+.rulx-btn{ background:#1f2c3a; color:#dfe8f2; border:1px solid #38506a; border-radius:8px;
+  padding:8px 16px; font-size:.85rem; font-weight:600; cursor:pointer; }
+.rulx-btn:hover{ background:#263646; }
+.rulx-hint{ font-size:.75rem; color:#7f92a6; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#work">Work</a> / Remaining Useful Life</div>
+    <div class="tag tag-violet">Research &middot; Full Case Study &middot; Prognostics</div>
+    <h1>Turbofan Remaining Useful Life — Pre-emptive Maintenance for Jet Engines</h1>
+    <p class="lede">Project 8 turns NASA's C-MAPSS turbofan run-to-failure data into a remaining-useful-life
+      predictor — an eight-regressor benchmark run <strong>separately</strong> across all four degradation
+      regimes, ranked by RMSE and the NASA prognostics score, and wrapped in an explorer whose engine you can
+      watch age in real time. The thesis is one line: schedule maintenance <em>before</em> failure, not after.</p>
+
+    <div class="button-row">
+      <a href="#explorer" class="btn btn-primary">See the live engine &darr;</a>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo — data engineering, ML, visual application</div></div>
+      <div class="meta-item"><div class="k">Dataset</div><div class="v">NASA C-MAPSS turbofan (FD001–FD004, run-to-failure)</div></div>
+      <div class="meta-item"><div class="k">Stack</div><div class="v">Python, pandas, scikit-learn, XGBoost, LightGBM, CatBoost, Streamlit</div></div>
+      <div class="meta-item"><div class="k">Best so far</div><div class="v">FD001 Extra Trees — RMSE 16.96 &middot; FD002 CatBoost — RMSE 16.19</div></div>
+      <div class="meta-item"><div class="k">Status</div><div class="v">Research — benchmarking in progress (FD001 & FD002 complete)</div></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <div class="prose reveal">
+      <p>A jet engine does not fail without warning — it degrades, cycle by cycle, and its sensors carry the
+        signature of that decline. The question this project answers is the one a maintenance planner actually
+        asks: <strong>how many cycles of useful life are left before this engine crosses into unsafe
+        territory?</strong> Not a stop/go flag, but a countdown — so an engine can be pulled for service while
+        it is still healthy, rather than discovered too late.</p>
+
+      <h3>The data</h3>
+      <p>Source: NASA's <strong>C-MAPSS</strong> (Commercial Modular Aero-Propulsion System Simulation)
+        turbofan degradation benchmark — the standard dataset for prognostics research. It ships as four
+        sub-datasets that get progressively harder, differing in how many <strong>operating conditions</strong>
+        the engines run under and how many <strong>fault modes</strong> can develop:</p>
+    </div>
+
+    <table class="data-table reveal">
+      <thead><tr><th>Fleet</th><th>Operating conditions</th><th>Fault modes</th><th>Why it's harder</th></tr></thead>
+      <tbody>
+        <tr><td>FD001</td><td class="num">1</td><td class="num">1</td><td>Cleanest — one regime, one failure path</td></tr>
+        <tr><td>FD002</td><td class="num">6</td><td class="num">1</td><td>Six regimes muddy the sensor signal</td></tr>
+        <tr><td>FD003</td><td class="num">1</td><td class="num">2</td><td>Two competing degradation modes</td></tr>
+        <tr><td>FD004</td><td class="num">6</td><td class="num">2</td><td>Hardest — six regimes and two faults</td></tr>
+      </tbody>
+    </table>
+
+    <div class="prose reveal">
+      <p>Each engine is a run-to-failure trajectory of 21 sensor channels and 3 operating settings; the target
+        is the remaining useful life at every point along the way. Following standard practice, RUL is
+        <strong>piecewise-linear capped</strong> (an engine far from failure is simply "healthy", so the label
+        is clipped at a ceiling of ~125 cycles) — degradation is only meaningfully predictable once wear
+        actually begins.</p>
+
+      <h3>Eight regressors, four separate leaderboards</h3>
+      <p>Every fleet was benchmarked with the same eight regressors, each tuned by a genuine hyperparameter
+        search inside the reusable AEGIS model-execution framework: Ridge, HistGradientBoosting, LightGBM,
+        XGBoost, CatBoost, Random Forest, Extra Trees, and SVR. Two deliberate discipline choices shape how
+        the results are read:</p>
+    </div>
+
+    <div class="callout warn reveal">
+      <strong>Never pooled — one leaderboard per fleet.</strong> FD001 and FD002 are different physical
+      problems (one regime versus six), so mixing their errors into a single ranking would be meaningless.
+      Each sub-dataset gets its own RMSE-ranked leaderboard, and the champion is named per fleet — not a single
+      flattering average.
+    </div>
+    <div class="callout warn reveal">
+      <strong>Ranked on RMSE and the NASA prognostics score.</strong> RMSE measures raw accuracy, but the NASA
+      score is <em>asymmetric</em> — it punishes a <strong>late</strong> prediction (saying an engine has more
+      life than it does) far more harshly than an early one, because in the real world a late call is the
+      dangerous one. Both are reported, so a model that is accurate <em>and</em> fails safe is visible.
+    </div>
+
+    <div class="prose reveal">
+      <h3>FD001 — the clean regime (7 of 8 models)</h3>
+      <p>One operating condition, one fault mode. The tree ensembles cluster tightly at the top; Extra Trees
+        leads. (SVR is O(n²) and still completing on the full search — reported when done rather than rushed.)</p>
+    </div>
+
+    <table class="data-table reveal">
+      <thead><tr><th>Rank</th><th>Model</th><th>RMSE</th><th>MAE</th><th>R²</th><th>NASA score</th></tr></thead>
+      <tbody>
+        <tr class="best"><td>1</td><td>Extra Trees</td><td class="num">16.96</td><td class="num">11.85</td><td class="num">0.821</td><td class="num">823.9</td></tr>
+        <tr><td>2</td><td>LightGBM</td><td class="num">17.16</td><td class="num">11.92</td><td class="num">0.817</td><td class="num">802.0</td></tr>
+        <tr><td>3</td><td>CatBoost</td><td class="num">17.16</td><td class="num">12.00</td><td class="num">0.817</td><td class="num">889.0</td></tr>
+        <tr><td>4</td><td>Random Forest</td><td class="num">17.21</td><td class="num">12.06</td><td class="num">0.816</td><td class="num">859.5</td></tr>
+        <tr><td>5</td><td>XGBoost</td><td class="num">17.32</td><td class="num">11.95</td><td class="num">0.813</td><td class="num">887.2</td></tr>
+        <tr><td>6</td><td>HistGradientBoosting</td><td class="num">17.62</td><td class="num">12.30</td><td class="num">0.807</td><td class="num">864.5</td></tr>
+        <tr><td>7</td><td>Ridge (linear baseline)</td><td class="num">20.88</td><td class="num">16.47</td><td class="num">0.728</td><td class="num">1312.2</td></tr>
+      </tbody>
+    </table>
+
+    <div class="prose reveal">
+      <h3>FD002 — six operating regimes (5 of 7 models)</h3>
+      <p>Six operating conditions make the sensor signal far noisier — yet the gradient-boosted models actually
+        score a <em>lower</em> RMSE here than on FD001, because there is far more data to learn the regimes
+        from. CatBoost leads. (SVR is skipped on the six-regime sets by design — it is prohibitively slow on
+        ~50–60k rows; Random Forest and Extra Trees are still completing.)</p>
+    </div>
+
+    <table class="data-table reveal">
+      <thead><tr><th>Rank</th><th>Model</th><th>RMSE</th><th>MAE</th><th>R²</th><th>NASA score</th></tr></thead>
+      <tbody>
+        <tr class="best"><td>1</td><td>CatBoost</td><td class="num">16.19</td><td class="num">11.88</td><td class="num">0.858</td><td class="num">1586.6</td></tr>
+        <tr><td>2</td><td>XGBoost</td><td class="num">16.24</td><td class="num">11.88</td><td class="num">0.857</td><td class="num">1612.6</td></tr>
+        <tr><td>3</td><td>LightGBM</td><td class="num">16.33</td><td class="num">11.89</td><td class="num">0.855</td><td class="num">1619.0</td></tr>
+        <tr><td>4</td><td>HistGradientBoosting</td><td class="num">16.47</td><td class="num">11.95</td><td class="num">0.853</td><td class="num">1635.8</td></tr>
+        <tr><td>5</td><td>Ridge (linear baseline)</td><td class="num">18.15</td><td class="num">14.07</td><td class="num">0.821</td><td class="num">1589.9</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout good reveal">
+      <strong>FD003 and FD004 are still running.</strong> The two two-fault regimes are benchmarking now; their
+      leaderboards will be added here as they complete. Nothing is reported before it is real — partial
+      results stay off the page rather than being estimated.
+    </div>
+
+    <!-- ============ INTERACTIVE ENGINE ============ -->
+    <div class="prose reveal" id="explorer">
+      <h3>See it: the engine's remaining life, live</h3>
+      <p>This is the heart of the RUL Explorer, running right here on the page — no video, no image, just inline
+        SVG. Drag the slider (or press <strong>Play degradation</strong>) and watch the engine age: the fan
+        slows, the combustor reddens, and the health verdict flips <span style="color:#2fa46a;font-weight:600;">HEALTHY</span>
+        &rarr; <span style="color:#d9a521;font-weight:600;">CAUTION</span> &rarr;
+        <span style="color:#e0503a;font-weight:600;">CRITICAL</span> as the remaining cycles drain toward the
+        maintenance line. "This engine is running out of life" becomes something you <em>see</em>.</p>
+    </div>
+
+    <div class="rulx-card reveal" id="rulx">
+      <div class="rulx-badge">
+        <div class="rulx-state" id="rulxState">HEALTHY</div>
+        <div class="rulx-num" id="rulxNum">95</div>
+        <div class="rulx-sub">CYCLES&nbsp;LEFT</div>
+      </div>
+      <svg class="rulx-svg" viewBox="0 0 520 210" role="img" aria-label="Turbofan engine cross-section, tinted by remaining useful life">
+        <defs>
+          <linearGradient id="rulxCase" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#33465c"/><stop offset="1" stop-color="#1a2734"/>
+          </linearGradient>
+          <linearGradient id="rulxBlade" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#8fa4b8"/><stop offset="1" stop-color="#4a5b6d"/>
+          </linearGradient>
+          <radialGradient id="rulxCore" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0" stop-color="#4fe3a0" id="rulxCoreGlow"/>
+            <stop offset="1" stop-color="#2fa46a" id="rulxCoreAcc"/>
+          </radialGradient>
+        </defs>
+        <path class="rulx-acc" d="M150 55 Q300 35 470 73 L470 137 Q300 175 150 155 Z"
+              fill="url(#rulxCase)" stroke="#2fa46a" stroke-width="1.5" opacity="0.96"/>
+        <path class="rulx-acc" d="M150 55 Q96 69 88 105 Q96 141 150 155 Z" fill="#1f2c3a"
+              stroke="#2fa46a" stroke-width="1.7"/>
+        <ellipse class="rulx-flame" cx="330" cy="105" rx="72" ry="18" fill="url(#rulxCore)" opacity="0.85"/>
+        <g stroke="#5c7186" stroke-width="2" opacity="0.75">
+          <line x1="392" y1="83" x2="392" y2="127"/><line x1="410" y1="85" x2="410" y2="125"/>
+          <line x1="428" y1="87" x2="428" y2="123"/>
+        </g>
+        <path class="rulx-acc" d="M452 87 L490 100 L490 110 L452 123 Z" fill="#26333f" stroke="#2fa46a" stroke-width="1.3"/>
+        <g class="rulx-spin" id="rulxSpin">
+          <g transform="translate(118,150) scale(1,0.62)">
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(0)"   fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(45)"  fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(90)"  fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(135)" fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(180)" fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(225)" fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(270)" fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(315)" fill="url(#rulxBlade)" opacity="0.95"/>
+          </g>
+        </g>
+        <circle cx="118" cy="105" r="12" fill="#8fa4b8" stroke="#dfe8f2" stroke-width="1.5"/>
+      </svg>
+      <div class="rulx-cap" id="rulxCap">Engine demo — RUL 95</div>
+
+      <div class="rulx-bar">
+        <div class="rulx-fill" id="rulxFill"></div>
+        <div class="rulx-line" title="maintenance line (20 cycles)"></div>
+      </div>
+      <div class="rulx-lab">
+        <span>failure&nbsp;(0)</span>
+        <span class="rulx-now" id="rulxNow">now: 95 cycles left</span>
+        <span>healthy&nbsp;(125+)</span>
+      </div>
+      <div class="rulx-note">Red line = the <strong>maintenance threshold (20 cycles)</strong>. Act while the bar is still above it.</div>
+
+      <div class="rulx-controls">
+        <button class="rulx-btn" id="rulxPlay" type="button">▶ Play degradation</button>
+        <input class="rulx-slider" id="rulxSlider" type="range" min="0" max="125" value="95" step="1" aria-label="Remaining useful life in cycles">
+        <span class="rulx-hint">drag to explore</span>
+      </div>
+    </div>
+
+    <div class="prose reveal">
+      <h3>Why the visual matters</h3>
+      <p>A prognostics model's output is a number, and numbers are easy to nod at and ignore. Binding that
+        number to a <strong>living engine</strong> — colour, spin, glow, a draining bar against a hard
+        maintenance line — turns "RUL = 18" into an unmistakable "pull this engine <em>now</em>." The point of
+        the whole project is pre-emptive action, and the interface is built to make that action feel urgent at
+        exactly the right moment, and calm when there is still runway.</p>
+
+      <h3>Engineering rigor</h3>
+    </div>
+
+    <div class="callout good reveal">
+      <strong>Separate leaderboards, honestly named.</strong> Four fleets, four rankings — no pooling of
+      physically different problems into one flattering average.
+    </div>
+    <div class="callout good reveal">
+      <strong>The right cost function.</strong> The NASA asymmetric score is reported alongside RMSE precisely
+      because, for a jet engine, a prediction that is late is far more dangerous than one that is early.
+    </div>
+    <div class="callout good reveal">
+      <strong>The linear baseline stays in.</strong> Ridge regression is kept in last place on every board
+      rather than dropped — an honest benchmark shows how far a simple model gets, and how much the ensembles
+      actually earn.
+    </div>
+    <div class="callout warn reveal">
+      <strong>Resume-safe and in-progress by design.</strong> The framework checkpoints every model, so a
+      multi-day run survives interruption. FD003 and FD004 are still training; this page reports only what has
+      genuinely finished.
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+<script>
+/* ---- Project 8 interactive turbofan ---- */
+(function(){
+  var CAP = 125;
+  var num = document.getElementById('rulxNum');
+  var state = document.getElementById('rulxState');
+  var cap = document.getElementById('rulxCap');
+  var fill = document.getElementById('rulxFill');
+  var now = document.getElementById('rulxNow');
+  var spin = document.getElementById('rulxSpin');
+  var glow = document.getElementById('rulxCoreGlow');
+  var acc = document.getElementById('rulxCoreAcc');
+  var slider = document.getElementById('rulxSlider');
+  var playBtn = document.getElementById('rulxPlay');
+  var accents = document.querySelectorAll('#rulx .rulx-acc');
+  if(!slider){ return; }
+
+  function health(r){
+    if(r <= 20) return {a:'#e0503a', g:'#ff5b3d', spin:0.9,  s:'CRITICAL'};
+    if(r <= 50) return {a:'#d9a521', g:'#ffcb47', spin:0.55, s:'CAUTION'};
+    return              {a:'#2fa46a', g:'#4fe3a0', spin:0.32, s:'HEALTHY'};
+  }
+  function render(r){
+    r = Math.max(0, Math.min(CAP, Math.round(r)));
+    var h = health(r);
+    num.textContent = r;         num.style.color = h.a;
+    state.textContent = h.s;     state.style.color = h.a;
+    cap.textContent = 'Engine demo — RUL ' + r;
+    glow.setAttribute('stop-color', h.g);
+    acc.setAttribute('stop-color', h.a);
+    for(var i=0;i<accents.length;i++){ accents[i].setAttribute('stroke', h.a); }
+    spin.style.animationDuration = h.spin + 's';
+    var pct = Math.max(0, Math.min(1, r / CAP)) * 100;
+    fill.style.width = pct + '%';
+    fill.style.background = 'linear-gradient(90deg,' + h.a + ',' + h.g + ')';
+    now.textContent = 'now: ' + r + ' cycles left';  now.style.color = h.a;
+  }
+
+  var raf = null, playing = false;
+  function stopPlay(){ playing = false; if(raf){ cancelAnimationFrame(raf); raf = null; } playBtn.textContent = '▶ Play degradation'; }
+  function play(){
+    stopPlay(); playing = true; playBtn.textContent = '⏸ Playing…';
+    var v = 120;
+    function step(){
+      if(!playing) return;
+      v -= 0.65;
+      if(v <= 4){ v = 4; render(v); slider.value = v; stopPlay(); return; }
+      render(v); slider.value = Math.round(v);
+      raf = requestAnimationFrame(step);
+    }
+    step();
+  }
+
+  slider.addEventListener('input', function(){ stopPlay(); render(+slider.value); });
+  playBtn.addEventListener('click', function(){ if(playing){ stopPlay(); } else { play(); } });
+
+  render(95);
+  // gentle auto-demo once the widget scrolls into view
+  var seen = false;
+  function maybeAuto(){
+    if(seen) return;
+    var box = document.getElementById('rulx').getBoundingClientRect();
+    if(box.top < window.innerHeight * 0.8 && box.bottom > 0){ seen = true; setTimeout(play, 500); }
+  }
+  window.addEventListener('scroll', maybeAuto, {passive:true});
+  maybeAuto();
+})();
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-E5ZR5LF113');
+</script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
