@@ -38,6 +38,39 @@
 </script>
 
 <link rel="stylesheet" href="style.css">
+<style>
+/* Project 8 card: simulator engine preview */
+.p8-right{ display:flex; flex-direction:column; gap:16px; }
+.p8-media{ position:relative; border-radius:12px; overflow:hidden; padding:10px 12px 6px;
+  background:radial-gradient(120% 140% at 30% 0%,#132030 0%,#0b1420 60%,#080d15 100%);
+  border:1px solid #22303f; }
+.p8-media svg{ width:100%; height:auto; display:block; }
+.p8-media .p8-tag{ position:absolute; top:9px; right:13px; font-size:.6rem; letter-spacing:.14em;
+  font-weight:800; color:#2fa46a; }
+.p8-spin{ transform-origin:120px 128px; animation:p8rot 3.4s linear infinite; }
+@keyframes p8rot{ to{ transform:rotate(360deg); } }
+.p8-flame{ animation:p8flick 1.4s ease-in-out infinite alternate; }
+@keyframes p8flick{ from{opacity:.55;} to{opacity:1;} }
+@media (prefers-reduced-motion: reduce){ .p8-spin,.p8-flame{ animation:none; } }
+</style>
+<style>
+/* Work page: domain group hero banners */
+.group-hero{ position:relative; overflow:hidden; border-radius:var(--radius); margin:48px 0 24px;
+  min-height:210px; display:flex; align-items:flex-end; border:1px solid var(--hairline); background:#0b1420; }
+.group-hero-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center right; z-index:0; }
+.group-hero::after{ content:""; position:absolute; inset:0; z-index:1;
+  background:linear-gradient(90deg, rgba(8,13,21,.95) 0%, rgba(8,13,21,.82) 34%, rgba(8,13,21,.25) 66%, rgba(8,13,21,0) 100%); }
+.group-hero-body{ position:relative; z-index:2; padding:26px 32px; max-width:62%; }
+.group-hero-body h2{ color:#f4f7fb; margin:6px 0 8px; }
+.group-hero-body p{ color:#c9d4e2; margin:0; font-size:15.5px; max-width:46ch; }
+.group-hero .section-label{ color:var(--gold); }
+@media (max-width:760px){
+  .group-hero{ min-height:260px; }
+  .group-hero-body{ max-width:100%; }
+  .group-hero::after{ background:linear-gradient(180deg, rgba(8,13,21,.55) 0%, rgba(8,13,21,.9) 70%); }
+  .group-hero-img{ object-position:center; }
+}
+</style>
 </head>
 <body>
 
@@ -130,7 +163,7 @@
   <div class="container">
     <div class="section-head reveal">
       <div class="section-label">Selected Work</div>
-      <h2>Seven decision-support systems — human-centered care at the heart</h2>
+      <h2>Eight decision-support systems, grouped by the human problem they solve</h2>
       <p>Every system here rests on one belief: AI should make people better decision-makers, not replace
         them. That belief has a home — the <strong>Nurse Augmenting System</strong>, human-centered patient
         care and the core of the AEGIS programme. The rest prove the same principle holds across domains: two
@@ -138,17 +171,16 @@
         can't tell you.</p>
     </div>
 
-    <!-- ===================== GROUP 1: THE CORE ===================== -->
-    <div class="section-head reveal" style="margin-top:44px;">
-      <div class="section-label">The Core</div>
-      <h2>Nurse Augmenting System — the heart of the work</h2>
-      <p>The Pento&#8209;Helix vertex: augmenting the people who care for patients, never replacing their
-        judgment. Two studies in human-centered healthcare, built under the AEGIS research programme in the
-        tradition of Prof. Dhanjoo N. Ghista.</p>
+        <!-- ============ DOMAIN: Biomedical Intelligence ============ -->
+    <div class="group-hero reveal">
+      <img class="group-hero-img" src="assets/group-biomedical.jpg" alt="Luminous data-lattice human heart with an ECG waveform flowing into a neural network" loading="lazy">
+      <div class="group-hero-body">
+        <div class="section-label">Domain 01 &middot; Biomedical Intelligence</div>
+        <h2>Biomedical Intelligence</h2>
+        <p>Predicting a patient&rsquo;s risk so a clinician can act early &mdash; AI that augments the nurse, never replaces her.</p>
+      </div>
     </div>
-
     <div class="project-grid">
-
       <article class="project-card reveal" style="border-top:3px solid var(--aqua,#2E8B84);">
         <div class="tag tag-aqua">Healthcare &middot; Core Project</div>
         <h3>Nurse Augmenting System for Biomedical Intelligence and Personalized Care Augmentation</h3>
@@ -164,7 +196,6 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </article>
-
       <article class="project-card reveal" style="border-top:3px solid var(--aqua,#2E8B84);">
         <div class="tag tag-aqua">Healthcare &middot; Core Project</div>
         <h3>Medication Adherence &amp; Healthcare Claims Analysis</h3>
@@ -180,54 +211,69 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </article>
-
     </div>
-
-    <!-- ===================== GROUP 2: DEPLOYED & WORKING ===================== -->
-    <div class="section-head reveal" style="margin-top:44px;">
-      <div class="section-label">Deployed &amp; Working</div>
-      <h2>Systems that ship — and one built to raise the alarm</h2>
-      <p>Two live, human-in-the-loop apps you can use right now. AEGIS Orbital Watch is the outreach signal — a
-        small voice on satellite-collision risk in a very large ocean. Predictive Maintenance is the working
-        proof the pipeline runs end to end.</p>
+    <!-- ============ DOMAIN: Pre-Emptive Maintenance ============ -->
+    <div class="group-hero reveal">
+      <img class="group-hero-img" src="assets/group-maintenance.jpg" alt="Cutaway turbofan engine glowing from green through amber to red along its core" loading="lazy">
+      <div class="group-hero-body">
+        <div class="section-label">Domain 02 &middot; Pre-Emptive Maintenance</div>
+        <h2>Pre-Emptive Maintenance</h2>
+        <p>Read the life that&rsquo;s left in a machine, and service it <em>before</em> it fails.</p>
+      </div>
     </div>
-
     <div class="project-grid">
-
       <article class="project-card featured reveal">
         <div>
-          <div class="tag tag-violet">Featured &middot; Full Case Study &middot; Deployed</div>
-          <h3>AEGIS Orbital Watch: Advance-Warning System for Satellite Collision Risk</h3>
-          <p>Built on ESA's Kelvins Collision Avoidance dataset (13,154 events) — an eight-model benchmark
-            across four increasingly rigorous passes, culminating in a deployed, human-in-the-loop app that
-            scores live conjunction data and lets an operator record their own call alongside the model's.
-            Built to raise awareness of a growing orbital problem.</p>
+          <div class="tag tag-violet">Research &middot; Full Case Study &middot; Prognostics</div>
+          <h3>Turbofan Remaining Useful Life &mdash; Pre-emptive Maintenance</h3>
+          <p>An eight-regressor remaining-useful-life benchmark on NASA's C-MAPSS turbofan data, run
+            <strong>separately</strong> across all four degradation regimes (FD001&ndash;FD004) and ranked by
+            RMSE and the NASA asymmetric prognostics score &mdash; late predictions punished harder than early
+            ones, because for a jet engine a late call is the dangerous one. An interactive engine ages
+            green &rarr; amber &rarr; red in real time, so "schedule maintenance before failure" is something
+            you see, not just read.</p>
           <div class="stack">
             <span class="chip">Python / pandas</span>
-            <span class="chip">XGBoost</span>
-            <span class="chip">FastAPI</span>
-            <span class="chip">Human-in-the-loop UI</span>
+            <span class="chip">scikit-learn</span>
+            <span class="chip">XGBoost / LightGBM / CatBoost</span>
+            <span class="chip">Streamlit</span>
+            <span class="chip">Prognostics &middot; RUL</span>
           </div>
-          <a href="project-6-aegis-orbital-watch.html" class="card-link">View case study
+          <a href="project-8-turbofan-rul.html" class="card-link">View case study
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
         </div>
-        <div class="stat-row">
+        <div class="p8-right">
+          <div class="p8-media"><div class="p8-tag">RUL 95 · HEALTHY</div><svg viewBox="0 0 520 180" role="img" aria-label="Turbofan engine from the RUL simulator (healthy)">
+<defs>
+<linearGradient id="p8case" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#33465c"/><stop offset="1" stop-color="#1a2734"/></linearGradient>
+<linearGradient id="p8blade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8fa4b8"/><stop offset="1" stop-color="#4a5b6d"/></linearGradient>
+<radialGradient id="p8core" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#4fe3a0"/><stop offset="1" stop-color="#2fa46a"/></radialGradient>
+</defs>
+<path d="M150 45 Q300 27 470 62 L470 118 Q300 152 150 133 Z" fill="url(#p8case)" stroke="#2fa46a" stroke-width="1.5" opacity="0.96"/>
+<path d="M150 45 Q98 58 90 89 Q98 120 150 133 Z" fill="#1f2c3a" stroke="#2fa46a" stroke-width="1.6"/>
+<ellipse class="p8-flame" cx="330" cy="89" rx="66" ry="15" fill="url(#p8core)" opacity="0.85"/>
+<g stroke="#5c7186" stroke-width="2" opacity="0.7"><line x1="392" y1="70" x2="392" y2="108"/><line x1="408" y1="72" x2="408" y2="106"/><line x1="424" y1="74" x2="424" y2="104"/></g>
+<path d="M452 72 L486 84 L486 94 L452 106 Z" fill="#26333f" stroke="#2fa46a" stroke-width="1.2"/>
+<g class="p8-spin"><g transform="translate(120,128) scale(1,0.6)"><ellipse cx="0" cy="-30" rx="8" ry="30" transform="rotate(0)" fill="url(#p8blade)" opacity="0.95"/><ellipse cx="0" cy="-30" rx="8" ry="30" transform="rotate(45)" fill="url(#p8blade)" opacity="0.95"/><ellipse cx="0" cy="-30" rx="8" ry="30" transform="rotate(90)" fill="url(#p8blade)" opacity="0.95"/><ellipse cx="0" cy="-30" rx="8" ry="30" transform="rotate(135)" fill="url(#p8blade)" opacity="0.95"/><ellipse cx="0" cy="-30" rx="8" ry="30" transform="rotate(180)" fill="url(#p8blade)" opacity="0.95"/><ellipse cx="0" cy="-30" rx="8" ry="30" transform="rotate(225)" fill="url(#p8blade)" opacity="0.95"/><ellipse cx="0" cy="-30" rx="8" ry="30" transform="rotate(270)" fill="url(#p8blade)" opacity="0.95"/><ellipse cx="0" cy="-30" rx="8" ry="30" transform="rotate(315)" fill="url(#p8blade)" opacity="0.95"/></g></g>
+<circle cx="120" cy="89" r="11" fill="#8fa4b8" stroke="#dfe8f2" stroke-width="1.4"/>
+</svg></div>
+          <div class="stat-row">
           <div class="stat-box">
-            <div class="stat-value good">0.9814</div>
-            <div class="stat-label">Test ROC-AUC (XGBoost)</div>
+            <div class="stat-value good">16.19</div>
+            <div class="stat-label">Best RMSE (FD002 CatBoost)</div>
           </div>
           <div class="stat-box">
-            <div class="stat-value">80.8%</div>
-            <div class="stat-label">Recall @ operating threshold</div>
+            <div class="stat-value">8 &times; 4</div>
+            <div class="stat-label">Regressors across four regimes</div>
           </div>
           <div class="stat-box">
-            <div class="stat-value">13,154</div>
-            <div class="stat-label">Conjunction events modeled</div>
+            <div class="stat-value">125</div>
+            <div class="stat-label">Cycle cap on remaining life</div>
           </div>
         </div>
+        </div>
       </article>
-
       <article class="project-card featured reveal">
         <div>
           <div class="tag tag-violet">Featured &middot; Full Case Study &middot; Deployed</div>
@@ -263,19 +309,61 @@
           </div>
         </div>
       </article>
-
     </div>
-
-    <!-- ===================== GROUP 3: THE METHOD, ACROSS DOMAINS ===================== -->
-    <div class="section-head reveal" style="margin-top:44px;">
-      <div class="section-label">The Method, Across Domains</div>
-      <h2>The same discipline in workforce, finance, and marketing</h2>
-      <p>The reusable AEGIS framework, applied and validated on public datasets in three more domains — same
-        rigor, same honesty about what each model can and can't do.</p>
+    <!-- ============ DOMAIN: Orbital &amp; Space Safety ============ -->
+    <div class="group-hero reveal">
+      <img class="group-hero-img" src="assets/group-space.jpg" alt="Earth at night threaded with converging satellite orbital paths and a near-miss warning halo" loading="lazy">
+      <div class="group-hero-body">
+        <div class="section-label">Domain 03 &middot; Orbital &amp; Space Safety</div>
+        <h2>Orbital &amp; Space Safety</h2>
+        <p>An advance-warning signal for satellite-collision risk &mdash; a small voice in a very large ocean.</p>
+      </div>
     </div>
-
     <div class="project-grid">
-
+      <article class="project-card featured reveal">
+        <div>
+          <div class="tag tag-violet">Featured &middot; Full Case Study &middot; Deployed</div>
+          <h3>AEGIS Orbital Watch: Advance-Warning System for Satellite Collision Risk</h3>
+          <p>Built on ESA's Kelvins Collision Avoidance dataset (13,154 events) — an eight-model benchmark
+            across four increasingly rigorous passes, culminating in a deployed, human-in-the-loop app that
+            scores live conjunction data and lets an operator record their own call alongside the model's.
+            Built to raise awareness of a growing orbital problem.</p>
+          <div class="stack">
+            <span class="chip">Python / pandas</span>
+            <span class="chip">XGBoost</span>
+            <span class="chip">FastAPI</span>
+            <span class="chip">Human-in-the-loop UI</span>
+          </div>
+          <a href="project-6-aegis-orbital-watch.html" class="card-link">View case study
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-value good">0.9814</div>
+            <div class="stat-label">Test ROC-AUC (XGBoost)</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">80.8%</div>
+            <div class="stat-label">Recall @ operating threshold</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">13,154</div>
+            <div class="stat-label">Conjunction events modeled</div>
+          </div>
+        </div>
+      </article>
+    </div>
+    <!-- ============ DOMAIN: Decision Intelligence ============ -->
+    <div class="group-hero reveal">
+      <img class="group-hero-img" src="assets/group-decision.jpg" alt="Branching decision tree of light beside a balanced scale, one path highlighted in gold" loading="lazy">
+      <div class="group-hero-body">
+        <div class="section-label">Domain 04 &middot; Decision Intelligence</div>
+        <h2>Decision Intelligence</h2>
+        <p>Weighing risk to make a fair, transparent call &mdash; in lending, retention, and livelihoods.</p>
+      </div>
+    </div>
+    <div class="project-grid">
       <article class="project-card featured reveal">
         <div>
           <div class="tag tag-blue">Featured &middot; Closed &middot; Framework Validated</div>
@@ -310,7 +398,6 @@
           </div>
         </div>
       </article>
-
       <article class="project-card reveal">
         <div class="tag tag-yellow">Finance</div>
         <h3>AI-Powered Loan Default Risk Decision Support System</h3>
@@ -321,7 +408,6 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </article>
-
       <article class="project-card reveal">
         <div class="tag tag-magenta">Marketing</div>
         <h3>AI-Powered Marketing Decision Support System for Customer Retention</h3>
@@ -331,21 +417,9 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </article>
-
     </div>
 
-    <!-- ===================== UPCOMING-PROJECT BANNER ===================== -->
-    <div class="reveal" style="margin-top:48px;border-radius:12px;padding:26px 30px;background:var(--lightblue,#EDF2F8);border:1px solid var(--line,#D8E1EA);border-left:5px solid var(--gold,#B8860B);">
-      <span style="display:inline-block;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#ffffff;background:var(--gold,#B8860B);padding:3px 12px;border-radius:20px;margin-bottom:12px;">Coming soon &middot; In the pipeline</span>
-      <h2 style="margin:0 0 8px;">Predictive Remaining-Useful-Life (RUL) for NASA turbofan engines</h2>
-      <p style="margin:0;max-width:860px;color:var(--text-muted,#5C7086);">The regression companion to
-        Predictive Maintenance — not "will it fail?" but "how many cycles of life are left?" A reusable
-        pipeline benchmarking eight regressors across NASA's four C-MAPSS turbofan datasets, with an
-        asymmetric scoring rule that penalizes dangerous late predictions harder than early ones. Full case
-        study in progress.</p>
-    </div>
-
-  </div>
+</div>
 </section>
 
 <footer>
