@@ -101,34 +101,13 @@
       predictor — an eight-regressor benchmark run <strong>separately</strong> across all four degradation
       regimes, ranked by RMSE and the NASA prognostics score, and wrapped in an explorer whose engine you can
       watch age in real time. The thesis is one line: schedule maintenance <em>before</em> failure, not after.</p>
-
-    <div class="button-row">
-      <a href="#explorer" class="btn btn-primary">See the live engine &darr;</a>
-    </div>
-    <div class="meta-row">
-      <div class="meta-item"><div class="k">Role</div><div class="v">Solo — data engineering, ML, visual application</div></div>
-      <div class="meta-item"><div class="k">Dataset</div><div class="v">NASA C-MAPSS turbofan (FD001–FD004, run-to-failure)</div></div>
-      <div class="meta-item"><div class="k">Stack</div><div class="v">Python, pandas, scikit-learn, XGBoost, LightGBM, CatBoost, Streamlit</div></div>
-      <div class="meta-item"><div class="k">Best so far</div><div class="v">FD001 Extra Trees — RMSE 16.96 &middot; FD002 CatBoost — RMSE 16.19</div></div>
-      <div class="meta-item"><div class="k">Status</div><div class="v">Research — benchmarking in progress (FD001 & FD002 complete)</div></div>
-    </div>
   </div>
 </header>
 
 <section>
   <div class="container">
 
-    <!-- ============ INTERACTIVE ENGINE (hero — first thing on the page) ============ -->
-    <div class="prose reveal" id="explorer">
-      <h3>See it: the engine's remaining life, live</h3>
-      <p>This is the heart of the RUL Explorer, running right here on the page — no video, no image, just inline
-        SVG. Drag the slider (or press <strong>Play degradation</strong>) and watch the engine age: the fan
-        slows, the combustor reddens, and the health verdict flips <span style="color:#2fa46a;font-weight:600;">HEALTHY</span>
-        &rarr; <span style="color:#d9a521;font-weight:600;">CAUTION</span> &rarr;
-        <span style="color:#e0503a;font-weight:600;">CRITICAL</span> as the remaining cycles drain toward the
-        maintenance line. "This engine is running out of life" becomes something you <em>see</em>.</p>
-    </div>
-
+    <!-- ============ INTERACTIVE ENGINE (hero — first screen of P8) ============ -->
     <div class="rulx-card reveal" id="rulx">
       <div class="rulx-badge">
         <div class="rulx-state" id="rulxState">HEALTHY</div>
@@ -190,6 +169,24 @@
         <input class="rulx-slider" id="rulxSlider" type="range" min="0" max="125" value="95" step="1" aria-label="Remaining useful life in cycles">
         <span class="rulx-hint">drag to explore</span>
       </div>
+    </div>
+
+    <div class="prose reveal" id="explorer">
+      <h3>See it: the engine's remaining life, live</h3>
+      <p>This is the heart of the RUL Explorer, running right here on the page — no video, no image, just inline
+        SVG. Drag the slider (or press <strong>Play degradation</strong>) and watch the engine age: the fan
+        slows, the combustor reddens, and the health verdict flips <span style="color:#2fa46a;font-weight:600;">HEALTHY</span>
+        &rarr; <span style="color:#d9a521;font-weight:600;">CAUTION</span> &rarr;
+        <span style="color:#e0503a;font-weight:600;">CRITICAL</span> as the remaining cycles drain toward the
+        maintenance line. "This engine is running out of life" becomes something you <em>see</em>.</p>
+    </div>
+
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo — data engineering, ML, visual application</div></div>
+      <div class="meta-item"><div class="k">Dataset</div><div class="v">NASA C-MAPSS turbofan (FD001–FD004, run-to-failure)</div></div>
+      <div class="meta-item"><div class="k">Stack</div><div class="v">Python, pandas, scikit-learn, XGBoost, LightGBM, CatBoost, Streamlit</div></div>
+      <div class="meta-item"><div class="k">Best so far</div><div class="v">FD001 Extra Trees — RMSE 16.96 &middot; FD002 CatBoost — RMSE 16.19</div></div>
+      <div class="meta-item"><div class="k">Status</div><div class="v">Research — benchmarking in progress (FD001 & FD002 complete)</div></div>
     </div>
 
     <div class="prose reveal">
