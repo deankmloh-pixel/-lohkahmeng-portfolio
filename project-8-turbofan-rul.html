@@ -193,7 +193,7 @@
       <div class="meta-item"><div class="k">Role</div><div class="v">Solo — data engineering, ML, visual application</div></div>
       <div class="meta-item"><div class="k">Dataset</div><div class="v">NASA C-MAPSS turbofan (FD001–FD004, run-to-failure)</div></div>
       <div class="meta-item"><div class="k">Stack</div><div class="v">Python, pandas, scikit-learn, XGBoost, LightGBM, CatBoost, Streamlit</div></div>
-      <div class="meta-item"><div class="k">Best so far</div><div class="v">FD001 Extra Trees — RMSE 16.96 &middot; FD002 CatBoost — RMSE 16.19</div></div>
+      <div class="meta-item"><div class="k">Best so far</div><div class="v">FD001 Extra Trees — RMSE 16.96 &middot; FD002 Random Forest — RMSE 16.14</div></div>
       <div class="meta-item"><div class="k">Status</div><div class="v">Research — benchmarking in progress (FD001 & FD002 complete)</div></div>
     </div>
 
@@ -268,21 +268,24 @@
     </table>
 
     <div class="prose reveal">
-      <h3>FD002 — six operating regimes (5 of 7 models)</h3>
-      <p>Six operating conditions make the sensor signal far noisier — yet the gradient-boosted models actually
-        score a <em>lower</em> RMSE here than on FD001, because there is far more data to learn the regimes
-        from. CatBoost leads. (SVR is skipped on the six-regime sets by design — it is prohibitively slow on
-        ~50–60k rows; Random Forest and Extra Trees are still completing.)</p>
+      <h3>FD002 — six operating regimes (7 of 7 models)</h3>
+      <p>Six operating conditions make the sensor signal far noisier — yet the gradient-boosted and tree
+        ensembles actually score a <em>lower</em> RMSE here than on FD001, because there is far more data to
+        learn the regimes from. <strong>Random Forest takes it</strong>, with CatBoost a whisker behind. (SVR
+        is skipped on the six-regime sets by design — it is prohibitively slow on ~50–60k rows; all seven
+        applicable models completed.)</p>
     </div>
 
     <table class="data-table reveal">
       <thead><tr><th>Rank</th><th>Model</th><th>RMSE</th><th>MAE</th><th>R²</th><th>NASA score</th></tr></thead>
       <tbody>
-        <tr class="best"><td>1</td><td>CatBoost</td><td class="num">16.19</td><td class="num">11.88</td><td class="num">0.858</td><td class="num">1586.6</td></tr>
-        <tr><td>2</td><td>XGBoost</td><td class="num">16.24</td><td class="num">11.88</td><td class="num">0.857</td><td class="num">1612.6</td></tr>
-        <tr><td>3</td><td>LightGBM</td><td class="num">16.33</td><td class="num">11.89</td><td class="num">0.855</td><td class="num">1619.0</td></tr>
-        <tr><td>4</td><td>HistGradientBoosting</td><td class="num">16.47</td><td class="num">11.95</td><td class="num">0.853</td><td class="num">1635.8</td></tr>
-        <tr><td>5</td><td>Ridge (linear baseline)</td><td class="num">18.15</td><td class="num">14.07</td><td class="num">0.821</td><td class="num">1589.9</td></tr>
+        <tr class="best"><td>1</td><td>Random Forest</td><td class="num">16.14</td><td class="num">11.99</td><td class="num">0.859</td><td class="num">1586.7</td></tr>
+        <tr><td>2</td><td>CatBoost</td><td class="num">16.19</td><td class="num">11.88</td><td class="num">0.858</td><td class="num">1586.6</td></tr>
+        <tr><td>3</td><td>Extra Trees</td><td class="num">16.21</td><td class="num">12.13</td><td class="num">0.857</td><td class="num">1679.0</td></tr>
+        <tr><td>4</td><td>XGBoost</td><td class="num">16.24</td><td class="num">11.88</td><td class="num">0.857</td><td class="num">1612.6</td></tr>
+        <tr><td>5</td><td>LightGBM</td><td class="num">16.33</td><td class="num">11.89</td><td class="num">0.855</td><td class="num">1619.0</td></tr>
+        <tr><td>6</td><td>HistGradientBoosting</td><td class="num">16.47</td><td class="num">11.95</td><td class="num">0.853</td><td class="num">1635.8</td></tr>
+        <tr><td>7</td><td>Ridge (linear baseline)</td><td class="num">18.15</td><td class="num">14.07</td><td class="num">0.821</td><td class="num">1589.9</td></tr>
       </tbody>
     </table>
 
