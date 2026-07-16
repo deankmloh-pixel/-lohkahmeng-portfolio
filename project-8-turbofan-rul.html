@@ -117,6 +117,81 @@
 
 <section>
   <div class="container">
+
+    <!-- ============ INTERACTIVE ENGINE (hero — first thing on the page) ============ -->
+    <div class="prose reveal" id="explorer">
+      <h3>See it: the engine's remaining life, live</h3>
+      <p>This is the heart of the RUL Explorer, running right here on the page — no video, no image, just inline
+        SVG. Drag the slider (or press <strong>Play degradation</strong>) and watch the engine age: the fan
+        slows, the combustor reddens, and the health verdict flips <span style="color:#2fa46a;font-weight:600;">HEALTHY</span>
+        &rarr; <span style="color:#d9a521;font-weight:600;">CAUTION</span> &rarr;
+        <span style="color:#e0503a;font-weight:600;">CRITICAL</span> as the remaining cycles drain toward the
+        maintenance line. "This engine is running out of life" becomes something you <em>see</em>.</p>
+    </div>
+
+    <div class="rulx-card reveal" id="rulx">
+      <div class="rulx-badge">
+        <div class="rulx-state" id="rulxState">HEALTHY</div>
+        <div class="rulx-num" id="rulxNum">95</div>
+        <div class="rulx-sub">CYCLES&nbsp;LEFT</div>
+      </div>
+      <svg class="rulx-svg" viewBox="0 0 520 210" role="img" aria-label="Turbofan engine cross-section, tinted by remaining useful life">
+        <defs>
+          <linearGradient id="rulxCase" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#33465c"/><stop offset="1" stop-color="#1a2734"/>
+          </linearGradient>
+          <linearGradient id="rulxBlade" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#8fa4b8"/><stop offset="1" stop-color="#4a5b6d"/>
+          </linearGradient>
+          <radialGradient id="rulxCore" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0" stop-color="#4fe3a0" id="rulxCoreGlow"/>
+            <stop offset="1" stop-color="#2fa46a" id="rulxCoreAcc"/>
+          </radialGradient>
+        </defs>
+        <path class="rulx-acc" d="M150 55 Q300 35 470 73 L470 137 Q300 175 150 155 Z"
+              fill="url(#rulxCase)" stroke="#2fa46a" stroke-width="1.5" opacity="0.96"/>
+        <path class="rulx-acc" d="M150 55 Q96 69 88 105 Q96 141 150 155 Z" fill="#1f2c3a"
+              stroke="#2fa46a" stroke-width="1.7"/>
+        <ellipse class="rulx-flame" cx="330" cy="105" rx="72" ry="18" fill="url(#rulxCore)" opacity="0.85"/>
+        <g stroke="#5c7186" stroke-width="2" opacity="0.75">
+          <line x1="392" y1="83" x2="392" y2="127"/><line x1="410" y1="85" x2="410" y2="125"/>
+          <line x1="428" y1="87" x2="428" y2="123"/>
+        </g>
+        <path class="rulx-acc" d="M452 87 L490 100 L490 110 L452 123 Z" fill="#26333f" stroke="#2fa46a" stroke-width="1.3"/>
+        <g class="rulx-spin" id="rulxSpin">
+          <g transform="translate(118,150) scale(1,0.62)">
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(0)"   fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(45)"  fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(90)"  fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(135)" fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(180)" fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(225)" fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(270)" fill="url(#rulxBlade)" opacity="0.95"/>
+            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(315)" fill="url(#rulxBlade)" opacity="0.95"/>
+          </g>
+        </g>
+        <circle cx="118" cy="105" r="12" fill="#8fa4b8" stroke="#dfe8f2" stroke-width="1.5"/>
+      </svg>
+      <div class="rulx-cap" id="rulxCap">Engine demo — RUL 95</div>
+
+      <div class="rulx-bar">
+        <div class="rulx-fill" id="rulxFill"></div>
+        <div class="rulx-line" title="maintenance line (20 cycles)"></div>
+      </div>
+      <div class="rulx-lab">
+        <span>failure&nbsp;(0)</span>
+        <span class="rulx-now" id="rulxNow">now: 95 cycles left</span>
+        <span>healthy&nbsp;(125+)</span>
+      </div>
+      <div class="rulx-note">Red line = the <strong>maintenance threshold (20 cycles)</strong>. Act while the bar is still above it.</div>
+
+      <div class="rulx-controls">
+        <button class="rulx-btn" id="rulxPlay" type="button">▶ Play degradation</button>
+        <input class="rulx-slider" id="rulxSlider" type="range" min="0" max="125" value="95" step="1" aria-label="Remaining useful life in cycles">
+        <span class="rulx-hint">drag to explore</span>
+      </div>
+    </div>
+
     <div class="prose reveal">
       <p>A jet engine does not fail without warning — it degrades, cycle by cycle, and its sensors carry the
         signature of that decline. The question this project answers is the one a maintenance planner actually
@@ -245,80 +320,6 @@
         <tr><td>5</td><td>Ridge (linear baseline)</td><td class="num">20.85</td><td class="num">16.56</td><td class="num">0.765</td><td class="num">2404</td></tr>
       </tbody>
     </table>
-
-    <!-- ============ INTERACTIVE ENGINE ============ -->
-    <div class="prose reveal" id="explorer">
-      <h3>See it: the engine's remaining life, live</h3>
-      <p>This is the heart of the RUL Explorer, running right here on the page — no video, no image, just inline
-        SVG. Drag the slider (or press <strong>Play degradation</strong>) and watch the engine age: the fan
-        slows, the combustor reddens, and the health verdict flips <span style="color:#2fa46a;font-weight:600;">HEALTHY</span>
-        &rarr; <span style="color:#d9a521;font-weight:600;">CAUTION</span> &rarr;
-        <span style="color:#e0503a;font-weight:600;">CRITICAL</span> as the remaining cycles drain toward the
-        maintenance line. "This engine is running out of life" becomes something you <em>see</em>.</p>
-    </div>
-
-    <div class="rulx-card reveal" id="rulx">
-      <div class="rulx-badge">
-        <div class="rulx-state" id="rulxState">HEALTHY</div>
-        <div class="rulx-num" id="rulxNum">95</div>
-        <div class="rulx-sub">CYCLES&nbsp;LEFT</div>
-      </div>
-      <svg class="rulx-svg" viewBox="0 0 520 210" role="img" aria-label="Turbofan engine cross-section, tinted by remaining useful life">
-        <defs>
-          <linearGradient id="rulxCase" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#33465c"/><stop offset="1" stop-color="#1a2734"/>
-          </linearGradient>
-          <linearGradient id="rulxBlade" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#8fa4b8"/><stop offset="1" stop-color="#4a5b6d"/>
-          </linearGradient>
-          <radialGradient id="rulxCore" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0" stop-color="#4fe3a0" id="rulxCoreGlow"/>
-            <stop offset="1" stop-color="#2fa46a" id="rulxCoreAcc"/>
-          </radialGradient>
-        </defs>
-        <path class="rulx-acc" d="M150 55 Q300 35 470 73 L470 137 Q300 175 150 155 Z"
-              fill="url(#rulxCase)" stroke="#2fa46a" stroke-width="1.5" opacity="0.96"/>
-        <path class="rulx-acc" d="M150 55 Q96 69 88 105 Q96 141 150 155 Z" fill="#1f2c3a"
-              stroke="#2fa46a" stroke-width="1.7"/>
-        <ellipse class="rulx-flame" cx="330" cy="105" rx="72" ry="18" fill="url(#rulxCore)" opacity="0.85"/>
-        <g stroke="#5c7186" stroke-width="2" opacity="0.75">
-          <line x1="392" y1="83" x2="392" y2="127"/><line x1="410" y1="85" x2="410" y2="125"/>
-          <line x1="428" y1="87" x2="428" y2="123"/>
-        </g>
-        <path class="rulx-acc" d="M452 87 L490 100 L490 110 L452 123 Z" fill="#26333f" stroke="#2fa46a" stroke-width="1.3"/>
-        <g class="rulx-spin" id="rulxSpin">
-          <g transform="translate(118,150) scale(1,0.62)">
-            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(0)"   fill="url(#rulxBlade)" opacity="0.95"/>
-            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(45)"  fill="url(#rulxBlade)" opacity="0.95"/>
-            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(90)"  fill="url(#rulxBlade)" opacity="0.95"/>
-            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(135)" fill="url(#rulxBlade)" opacity="0.95"/>
-            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(180)" fill="url(#rulxBlade)" opacity="0.95"/>
-            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(225)" fill="url(#rulxBlade)" opacity="0.95"/>
-            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(270)" fill="url(#rulxBlade)" opacity="0.95"/>
-            <ellipse cx="0" cy="-34" rx="9" ry="34" transform="rotate(315)" fill="url(#rulxBlade)" opacity="0.95"/>
-          </g>
-        </g>
-        <circle cx="118" cy="105" r="12" fill="#8fa4b8" stroke="#dfe8f2" stroke-width="1.5"/>
-      </svg>
-      <div class="rulx-cap" id="rulxCap">Engine demo — RUL 95</div>
-
-      <div class="rulx-bar">
-        <div class="rulx-fill" id="rulxFill"></div>
-        <div class="rulx-line" title="maintenance line (20 cycles)"></div>
-      </div>
-      <div class="rulx-lab">
-        <span>failure&nbsp;(0)</span>
-        <span class="rulx-now" id="rulxNow">now: 95 cycles left</span>
-        <span>healthy&nbsp;(125+)</span>
-      </div>
-      <div class="rulx-note">Red line = the <strong>maintenance threshold (20 cycles)</strong>. Act while the bar is still above it.</div>
-
-      <div class="rulx-controls">
-        <button class="rulx-btn" id="rulxPlay" type="button">▶ Play degradation</button>
-        <input class="rulx-slider" id="rulxSlider" type="range" min="0" max="125" value="95" step="1" aria-label="Remaining useful life in cycles">
-        <span class="rulx-hint">drag to explore</span>
-      </div>
-    </div>
 
     <div class="prose reveal">
       <h3>Why the visual matters</h3>
