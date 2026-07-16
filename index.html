@@ -348,7 +348,6 @@
               <input class="rulx-slider" id="rulxSlider" type="range" min="0" max="125" value="95" step="1" aria-label="Remaining useful life in cycles">
               <span class="rulx-hint">drag to explore</span>
             </div>
-            <a class="rulx-open" href="https://rul.aegishumanai.com" target="_blank" rel="noopener">▶ Open the live app <span class="arw">&rarr;</span></a>
           </div>
           <div class="stat-row">
           <div class="stat-box">
@@ -586,15 +585,7 @@
   slider.addEventListener('input', function(){ stopPlay(); render(+slider.value); });
   playBtn.addEventListener('click', function(){ if(playing){ stopPlay(); } else { play(); } });
 
-  render(95);
-  var seen = false;
-  function maybeAuto(){
-    if(seen) return;
-    var box = document.getElementById('rulx').getBoundingClientRect();
-    if(box.top < window.innerHeight * 0.8 && box.bottom > 0){ seen = true; setTimeout(play, 500); }
-  }
-  window.addEventListener('scroll', maybeAuto, {passive:true});
-  maybeAuto();
+  render(95);   // rest on a calm, healthy green engine; visitor presses Play to see it age
 })();
 </script>
 <!-- Google tag (gtag.js) -->

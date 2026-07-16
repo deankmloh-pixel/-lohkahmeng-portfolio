@@ -73,6 +73,13 @@
   padding:8px 16px; font-size:.85rem; font-weight:600; cursor:pointer; }
 .rulx-btn:hover{ background:#263646; }
 .rulx-hint{ font-size:.75rem; color:#7f92a6; }
+.rulx-open{ display:flex; align-items:center; justify-content:center; gap:8px;
+  margin-top:16px; padding:13px 18px; border-radius:10px; text-decoration:none;
+  background:linear-gradient(90deg,#2fa46a,#4fe3a0); color:#08120b;
+  font-size:.98rem; font-weight:800; letter-spacing:.01em;
+  transition:filter .15s ease, transform .15s ease; }
+.rulx-open:hover{ filter:brightness(1.06); transform:translateY(-1px); }
+.rulx-open .arw{ font-weight:800; }
 </style>
 </head>
 <body>
@@ -169,6 +176,7 @@
         <input class="rulx-slider" id="rulxSlider" type="range" min="0" max="125" value="95" step="1" aria-label="Remaining useful life in cycles">
         <span class="rulx-hint">drag to explore</span>
       </div>
+      <a class="rulx-open" href="https://rul.aegishumanai.com" target="_blank" rel="noopener">▶ Open the live app <span class="arw">&rarr;</span></a>
     </div>
 
     <div class="prose reveal" id="explorer">
@@ -424,16 +432,7 @@
   slider.addEventListener('input', function(){ stopPlay(); render(+slider.value); });
   playBtn.addEventListener('click', function(){ if(playing){ stopPlay(); } else { play(); } });
 
-  render(95);
-  // gentle auto-demo once the widget scrolls into view
-  var seen = false;
-  function maybeAuto(){
-    if(seen) return;
-    var box = document.getElementById('rulx').getBoundingClientRect();
-    if(box.top < window.innerHeight * 0.8 && box.bottom > 0){ seen = true; setTimeout(play, 500); }
-  }
-  window.addEventListener('scroll', maybeAuto, {passive:true});
-  maybeAuto();
+  render(95);   // rest on a calm, healthy green engine; visitor presses Play to see it age
 })();
 </script>
 
