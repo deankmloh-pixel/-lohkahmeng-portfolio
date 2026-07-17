@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Attrition Target List — Case Study | Loh Kah Meng</title>
+<meta name="description" content="Project 9 turns IBM's HR attrition data into a privacy-safe retention target list — an eight-model benchmark on 1,470 employees, with a recall-first Logistic Regression champion served behind an anonymised, score-free app. Find who to retain before they leave, not after.">
+<link rel="canonical" href="https://aegishumanai.com/project-9-attrition-target-list.html">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://aegishumanai.com/project-9-attrition-target-list.html">
+<meta property="og:title" content="Employee Attrition Target List — Case Study | Loh Kah Meng">
+<meta property="og:description" content="An eight-model attrition benchmark on 1,470 employees, served as a privacy-safe, score-free retention target list — champion chosen for recall, not headline accuracy.">
+<meta property="og:image" content="https://aegishumanai.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Employee Attrition Target List — Case Study | Loh Kah Meng">
+<meta name="twitter:description" content="An eight-model attrition benchmark on 1,470 employees, served as a privacy-safe retention target list with a recall-first champion.">
+<meta name="twitter:image" content="https://aegishumanai.com/assets/og-image.png">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Employee Attrition Target List — Retention Decision Support",
+  "description": "An eight-model employee-attrition benchmark on the IBM HR dataset (1,470 employees), served as an anonymised, score-free retention target list with a recall-first Logistic Regression champion.",
+  "author": { "@type": "Person", "name": "Loh Kah Meng", "url": "https://aegishumanai.com/" },
+  "url": "https://aegishumanai.com/project-9-attrition-target-list.html"
+}
+</script>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* ---- Project 9: self-contained interactive attrition target list (scoped .attx-) ---- */
+.attx-card{
+  position:relative; overflow:hidden; border-radius:16px; margin:8px 0 6px;
+  padding:18px 20px 20px;
+  background:radial-gradient(120% 140% at 30% 0%,#132030 0%,#0b1420 60%,#080d15 100%);
+  border:1px solid #22303f; color:#dfe8f2;
+  font-family:-apple-system,"Segoe UI",Roboto,system-ui,sans-serif;
+}
+.attx-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:12px; }
+.attx-badge{ text-align:right; flex:0 0 auto; }
+.attx-state{ font-size:.7rem; letter-spacing:.16em; font-weight:800; color:#7f92a6; white-space:nowrap; }
+.attx-num{ font-size:2.4rem; font-weight:800; line-height:1; color:#dfe8f2; }
+.attx-sub{ font-size:.66rem; letter-spacing:.14em; font-weight:700; color:#7f92a6; white-space:nowrap; }
+.attx-cap{ font-size:.82rem; color:#9fb0c4; flex:1 1 auto; padding-top:3px; }
+.attx-list{ display:flex; flex-direction:column; gap:7px; }
+.attx-row{ display:grid; grid-template-columns:13px 76px 42px 24px 1fr 62px; align-items:center; gap:9px;
+  font-size:.78rem; padding:2px 0; opacity:.45; transition:opacity .3s ease; }
+.attx-row.on{ opacity:1; }
+.attx-dot{ width:11px; height:11px; border-radius:50%; border:2px solid #2fa46a; box-sizing:border-box; }
+.attx-id{ font-weight:700; letter-spacing:.02em; color:#cdd9e6; }
+.attx-dep{ font-size:.68rem; color:#8ea0b4; }
+.attx-otf{ font-size:.6rem; font-weight:800; color:#e0503a; letter-spacing:.08em; }
+.attx-track{ height:12px; border-radius:6px; background:#1c2733; overflow:hidden; border:1px solid #2b3947; }
+.attx-barfill{ height:100%; border-radius:6px; transition:width .4s cubic-bezier(.22,.9,.3,1), background .3s ease; }
+.attx-band{ font-size:.7rem; font-weight:700; text-align:right; }
+.attx-note{ font-size:.72rem; color:#8ea0b4; margin-top:10px; }
+.attx-controls{ display:flex; align-items:center; gap:14px; margin-top:14px; flex-wrap:wrap; }
+.attx-slider{ -webkit-appearance:none; appearance:none; height:6px; border-radius:3px;
+  background:#2b3947; flex:1 1 200px; outline:none; }
+.attx-slider::-webkit-slider-thumb{ -webkit-appearance:none; width:18px; height:18px; border-radius:50%;
+  background:#dfe8f2; border:2px solid #0b1420; cursor:pointer; }
+.attx-slider::-moz-range-thumb{ width:18px; height:18px; border-radius:50%; background:#dfe8f2;
+  border:2px solid #0b1420; cursor:pointer; }
+.attx-btn{ background:#1f2c3a; color:#dfe8f2; border:1px solid #38506a; border-radius:8px;
+  padding:8px 14px; font-size:.82rem; font-weight:600; cursor:pointer; transition:border-color .2s ease; }
+.attx-btn:hover{ background:#263646; }
+.attx-hint{ font-size:.72rem; color:#7f92a6; }
+.attx-open{ display:flex; align-items:center; justify-content:center; gap:8px;
+  margin-top:16px; padding:13px 18px; border-radius:10px; text-decoration:none;
+  background:linear-gradient(90deg,#2fa46a,#4fe3a0); color:#08120b;
+  font-size:.98rem; font-weight:800; letter-spacing:.01em;
+  transition:filter .15s ease, transform .15s ease; }
+.attx-open:hover{ filter:brightness(1.06); transform:translateY(-1px); }
+.attx-open .arw{ font-weight:800; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#work">Work</a> / Attrition Target List</div>
+    <div class="tag tag-violet">Featured &middot; Full Case Study &middot; Deployed</div>
+    <h1>Employee Attrition Target List — Retention, Before the Resignation</h1>
+    <p class="lede">Project 9 turns IBM's HR attrition data into something a manager can actually act on: an
+      anonymised, <strong>score-free target list</strong> of the employees most likely to leave — so retention
+      effort lands <em>before</em> the resignation, not after. Eight models were benchmarked on 1,470 employees;
+      the one that ships was chosen for <strong>recall</strong>, because a retention list that misses the
+      leavers has missed the point.</p>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+
+    <!-- ============ INTERACTIVE TARGET LIST (hero — first screen of P9) ============ -->
+    <div class="attx-card reveal" id="attx">
+      <div class="attx-head">
+        <div class="attx-cap" id="attxCap">Attrition target list — Overtime OFF · cut-off: High &amp; above</div>
+        <div class="attx-badge">
+          <div class="attx-state" id="attxState">OVERTIME OFF</div>
+          <div class="attx-num" id="attxNum">2</div>
+          <div class="attx-sub">ON&nbsp;TARGET&nbsp;LIST</div>
+        </div>
+      </div>
+      <div class="attx-list" id="attxList"></div>
+      <div class="attx-note">Colour <strong>bands</strong>, never raw scores — the same privacy rule the real app follows.
+        Toggle <strong>Overtime</strong> and watch the list swell and redden: in this data, working overtime
+        raises attrition from ~10% to ~30%.</div>
+      <div class="attx-controls">
+        <button class="attx-btn" id="attxOT" type="button">Overtime: OFF</button>
+        <input class="attx-slider" id="attxSlider" type="range" min="1" max="4" value="3" step="1" aria-label="Target-list risk cut-off">
+        <span class="attx-hint">drag: risk cut-off</span>
+      </div>
+      <a class="attx-open" href="https://attrition.aegishumanai.com" target="_blank" rel="noopener">▶ Open the live app <span class="arw">&rarr;</span></a>
+    </div>
+
+    <div class="prose reveal" id="explorer">
+      <h3>See it: who's on the list, live</h3>
+      <p>This is the shape of the real app, running right here on the page — no video, no screenshot. Each row is
+        an anonymised employee (<strong>Rec-####</strong>, never a name), banded
+        <span style="color:#2fa46a;font-weight:600;">Low</span> &rarr;
+        <span style="color:#d9a521;font-weight:600;">Medium</span> &rarr;
+        <span style="color:#e07a1f;font-weight:600;">High</span> &rarr;
+        <span style="color:#e0503a;font-weight:600;">Very&nbsp;High</span> by attrition risk, and sorted so the
+        people to talk to first sit at the top. Flip <strong>Overtime</strong> on and the target list grows as
+        the model's strongest driver kicks in; drag the cut-off to decide how wide to cast the net. The score
+        itself is never shown — a manager sees <em>who</em> and <em>how urgent</em>, not a number to argue with.</p>
+    </div>
+
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo — data engineering, ML, decision-support app</div></div>
+      <div class="meta-item"><div class="k">Dataset</div><div class="v">IBM HR Employee Attrition — 1,470 employees, 237 left (16.1%)</div></div>
+      <div class="meta-item"><div class="k">Stack</div><div class="v">Python, pandas, scikit-learn, 8-model benchmark, self-contained HTML app</div></div>
+      <div class="meta-item"><div class="k">Champion</div><div class="v">Logistic Regression — recall-first (68% recall, fully interpretable)</div></div>
+      <div class="meta-item"><div class="k">Status</div><div class="v">Deployed &middot; attrition.aegishumanai.com</div></div>
+    </div>
+
+    <div class="prose reveal">
+      <p>Attrition is expensive and quiet. A good employee doesn't leave on a Tuesday out of nowhere — the signal
+        builds for months in things HR already records: overtime, pay position, how long since the last
+        promotion, tenure, distance from home. The question this project answers is the one a manager actually
+        acts on: <strong>who, right now, is most likely to leave — and therefore worth a retention conversation
+        this quarter?</strong> Not a verdict, not a number on someone's file — a ranked, privacy-safe shortlist.</p>
+
+      <h3>The data</h3>
+      <p>Source: IBM's widely used <strong>HR Analytics Employee Attrition</strong> dataset — 1,470 employees
+        across Research &amp; Development, Sales, and Human Resources, each described by 30-plus attributes
+        (income, role, overtime, tenure, satisfaction, commute) with a Yes/No attrition label. It is
+        <strong>imbalanced by nature</strong>: only <strong>237 employees (16.1%) left</strong>, which is exactly
+        why headline accuracy is a trap — a model that predicts "nobody leaves" scores 84% and is useless.</p>
+    </div>
+
+    <div class="callout warn reveal">
+      <strong>Overtime is the loudest signal — and it's real.</strong> In this data, employees working overtime
+      leave at <strong>30.5%</strong> versus <strong>10.4%</strong> for those who don't — nearly triple. That is
+      why the live app makes Overtime a first-class toggle, and why the demo above reshapes the whole list the
+      moment you flip it.
+    </div>
+
+    <div class="prose reveal">
+      <h3>Eight models, one honest leaderboard</h3>
+      <p>Every model was tuned by a genuine hyperparameter search inside the reusable AEGIS model-execution
+        framework, then ranked on the full picture — accuracy, precision, recall, F1, ROC-AUC and MCC — not a
+        single flattering metric. The board below is ordered by <strong>ROC-AUC</strong>:</p>
+    </div>
+
+    <table class="data-table reveal">
+      <thead><tr><th>Rank</th><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>ROC-AUC</th><th>MCC</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>CatBoost</td><td class="num">80.3%</td><td class="num">0.418</td><td class="num">0.596</td><td class="num">0.491</td><td class="num">0.8095</td><td class="num">0.383</td></tr>
+        <tr><td>2</td><td>Extra Trees</td><td class="num">84.4%</td><td class="num">0.511</td><td class="num">0.511</td><td class="num">0.511</td><td class="num">0.8073</td><td class="num">0.418</td></tr>
+        <tr class="best"><td>3</td><td>Logistic Regression &nbsp;★ served</td><td class="num">78.9%</td><td class="num">0.405</td><td class="num">0.681</td><td class="num">0.508</td><td class="num">0.8069</td><td class="num">0.406</td></tr>
+        <tr><td>4</td><td>SVM</td><td class="num">85.0%</td><td class="num">0.571</td><td class="num">0.255</td><td class="num">0.353</td><td class="num">0.8024</td><td class="num">0.311</td></tr>
+        <tr><td>5</td><td>Random Forest</td><td class="num">84.0%</td><td class="num">0.500</td><td class="num">0.340</td><td class="num">0.405</td><td class="num">0.7928</td><td class="num">0.324</td></tr>
+        <tr><td>6</td><td>LightGBM</td><td class="num">85.4%</td><td class="num">0.583</td><td class="num">0.298</td><td class="num">0.394</td><td class="num">0.7893</td><td class="num">0.345</td></tr>
+        <tr><td>7</td><td>XGBoost</td><td class="num">85.0%</td><td class="num">0.565</td><td class="num">0.277</td><td class="num">0.371</td><td class="num">0.7859</td><td class="num">0.322</td></tr>
+        <tr><td>8</td><td>HistGradientBoosting</td><td class="num">85.4%</td><td class="num">0.577</td><td class="num">0.319</td><td class="num">0.411</td><td class="num">0.7694</td><td class="num">0.354</td></tr>
+      </tbody>
+    </table>
+
+    <div class="prose reveal">
+      <h3>Why Logistic Regression ships — even at rank 3</h3>
+      <p>On raw ROC-AUC the boards are a photo finish: CatBoost (0.8095), Extra Trees (0.8073) and Logistic
+        Regression (0.8069) are separated by a rounding error. So the tie-breaker is the <em>job</em>. This is a
+        <strong>retention target list</strong> — its whole value is catching the people who will actually
+        leave, so the metric that matters is <strong>recall</strong>. And on recall it isn't close:</p>
+    </div>
+
+    <div class="callout good reveal">
+      <strong>Logistic Regression catches 68% of real leavers</strong> — versus 60% for CatBoost and 51% for
+      Extra Trees. It flags more of the people you'd otherwise lose, and it does so with a fully
+      <strong>interpretable</strong> linear model whose reasons a manager can actually be told. Higher-accuracy
+      tree models here buy their headline number by predicting "stays" more often — precisely the wrong bias for
+      a list whose purpose is not to miss anyone.
+    </div>
+
+    <div class="prose reveal">
+      <p>This is the site's recurring discipline in one decision: <strong>transparency over accuracy theater.</strong>
+        The flashiest number (85% accuracy) is left on the table on purpose, because it would mean quietly
+        missing half the at-risk employees. The champion is named for the decision it serves, and the honest
+        board above shows exactly what that choice costs and buys.</p>
+
+      <h3>Built as a decision tool, not a scoreboard</h3>
+    </div>
+
+    <div class="callout good reveal">
+      <strong>Names never appear.</strong> Every employee is a neutral <strong>Rec-####</strong> tag; the app
+      carries no PII. It is a prioritisation aid for a manager who already knows their team, not a surveillance
+      list.
+    </div>
+    <div class="callout good reveal">
+      <strong>Bands, not scores.</strong> The raw probability is deliberately hidden — the interface shows a
+      colour band (Low → Very High) and a rank, so the conversation is "who do I check on first," not "why is
+      Alice a 0.62." Risk is a prompt to talk, not a verdict to enforce.
+    </div>
+    <div class="callout good reveal">
+      <strong>Scope it, then act.</strong> Two pull-downs, an Overtime toggle and sliders build the view; the
+      list re-sorts by risk and can be exported to CSV for the managers who own the follow-up. Viewers are
+      read-only.
+    </div>
+    <div class="callout good reveal">
+      <strong>Self-contained and always-on.</strong> The whole app is a single HTML file — the champion's logic
+      baked in, no server round-trip, nothing to spin down — served on its own subdomain behind the same
+      always-on infrastructure as the rest of the AEGIS apps.
+    </div>
+
+    <div class="prose reveal">
+      <h3>Why the visual matters</h3>
+      <p>A probability is easy to nod at and forget. Binding it to a <strong>ranked, colour-banded list of real
+        seats</strong> — with the single strongest driver (overtime) under the manager's thumb — turns "16%
+        baseline attrition" into "these five people, this month, starting with the two in red." The point of the
+        project is pre-emptive retention, and the interface is built to make the next conversation obvious.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+<script>
+/* ---- Project 9 interactive attrition target list ---- */
+(function(){
+  var EMP=[
+    {id:'Rec-0925',dep:'R&D',ot:false,base:61},
+    {id:'Rec-2671',dep:'Sales',ot:true,base:52},
+    {id:'Rec-1187',dep:'Sales',ot:true,base:44},
+    {id:'Rec-1502',dep:'HR',ot:false,base:48},
+    {id:'Rec-2043',dep:'R&D',ot:true,base:38},
+    {id:'Rec-0788',dep:'R&D',ot:true,base:35},
+    {id:'Rec-3310',dep:'Sales',ot:false,base:27},
+    {id:'Rec-0416',dep:'R&D',ot:false,base:18}
+  ];
+  var OTB=28;
+  var CUTS=[0,0,30,50,71];                 // slider 1..4 -> min score to make the list
+  var CUTLAB=['','All bands','Medium & above','High & above','Very High only'];
+  var list=document.getElementById('attxList');
+  if(!list){ return; }
+  var otBtn=document.getElementById('attxOT');
+  var slider=document.getElementById('attxSlider');
+  var numEl=document.getElementById('attxNum');
+  var stateEl=document.getElementById('attxState');
+  var capEl=document.getElementById('attxCap');
+  var otOn=false;
+
+  function band(s){
+    if(s<30) return {n:'Low',       a:'#2fa46a', g:'#4fe3a0'};
+    if(s<50) return {n:'Medium',    a:'#d9a521', g:'#ffcb47'};
+    if(s<=70)return {n:'High',      a:'#e07a1f', g:'#ff9d3d'};
+    return            {n:'Very High',a:'#e0503a', g:'#ff5b3d'};
+  }
+  function esc(t){ return t.replace('&','&amp;'); }
+  function render(){
+    var cut=CUTS[+slider.value];
+    var data=EMP.map(function(e){
+      var s=e.base+((otOn&&e.ot)?OTB:0);
+      s=Math.max(0,Math.min(95,s));
+      return {id:e.id,dep:e.dep,ot:e.ot,s:s};
+    }).sort(function(a,b){ return b.s-a.s; });
+
+    var onCount=0, html='';
+    data.forEach(function(d){
+      var b=band(d.s), on=d.s>=cut; if(on){ onCount++; }
+      html+='<div class="attx-row'+(on?' on':'')+'">'
+        +'<span class="attx-dot" style="background:'+(on?b.a:'transparent')+';border-color:'+b.a+'"></span>'
+        +'<span class="attx-id">'+d.id+'</span>'
+        +'<span class="attx-dep">'+esc(d.dep)+'</span>'
+        +'<span class="attx-otf"'+((otOn&&d.ot)?'':' style="visibility:hidden"')+'>OT</span>'
+        +'<span class="attx-track"><span class="attx-barfill" style="width:'+d.s+'%;background:linear-gradient(90deg,'+b.a+','+b.g+')"></span></span>'
+        +'<span class="attx-band" style="color:'+b.a+'">'+b.n+'</span>'
+        +'</div>';
+    });
+    list.innerHTML=html;
+    numEl.textContent=onCount;
+    stateEl.textContent=otOn?'OVERTIME ON':'OVERTIME OFF';
+    stateEl.style.color=otOn?'#e0503a':'#7f92a6';
+    capEl.innerHTML='Attrition target list — Overtime '+(otOn?'ON':'OFF')+' · cut-off: '+CUTLAB[+slider.value];
+    if(otOn){
+      otBtn.textContent='Overtime: ON';
+      otBtn.style.color='#dfe8f2'; otBtn.style.fontWeight='600';
+      otBtn.style.textDecoration='none'; otBtn.style.borderColor='#38506a';
+    } else {
+      otBtn.textContent='Overtime: OFF';                 /* app signature: OFF = bold red strike-through */
+      otBtn.style.color='#e0503a'; otBtn.style.fontWeight='800';
+      otBtn.style.textDecoration='line-through'; otBtn.style.borderColor='#e0503a';
+    }
+  }
+  otBtn.addEventListener('click',function(){ otOn=!otOn; render(); });
+  slider.addEventListener('input',render);
+  render();   // rest calm: overtime off, only the High+ seats on the list
+})();
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-E5ZR5LF113');
+</script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

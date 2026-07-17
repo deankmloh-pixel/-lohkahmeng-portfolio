@@ -116,6 +116,38 @@
 .rulx-open:hover{ filter:brightness(1.06); transform:translateY(-1px); }
 .rulx-open .arw{ font-weight:800; }
 </style>
+<style>
+/* Project 9 card: attrition target-list preview (scoped .attx-) */
+.p9-right{ display:flex; flex-direction:column; gap:16px; }
+.attx-card{ position:relative; overflow:hidden; border-radius:14px; margin:0; padding:16px 18px 18px;
+  background:radial-gradient(120% 140% at 30% 0%,#132030 0%,#0b1420 60%,#080d15 100%);
+  border:1px solid #22303f; color:#dfe8f2; font-family:-apple-system,"Segoe UI",Roboto,system-ui,sans-serif; }
+.attx-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:11px; }
+.attx-badge{ text-align:right; flex:0 0 auto; }
+.attx-state{ font-size:.62rem; letter-spacing:.14em; font-weight:800; color:#7f92a6; white-space:nowrap; }
+.attx-num{ font-size:1.9rem; font-weight:800; line-height:1; color:#dfe8f2; }
+.attx-sub{ font-size:.56rem; letter-spacing:.12em; font-weight:700; color:#7f92a6; white-space:nowrap; }
+.attx-cap{ font-size:.76rem; color:#9fb0c4; flex:1 1 auto; padding-top:2px; }
+.attx-list{ display:flex; flex-direction:column; gap:6px; }
+.attx-row{ display:grid; grid-template-columns:12px 74px 40px 22px 1fr 60px; align-items:center; gap:8px;
+  font-size:.74rem; padding:1px 0; opacity:.45; transition:opacity .3s ease; }
+.attx-row.on{ opacity:1; }
+.attx-dot{ width:10px; height:10px; border-radius:50%; border:2px solid #2fa46a; box-sizing:border-box; }
+.attx-id{ font-weight:700; letter-spacing:.02em; color:#cdd9e6; }
+.attx-dep{ font-size:.64rem; color:#8ea0b4; }
+.attx-otf{ font-size:.56rem; font-weight:800; color:#e0503a; letter-spacing:.08em; }
+.attx-track{ height:11px; border-radius:6px; background:#1c2733; overflow:hidden; border:1px solid #2b3947; }
+.attx-barfill{ height:100%; border-radius:6px; transition:width .4s cubic-bezier(.22,.9,.3,1), background .3s ease; }
+.attx-band{ font-size:.66rem; font-weight:700; text-align:right; }
+.attx-note{ font-size:.68rem; color:#8ea0b4; margin-top:9px; }
+.attx-controls{ display:flex; align-items:center; gap:12px; margin-top:13px; flex-wrap:wrap; }
+.attx-slider{ -webkit-appearance:none; appearance:none; height:6px; border-radius:3px; background:#2b3947; flex:1 1 150px; outline:none; }
+.attx-slider::-webkit-slider-thumb{ -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:#dfe8f2; border:2px solid #0b1420; cursor:pointer; }
+.attx-slider::-moz-range-thumb{ width:18px; height:18px; border-radius:50%; background:#dfe8f2; border:2px solid #0b1420; cursor:pointer; }
+.attx-btn{ background:#1f2c3a; color:#dfe8f2; border:1px solid #38506a; border-radius:8px; padding:7px 13px; font-size:.8rem; font-weight:600; cursor:pointer; transition:border-color .2s ease; }
+.attx-btn:hover{ background:#263646; }
+.attx-hint{ font-size:.7rem; color:#7f92a6; }
+</style>
 </head>
 <body>
 
@@ -208,7 +240,7 @@
   <div class="container">
     <div class="section-head reveal">
       <div class="section-label">Selected Work</div>
-      <h2>Eight decision-support systems, grouped by the human problem they solve</h2>
+      <h2>Nine decision-support systems, grouped by the human problem they solve</h2>
       <p>Every system here rests on one belief: AI should make people better decision-makers, not replace
         them. That belief has a home — the <strong>Nurse Augmenting System</strong>, human-centered patient
         care and the core of the AEGIS programme. The rest prove the same principle holds across domains: two
@@ -457,6 +489,60 @@
     <div class="project-grid">
       <article class="project-card featured reveal">
         <div>
+          <div class="tag tag-violet">Featured &middot; Full Case Study &middot; Deployed</div>
+          <h3>Employee Attrition Target List &mdash; Retention Decision Support</h3>
+          <p>An eight-model attrition benchmark on IBM's HR data (1,470 employees, 16.1% attrition) &mdash; served
+            as an anonymised, <strong>score-free</strong> retention target list. The champion isn't the
+            highest-accuracy model; it's <strong>Logistic Regression</strong>, chosen for recall (68% of real
+            leavers caught) and interpretability, because a retention list that misses the leavers has missed the
+            point. Overtime &mdash; the strongest driver, ~3&times; the attrition rate &mdash; is a live toggle.</p>
+          <div class="stack">
+            <span class="chip">Python / pandas</span>
+            <span class="chip">scikit-learn</span>
+            <span class="chip">8-model benchmark</span>
+            <span class="chip">Logistic Regression</span>
+            <span class="chip">Self-contained HTML</span>
+          </div>
+          <a href="project-9-attrition-target-list.html" class="card-link">View case study
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+        <div class="p9-right">
+          <div class="attx-card" id="attx">
+            <div class="attx-head">
+              <div class="attx-cap" id="attxCap">Attrition target list &mdash; Overtime OFF &middot; cut-off: High &amp; above</div>
+              <div class="attx-badge">
+                <div class="attx-state" id="attxState">OVERTIME OFF</div>
+                <div class="attx-num" id="attxNum">2</div>
+                <div class="attx-sub">ON&nbsp;TARGET&nbsp;LIST</div>
+              </div>
+            </div>
+            <div class="attx-list" id="attxList"></div>
+            <div class="attx-note">Colour <strong>bands</strong>, never raw scores. Toggle Overtime &mdash; the top driver &mdash; and watch the list grow.</div>
+            <div class="attx-controls">
+              <button class="attx-btn" id="attxOT" type="button">Overtime: OFF</button>
+              <input class="attx-slider" id="attxSlider" type="range" min="1" max="4" value="3" step="1" aria-label="Target-list risk cut-off">
+              <span class="attx-hint">drag: cut-off</span>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-box">
+              <div class="stat-value good">68%</div>
+              <div class="stat-label">Real leavers caught (LR recall)</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value">8</div>
+              <div class="stat-label">Models benchmarked</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value">1,470</div>
+              <div class="stat-label">Employees scored</div>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="project-card featured reveal">
+        <div>
           <div class="tag tag-blue">Featured &middot; Closed &middot; Framework Validated</div>
           <h3>AI-Powered Workforce Income Analytics &amp; Decision Support System</h3>
           <p>A unified master dataset (48,790 U.S. Census records) feeding a Power BI analytics layer and a
@@ -586,6 +672,76 @@
   playBtn.addEventListener('click', function(){ if(playing){ stopPlay(); } else { play(); } });
 
   render(95);   // rest on a calm, healthy green engine; visitor presses Play to see it age
+})();
+</script>
+<script>
+/* ---- Project 9 card: interactive attrition target list ---- */
+(function(){
+  var EMP=[
+    {id:'Rec-0925',dep:'R&D',ot:false,base:61},
+    {id:'Rec-2671',dep:'Sales',ot:true,base:52},
+    {id:'Rec-1187',dep:'Sales',ot:true,base:44},
+    {id:'Rec-1502',dep:'HR',ot:false,base:48},
+    {id:'Rec-2043',dep:'R&D',ot:true,base:38},
+    {id:'Rec-0788',dep:'R&D',ot:true,base:35},
+    {id:'Rec-3310',dep:'Sales',ot:false,base:27},
+    {id:'Rec-0416',dep:'R&D',ot:false,base:18}
+  ];
+  var OTB=28;
+  var CUTS=[0,0,30,50,71];
+  var CUTLAB=['','All bands','Medium & above','High & above','Very High only'];
+  var list=document.getElementById('attxList');
+  if(!list){ return; }
+  var otBtn=document.getElementById('attxOT');
+  var slider=document.getElementById('attxSlider');
+  var numEl=document.getElementById('attxNum');
+  var stateEl=document.getElementById('attxState');
+  var capEl=document.getElementById('attxCap');
+  var otOn=false;
+  function band(s){
+    if(s<30) return {n:'Low',       a:'#2fa46a', g:'#4fe3a0'};
+    if(s<50) return {n:'Medium',    a:'#d9a521', g:'#ffcb47'};
+    if(s<=70)return {n:'High',      a:'#e07a1f', g:'#ff9d3d'};
+    return            {n:'Very High',a:'#e0503a', g:'#ff5b3d'};
+  }
+  function esc(t){ return t.replace('&','&amp;'); }
+  function render(){
+    var cut=CUTS[+slider.value];
+    var data=EMP.map(function(e){
+      var s=e.base+((otOn&&e.ot)?OTB:0);
+      s=Math.max(0,Math.min(95,s));
+      return {id:e.id,dep:e.dep,ot:e.ot,s:s};
+    }).sort(function(a,b){ return b.s-a.s; });
+    var onCount=0, html='';
+    data.forEach(function(d){
+      var b=band(d.s), on=d.s>=cut; if(on){ onCount++; }
+      html+='<div class="attx-row'+(on?' on':'')+'">'
+        +'<span class="attx-dot" style="background:'+(on?b.a:'transparent')+';border-color:'+b.a+'"></span>'
+        +'<span class="attx-id">'+d.id+'</span>'
+        +'<span class="attx-dep">'+esc(d.dep)+'</span>'
+        +'<span class="attx-otf"'+((otOn&&d.ot)?'':' style="visibility:hidden"')+'>OT</span>'
+        +'<span class="attx-track"><span class="attx-barfill" style="width:'+d.s+'%;background:linear-gradient(90deg,'+b.a+','+b.g+')"></span></span>'
+        +'<span class="attx-band" style="color:'+b.a+'">'+b.n+'</span>'
+        +'</div>';
+    });
+    list.innerHTML=html;
+    numEl.textContent=onCount;
+    stateEl.textContent=otOn?'OVERTIME ON':'OVERTIME OFF';
+    stateEl.style.color=otOn?'#e0503a':'#7f92a6';
+    capEl.innerHTML='Attrition target list &mdash; Overtime '+(otOn?'ON':'OFF')+' &middot; cut-off: '+CUTLAB[+slider.value];
+    if(otOn){
+      otBtn.textContent='Overtime: ON';
+      otBtn.style.color='#dfe8f2'; otBtn.style.fontWeight='600';
+      otBtn.style.textDecoration='none'; otBtn.style.borderColor='#38506a';
+    } else {
+      otBtn.textContent='Overtime: OFF';                 /* app signature: OFF = bold red strike-through */
+      otBtn.style.color='#e0503a'; otBtn.style.fontWeight='800';
+      otBtn.style.textDecoration='line-through'; otBtn.style.borderColor='#e0503a';
+    }
+  }
+  otBtn.addEventListener('click',function(){ otOn=!otOn; render(); });
+  slider.addEventListener('input',render);
+  render();
 })();
 </script>
 <!-- Google tag (gtag.js) -->
