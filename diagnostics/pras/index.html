@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AEGIS · PRAS Console</title><style>
+:root{--navy:#1F3864;--teal:#2E8B84;--gold:#C9A227;--red:#B4462F;--ink:#16233b;--paper:#eef1f6;--line:#dce3ee}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--paper);color:var(--ink)}
+header{background:linear-gradient(135deg,#16233b,#1F3864 60%,#26507a);color:#fff;padding:16px 26px;display:flex;align-items:center;gap:15px}
+.mark{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--teal),var(--navy));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex:none}
+.badge{font-weight:700;font-size:19px;letter-spacing:.5px}.sub{opacity:.82;font-size:12px;margin-top:2px}
+.tag{margin-left:auto;text-align:right;font-size:11px;opacity:.85;line-height:1.5}
+.wrap{max-width:1160px;margin:20px auto;padding:0 18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:17px 20px;box-shadow:0 1px 3px rgba(20,35,59,.06);margin-bottom:18px}
+.card h2{margin:0 0 3px;font-size:13.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--navy)}
+.hn{font-size:11.5px;color:#6b7893;margin-bottom:13px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0}
+.row label{font-size:13px;font-weight:600}.row .v{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);min-width:64px;text-align:right}
+input[type=range]{width:100%;accent-color:var(--teal)}.slider{flex:1;margin:0 10px}
+.toggles{display:flex;gap:7px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--line);border-radius:20px;padding:6px 13px;font-size:12.5px;cursor:pointer;user-select:none;background:#fff}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.stat{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #eef1f7;font-size:13.5px}
+.stat b{font-variant-numeric:tabular-nums;color:var(--navy)}
+.bar{height:13px;border-radius:7px;background:linear-gradient(90deg,var(--teal),var(--gold) 55%,var(--red));position:relative;margin-top:7px}
+.bar .k{position:absolute;top:-5px;width:3px;height:23px;background:#16233b;border-radius:2px}
+.decision{border-radius:11px;padding:14px 17px;color:#fff;display:flex;align-items:center;gap:14px;margin-top:6px}
+.decision .big{font-size:19px;font-weight:800}.decision .d-sub{font-size:12px;opacity:.92}
+.pill{margin-left:auto;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(255,255,255,.22)}
+.hic{background:#fff7e2;border:1.5px solid var(--gold);border-radius:11px;padding:11px 15px;font-size:12.5px;color:#6b5410;margin-top:12px}
+.cover{background:linear-gradient(90deg,var(--navy),var(--teal));color:#fff;border-radius:10px;padding:11px 15px;margin-bottom:14px;font-size:13px;line-height:1.5}
+.foot{font-size:11.5px;color:#6b7893;padding:16px 4px 30px;line-height:1.7}
+.foot b{color:var(--ink)}
+.classbar{display:flex;gap:8px;margin-top:4px}
+.classchip{flex:1;text-align:center;border-radius:9px;padding:8px 4px;font-size:11.5px;font-weight:700;border:1.5px solid var(--line);color:#8a93a6}
+.classchip.active{color:#fff}
+.classchip.n.active{background:var(--teal);border-color:var(--teal)}
+.classchip.a.active{background:var(--gold);border-color:var(--gold)}
+.classchip.o.active{background:var(--red);border-color:var(--red)}
+</style></head>
+<body>
+<header><div class="mark">AE</div><div><div class="badge">PRAS Console</div><div class="sub">Pulmonary Risk Augmenting System &middot; screening-only obstruction call + severity estimate</div></div>
+<div class="tag">AEGIS &middot; Project 12<br/>Logistic-regression screen (distilled from SVM)<br/>augment &middot; human-in-command</div></header>
+
+<div class="wrap">
+<div class="cover">No spirometer needed for the screening call. Enter age, smoking history, and two cheap
+  symptom/risk-factor scores &mdash; the console flags who should get a spirometry test next, it does not replace one.</div>
+
+<div class="grid">
+<div class="card">
+  <h2>1 &middot; Patient &mdash; Screening Inputs</h2>
+  <div class="hn">Symptom and risk-factor inputs only. No FEV1/FVC reading required at this stage.</div>
+
+  <div class="row"><label>Age (yrs)</label><input class="slider" type="range" id="age" min="20" max="90" value="55"/><span class="v" id="age_v">55</span></div>
+  <div class="row"><label>Pack-history (years)</label><input class="slider" type="range" id="pack" min="0" max="60" value="12" step="1"/><span class="v" id="pack_v">12</span></div>
+  <div class="row"><label>CAT score (0&ndash;40)</label><input class="slider" type="range" id="cat" min="0" max="40" value="5" step="1"/><span class="v" id="cat_v">5</span></div>
+  <div class="row"><label>Peak flow (L/min)</label><input class="slider" type="range" id="pf" min="150" max="650" value="430" step="5"/><span class="v" id="pf_v">430</span></div>
+
+  <div style="margin-top:14px"><label style="font-size:13px;font-weight:600">Current or ex-smoker</label>
+    <div class="toggles" style="margin-top:6px">
+      <div class="chip on" id="smoke_y">Smoker</div>
+      <div class="chip" id="smoke_n">Non-smoker</div>
+    </div>
+  </div>
+  <div style="margin-top:12px"><label style="font-size:13px;font-weight:600">Asthma comorbidity</label>
+    <div class="toggles" style="margin-top:6px">
+      <div class="chip" id="asthma_y">Yes</div>
+      <div class="chip on" id="asthma_n">No</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Result &mdash; Screening Call + Severity Estimate</h2>
+  <div class="hn">Logistic-regression screen decides the class; linear-regression estimate grades predicted FEV1% (both distilled from the trained SVM/SVR pair, see footer).</div>
+
+  <div class="classbar">
+    <div class="classchip n" id="chip_normal">NORMAL</div>
+    <div class="classchip a" id="chip_atrisk">AT-RISK</div>
+    <div class="classchip o" id="chip_obstr">OBSTRUCTED</div>
+  </div>
+
+  <div class="stat"><span>Confidence in screening call</span><b id="conf">&mdash;</b></div>
+  <div class="stat"><span>Estimated FEV1 (% predicted)</span><b id="fev1pred">&mdash;</b></div>
+  <div class="bar"><div class="k" id="fev1_marker" style="left:0%"></div></div>
+  <div style="display:flex;justify-content:space-between;font-size:10.5px;color:#8a93a6;margin-top:3px"><span>30 (severe)</span><span>110 (normal)</span></div>
+
+  <div class="decision" id="decision" style="background:var(--teal)">
+    <div><div class="big" id="d_title">ROUTINE &mdash; monitor</div><div class="d-sub" id="d_sub">No obstructive signal detected.</div></div>
+    <div class="pill" id="d_pill">screen</div>
+  </div>
+
+  <div class="hic" id="hic_note" style="display:none">
+    <b>Human-in-command:</b> this screen flags who should get a spirometry (FEV1/FVC) test next &mdash;
+    it does not diagnose COPD. Confirmed obstruction, once flagged, still needs the actual test.
+  </div>
+</div>
+</div>
+
+<div class="foot">
+  <b>What this is.</b> A screening-only console: predicts a 3-class pulmonary risk band
+  (Normal / At-risk / COPD-Obstructed) and an estimated FEV1% from age, smoking history,
+  symptom burden (CAT score), asthma comorbidity, and peak flow &mdash; deliberately excluding the
+  actual FEV1/FVC spirometry reading, so it can be used <i>before</i> a spirometer is involved, to
+  decide who needs one.<br/><br/>
+
+  <b>Champion models (server-side, full precision).</b> SVM classifier (screening-only 6-feature
+  set) &mdash; 96.3% accuracy, macro-F1 0.90, ROC-AUC (OvR) 0.986. Per-class recall: Normal 99%,
+  At-risk 97%, COPD-Obstructed 70% &mdash; the model reliably catches Normal and At-risk, but
+  under-catches confirmed obstruction from symptoms alone. That is the honest, expected finding for
+  a screening tool built without a spirometry reading: severe disease still needs the actual test to
+  confirm, not a symptom-based guess. SVR severity regressor (same 6 features, predicting FEV1%
+  predicted) &mdash; R&sup2;=0.61, MAE=7.98.<br/><br/>
+
+  <b>Browser distillation.</b> This page runs a logistic-regression surrogate of the SVM
+  (99.1% agreement with the full model on held-out data) and a linear-regression surrogate of the
+  SVR (R&sup2;=0.85 vs the full model) &mdash; same distillation pattern as the RRAS/DRAS consoles,
+  so the browser needs no server and no Python at runtime.<br/><br/>
+
+  <b>Data sources (5-layer evidence stack, PRAS-RP synthetic cohort, 6,000 patients).</b>
+  L1+L2 spirometry/severity: 101 real COPD patients (GOLD-consistent FEV1/FVC, COPD severity
+  labels) for the At-risk/Obstructed classes; the Normal class uses a documented ATS/ERS population
+  reference (FEV1/FVC &asymp; 0.80 &plusmn; 0.05) since the real cohort has no healthy controls &mdash;
+  this is a modelling assumption, not real patient data. L3 population: 300 real asthma-cohort
+  patients for smoking/comorbidity signal. L4 utilisation: 15,108 real respiratory hospital
+  encounters (130-hospital dataset, ICD-9 490&ndash;496/466/480&ndash;488/786 subset;
+  readmit30=8.1%, mean LOS=4.2 days), resampled by class. L5 economics: deferred this session
+  (Umbrella 24-country cost anchors not wired in) &mdash; a documented next step, not silently
+  skipped.<br/><br/>
+
+  <b>Theoretical grounding.</b> Thesis Vol.1 Ch.3 &ldquo;Lung Ventilation Modeling and
+  Assessment&rdquo;, S3.12&ndash;3.13, develops a damped-oscillator model of lung volume in terms of
+  airflow-resistance (R) and compliance (C), proposing R/C-derived indices for differential
+  diagnosis of obstructive lung disease &mdash; the same theoretical role Vol.1 Ch.1 played for DRAS
+  and Vol.2 App.G played for RRAS. Unlike those two, Ch.3 does not contain a multi-subject R/C
+  table to resample from (only a single two-lung illustrative case) &mdash; so this console's L1
+  layer substitutes real GOLD-consistent spirometry for resampled thesis kinetics. That substitution
+  is disclosed here, not hidden.<br/><br/>
+
+  <b>Status:</b> SYNTHETIC cohort and distilled screen &mdash; a research scaffold, not a validated
+  clinical tool. &#9888; Human-in-command: every flag is a prompt for a clinician-ordered test, not a
+  diagnosis.
+</div>
+</div>
+
+<script>
+const D = {
+  logreg_coef: [[-0.025795018903266596,0.17127356193141452,0.01687037049582763,0.6440539885605439,-0.09206186082145464,-1.8466857398073828],
+                [0.17430591543061863,0.4432003646633002,3.8935050404986575,4.358146028727473,0.6680281420595571,-1.2936994643730468],
+                [-0.1485108965273583,-0.6144739265947232,-3.910375410994485,-5.002200017288042,-0.57596628123812,3.1403852041804345]],
+  logreg_intercept: [2.4903063120206634,-8.911823005595247,6.421516693574673],
+  svm_scaler_mean: [54.025416666666665,0.4060416666666667,11.590187499999999,4.924916666666667,0.10541666666666667,429.04041666666666],
+  svm_scaler_scale: [17.903147413971347,0.4910924878240577,14.847124776585883,6.135963316903784,0.3070895521758361,108.71669620237603],
+  classes: ["At-risk","COPD-Obstructed","Normal"],
+  linreg_coef: [-0.2439406275357211,0.04253367955452436,-5.011601386861449,-7.601350334862097,-0.8072397498459032,-1.493873478441428],
+  linreg_intercept: 93.55775951280434,
+  svr_scaler_mean: [53.83625,0.40375,11.521625,4.8683125,0.10791666666666666,429.31583333333333],
+  svr_scaler_scale: [17.74865776908684,0.49064848669898087,14.870766031357464,6.04896565419883,0.3102751355204316,107.48400384540432]
+};
+
+let smoker = 1, asthma = 0;
+const $ = id => document.getElementById(id);
+
+function bindToggle(onId, offId, setVal){
+  $(onId).addEventListener('click', () => { setVal(1); $(onId).classList.add('on'); $(offId).classList.remove('on'); compute(); });
+  $(offId).addEventListener('click', () => { setVal(0); $(offId).classList.add('on'); $(onId).classList.remove('on'); compute(); });
+}
+bindToggle('smoke_y','smoke_n', v => smoker = v);
+bindToggle('asthma_y','asthma_n', v => asthma = v);
+['age','pack','cat','pf'].forEach(id => $(id).addEventListener('input', compute));
+
+function zscore(x, mean, scale){ return x.map((v,i) => (v - mean[i]) / scale[i]); }
+function softmax(z){ const m = Math.max(...z); const e = z.map(v => Math.exp(v-m)); const s = e.reduce((a,b)=>a+b,0); return e.map(v=>v/s); }
+
+function compute(){
+  const age = +$('age').value, pack = +$('pack').value, cat = +$('cat').value, pf = +$('pf').value;
+  $('age_v').textContent = age; $('pack_v').textContent = pack; $('cat_v').textContent = cat; $('pf_v').textContent = pf;
+
+  const raw = [age, smoker, pack, cat, asthma, pf];
+
+  // --- logistic regression classifier (distilled SVM surrogate) ---
+  const xz = zscore(raw, D.svm_scaler_mean, D.svm_scaler_scale);
+  const z = D.logreg_coef.map((row,k) => row.reduce((s,c,i)=>s+c*xz[i],0) + D.logreg_intercept[k]);
+  const p = softmax(z);
+  let best = 0; for(let i=1;i<p.length;i++) if(p[i]>p[best]) best = i;
+  const cls = D.classes[best], conf = p[best];
+
+  // --- linear regression severity estimate (distilled SVR surrogate) ---
+  const xz2 = zscore(raw, D.svr_scaler_mean, D.svr_scaler_scale);
+  let fev1pred = D.linreg_intercept + D.linreg_coef.reduce((s,c,i)=>s+c*xz2[i],0);
+  fev1pred = Math.max(20, Math.min(115, fev1pred));
+
+  $('conf').textContent = (conf*100).toFixed(0) + '%';
+  $('fev1pred').textContent = fev1pred.toFixed(1) + '%';
+  const pct = Math.max(0, Math.min(100, (fev1pred-30)/(110-30)*100));
+  $('fev1_marker').style.left = pct + '%';
+
+  ['chip_normal','chip_atrisk','chip_obstr'].forEach(id => $(id).classList.remove('active'));
+  const decision = $('decision'), hic = $('hic_note');
+  if (cls === 'Normal') {
+    $('chip_normal').classList.add('active');
+    decision.style.background = 'var(--teal)';
+    $('d_title').textContent = 'ROUTINE — monitor'; $('d_sub').textContent = 'No obstructive signal detected.';
+    $('d_pill').textContent = 'screen'; hic.style.display = 'none';
+  } else if (cls === 'At-risk') {
+    $('chip_atrisk').classList.add('active');
+    decision.style.background = 'var(--gold)';
+    $('d_title').textContent = 'REFER — early pulmonary function review';
+    $('d_sub').textContent = 'Order spirometry to confirm; symptom pattern suggests early airflow limitation.';
+    $('d_pill').textContent = 'screen'; hic.style.display = 'block';
+  } else {
+    $('chip_obstr').classList.add('active');
+    decision.style.background = 'var(--red)';
+    $('d_title').textContent = 'MANAGE — likely obstructive disease';
+    $('d_sub').textContent = 'Confirm with spirometry; recall on this class from symptoms alone is 70% — do not skip the test.';
+    $('d_pill').textContent = 'screen'; hic.style.display = 'block';
+  }
+}
+compute();
+</script>
+</body></html>
