@@ -34,6 +34,12 @@ input[type=range]{width:100%;accent-color:var(--teal)}.slider{flex:1;margin:0 10
 .classchip.n.active{background:var(--teal);border-color:var(--teal)}
 .classchip.a.active{background:var(--gold);border-color:var(--gold)}
 .classchip.o.active{background:var(--red);border-color:var(--red)}
+.selrow{display:flex;gap:16px;margin-bottom:8px;flex-wrap:wrap}.selrow>div{flex:1;min-width:170px}
+.selrow label{font-size:12px;color:#48566f;display:block;margin-bottom:4px}
+.selrow input,.selrow select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px}
+.plan2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.note2{font-size:11.5px;color:#6b7893;margin-top:10px;line-height:1.55}
+.ptag{display:inline-block;background:var(--navy);color:#fff;border-radius:6px;padding:2px 7px;font-size:10.5px;font-weight:700;margin-right:6px}
 </style></head>
 <body>
 <header><img src="../img/aegis-logo.png" alt="AEGIS" style="height:42px;width:auto;flex:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))"/><div><div class="badge">PRAS Console</div><div class="sub">Pulmonary Risk Augmenting System &middot; screening-only obstruction call + severity estimate</div></div>
@@ -94,6 +100,26 @@ input[type=range]{width:100%;accent-color:var(--teal)}.slider{flex:1;margin:0 10
 </div>
 </div>
 
+<div class="card">
+  <h2>2 &middot; Medical resource planning — COPD / pulmonary population</h2>
+  <div class="cover">🌍 <b>GLOBAL COVERAGE</b> — planning anchored to the real health-system spend of <b>24 countries</b>. Choose your market; COPD-cohort cost, bed-days and avoidable spend re-compute in your economy.</div>
+  <div class="selrow">
+    <div><label>Screened pulmonary / COPD-risk patients in your service</label><input id="pop" type="number" value="10000" min="0" step="500"/></div>
+    <div><label>Market (per-capita cost anchor)</label><select id="mkt"><option value="992">China (S$992)</option><option value="4771">Japan (S$4,771)</option><option value="5073" selected>Singapore (S$5,073)</option><option value="5070">South Korea (S$5,070)</option><option value="3279">Taiwan (S$3,279)</option><option value="8710">Australia (S$8,710)</option><option value="104">India (S$104)</option><option value="172">Indonesia (S$172)</option><option value="598">Malaysia (S$598)</option><option value="481">Thailand (S$481)</option><option value="7297">Finland (S$7,297)</option><option value="7930">France (S$7,930)</option><option value="9100">Germany (S$9,100)</option><option value="6713">Italy (S$6,713)</option><option value="9333">Netherlands (S$9,333)</option><option value="4237">Spain (S$4,237)</option><option value="7761">Sweden (S$7,761)</option><option value="10400">Switzerland (S$10,400)</option><option value="7150">United Kingdom (S$7,150)</option><option value="1132">Brazil (S$1,132)</option><option value="9230">Canada (S$9,230)</option><option value="1950">Saudi Arabia (S$1,950)</option><option value="3123">United Arab Em. (S$3,123)</option><option value="19500">United States (S$19,500)</option></select></div>
+  </div>
+  <div class="plan2">
+    <div>
+      <div class="stat"><span>Annual care cost (pulmonary cohort)</span><b id="rCost">&mdash;</b></div>
+      <div class="stat"><span>Expected inpatient bed-days / yr</span><b id="rBed">&mdash;</b></div>
+      <div class="stat"><span>Cost avoidable via early cessation / bronchodilator</span><b id="rAvoid" style="color:var(--teal)">&mdash;</b></div>
+    </div>
+    <div>
+      <div class="stat"><span><span class="ptag">P1 · NAS</span>Nurses for follow-up (@500/nurse)</span><b id="rNurse">&mdash;</b></div>
+      <div class="stat"><span>Spirometry referrals to pre-empt (shadow cohort)</span><b id="rSpiro">&mdash;</b></div>
+      <div class="note2">Ties the individual call to the system view: every At-risk patient flagged here becomes a spirometry referral and nurse-follow-up load (Project 1). Catching airflow limitation early &mdash; before COPD &mdash; is where the avoidable cost lives.</div>
+    </div>
+  </div>
+</div>
 <div style="background:#f8fafc;border:1px dashed #dce3ee;border-radius:12px;padding:15px 18px;font-size:12px;color:#3d4a63;line-height:1.6;margin-bottom:16px">
   <div style="font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:#1F3864;font-weight:700;margin-bottom:8px">How the numbers are derived — data vintage &amp; method</div>
   <b>Data sources &amp; vintage</b>
@@ -102,7 +128,7 @@ input[type=range]{width:100%;accent-color:var(--teal)}.slider{flex:1;margin:0 10
     <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L2 · Spirometry / severity</td><td style="padding:3px 0;vertical-align:top">101 real GOLD-consistent COPD patients (FEV1/FVC, severity labels). Normal class = documented ATS/ERS reference (FEV1/FVC ≈ 0.80 ± 0.05) — a disclosed modelling assumption, not real controls.</td></tr>
     <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L3 · Population risk</td><td style="padding:3px 0;vertical-align:top">300 real asthma-cohort patients (smoking / comorbidity signal).</td></tr>
     <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L4 · Hospitalisation</td><td style="padding:3px 0;vertical-align:top">UCI Diabetes 130-US-Hospitals respiratory subset (ICD-9 490–496 / 466 / 480–488 / 786). Encounters <b>1999–2008</b> (15,108; readmit30 8.1%, mean LOS 4.2 d).</td></tr>
-    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L5 · Economics</td><td style="padding:3px 0;vertical-align:top">Umbrella 24-country per-capita anchors (WHO / World Bank, compiled mid-2026, SGD). The interactive market-planning panel is the documented next integration — deferred, not silently skipped.</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L5 · Economics</td><td style="padding:3px 0;vertical-align:top">Umbrella 24-country per-capita anchors (WHO / World Bank, compiled mid-2026, SGD), wired into the market-planning panel above (patients × COPD severity multiplier 1.0 / 1.5 / 3.0 × per-capita anchor; avoidable = At-risk × per-capita × 45% early-cessation effect).</td></tr>
   </table>
   <b>Method</b> — illustrative screening scaffold, <u>not billed figures</u>:
   <table style="border-collapse:collapse;width:100%;margin:4px 0 4px">
@@ -231,6 +257,21 @@ function compute(){
     $('d_pill').textContent = 'screen'; hic.style.display = 'block';
   }
 }
+
+const PLAN={"p_atrisk": 0.1643, "p_obstr": 0.0947, "p_admit": 0.0443, "mean_los": 4.23, "readmit": 0.094, "m_norm": 1.0, "m_at": 1.5, "m_ob": 3.0, "interv": 0.45};
+function fmtM(x){x=Math.round(x);return x>=1e6?(x/1e6).toFixed(2)+'M':x>=1e3?(x/1e3).toFixed(1)+'k':''+x;}
+function plan(){
+  const N=+document.getElementById('pop').value||0, pc=+document.getElementById('mkt').value, a=PLAN;
+  const w=(1-a.p_atrisk-a.p_obstr)*a.m_norm+a.p_atrisk*a.m_at+a.p_obstr*a.m_ob;
+  document.getElementById('rCost').textContent='S$'+fmtM(N*w*pc);
+  document.getElementById('rBed').textContent=fmtM(N*a.p_admit*a.mean_los*(1+a.readmit));
+  document.getElementById('rAvoid').textContent='S$'+fmtM(N*a.p_atrisk*pc*a.interv);
+  document.getElementById('rNurse').textContent=fmtM(Math.ceil(N*a.p_atrisk/500));
+  document.getElementById('rSpiro').textContent=fmtM(N*a.p_atrisk);
+}
+document.getElementById('pop').addEventListener('input',plan);
+document.getElementById('mkt').addEventListener('input',plan);
+plan();
 compute();
 </script>
 </body></html>
