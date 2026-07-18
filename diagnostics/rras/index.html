@@ -38,10 +38,26 @@ input[type=range]{width:100%;accent-color:var(--teal)}.slider{flex:1;margin:0 10
 .prov td{padding:3px 8px 3px 0;vertical-align:top}.prov td:first-child{font-weight:700;color:var(--navy);white-space:nowrap}
 .foot{max-width:1160px;margin:4px auto 30px;padding:0 18px;font-size:11.5px;color:#7c8aa5;line-height:1.6}
 svg text{font-family:inherit}
+.rhero{position:relative;border-radius:14px;overflow:hidden;margin:0 0 18px;box-shadow:0 2px 10px rgba(20,30,60,.12)}
+.rhero img{display:block;width:100%;height:auto}
+.rhero .cap{position:absolute;top:0;right:0;bottom:0;width:50%;display:flex;flex-direction:column;justify-content:center;padding:0 5% 0 3%;background:linear-gradient(90deg,rgba(238,241,246,0),rgba(238,241,246,.5) 28%,rgba(238,241,246,.93) 100%)}
+.rhero .cap h2{font-size:22px;line-height:1.2;color:var(--navy);margin:0;text-transform:none;letter-spacing:0}
+.rhero .cap p{font-size:12.5px;color:#3a4459;margin:8px 0 0;line-height:1.5}
+.rband{position:relative;border-radius:14px;overflow:hidden;margin:18px 0 0;box-shadow:0 2px 10px rgba(20,30,60,.12)}
+.rband img{display:block;width:100%;height:auto}
+.rband .cap{position:absolute;left:0;right:0;bottom:0;padding:16px 20px;background:linear-gradient(0deg,rgba(15,25,45,.82),rgba(15,25,45,.30) 55%,rgba(15,25,45,0));color:#fff}
+.rband .cap b{font-size:16px;display:block;margin-bottom:2px}
+.rband .cap span{font-size:12px;color:#dbe3f0}
+@media(max-width:680px){.rhero .cap{width:64%}.rhero .cap h2{font-size:15px}.rhero .cap p{font-size:11px}}
 </style></head><body>
 <header><img src="../img/aegis-logo.png" alt="AEGIS"/><div><div class="badge">RRAS Console</div><div class="sub">Renal Risk Augmenting System · pre-emptive obstruction detection + severity + system planning</div></div>
 <div class="tag">AEGIS · Project 11<br/>SVM classifier + SVR severity<br/>augment · human-in-command</div></header>
 <div class="wrap">
+
+<div class="rhero">
+  <img src="../img/renal-hero.jpg" alt="Nephrologist reviewing a renogram clearance curve and split-function chart on a diagnostic console">
+  <div class="cap"><h2>Catch the obstruction before the kidney fails.</h2><p>Renogram washout kinetics plus a cheap lab panel — an obstruction call, a severity gauge, and resource planning across 24 countries, with a clinician in command of every decision.</p></div>
+</div>
 
 <div class="grid">
   <div class="card">
@@ -114,6 +130,11 @@ svg text{font-family:inherit}
     <tr><td>Bed-days</td><td>= admitted patients × mean length-of-stay (from real 1999–2008 renal encounters) × (1 + 30-day readmission rate).</td></tr>
   </table>
   Cohort rates are measured from the RRAS-RP <b>synthetic</b> cohort (main.csv): early-obstruction 17.1%, obstructed 8.9%, admitted 7.0%, mean LOS 5.01 d, 30-day readmission 14.1%.
+</div>
+
+<div class="rband">
+  <img src="../img/renal-clinician.jpg" alt="A nephrologist studying renogram waveforms on a diagnostic display, making the final decision">
+  <div class="cap"><b>The system flags the obstruction. A clinician makes every call.</b><span>RRAS surfaces its own uncertainty at the margin and hands the judgement to a human — augmenting the nephrologist, never replacing them.</span></div>
 </div>
 
 <div class="foot" id="foot"></div>
