@@ -6,7 +6,8 @@
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--paper);color:var(--ink)}
 .wrap{max-width:1080px;margin:0 auto;padding:10px}
 header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--gold);padding-bottom:12px;margin-bottom:8px}
-.logo{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 60% 40%,var(--gold),#8a6f1a);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.logo-img{height:52px;width:auto;display:block}
+@media(max-width:680px){.logo-img{height:40px}}
 h1{font-size:20px;margin:0;color:var(--navy)}.sub{font-size:12px;color:var(--grey)}
 .tag{margin-left:auto;font-size:11px;color:var(--red);border:1px solid var(--red);border-radius:20px;padding:4px 10px;font-weight:600}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -33,7 +34,7 @@ select,input[type=number]{padding:6px 8px;border:1px solid #cfd6e2;border-radius
 </style></head>
 <body><div class="wrap">
 <header>
-  <div class="logo">Æ</div>
+  <img class="logo-img" src="../img/aegis-logo.png" alt="AEGIS — We Define the Market">
   <div><h1>DRAS Console — Diabetes Risk Augmenting System</h1><div class="sub">Kinetic SVM 3-class + SVR severity · confidence-scored · human-in-command</div></div>
   <div class="tag">DEMO · clinician decides</div>
 </header>
