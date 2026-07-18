@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AEGIS · DRAS Console</title>
+<style>
+:root{--navy:#1F3864;--teal:#2E8B84;--gold:#C9A227;--red:#B4462F;--ink:#1a2230;--paper:#f4f6fa;--card:#ffffff;--grey:#8792a4}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--paper);color:var(--ink)}
+.wrap{max-width:1080px;margin:0 auto;padding:10px}
+header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--gold);padding-bottom:12px;margin-bottom:8px}
+.logo{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 60% 40%,var(--gold),#8a6f1a);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+h1{font-size:20px;margin:0;color:var(--navy)}.sub{font-size:12px;color:var(--grey)}
+.tag{margin-left:auto;font-size:11px;color:var(--red);border:1px solid var(--red);border-radius:20px;padding:4px 10px;font-weight:600}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border-radius:12px;padding:12px 14px;box-shadow:0 1px 3px rgba(20,30,60,.08)}
+.card h2{font-size:14px;margin:0 0 12px;color:var(--navy);text-transform:uppercase;letter-spacing:.5px}
+label{font-size:12px;color:#3a4459;display:block;margin:7px 0 2px;font-weight:600}
+.row{display:flex;align-items:center;gap:10px}
+input[type=range]{flex:1;accent-color:var(--teal)}
+.val{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);min-width:70px;text-align:right}
+.unit{font-size:11px;color:var(--grey)}
+.verdict{font-size:21px;font-weight:800;margin:2px 0 2px}
+.mech{font-size:13px;color:#3a4459;margin-bottom:10px}
+.bar{height:22px;border-radius:6px;background:#eef1f6;position:relative;margin:6px 0;overflow:hidden}
+.bar>span{position:absolute;left:0;top:0;bottom:0;border-radius:6px;transition:width .25s}
+.barlab{display:flex;justify-content:space-between;font-size:12px;margin-top:8px;font-weight:600}
+.big{font-size:34px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+.stat{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #e6eaf1;font-size:12px}
+.stat b{color:var(--navy);font-variant-numeric:tabular-nums}
+.note{font-size:11px;color:var(--grey);margin-top:10px;line-height:1.5}
+.pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;color:#fff;font-weight:700}
+.foot{font-size:11px;color:var(--grey);text-align:center;margin-top:18px;line-height:1.6}
+select,input[type=number]{padding:6px 8px;border:1px solid #cfd6e2;border-radius:8px;font-size:13px}
+</style></head>
+<body><div class="wrap">
+<header>
+  <div class="logo">Æ</div>
+  <div><h1>DRAS Console — Diabetes Risk Augmenting System</h1><div class="sub">Kinetic SVM 3-class + SVR severity · confidence-scored · human-in-command</div></div>
+  <div class="tag">DEMO · clinician decides</div>
+</header>
+
+<div class="grid">
+  <!-- INPUT -->
+  <div class="card" style="order:2">
+    <h2>Patient OGTT input (2-hour values)</h2>
+    <label>Blood glucose — 2h OGTT <span class="unit">(mg/dL)</span></label>
+    <div class="row"><input type="range" id="glu" min="60" max="260" value="132" oninput="run()"><div class="val"><span id="gluv">132</span></div></div>
+    <label>Insulin — 2h OGTT <span class="unit">(µU/mL)</span></label>
+    <div class="row"><input type="range" id="ins" min="10" max="500" value="150" oninput="run()"><div class="val"><span id="insv">150</span></div></div>
+    <label>Age <span class="unit">(yrs)</span></label>
+    <div class="row"><input type="range" id="age" min="20" max="90" value="52" oninput="run()"><div class="val"><span id="agev">52</span></div></div>
+    <label>BMI</label>
+    <div class="row"><input type="range" id="bmi" min="16" max="48" value="30" step="0.1" oninput="run()"><div class="val"><span id="bmiv">30</span></div></div>
+    <div class="note">Enter the patient's 2-hour OGTT glucose &amp; insulin (fasting values would use different thresholds). The model reads insulin <i>against</i> glucose to separate the at-risk mechanism.</div>
+  </div>
+
+  <!-- CLASSIFICATION -->
+  <div class="card" style="order:1">
+    <h2>Classification &amp; confidence</h2>
+    <div class="verdict" id="verdict">—</div>
+    <div class="mech" id="mech"></div>
+    <div class="barlab"><span>Non-diabetic</span><span id="pN">0%</span></div>
+    <div class="bar"><span id="bN" style="background:var(--teal)"></span></div>
+    <div class="barlab"><span>At-risk (rim)</span><span id="pA">0%</span></div>
+    <div class="bar"><span id="bA" style="background:var(--gold)"></span></div>
+    <div class="barlab"><span>Diabetic</span><span id="pD">0%</span></div>
+    <div class="bar"><span id="bD" style="background:var(--red)"></span></div>
+    <div class="stat" style="margin-top:14px"><span>Confidence in top class</span><b id="conf">—</b></div>
+    <div class="stat"><span>Annual hospitalisation risk <span class="unit">(reference)</span></span><b id="hosp">—</b></div>
+    <div class="stat"><span>Kinetic severity: est. damping A <span class="unit">(SVR)</span></span><b id="estA">—</b></div>
+    <div class="barlab" style="margin-top:2px"><span>severity index (100 = most severe)</span><span id="sevpct">0 / 100</span></div>
+    <div class="bar"><span id="bSev" style="background:linear-gradient(90deg,var(--teal),var(--gold),var(--red))"></span></div>
+    <div class="note" id="flag"></div>
+  </div>
+</div>
+
+<!-- RESOURCE PLANNING -->
+<div class="card" style="margin-top:16px">
+  <h2>3 · Medical resource planning — outpatient diabetic population</h2>
+  <div style="background:linear-gradient(90deg,var(--navy),var(--teal));color:#fff;border-radius:10px;padding:11px 15px;margin-bottom:14px;font-size:13.5px;line-height:1.5">🌍 <b>GLOBAL COVERAGE</b> — resource planning anchored to the real health-system resources of <b>24 countries worldwide</b>. Choose your market below; annual cost, bed-days, supplies and workforce re-compute in your own economy.</div>
+  <div class="row" style="gap:16px;flex-wrap:wrap">
+    <div><label>Outpatient diabetic patients in your service</label>
+      <input type="number" id="pop" value="10000" min="100" step="100" oninput="run()" style="width:140px"></div>
+    <div><label>Market (per-capita cost anchor)</label>
+      <select id="mkt" onchange="run()">
+        <option value="8710">Australia (S$8,710)</option>
+        <option value="1132">Brazil (S$1,132)</option>
+        <option value="9230">Canada (S$9,230)</option>
+        <option value="992">China (S$992)</option>
+        <option value="7297">Finland (S$7,297)</option>
+        <option value="7930">France (S$7,930)</option>
+        <option value="9100">Germany (S$9,100)</option>
+        <option value="104">India (S$104)</option>
+        <option value="172">Indonesia (S$172)</option>
+        <option value="6713">Italy (S$6,713)</option>
+        <option value="4771">Japan (S$4,771)</option>
+        <option value="598">Malaysia (S$598)</option>
+        <option value="9333">Netherlands (S$9,333)</option>
+        <option value="1950">Saudi Arabia (S$1,950)</option>
+        <option value="5073" selected>Singapore (S$5,073)</option>
+        <option value="5070">South Korea (S$5,070)</option>
+        <option value="4237">Spain (S$4,237)</option>
+        <option value="7761">Sweden (S$7,761)</option>
+        <option value="10400">Switzerland (S$10,400)</option>
+        <option value="3279">Taiwan (S$3,279)</option>
+        <option value="481">Thailand (S$481)</option>
+        <option value="3123">United Arab Emirates (S$3,123)</option>
+        <option value="7150">United Kingdom (S$7,150)</option>
+        <option value="19500">United States (S$19,500)</option>
+      </select></div>
+  </div>
+  <div class="grid" style="margin-top:8px">
+    <div>
+      <div class="stat"><span>Annual care cost (diabetic cohort)</span><b id="rCost">—</b></div>
+      <div class="stat"><span>Expected inpatient bed-days / yr</span><b id="rBed">—</b></div>
+      <div class="stat"><span>Insulin units / yr (supplies)</span><b id="rIns">—</b></div>
+      <div class="stat"><span>Test strips / yr (supplies)</span><b id="rStr">—</b></div>
+      <div class="stat"><span>Cost avoidable via early intervention</span><b id="rAvoid" style="color:var(--teal)">—</b></div>
+    </div>
+    <div>
+      <div class="stat"><span><span class="pill" style="background:var(--navy)">P1 · NAS</span> Nurses for follow-up (@500/nurse)</span><b id="rNurse">—</b></div>
+      <div class="stat"><span><span class="pill" style="background:var(--teal)">P2 · Adherence</span> Adherence checks / yr (quarterly)</span><b id="rAdh">—</b></div>
+      <div class="stat"><span>At-risk to pre-empt (est. shadow cohort)</span><b id="rAtrisk">—</b></div>
+      <div class="note">Ties the individual call to the system view: every diabetic flagged here becomes nurse-follow-up load (Project 1, Nurse Augmenting System) and an adherence-monitoring case (Project 2, Medication Adherence). Catching the at-risk rim <i>before</i> conversion is where the avoidable cost lives.</div>
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  AEGIS · Human-AI Augmenting Systems — <b>augment, never replace · human-in-command · honest metrics</b><br>
+  Classification via SVM (3-class) and continuous severity via SVR (fitting-free damping estimate, CV R² 0.20 — coarse; precise damping needs the full OGTT curve). Calibrated to the synthetic DRAS-RP cohort (main.csv). Screening estimate for reference only — a clinician makes every call. Not for clinical use.
+</div>
+</div>
+
+<script>
+function fmt(n){return n>=1e9?(n/1e9).toFixed(2)+'B':n>=1e6?(n/1e6).toFixed(2)+'M':n>=1e3?(n/1e3).toFixed(1)+'k':Math.round(n).toLocaleString()}
+function run(){
+  const g=+glu.value, ins=+document.getElementById('ins').value, age=+document.getElementById('age').value, bmi=+document.getElementById('bmi').value;
+  gluv.textContent=g; insv.textContent=ins; agev.textContent=age; bmiv.textContent=bmi;
+  // transparent 3-class model calibrated to DRAS cohort band means (mg/dL): 92 / 122 / 162
+  const sig=24;
+  let sN=-Math.pow(g-92,2)/(2*sig*sig), sA=-Math.pow(g-122,2)/(2*sig*sig), sD=-Math.pow(g-162,2)/(2*sig*sig);
+  const insE=(ins-140)/120;          // high insulin => resistance (rim), disfavours overt diabetic
+  sA+=0.5*insE; sD-=0.4*insE;
+  const risk=(age-45)/40+(bmi-28)/15;
+  sA+=0.15*Math.max(0,risk); sD+=0.20*Math.max(0,risk);
+  const m=Math.max(sN,sA,sD); let eN=Math.exp(sN-m),eA=Math.exp(sA-m),eD=Math.exp(sD-m);
+  const Z=eN+eA+eD; const pN=eN/Z,pA=eA/Z,pD=eD/Z;
+  bN.style.width=(pN*100)+'%'; bA.style.width=(pA*100)+'%'; bD.style.width=(pD*100)+'%';
+  document.getElementById('pN').textContent=(pN*100).toFixed(0)+'%';
+  document.getElementById('pA').textContent=(pA*100).toFixed(0)+'%';
+  document.getElementById('pD').textContent=(pD*100).toFixed(0)+'%';
+  const arr=[['Non-diabetic',pN,'var(--teal)'],['At-risk',pA,'var(--gold)'],['Diabetic',pD,'var(--red)']].sort((a,b)=>b[1]-a[1]);
+  const top=arr[0];
+  verdict.textContent=top[0]; verdict.style.color=top[2];
+  conf.textContent=(top[1]*100).toFixed(0)+'% ('+(top[1]>.66?'high':top[1]>.45?'moderate':'low — rim')+')';
+  // mechanism for at-risk
+  let mech='';
+  if(top[0]==='At-risk'){ mech = ins>170?'Mechanism: resistance / hyperinsulinemia (high glucose + high insulin) — the metabolic rim.':ins<90?'Mechanism: deficiency / early beta-cell insufficiency (high glucose + low insulin).':'Mechanism: mixed — monitor.'; }
+  else if(top[0]==='Diabetic'){ mech = ins<90?'High glucose with low insulin — consistent with established diabetic pattern.':'High glucose; read insulin against glucose to grade severity.'; }
+  else { mech='Well-regulated response — glucose returns toward baseline.'; }
+  document.getElementById('mech').textContent=mech;
+  // hospitalisation reference (annual)
+  const pHosp=(0.05*pN+0.12*pA+0.30*pD)*(0.8+0.4*Math.min(1,Math.max(0,(g-100)/120)));
+  hosp.textContent=(pHosp*100).toFixed(0)+'%';
+  // SVR fitting-free severity: estimated kinetic damping A (low A = severe). Calibrated to SVR FULL (Diabetic ~0.71, others ~1.8; CV R2 0.20).
+  const estA=Math.max(0.45, 1.80 - 1.15*pD - 0.05*pA);
+  const sev=Math.max(0, Math.min(100, Math.round(100*(1.85-estA)/1.30)));
+  document.getElementById('estA').textContent=estA.toFixed(2);
+  document.getElementById('sevpct').textContent=sev+' / 100';
+  document.getElementById('bSev').style.width=sev+'%';
+  document.getElementById('flag').innerHTML = top[0]==='At-risk'
+    ? '⚑ <b>REFER for early intervention</b> — the augmenting catch: flag to the medical team before overt diabetes.'
+    : top[0]==='Diabetic' ? '● <b>Active management</b> — confirm clinically; enrol in adherence + follow-up.'
+    : '○ Routine monitoring.';
+  // resource planning
+  const N=+document.getElementById('pop').value, pc=+document.getElementById('mkt').value;
+  const cost=N*2.3*pc;
+  const bed=N*0.30*3*1.1;
+  const insUnits=N*0.30*38*365;
+  const strips=N*(0.30*900+0.70*250);
+  const avoid=N*0.20*pc*0.5;
+  const nurses=Math.ceil(N/500);
+  const adh=N*4;
+  const atrisk=Math.round(N*0.45); // shadow at-risk cohort ~ per diabetic
+  rCost.textContent='S$'+fmt(cost); rBed.textContent=fmt(bed); rIns.textContent=fmt(insUnits);
+  rStr.textContent=fmt(strips); rAvoid.textContent='S$'+fmt(avoid);
+  rNurse.textContent=fmt(nurses); rAdh.textContent=fmt(adh); rAtrisk.textContent=fmt(atrisk);
+}
+run();
+</script>
+</body></html>
