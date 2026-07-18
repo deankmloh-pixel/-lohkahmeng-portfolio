@@ -36,7 +36,7 @@ input[type=range]{width:100%;accent-color:var(--teal)}.slider{flex:1;margin:0 10
 .classchip.o.active{background:var(--red);border-color:var(--red)}
 </style></head>
 <body>
-<header><div class="mark">AE</div><div><div class="badge">PRAS Console</div><div class="sub">Pulmonary Risk Augmenting System &middot; screening-only obstruction call + severity estimate</div></div>
+<header><img src="../img/aegis-logo.png" alt="AEGIS" style="height:42px;width:auto;flex:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))"/><div><div class="badge">PRAS Console</div><div class="sub">Pulmonary Risk Augmenting System &middot; screening-only obstruction call + severity estimate</div></div>
 <div class="tag">AEGIS &middot; Project 12<br/>Logistic-regression screen (distilled from SVM)<br/>augment &middot; human-in-command</div></header>
 
 <div class="wrap">
@@ -94,6 +94,24 @@ input[type=range]{width:100%;accent-color:var(--teal)}.slider{flex:1;margin:0 10
 </div>
 </div>
 
+<div style="background:#f8fafc;border:1px dashed #dce3ee;border-radius:12px;padding:15px 18px;font-size:12px;color:#3d4a63;line-height:1.6;margin-bottom:16px">
+  <div style="font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:#1F3864;font-weight:700;margin-bottom:8px">How the numbers are derived — data vintage &amp; method</div>
+  <b>Data sources &amp; vintage</b>
+  <table style="border-collapse:collapse;width:100%;margin:4px 0 10px">
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L1 · Airflow model</td><td style="padding:3px 0;vertical-align:top">Author’s doctoral thesis — Vol.1 Ch.3 “Lung Ventilation Modeling &amp; Assessment” (damped-oscillator R/C indices). Single illustrative case, so L1 substitutes real GOLD spirometry (disclosed).</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L2 · Spirometry / severity</td><td style="padding:3px 0;vertical-align:top">101 real GOLD-consistent COPD patients (FEV1/FVC, severity labels). Normal class = documented ATS/ERS reference (FEV1/FVC ≈ 0.80 ± 0.05) — a disclosed modelling assumption, not real controls.</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L3 · Population risk</td><td style="padding:3px 0;vertical-align:top">300 real asthma-cohort patients (smoking / comorbidity signal).</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L4 · Hospitalisation</td><td style="padding:3px 0;vertical-align:top">UCI Diabetes 130-US-Hospitals respiratory subset (ICD-9 490–496 / 466 / 480–488 / 786). Encounters <b>1999–2008</b> (15,108; readmit30 8.1%, mean LOS 4.2 d).</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L5 · Economics</td><td style="padding:3px 0;vertical-align:top">Umbrella 24-country per-capita anchors (WHO / World Bank, compiled mid-2026, SGD). The interactive market-planning panel is the documented next integration — deferred, not silently skipped.</td></tr>
+  </table>
+  <b>Method</b> — illustrative screening scaffold, <u>not billed figures</u>:
+  <table style="border-collapse:collapse;width:100%;margin:4px 0 4px">
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">Screening call</td><td style="padding:3px 0;vertical-align:top">logistic-regression surrogate of the full SVM (6 features: age, smoking, pack-years, CAT, asthma, peak flow) — 99.1% agreement with the full SVM (ACC 96.3%, macro-F1 0.90).</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">Severity estimate</td><td style="padding:3px 0;vertical-align:top">linear-regression surrogate of the SVR predicting FEV1% predicted — R²=0.85 vs the full SVR.</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">Planned cost method</td><td style="padding:3px 0;vertical-align:top">patients × COPD severity multiplier × per-capita anchor; avoidable via early smoking-cessation / bronchodilator — to be wired with the 24-country panel.</td></tr>
+  </table>
+  Cohort is the synthetic <b>PRAS-RP</b> dataset (6,000 patients). Every row carries the SYNTHETIC label; a clinician makes every call.
+</div>
 <div class="foot">
   <b>What this is.</b> A screening-only console: predicts a 3-class pulmonary risk band
   (Normal / At-risk / COPD-Obstructed) and an estimated FEV1% from age, smoking history,
