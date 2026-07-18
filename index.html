@@ -185,7 +185,7 @@
 <!-- ============ FEATURED TODAY — daily rotating spotlight ============ -->
 <style>
 #spotlight{padding:0 0 6px;}
-#spotlight .spot-card{display:block;text-decoration:none;position:relative;background:#fff;border:1px solid #e6eaf1;border-radius:16px;
+#spotlight .spot-card{display:block;text-decoration:none;position:relative;background:#fff;border:1px solid #e6eaf1;border-radius:16px;background-repeat:no-repeat;background-position:center,right center;background-size:cover,cover;transition:background-image .35s ease;
   padding:24px 28px 24px 30px;box-shadow:0 6px 22px rgba(20,30,60,.08);overflow:hidden;}
 #spotlight .spot-accent{position:absolute;left:0;top:0;bottom:0;width:6px;background:#2E8B84;}
 #spotlight .spot-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;}
@@ -227,21 +227,22 @@
 <script>
 (function(){
   var items=[
-    {eb:"Healthcare · Core project", t:"Nurse Augmenting System for Biomedical Intelligence", b:"Eight independently trained models converged on the same five predictors of 30-day heart-failure readmission. The point was a clinical score a nurse can actually use — not raw accuracy.", h:"project-1-nurse-augmenting-system.html", c:"#2E8B84"},
-    {eb:"Healthcare · Core project", t:"Medication Adherence & Healthcare Claims Analysis", b:"A star-schema claims model and a five-model adherence benchmark on 24,084 diabetes and hypertension patients — surfacing that non-adherent patients cost 2.5× more, with an honest report of the one model that failed.", h:"project-2-medication-adherence.html", c:"#2E8B84"},
-    {eb:"New series · Now live", t:"Diagnostic Augmenting Systems (DRAS)", b:"Three-class diabetes risk from a 2-hour OGTT, grounded in glucose-insulin kinetics, with a confidence score and hospital-resource planning across 24 countries. The first release of the DAS series.", h:"/diagnostics/", c:"#C9A227"},
-    {eb:"Pre-emptive maintenance", t:"Turbofan Remaining Useful Life", b:"Predicts the remaining useful life of a jet engine so maintenance happens before failure, not after — with a live, playable engine-degradation demo right on the page.", h:"project-8-turbofan-rul.html", c:"#2F6B45"},
-    {eb:"Pre-emptive maintenance", t:"AI-Powered Predictive Maintenance System", b:"An end-to-end predictive-maintenance decision system that flags equipment risk early enough for a team to act before a breakdown.", h:"project-7-predictive-maintenance.html", c:"#2F6B45"},
-    {eb:"Orbital & space safety", t:"AEGIS Orbital Watch", b:"An advance-warning system that estimates satellite collision risk so operators can manoeuvre in time — decision support for orbital safety.", h:"project-6-aegis-orbital-watch.html", c:"#1F3864"},
-    {eb:"Decision intelligence", t:"Employee Attrition Target List", b:"A retention decision-support system that ranks which employees are most at risk of leaving, so managers can act on the right few before they go.", h:"project-9-attrition-target-list.html", c:"#24506e"},
-    {eb:"Decision intelligence", t:"Workforce Income Analytics & Decision Support", b:"Workforce income analytics that surface pay patterns for fairer, better-informed compensation decisions.", h:"project-5-workforce-income.html", c:"#24506e"},
-    {eb:"Decision intelligence", t:"Loan Default Risk Decision Support", b:"A loan default-risk system that explains each risk call to a human underwriter instead of issuing a silent verdict.", h:"project-3-loan-default-risk.html", c:"#24506e"},
-    {eb:"Decision intelligence", t:"Customer Retention Decision Support", b:"A marketing decision-support system that predicts customer churn early enough for a team to retain the relationship.", h:"project-4-telco-churn.html", c:"#24506e"}
+    {eb:"Healthcare · Core project", t:"Nurse Augmenting System for Biomedical Intelligence", b:"Eight independently trained models converged on the same five predictors of 30-day heart-failure readmission. The point was a clinical score a nurse can actually use — not raw accuracy.", h:"project-1-nurse-augmenting-system.html", c:"#2E8B84", bg:"assets/spot/bg-nurse.jpg"},
+    {eb:"Healthcare · Core project", t:"Medication Adherence & Healthcare Claims Analysis", b:"A star-schema claims model and a five-model adherence benchmark on 24,084 diabetes and hypertension patients — surfacing that non-adherent patients cost 2.5× more, with an honest report of the one model that failed.", h:"project-2-medication-adherence.html", c:"#2E8B84", bg:"assets/spot/bg-adherence.jpg"},
+    {eb:"New series · Now live", t:"Diagnostic Augmenting Systems (DRAS)", b:"Three-class diabetes risk from a 2-hour OGTT, grounded in glucose-insulin kinetics, with a confidence score and hospital-resource planning across 24 countries. The first release of the DAS series.", h:"/diagnostics/", c:"#C9A227", bg:"assets/spot/bg-dras.jpg"},
+    {eb:"Pre-emptive maintenance", t:"Turbofan Remaining Useful Life", b:"Predicts the remaining useful life of a jet engine so maintenance happens before failure, not after — with a live, playable engine-degradation demo right on the page.", h:"project-8-turbofan-rul.html", c:"#2F6B45", bg:"assets/spot/bg-turbofan.jpg"},
+    {eb:"Pre-emptive maintenance", t:"AI-Powered Predictive Maintenance System", b:"An end-to-end predictive-maintenance decision system that flags equipment risk early enough for a team to act before a breakdown.", h:"project-7-predictive-maintenance.html", c:"#2F6B45", bg:"assets/spot/bg-maintenance.jpg"},
+    {eb:"Orbital & space safety", t:"AEGIS Orbital Watch", b:"An advance-warning system that estimates satellite collision risk so operators can manoeuvre in time — decision support for orbital safety.", h:"project-6-aegis-orbital-watch.html", c:"#1F3864", bg:"assets/spot/bg-orbital.jpg"},
+    {eb:"Decision intelligence", t:"Employee Attrition Target List", b:"A retention decision-support system that ranks which employees are most at risk of leaving, so managers can act on the right few before they go.", h:"project-9-attrition-target-list.html", c:"#24506e", bg:"assets/spot/bg-attrition.jpg"},
+    {eb:"Decision intelligence", t:"Workforce Income Analytics & Decision Support", b:"Workforce income analytics that surface pay patterns for fairer, better-informed compensation decisions.", h:"project-5-workforce-income.html", c:"#24506e", bg:"assets/spot/bg-workforce.jpg"},
+    {eb:"Decision intelligence", t:"Loan Default Risk Decision Support", b:"A loan default-risk system that explains each risk call to a human underwriter instead of issuing a silent verdict.", h:"project-3-loan-default-risk.html", c:"#24506e", bg:"assets/spot/bg-loan.jpg"},
+    {eb:"Decision intelligence", t:"Customer Retention Decision Support", b:"A marketing decision-support system that predicts customer churn early enough for a team to retain the relationship.", h:"project-4-telco-churn.html", c:"#24506e", bg:"assets/spot/bg-churn.jpg"}
   ];
   var N=items.length;
   var day=Math.floor(Date.now()/86400000);        // days since epoch (UTC) — advances once per day
   var today=((day%N)+N)%N;
   var cur=today;
+  var scrim="linear-gradient(90deg,#fff 0%,rgba(255,255,255,.93) 42%,rgba(255,255,255,.5) 72%,rgba(255,255,255,.2) 100%)";
   function render(i){
     var it=items[i];
     document.getElementById('spotEyebrow').textContent=it.eb;
@@ -249,7 +250,10 @@
     document.getElementById('spotBlurb').textContent=it.b;
     document.getElementById('spotAccent').style.background=it.c;
     document.getElementById('spotLink').style.color=it.c;
-    document.getElementById('spotCard').setAttribute('href',it.h);
+    var card=document.getElementById('spotCard');
+    card.setAttribute('href',it.h);
+    card.style.backgroundImage='';                       // stays white until the image is confirmed loaded
+    if(it.bg){ (function(src){ var im=new Image(); im.onload=function(){ if(items[cur].bg===src){ card.style.backgroundImage=scrim+",url('"+src+"')"; } }; im.src=src; })(it.bg); }
     document.getElementById('spotCount').textContent=(i+1)+' / '+N;
   }
   function go(d,ev){ if(ev){ev.preventDefault();ev.stopPropagation();} cur=((cur+d)%N+N)%N; render(cur); }
