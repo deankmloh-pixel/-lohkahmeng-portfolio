@@ -1,0 +1,174 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AEGIS · RRAS Console</title><style>
+:root{--navy:#1F3864;--teal:#2E8B84;--gold:#C9A227;--red:#B4462F;--ink:#16233b;--paper:#eef1f6;--line:#dce3ee}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--paper);color:var(--ink)}
+header{background:linear-gradient(135deg,#16233b,#1F3864 60%,#26507a);color:#fff;padding:16px 26px;display:flex;align-items:center;gap:15px}
+header img{height:42px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
+.badge{font-weight:700;font-size:19px;letter-spacing:.5px}.sub{opacity:.82;font-size:12px;margin-top:2px}
+.tag{margin-left:auto;text-align:right;font-size:11px;opacity:.85;line-height:1.5}
+.wrap{max-width:1160px;margin:20px auto;padding:0 18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:17px 20px;box-shadow:0 1px 3px rgba(20,35,59,.06);margin-bottom:18px}
+.card h2{margin:0 0 3px;font-size:13.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--navy)}
+.hn{font-size:11.5px;color:#6b7893;margin-bottom:13px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0}
+.row label{font-size:13px;font-weight:600}.row .v{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy);min-width:64px;text-align:right}
+input[type=range]{width:100%;accent-color:var(--teal)}.slider{flex:1;margin:0 10px}
+.toggles{display:flex;gap:7px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--line);border-radius:20px;padding:6px 13px;font-size:12.5px;cursor:pointer;user-select:none;background:#fff}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.stat{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #eef1f7;font-size:13.5px}
+.stat b{font-variant-numeric:tabular-nums;color:var(--navy)}
+.gauge{height:140px;margin:2px 0}.bar{height:13px;border-radius:7px;background:linear-gradient(90deg,var(--teal),var(--gold) 55%,var(--red));position:relative;margin-top:7px}
+.bar .k{position:absolute;top:-5px;width:3px;height:23px;background:#16233b;border-radius:2px}
+.decision{border-radius:11px;padding:14px 17px;color:#fff;display:flex;align-items:center;gap:14px;margin-top:6px}
+.decision .big{font-size:19px;font-weight:800}.decision .d-sub{font-size:12px;opacity:.92}
+.pill{margin-left:auto;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(255,255,255,.22)}
+.hic{background:#fff7e2;border:1.5px solid var(--gold);border-radius:11px;padding:11px 15px;font-size:12.5px;color:#6b5410;margin-top:12px;display:none}.hic.show{display:block}
+.cover{background:linear-gradient(90deg,var(--navy),var(--teal));color:#fff;border-radius:10px;padding:11px 15px;margin-bottom:14px;font-size:13px;line-height:1.5}
+.plan{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.selrow{display:flex;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.selrow>div{flex:1;min-width:180px}.selrow label{font-size:12px;color:#48566f;display:block;margin-bottom:4px}
+.selrow input,.selrow select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px}
+.projtag{display:inline-block;background:var(--navy);color:#fff;border-radius:6px;padding:2px 7px;font-size:10.5px;font-weight:700;margin-right:6px}
+.note{font-size:11.5px;color:#6b7893;margin-top:10px;line-height:1.55}
+.prov{background:#f8fafc;border:1px dashed var(--line);border-radius:11px;padding:15px 18px;font-size:12px;color:#3d4a63;line-height:1.6}
+.prov h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--navy)}
+.prov table{border-collapse:collapse;width:100%;margin:4px 0 10px}
+.prov td{padding:3px 8px 3px 0;vertical-align:top}.prov td:first-child{font-weight:700;color:var(--navy);white-space:nowrap}
+.foot{max-width:1160px;margin:4px auto 30px;padding:0 18px;font-size:11.5px;color:#7c8aa5;line-height:1.6}
+svg text{font-family:inherit}
+</style></head><body>
+<header><img src="../img/aegis-logo.png" alt="AEGIS"/><div><div class="badge">RRAS Console</div><div class="sub">Renal Risk Augmenting System · pre-emptive obstruction detection + severity + system planning</div></div>
+<div class="tag">AEGIS · Project 11<br/>SVM classifier + SVR severity<br/>augment · human-in-command</div></header>
+<div class="wrap">
+
+<div class="grid">
+  <div class="card">
+    <h2>1 · Patient — renogram + clinical snapshot</h2>
+    <div class="hn">Enter the renogram kinetics and a cheap lab panel. The engine estimates function and detects obstruction — no nuclear scan needed for the severity estimate.</div>
+    <div class="row"><label>Renogram washout k</label><input class="slider" id="k" type="range" min="0.004" max="0.09" step="0.0005" value="0.012"/><span class="v" id="kv"></span></div>
+    <div class="row"><label>Split function (affected %)</label><input class="slider" id="sp" type="range" min="5" max="60" step="0.5" value="49"/><span class="v" id="spv"></span></div>
+    <div class="row"><label>Serum creatinine (mg/dL)</label><input class="slider" id="scr" type="range" min="0.4" max="9" step="0.1" value="0.9"/><span class="v" id="scrv"></span></div>
+    <div class="row"><label>Age (yrs)</label><input class="slider" id="age" type="range" min="20" max="90" step="1" value="52"/><span class="v" id="agev"></span></div>
+    <div class="row"><label>Blood urea (mg/dL)</label><input class="slider" id="ur" type="range" min="10" max="200" step="1" value="32"/><span class="v" id="urv"></span></div>
+    <div class="row"><label>Haemoglobin (g/dL)</label><input class="slider" id="hb" type="range" min="6" max="18" step="0.1" value="14.3"/><span class="v" id="hbv"></span></div>
+    <div class="row"><label>Albuminuria grade (0–4)</label><input class="slider" id="alb" type="range" min="0" max="4" step="1" value="0"/><span class="v" id="albv"></span></div>
+    <div class="row"><label>Sex</label><div class="toggles"><span class="chip on" id="sexM">Male</span><span class="chip" id="sexF">Female</span></div></div>
+    <div class="row" style="align-items:flex-start"><label>Pre-existing conditions</label><div class="toggles"><span class="chip" id="dm" data-on="0">Diabetes mellitus</span><span class="chip" id="htn" data-on="0">Hypertension</span></div></div>
+  </div>
+
+  <div class="card">
+    <h2>Result — obstruction call + severity</h2>
+    <div class="hn">SVM decides obstruction; SVR grades kidney function (est. eGFR). Both defer at the margin.</div>
+    <div class="gauge"><svg id="gsvg" viewBox="0 0 300 150" width="100%" height="140"></svg></div>
+    <div class="stat"><span>Confidence in obstruction call (SVM)</span><b id="mConf"></b></div>
+    <div class="stat"><span>Annual hospitalisation risk <span style="color:#8894ac">(reference)</span></span><b id="mHosp"></b></div>
+    <div class="stat"><span>Renal severity: est. eGFR <span style="color:#8894ac">(SVR)</span></span><b id="mEgfrS"></b></div>
+    <div class="stat"><span>eGFR from creatinine · KDIGO stage</span><b id="mEgfrM"></b></div>
+    <div class="row" style="margin-top:8px"><label>severity index (100 = most severe)</label><span class="v" id="mSev"></span></div>
+    <div class="bar"><div class="k" id="sevk"></div></div>
+    <div class="decision" id="dec"><div><div class="big" id="decbig"></div><div class="d-sub" id="decsub"></div></div><span class="pill" id="decpill"></span></div>
+    <div class="hic" id="hic"><b>⚠ Human-in-command.</b> <span id="hictxt"></span></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>2 · Medical resource planning — CKD / renal population</h2>
+  <div class="cover">🌍 <b>GLOBAL COVERAGE</b> — planning anchored to the real health-system spend of <b>24 countries</b>. Choose your market; renal cohort cost, bed-days, dialysis burden and avoidable spend re-compute in your own economy.</div>
+  <div class="selrow">
+    <div><label>Renal / CKD-risk patients in your service</label><input id="pop" type="number" value="10000" min="0" step="500"/></div>
+    <div><label>Market (per-capita cost anchor)</label><select id="mkt"><option value="992">China (S$992)</option><option value="4771">Japan (S$4,771)</option><option value="5073" selected>Singapore (S$5,073)</option><option value="5070">South Korea (S$5,070)</option><option value="3279">Taiwan (S$3,279)</option><option value="8710">Australia (S$8,710)</option><option value="104">India (S$104)</option><option value="172">Indonesia (S$172)</option><option value="598">Malaysia (S$598)</option><option value="481">Thailand (S$481)</option><option value="7297">Finland (S$7,297)</option><option value="7930">France (S$7,930)</option><option value="9100">Germany (S$9,100)</option><option value="6713">Italy (S$6,713)</option><option value="9333">Netherlands (S$9,333)</option><option value="4237">Spain (S$4,237)</option><option value="7761">Sweden (S$7,761)</option><option value="10400">Switzerland (S$10,400)</option><option value="7150">United Kingdom (S$7,150)</option><option value="1132">Brazil (S$1,132)</option><option value="9230">Canada (S$9,230)</option><option value="1950">Saudi Arabia (S$1,950)</option><option value="3123">United Arab Em. (S$3,123)</option><option value="19500">United States (S$19,500)</option></select></div>
+  </div>
+  <div class="plan">
+    <div>
+      <div class="stat"><span>Annual care cost (renal cohort)</span><b id="rCost">—</b></div>
+      <div class="stat"><span>Expected inpatient bed-days / yr</span><b id="rBed">—</b></div>
+      <div class="stat"><span>Dialysis burden / yr</span><b id="rDial">—</b></div>
+      <div class="stat"><span>Cost avoidable via early nephroprotection</span><b id="rAvoid" style="color:var(--teal)">—</b></div>
+    </div>
+    <div>
+      <div class="stat"><span><span class="projtag">P1 · NAS</span>Nurses for follow-up (@500/nurse)</span><b id="rNurse">—</b></div>
+      <div class="stat"><span><span class="projtag">P2 · Adherence</span>Nephroprotection reviews / yr</span><b id="rAdh">—</b></div>
+      <div class="stat"><span>Early-obstruction to pre-empt (shadow cohort)</span><b id="rEarly">—</b></div>
+      <div class="note">Ties the individual call to the system view: every early-obstruction kidney flagged here becomes nurse-follow-up load (Project 1, Nurse Augmenting System) and a nephroprotection-monitoring case (Project 2). Catching the rim <i>before</i> dialysis is where the avoidable cost lives.</div>
+    </div>
+  </div>
+</div>
+
+<div class="prov">
+  <h3>How the numbers are derived — data vintage & cost method</h3>
+  <b>Data sources & vintage</b>
+  <table>
+    <tr><td>L1 · Renogram kinetics</td><td>Author's doctoral thesis — renogram simulations (Vol. 2, Appendix G). 40 fitted kidneys.</td></tr>
+    <tr><td>L2 · Screening labs</td><td>UCI <i>Chronic Kidney Disease</i> dataset (400 subjects), collected c. 2015.</td></tr>
+    <tr><td>L3 · Population risk</td><td>US CDC <i>BRFSS</i> survey, <b>2020</b> (Personal Key Indicators, 319,795 records).</td></tr>
+    <tr><td>L4 · Hospitalisation</td><td>UCI <i>Diabetes 130-US Hospitals</i>, renal-diagnosis subset (ICD-9 585/584/586/588/250.4/403–404). Encounters <b>1999–2008</b>.</td></tr>
+    <tr><td>L5 · Economics</td><td>Country current health-expenditure per capita (WHO / World Bank), compiled mid-2026, converted to SGD.</td></tr>
+  </table>
+  <b>How costs are derived</b> — illustrative planning estimates, <u>not billed figures</u>:
+  <table>
+    <tr><td>Annual care cost</td><td>= patients × severity multiplier (Clear 1.0 / Early-obstruction 1.6 / Obstructed 3.5; cohort-weighted ≈ 1.32) × per-capita anchor.</td></tr>
+    <tr><td>Dialysis burden</td><td>= dialysis patients × <b>SGD 45,000 / yr</b> (in-centre haemodialysis anchor).</td></tr>
+    <tr><td>Avoidable cost</td><td>= early-obstruction patients × per-capita anchor × <b>40%</b> progression reduction (SGLT2i / RAAS-blockade, literature).</td></tr>
+    <tr><td>Bed-days</td><td>= admitted patients × mean length-of-stay (from real 1999–2008 renal encounters) × (1 + 30-day readmission rate).</td></tr>
+  </table>
+  Cohort rates are measured from the RRAS-RP <b>synthetic</b> cohort (main.csv): early-obstruction 17.1%, obstructed 8.9%, admitted 7.0%, mean LOS 5.01 d, 30-day readmission 14.1%.
+</div>
+
+<div class="foot" id="foot"></div>
+</div>
+<script>
+const P={"clf": {"features": ["washout_k", "split_function_pct", "washout_thalf_rel", "egfr", "blood_urea", "hemoglobin", "albuminuria", "age", "diabetic", "hypertensive"], "mean": [0.013, 46.00687, 59.39659, 84.38969, 35.42613, 14.26086, 0.33678, 46.5455, 0.17486, 0.41925], "std": [0.00659, 7.51898, 17.07902, 31.62861, 20.98762, 2.34126, 0.86563, 16.92009, 0.37985, 0.49344], "coef": [2.87953, -3.75748, 0.96108, -3.60826, -1.30293, -5.02243, 6.76619, -0.31315, 0.25685, 1.69996], "intercept": -3.61604, "agreement": 0.9899}, "sev": {"features": ["washout_k", "split_function_pct", "washout_thalf_rel", "blood_urea", "hemoglobin", "albuminuria", "age", "diabetic", "hypertensive"], "mean": [0.013, 46.00687, 59.39659, 35.42613, 14.26086, 0.33678, 46.5455, 0.17486, 0.41925], "std": [0.00659, 7.51898, 17.07902, 20.98762, 2.34126, 0.86563, 16.92009, 0.37985, 0.49344], "coef": [-1.50158, 8.78516, 0.23882, -1.69412, 5.14027, -5.69482, -8.93982, -1.52293, -2.06659], "intercept": 85.5331, "r2": 0.8481}, "svm_full": {"acc": 0.976, "f1": 0.953, "roc_auc": 0.997, "mcc": 0.937}, "svr_full": {"r2": 0.453, "mae": 19.4, "egfr_by_class": {"Clear": 96.2, "Early-obstruction": 64.2, "Obstructed": 36.6}}, "agg": {"p_early": 0.1705, "p_obstr": 0.0889, "p_admit": 0.0695, "mean_los": 5.01, "readmit": 0.1406, "p_dialysis": 0.0054, "mult_clear": 1.0, "mult_early": 1.6, "mult_obstr": 3.5, "dialysis_annual_sgd": 45000, "interv_effect": 0.4}, "markets": [{"c": "China", "pc": 992}, {"c": "Japan", "pc": 4771}, {"c": "Singapore", "pc": 5073}, {"c": "South Korea", "pc": 5070}, {"c": "Taiwan", "pc": 3279}, {"c": "Australia", "pc": 8710}, {"c": "India", "pc": 104}, {"c": "Indonesia", "pc": 172}, {"c": "Malaysia", "pc": 598}, {"c": "Thailand", "pc": 481}, {"c": "Finland", "pc": 7297}, {"c": "France", "pc": 7930}, {"c": "Germany", "pc": 9100}, {"c": "Italy", "pc": 6713}, {"c": "Netherlands", "pc": 9333}, {"c": "Spain", "pc": 4237}, {"c": "Sweden", "pc": 7761}, {"c": "Switzerland", "pc": 10400}, {"c": "United Kingdom", "pc": 7150}, {"c": "Brazil", "pc": 1132}, {"c": "Canada", "pc": 9230}, {"c": "Saudi Arabia", "pc": 1950}, {"c": "United Arab Em.", "pc": 3123}, {"c": "United States", "pc": 19500}]};const $=id=>document.getElementById(id);
+['k','sp','scr','age','ur','hb','alb'].forEach(i=>$(i).addEventListener('input',update));
+['dm','htn'].forEach(i=>$(i).addEventListener('click',()=>{const c=$(i);c.dataset.on=c.dataset.on==='1'?'0':'1';c.classList.toggle('on');update();}));
+['sexM','sexF'].forEach(i=>$(i).addEventListener('click',()=>{$('sexM').classList.toggle('on',i==='sexM');$('sexF').classList.toggle('on',i==='sexF');update();}));
+['pop','mkt'].forEach(i=>$(i).addEventListener('input',update));
+function sig(x){return 1/(1+Math.exp(-x));}
+function egfrC(scr,age,f){const k=f?0.7:0.9,a=f?-0.241:-0.302,s=f?1.012:1.0;return 142*Math.pow(Math.min(scr/k,1),a)*Math.pow(Math.max(scr/k,1),-1.2)*Math.pow(0.9938,age)*s;}
+function stage(e){return e>=90?'G1':e>=60?'G2':e>=45?'G3a':e>=30?'G3b':e>=15?'G4':'G5';}
+function sc(vec,M){let z=0;for(let i=0;i<M.coef.length;i++)z+=((vec[i]-M.mean[i])/M.std[i])*M.coef[i];return z+M.intercept;}
+function fmt(x){x=Math.round(x);if(x>=1e6)return(x/1e6).toFixed(2)+'M';if(x>=1e3)return(x/1e3).toFixed(1)+'k';return''+x;}
+function update(){
+  const k=+$('k').value,sp=+$('sp').value,scr=+$('scr').value,age=+$('age').value,ur=+$('ur').value,hb=+$('hb').value,alb=+$('alb').value,
+        female=$('sexF').classList.contains('on'),dm=+$('dm').dataset.on,htn=+$('htn').dataset.on;
+  const th=Math.log(2)/Math.max(k,1e-4);
+  $('kv').textContent=k.toFixed(4);$('spv').textContent=sp.toFixed(1)+'%';$('scrv').textContent=scr.toFixed(1);$('agev').textContent=age;$('urv').textContent=ur;$('hbv').textContent=hb.toFixed(1);$('albv').textContent=alb;
+  const egfrM=egfrC(scr,age,female);
+  let egfrS=Math.max(4,Math.min(150,sc([k,sp,th,ur,hb,alb,age,dm,htn],P.sev)));
+  const p=sig(sc([k,sp,th,egfrM,ur,hb,alb,age,dm,htn],P.clf));
+  const conf=Math.round((p>=0.5?p:1-p)*100);
+  let cls,col,big,sub,pill;
+  if(p<0.5){cls='Clear';col='var(--teal)';big='ROUTINE — monitor';sub='No obstruction detected. Standard surveillance.';pill='CLEAR';}
+  else if(egfrM>=45){cls='Early';col='var(--gold)';big='REFER — early nephroprotection';sub='Obstruction in the pre-emptive window. RAAS-blockade / SGLT2i, nephrology referral.';pill='EARLY';}
+  else{cls='Obstr';col='var(--red)';big='MANAGE — active renal failure';sub='Established obstruction / low function. Renal-replacement planning.';pill='OBSTRUCTED';}
+  const pMargin=(p>0.40&&p<0.62),eMargin=(egfrM>40&&egfrM<52&&p>=0.5);
+  $('hic').classList.toggle('show',pMargin||eMargin);
+  $('hictxt').textContent=pMargin?('Obstruction call sits on the SVM margin (P='+p.toFixed(2)+') — the classifier is genuinely uncertain. Clinician confirms.'):eMargin?('Obstruction confirmed, but severity is at the Early / Obstructed boundary (eGFR '+egfrM.toFixed(0)+', ~G3a/G3b). Clinician confirms refer vs manage.'):'';
+  $('dec').style.background=col;$('decbig').textContent=big;$('decsub').textContent=sub;$('decpill').textContent=pill;
+  const hosp=Math.round(({Clear:0.04,Early:0.10,Obstr:0.34}[cls])*(0.6+0.8*(age-20)/70)*100);
+  const sev=Math.max(0,Math.min(100,Math.round(100*(120-egfrS)/110)));
+  $('mConf').textContent=conf+'%';$('mHosp').textContent=hosp+'%';$('mEgfrS').textContent=egfrS.toFixed(0)+' mL/min';
+  $('mEgfrM').textContent=egfrM.toFixed(0)+' · '+stage(egfrM);$('mSev').textContent=sev+' / 100';$('sevk').style.left=sev+'%';
+  drawGauge(egfrS);
+  // resource planning (dataset rates + market per-capita anchor)
+  const N=+$('pop').value||0,pc=+$('mkt').value,a=P.agg;
+  const wmult=(1-a.p_early-a.p_obstr)*a.mult_clear+a.p_early*a.mult_early+a.p_obstr*a.mult_obstr;
+  $('rCost').textContent='S$'+fmt(N*wmult*pc);
+  $('rBed').textContent=fmt(N*a.p_admit*a.mean_los*(1+a.readmit));
+  $('rDial').textContent='S$'+fmt(N*a.p_dialysis*a.dialysis_annual_sgd);
+  $('rAvoid').textContent='S$'+fmt(N*a.p_early*pc*a.interv_effect);
+  $('rNurse').textContent=fmt(Math.ceil(N*a.p_early/500));
+  $('rAdh').textContent=fmt(N*a.p_early*2);
+  $('rEarly').textContent=fmt(N*a.p_early);
+}
+function drawGauge(e){const s=$('gsvg'),cx=150,cy=138,r=108;
+  function pt(an,rr){const a=(180-an)*Math.PI/180;return[cx+rr*Math.cos(a),cy-rr*Math.sin(a)];}
+  let o='';[[0,15,'#7a1f12'],[15,30,'#B4462F'],[30,45,'#d08a1e'],[45,60,'#C9A227'],[60,90,'#3fa08f'],[90,120,'#2E8B84']].forEach(([a0,a1,c])=>{const[x0,y0]=pt(a0/120*180,r),[x1,y1]=pt(a1/120*180,r);o+=`<path d="M ${x0} ${y0} A ${r} ${r} 0 0 1 ${x1} ${y1}" stroke="${c}" stroke-width="15" fill="none"/>`;});
+  const ec=Math.max(0,Math.min(120,e)),[nx,ny]=pt(ec/120*180,r-20);
+  o+=`<line x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" stroke="#16233b" stroke-width="3.4"/><circle cx="${cx}" cy="${cy}" r="5.5" fill="#16233b"/>`;
+  o+=`<text x="${cx}" y="${cy-30}" text-anchor="middle" font-size="29" font-weight="800" fill="#1F3864">${e.toFixed(0)}</text><text x="${cx}" y="${cy-14}" text-anchor="middle" font-size="10.5" fill="#6b7893">est. eGFR (SVR)</text>`;
+  o+=`<text x="30" y="146" font-size="9" fill="#8894ac">0</text><text x="262" y="146" font-size="9" fill="#8894ac">120</text>`;s.innerHTML=o;}
+$('foot').innerHTML='Engine: <b>RRAS SVM classifier</b> (FULL: ACC '+P.svm_full.acc+', F1 '+P.svm_full.f1+', ROC-AUC '+P.svm_full.roc_auc+') decides obstruction; <b>RRAS SVR severity</b> (per-class eGFR '+P.svr_full.egfr_by_class.Clear+' / '+P.svr_full['egfr_by_class']['Early-obstruction']+' / '+P.svr_full.egfr_by_class.Obstructed+') grades it. Browser runs a distilled scorer agreeing with the full SVM on '+(P.clf.agreement*100).toFixed(1)+'% of cases and reproducing the SVR at R²='+P.sev.r2+'. Cohort is <b>SYNTHETIC</b> (RRAS-RP) — research scaffold, screening estimate for reference only, a clinician makes every call. Not for clinical use. Same SVM+SVR pair as the DRAS Console (Project 10).';
+update();
+</script></body></html>

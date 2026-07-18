@@ -126,6 +126,26 @@ select,input[type=number]{padding:6px 8px;border:1px solid #cfd6e2;border-radius
   </div>
 </div>
 
+<div style="background:#f8fafc;border:1px dashed #dce3ee;border-radius:11px;padding:15px 18px;font-size:12px;color:#3d4a63;line-height:1.6;margin-bottom:16px">
+  <div style="font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:#1F3864;font-weight:700;margin-bottom:8px">How the numbers are derived — data vintage &amp; cost method</div>
+  <b>Data sources &amp; vintage</b>
+  <table style="border-collapse:collapse;width:100%;margin:4px 0 10px">
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L1 · OGTT kinetics</td><td style="padding:3px 0;vertical-align:top">Author's doctoral thesis — glucose-response (OGTT) simulations. Damped-oscillator damping A.</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L2 · Screening</td><td style="padding:3px 0;vertical-align:top">NIDDK <i>Pima Indians Diabetes</i> dataset (768 subjects), collected c. 1990.</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L3 · Population risk</td><td style="padding:3px 0;vertical-align:top">US CDC <i>BRFSS</i> survey, <b>2015</b> (diabetes health-indicators, 253,680 records).</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L4 · Hospitalisation</td><td style="padding:3px 0;vertical-align:top">UCI <i>Diabetes 130-US Hospitals</i>. Encounters <b>1999–2008</b> (101,766 admissions).</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">L5 · Economics</td><td style="padding:3px 0;vertical-align:top">Country current health-expenditure per capita (WHO / World Bank), compiled mid-2026, converted to SGD.</td></tr>
+  </table>
+  <b>How costs are derived</b> — illustrative planning estimates, <u>not billed figures</u>:
+  <table style="border-collapse:collapse;width:100%;margin:4px 0 4px">
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">Annual care cost</td><td style="padding:3px 0;vertical-align:top">= patients × diabetic-cohort multiplier <b>2.3</b> × per-capita anchor.</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">Avoidable cost</td><td style="padding:3px 0;vertical-align:top">= at-risk patients (<b>20%</b>) × per-capita anchor × <b>50%</b> risk reduction (DPP-style lifestyle intervention, literature).</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">Bed-days</td><td style="padding:3px 0;vertical-align:top">= admitted (30%) × mean 3-day stay × 1.1 readmission factor (130-hospital 1999–2008 pattern).</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">Supplies</td><td style="padding:3px 0;vertical-align:top">Insulin units &amp; test-strips scaled from the treated-diabetic fraction.</td></tr>
+  </table>
+  Cohort is the synthetic DRAS-RP dataset (main.csv). Economic anchors are point estimates; multipliers are directional planning figures, not epidemiological claims.
+</div>
+
 <div class="foot">
   AEGIS · Human-AI Augmenting Systems — <b>augment, never replace · human-in-command · honest metrics</b><br>
   Classification via SVM (3-class) and continuous severity via SVR (fitting-free damping estimate, CV R² 0.20 — coarse; precise damping needs the full OGTT curve). Calibrated to the synthetic DRAS-RP cohort (main.csv). Screening estimate for reference only — a clinician makes every call. Not for clinical use.
