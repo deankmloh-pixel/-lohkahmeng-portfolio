@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AEGIS · Diagnostic Augmenting Systems</title>
+<meta name="description" content="AEGIS Diagnostic Augmenting Systems (DAS) — kinetics-grounded, human-in-command diagnostic support. First release: DRAS for diabetes risk.">
+<style>
+:root{--navy:#1F3864;--teal:#2E8B84;--gold:#C9A227;--red:#B4462F;--ink:#1a2230;--paper:#f4f6fa;--card:#fff;--grey:#8792a4}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--paper);color:var(--ink)}
+.wrap{max-width:960px;margin:0 auto;padding:26px 20px 40px}
+header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--gold);padding-bottom:14px}
+.logo{width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 60% 40%,var(--gold),#8a6f1a);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:24px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+h1{font-size:23px;margin:0;color:var(--navy)}.sub{font-size:12.5px;color:var(--grey);margin-top:2px}
+.motto{margin-left:auto;font-size:11px;color:var(--gold);font-weight:700;letter-spacing:2px}
+.lede{font-size:15px;line-height:1.65;color:#3a4459;margin:22px 0 6px}
+.lede b{color:var(--navy)}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin:26px 0 12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:680px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border-radius:14px;padding:18px 20px;box-shadow:0 1px 4px rgba(20,30,60,.08);display:flex;flex-direction:column}
+.card h3{margin:0 0 4px;font-size:17px;color:var(--navy)}
+.tag{align-self:flex-start;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;color:#fff;margin-bottom:10px}
+.live{background:var(--teal)}.dev{background:var(--grey)}
+.card p{font-size:13.5px;line-height:1.55;color:#43506a;flex:1;margin:0 0 14px}
+.btn{align-self:flex-start;display:inline-block;background:var(--navy);color:#fff;text-decoration:none;font-size:13px;font-weight:600;padding:9px 16px;border-radius:9px}
+.btn:hover{background:#16294a}
+.btn.disabled{background:#cfd6e2;color:#7a8699;pointer-events:none}
+.principles{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.principles span{font-size:11.5px;background:#eef1f6;color:var(--navy);padding:4px 10px;border-radius:20px;font-weight:600}
+.foot{margin-top:34px;padding-top:16px;border-top:1px solid #e6eaf1;font-size:12px;color:var(--grey);line-height:1.6}
+.foot a{color:var(--teal);text-decoration:none}
+.hero{position:relative;border-radius:16px;overflow:hidden;margin:20px 0 8px;box-shadow:0 2px 10px rgba(20,30,60,.10)}
+.hero img{display:block;width:100%;height:auto}
+.hero .cap{position:absolute;top:0;right:0;bottom:0;width:54%;display:flex;flex-direction:column;justify-content:center;padding:0 5% 0 3%;background:linear-gradient(90deg,rgba(244,246,250,0),rgba(244,246,250,.72) 34%,rgba(244,246,250,.94) 100%)}
+.hero .cap h2{font-size:24px;line-height:1.22;color:var(--navy);margin:0;text-transform:none;letter-spacing:0}
+.hero .cap p{font-size:13px;color:#3a4459;margin:9px 0 0;line-height:1.5}
+.band{position:relative;border-radius:16px;overflow:hidden;margin:26px 0 6px;box-shadow:0 2px 10px rgba(20,30,60,.10)}
+.band img{display:block;width:100%;height:auto}
+.band .cap{position:absolute;left:0;right:0;bottom:0;padding:20px 24px;background:linear-gradient(0deg,rgba(15,25,45,.80),rgba(15,25,45,.30) 55%,rgba(15,25,45,0));color:#fff}
+.band .cap b{font-size:18px;display:block;margin-bottom:3px}
+.band .cap span{font-size:12.5px;color:#dbe3f0}
+@media(max-width:680px){
+ .hero .cap{width:64%;padding:0 4% 0 2%;background:linear-gradient(90deg,rgba(244,246,250,0),rgba(244,246,250,.86) 26%,rgba(244,246,250,.97) 100%)}
+ .hero .cap h2{font-size:16px}.hero .cap p{font-size:11px;margin-top:5px}
+ .band .cap b{font-size:15px}.band .cap span{font-size:11px}
+}
+</style></head>
+<body><div class="wrap">
+<header>
+  <div class="logo">Æ</div>
+  <div><h1>Diagnostic Augmenting Systems</h1><div class="sub">AEGIS · kinetics-grounded, human-in-command clinical decision support</div></div>
+  <div class="motto">WE DEFINE THE MARKET</div>
+</header>
+
+<div class="hero">
+  <img src="./img/hero.jpg" alt="Clinician reviewing a kinetic glucose-response curve and resource chart on a diagnostic console">
+  <div class="cap">
+    <h2>Diagnostics that show their reasoning.</h2>
+    <p>Kinetics-grounded risk stratification, an explicit confidence score, and resource planning across 24 countries — with a clinician in command of every call.</p>
+  </div>
+</div>
+
+<p class="lede">The <b>Diagnostic Augmenting Systems (DAS)</b> series builds clinical screening tools grounded in the <b>physiological kinetics</b> of the disease itself — not statistical thresholds alone. Each system recovers an interpretable risk stratification, surfaces its own uncertainty as a confidence score, and <b>flags the at-risk patient to the medical team while a human clinician stays in command of every call.</b> The series targets the cardio-renal-metabolic cluster — the leading avoidable-readmission driver worldwide.</p>
+<div class="principles"><span>Augment, never replace</span><span>Human-in-command</span><span>Interpretable</span><span>Honest metrics</span></div>
+
+<div style="background:linear-gradient(90deg,var(--navy),var(--teal));color:#fff;border-radius:12px;padding:15px 20px;margin-top:18px;font-size:14.5px;line-height:1.55">🌍 <b>Global by design.</b> Every system plans across <b>24 countries worldwide</b>, anchored to each nation's real health-system resources — per-capita cost, hospital beds, and clinical workforce. Applicable anywhere on Earth.</div>
+<h2>Systems</h2>
+<div class="grid">
+  <div class="card">
+    <span class="tag live">LIVE</span>
+    <h3>DRAS — Diabetes Risk</h3>
+    <p>The Diabetes Risk Augmenting System. From a 2-hour OGTT (glucose + insulin) it returns a three-class stratification — Non-diabetic, At-risk, Diabetic — with a confidence level, an SVR-based severity index, a reference hospitalisation risk, and outpatient resource planning. Grounded in the damped-oscillator glucose-insulin kinetics.</p>
+    <a class="btn" href="./dras/">Open DRAS Console &rarr;</a>
+  </div>
+  <div class="card">
+    <span class="tag dev">IN DEVELOPMENT</span>
+    <h3>RRAS — Renal Risk</h3>
+    <p>The Renal Risk Augmenting System. Extends the kinetic method to kidney function using renogram clearance dynamics and clinical CKD markers — the "R" in the cardio-renal-metabolic cluster, and the natural sequel to diabetes (diabetic nephropathy).</p>
+    <a class="btn disabled">Coming soon</a>
+  </div>
+  <div class="card">
+    <span class="tag dev">IN DEVELOPMENT</span>
+    <h3>PRAS — Pulmonary Risk</h3>
+    <p>The Pulmonary Risk Augmenting System. Applies the augmenting framework to respiratory function (COPD / asthma) using spirometry and functional markers, completing the multi-disease diagnostic panel.</p>
+    <a class="btn disabled">Coming soon</a>
+  </div>
+  <div class="card">
+    <span class="tag dev">RESEARCH</span>
+    <h3>Multi-disease panel</h3>
+    <p>A unified patient view across diabetes, renal and pulmonary risk — one augmenting layer over the cardio-renal-metabolic cluster, linked to the Nurse Augmenting System and Medication Adherence modules for follow-up and resource planning.</p>
+    <a class="btn disabled">On the roadmap</a>
+  </div>
+</div>
+
+<div class="band">
+  <img src="./img/clinician.jpg" alt="A clinician studying physiological waveforms on a transparent display, making the final decision">
+  <div class="cap">
+    <b>The system flags the at-risk patient. A clinician makes every call.</b>
+    <span>Every AEGIS system surfaces its own uncertainty and hands the judgement to a human — augmenting the clinician, never replacing them.</span>
+  </div>
+</div>
+
+<div class="foot">
+  AEGIS — Human-AI Augmenting Systems · <a href="/">aegishumanai.com</a> · Systems are screening/decision-support demonstrators; a clinician makes every call. Not for clinical use.
+</div>
+</div></body></html>
