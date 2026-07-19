@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AEGIS · Diagnostic Augmenting Systems</title>
-<meta name="description" content="AEGIS Diagnostic Augmenting Systems (DAS) — kinetics-grounded, human-in-command diagnostic support. First release: DRAS for diabetes risk.">
+<meta name="description" content="AEGIS Diagnostic Augmenting Systems (DAS) — kinetics-grounded, human-in-command diagnostic support. Live: DRAS diabetes, RRAS renal, PRAS pulmonary.">
 <style>
 :root{--navy:#1F3864;--teal:#2E8B84;--gold:#C9A227;--red:#B4462F;--ink:#1a2230;--paper:#f4f6fa;--card:#fff;--grey:#8792a4}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--paper);color:var(--ink)}
@@ -79,9 +79,10 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);
     <a class="btn" href="./rras/">Open RRAS Console &rarr;</a>
   </div>
   <div class="card">
+    <img class="card-img" src="./img/pras-concept.jpg" alt="Two translucent lungs with spirometry flow-volume loops — a full normal loop versus a scooped obstructed loop">
     <span class="tag live">LIVE</span>
     <h3>PRAS — Pulmonary Risk</h3>
-    <p>The Pulmonary Risk Augmenting System. Applies the augmenting framework to respiratory function (COPD / asthma) using spirometry and functional markers, completing the multi-disease diagnostic panel.</p>
+    <p>The Pulmonary Risk Augmenting System. From age, smoking history and two cheap symptom/risk-factor scores it flags who should get a spirometry test — returning a Normal / At-risk / COPD-obstructed call with a confidence level, an estimated FEV1 % predicted, and pulmonary resource planning. Screening-first: it flags the test, it does not replace it — completing the cardio-renal-metabolic panel with the "P".</p>
     <a class="btn" href="./pras/">Open PRAS Console &rarr;</a>
   </div>
   <div class="card">
