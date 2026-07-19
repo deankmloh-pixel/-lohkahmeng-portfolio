@@ -61,7 +61,13 @@ h2{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);
    <div><span class="stage" id="stage">Healthy</span></div></div>
   <div class="bar" id="bar"><div class="tick" id="tick"></div></div>
   <div class="scale"><span>0 Healthy</span><span>1</span><span>2.5</span><span>5</span><span>8 Terminal</span></div>
-  <div class="idx">
+  <div id="tl" style="display:flex;align-items:center;gap:14px;margin:14px 0 4px;padding:13px 16px;border-radius:12px;border:1px solid #e3e8f0">
+    <div id="tldot" style="width:34px;height:34px;border-radius:50%;flex:0 0 34px;box-shadow:0 0 0 4px rgba(0,0,0,.05)"></div>
+    <div><b id="tlband" style="font-size:16px">—</b><div id="tlaction" style="font-size:12.5px;color:#4a5568"></div></div>
+    <div style="margin-left:auto;text-align:right"><b id="tlomega" style="font-size:24px">–</b><div style="font-size:10px;color:#8792a4">Ω · trajectory</div></div>
+  </div>
+  <button id="idxtog" onclick="var p=document.getElementById('idxpanel');var s=p.style.display=='none';p.style.display=s?'flex':'none';this.textContent=(s?'– Hide':'+ Show')+' organ indices (DBI · VTI · RCI)';" style="margin:6px 0;background:#eef1f6;border:none;border-radius:8px;padding:7px 12px;font-size:12px;color:#1F3864;font-weight:600;cursor:pointer">+ Show organ indices (DBI · VTI · RCI)</button>
+  <div class="idx" id="idxpanel" style="display:none">
     <div><b id="dbi">–</b><span>DBI (Diabetes Index = A·Td)</span></div>
     <div><b id="vti">–</b><span>VTI (Ventilatory Index)</span></div>
     <div><b id="rci">–</b><span>RCI (Renal clearance = 90/eGFR)</span></div>
@@ -131,6 +137,17 @@ function calc(){
  let zl=0,zr=0;for(let i=0;i<13;i++){const zf=(f[i]-D.mean[i])/D.scale[i];zl+=D.lc[i]*zf;zr+=D.rc[i]*zf;}
  const risk=1/(1+Math.exp(-(D.li+zl))),futL=Math.max(0,D.ri+zr),fst=stageOf(futL),rcol=risk<0.10?'#2E8B84':risk<0.30?'#C9A227':'#B4462F';
  document.getElementById('prog').innerHTML=`<b style="color:#1F3864">2-year prognosis</b> — learned SVM + SVR (distilled · SVM ROC 0.95 / SVR R² 0.95)<br>Deterioration risk (Λ↑≥1 or death in 2 yr): <b style="color:${rcol};font-size:16px">${(risk*100).toFixed(0)}%</b> &nbsp;·&nbsp; projected Λ in 2 yr: <b style="color:${fst[3]}">${futL.toFixed(2)} · ${fst[2]}</b>`;
+ // Ω — Prognostic Health-Trajectory Index → 4-colour traffic light
+ const om=L*(1+0.45*Math.tanh(0.8*(futL-L)))*(0.70+0.60*risk);
+ const TL=om<0.6?['#22A45D','#e9f7ef','GREEN · Well','no active burden — routine monitoring']
+   :om<2.5?['#E6B800','#fdf8e0','YELLOW · Managed','burden present but stable / controlled — monitor']
+   :om<7?['#E8801A','#fdefe1','ORANGE · Deteriorating','progressing — focus attention while still salvageable']
+   :['#C0392B','#fbeceb','RED · Beyond reach','IMMEDIATE ATTENTION — critical / palliative review'];
+ document.getElementById('tldot').style.background=TL[0];
+ document.getElementById('tl').style.background=TL[1];
+ const tb=document.getElementById('tlband');tb.textContent=TL[2];tb.style.color=TL[0];
+ document.getElementById('tlaction').textContent=TL[3];
+ const tlo=document.getElementById('tlomega');tlo.textContent=om.toFixed(2);tlo.style.color=TL[0];
 }
 for(const k in AX)document.getElementById('i_'+k).addEventListener('input',calc);
 ['i_prev','i_age','i_bmi','i_smk'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
