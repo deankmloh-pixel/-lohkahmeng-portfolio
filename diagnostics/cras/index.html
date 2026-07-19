@@ -272,10 +272,12 @@ function loadPatient(id){
 // ---- watchlist ----
 var wsort='svmP', wasc=false;
 function fmt(x){return x==null?'—':x;}
+var _cband='';
+function chipFilter(b){_cband=(_cband===b)?'':b;[].forEach.call(document.querySelectorAll('#chips .chip'),function(c){c.classList.toggle('off',_cband&&c.dataset.band!==_cband);});renderW();}
 function renderW(){
  var q=(document.getElementById('q').value||'').toLowerCase();
  var fb=document.getElementById('fband').value;
- var rows=PATS.filter(function(p){return (!q||p.id.indexOf(q)>=0)&&(!fb||(p.cfriBand||p.criBand)===fb || p.criBand===fb);});
+ var rows=PATS.filter(function(p){var pb=(p.cfriBand||p.criBand);return (!q||p.id.indexOf(q)>=0)&&(!fb||pb===fb)&&(!_cband||pb===_cband);});
  rows.sort(function(a,b){var x=a[wsort],y=b[wsort];if(x==null)x=-1;if(y==null)y=-1;return wasc?x-y:(x>y?-1:x<y?1:0);});
  var tb=document.getElementById('wbody');tb.innerHTML='';
  rows.slice(0,120).forEach(function(p){
@@ -334,7 +336,7 @@ function showTab(t){
  PATS.forEach(function(p){var o=document.createElement('option');o.value=p.id;o.textContent=p.id+' · '+p.age+(p.sex?'M':'F')+' · '+(p.cfriBand||p.criBand);sel.appendChild(o);});
  var chips=document.getElementById('chips');
  LAB.forEach(function(l){var n=PATS.filter(function(p){return (p.cfriBand||p.criBand)===l;}).length;
-  var d=document.createElement('div');d.className='chip';d.style.background=COL[l];d.innerHTML=l+' <small>'+n+'</small>';chips.appendChild(d);});
+  var d=document.createElement('div');d.className='chip';d.dataset.band=l;d.style.background=COL[l];d.innerHTML=l+' <small>'+n+'</small>';d.onclick=function(){chipFilter(l);};chips.appendChild(d);});
  calc();
 })();
 </script>
