@@ -49,6 +49,9 @@ h2{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);
   <div class="row"><label>ALT (U/L) — hepatic</label><input id="i_hep" type="range" min="10" max="200" step="1" value="24"><span class="v" id="v_hep"></span></div>
   <div class="row"><label>CRP (mg/L) — inflammation</label><input id="i_inf" type="range" min="0.2" max="80" step="0.2" value="1.2"><span class="v" id="v_inf"></span></div>
   <div class="row"><label>Hemoglobin (g/dL)</label><input id="i_hgb" type="range" min="6" max="18" step="0.1" value="14.6"><span class="v" id="v_hgb"></span></div>
+  <div class="row"><label>Age (years)</label><input id="i_age" type="range" min="20" max="90" step="1" value="55"><span class="v" id="v_age"></span></div>
+  <div class="row"><label>BMI</label><input id="i_bmi" type="range" min="16" max="46" step="0.5" value="26"><span class="v" id="v_bmi"></span></div>
+  <div class="row"><label>Smoker (0/1)</label><input id="i_smk" type="range" min="0" max="1" step="1" value="0"><span class="v" id="v_smk"></span></div>
   <div class="row"><label>Prior Λ (optional)</label><input id="i_prev" type="range" min="0" max="9" step="0.1" value="0"><span class="v" id="v_prev"></span></div>
   <div class="traj" id="traj"></div>
  </div>
@@ -65,6 +68,7 @@ h2{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);
   </div>
   <div style="margin-top:14px"><h2 style="margin-bottom:8px">Organ contribution to Λ</h2><div id="organs"></div></div>
   <div class="route" id="route"></div>
+  <div id="prog" style="margin-top:12px;padding:12px 15px;border-radius:11px;background:#f4f6fb;font-size:13px;line-height:1.55"></div>
   <div class="hic"><b>The number flags; a clinician decides.</b> Λ integrates the panel into one health-state number and points to the pathway — it does not diagnose. Every call stays with the medical team.</div>
  </div>
 </div>
@@ -80,6 +84,12 @@ const AX={
  inf:{el:'inf',normal:1.5,crit:10,dir:'hi',w:0.8,name:'Inflammatory',unit:''},
  hgb:{el:'hgb',normal:14.5,crit:10,dir:'lo',w:0.7,name:'Haematologic',unit:''}};
 const BANDS=[[0,.5,'Healthy','#2E8B84'],[.5,1,'At-risk','#5c9e94'],[1,2.5,'Established','#C9A227'],[2.5,5,'Progressive','#d98b3a'],[5,8,'Critical','#B4462F'],[8,99,'Terminal','#6b1f16']];
+// distilled SVM (2-yr deterioration) + SVR (future Λ) — surrogates of the FULL RBF models
+// features order: DBI,VTI,RCI,eGFR,Troponin,ALT,CRP,Hgb,age,bmi,smoker,Lambda,dLambda_dt
+const D={mean:[2.9676,67.9248,1.6863,73.3605,11.3674,32.6191,3.6913,13.4711,58.7173,26.9295,0.2748,1.2073,0.1547],
+ scale:[0.9902,25.2214,1.9620,21.6506,6.5536,7.1614,2.0620,0.9672,14.8650,4.9710,0.4464,0.9569,0.2231],
+ lc:[-0.4138,-0.4174,-0.1951,0.3010,-0.4362,-0.1145,-0.0804,0.0195,0.7480,0.1599,0.1194,3.5080,2.6380],li:-3.6113,
+ rc:[-0.0290,-0.0149,-0.0103,-0.0992,0.0047,-0.0162,-0.0108,-0.0018,0.0053,0.0168,0.0129,0.9909,0.1101],ri:1.5026};
 function zof(k,x){const a=AX[k];let z=a.dir=='hi'?(x-a.normal)/(a.crit-a.normal):(a.normal-x)/(a.normal-a.crit);return Math.max(0,z);}
 function stageOf(L){for(const b of BANDS)if(L<b[1])return b;return BANDS[5];}
 function calc(){
@@ -113,8 +123,16 @@ function calc(){
  const tj=document.getElementById('traj');
  if(prev<=0) tj.innerHTML='Enter a prior Λ to show trajectory (dΛ/dt).';
  else{const d=L-prev;tj.innerHTML=d<-0.05?`Trajectory: <span class="dn">▼ improving</span> (dΛ = ${d.toFixed(2)}) — responding to care.`:d>0.05?`Trajectory: <span class="up">▲ deteriorating</span> (dΛ = +${d.toFixed(2)}) — escalate review.`:`Trajectory: stable (dΛ = ${d.toFixed(2)}).`;}
+ // learned prognosis — distilled SVM (deterioration) + SVR (future Λ)
+ const age=+document.getElementById('i_age').value,bmi=+document.getElementById('i_bmi').value,smk=+document.getElementById('i_smk').value;
+ document.getElementById('v_age').textContent=age;document.getElementById('v_bmi').textContent=bmi.toFixed(1);document.getElementById('v_smk').textContent=smk;
+ const dLdt=prev>0?(L-prev)/0.5:0;
+ const f=[dbi,vti,rci,+document.getElementById('i_ren').value,+document.getElementById('i_car').value,+document.getElementById('i_hep').value,+document.getElementById('i_inf').value,+document.getElementById('i_hgb').value,age,bmi,smk,L,dLdt];
+ let zl=0,zr=0;for(let i=0;i<13;i++){const zf=(f[i]-D.mean[i])/D.scale[i];zl+=D.lc[i]*zf;zr+=D.rc[i]*zf;}
+ const risk=1/(1+Math.exp(-(D.li+zl))),futL=Math.max(0,D.ri+zr),fst=stageOf(futL),rcol=risk<0.10?'#2E8B84':risk<0.30?'#C9A227':'#B4462F';
+ document.getElementById('prog').innerHTML=`<b style="color:#1F3864">2-year prognosis</b> — learned SVM + SVR (distilled · SVM ROC 0.95 / SVR R² 0.95)<br>Deterioration risk (Λ↑≥1 or death in 2 yr): <b style="color:${rcol};font-size:16px">${(risk*100).toFixed(0)}%</b> &nbsp;·&nbsp; projected Λ in 2 yr: <b style="color:${fst[3]}">${futL.toFixed(2)} · ${fst[2]}</b>`;
 }
 for(const k in AX)document.getElementById('i_'+k).addEventListener('input',calc);
-document.getElementById('i_prev').addEventListener('input',calc);
+['i_prev','i_age','i_bmi','i_smk'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
 calc();
 </script></body></html>
