@@ -31,13 +31,15 @@ input[type=range]{flex:1;accent-color:var(--teal)}
 .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;color:#fff;font-weight:700}
 .foot{font-size:11px;color:var(--grey);text-align:center;margin-top:18px;line-height:1.6}
 select,input[type=number]{padding:6px 8px;border:1px solid #cfd6e2;border-radius:8px;font-size:13px}
-</style></head>
+.rhero{position:relative;border-radius:14px;overflow:hidden;margin:14px 0 4px;box-shadow:0 2px 10px rgba(20,30,60,.12)}.rhero img{display:block;width:100%;height:auto}.rband{position:relative;border-radius:14px;overflow:hidden;margin:18px 0 8px;box-shadow:0 2px 10px rgba(20,30,60,.12)}.rband img{display:block;width:100%;height:auto}.rband .cap{position:absolute;left:0;right:0;bottom:0;padding:16px 20px;background:linear-gradient(0deg,rgba(15,25,45,.82),rgba(15,25,45,.30) 55%,rgba(15,25,45,0));color:#fff}.rband .cap b{font-size:16px;display:block;margin-bottom:2px}.rband .cap span{font-size:12px;color:#dbe3f0}@media print{.rhero,.rband{display:none!important}}</style></head>
 <body><div class="wrap">
 <header>
   <img class="logo-img" src="../img/aegis-logo.png" alt="AEGIS — We Define the Market">
   <div><h1>DRAS Console — Diabetes Risk Augmenting System</h1><div class="sub">Kinetic SVM 3-class + SVR severity · confidence-scored · human-in-command</div></div>
   <div class="tag">DEMO · clinician decides</div>
 </header>
+
+<div class="rhero"><img src="../img/dras-hero.jpg" alt="An endocrinologist reviewing a glucose-tolerance curve and the Diabetes Index on a diagnostic console"/></div>
 
 <div class="grid">
   <!-- INPUT -->
@@ -74,6 +76,7 @@ select,input[type=number]{padding:6px 8px;border:1px solid #cfd6e2;border-radius
   </div>
 </div>
 
+<div class="rband"><img src="../img/dras-clinician.jpg" alt="A clinician reviewing glucose-tolerance curves, making the final decision"/><div class="cap"><b>The system flags who needs a glucose-tolerance test. A clinician makes every call.</b><span>DRAS surfaces its own uncertainty and hands the judgement to a human &mdash; augmenting the clinician, never replacing them.</span></div></div>
 <!-- RESOURCE PLANNING -->
 <div class="card" style="margin-top:16px">
   <h2>3 · Medical resource planning — outpatient diabetic population</h2>
