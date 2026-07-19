@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AEGIS · Diagnostic Augmenting Systems</title>
-<meta name="description" content="AEGIS Diagnostic Augmenting Systems (DAS) — kinetics-grounded, human-in-command diagnostic support. Live: DRAS diabetes, RRAS renal, PRAS pulmonary.">
+<meta name="description" content="AEGIS Diagnostic Augmenting Systems (DAS) — kinetics-grounded, human-in-command diagnostic support. Live: DRAS diabetes, RRAS renal, PRAS pulmonary, CRAS cardiac, MDAS unified.">
 <style>
 :root{--navy:#1F3864;--teal:#2E8B84;--gold:#C9A227;--red:#B4462F;--ink:#1a2230;--paper:#f4f6fa;--card:#fff;--grey:#8792a4}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--paper);color:var(--ink)}
@@ -85,6 +85,13 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);
     <h3>PRAS — Pulmonary Risk</h3>
     <p>The Pulmonary Risk Augmenting System. From age, smoking history and two cheap symptom/risk-factor scores it flags who should get a spirometry test — returning a Normal / At-risk / COPD-obstructed call with a confidence level, an estimated FEV1 % predicted, and pulmonary resource planning. Screening-first: it flags the test, it does not replace it — completing the cardio-renal-metabolic panel with the "P".</p>
     <a class="btn" href="./pras/">Open PRAS Console &rarr;</a>
+  </div>
+  <div class="card">
+    <img class="card-img" src="./img/cras-concept.jpg" alt="Concentric arcs of cardiac reserve — gold age-predicted maximum, teal achieved — a nondimensional functional index">
+    <span class="tag live">LIVE</span>
+    <h3>CRAS — Cardiac Risk</h3>
+    <p>The Cardiac Risk Augmenting System. Two dimensionless cardiac indices in Prof Ghista's tradition: the <b>CRI</b> screening composite over routine risk factors, and the <b>CFRI</b> — a true nondimensional functional-reserve index (chronotropic reserve, ischaemic ST-strain, anginal threshold) validated against angiographic severity. Distilled SVM+SVR, 24-country resource planning, and the cardiac axis of the unified &Lambda;/&Omega; engine — the "C" completing the cardio-renal-metabolic-pulmonary panel.</p>
+    <a class="btn" href="./cras/">Open CRAS Console &rarr;</a>
   </div>
   <div class="card">
     <img class="card-img" src="./img/mdas-concept.jpg" alt="A chaotic tangle of many disease signals resolving into one luminous dimensionless index number with a green-to-red health arc">

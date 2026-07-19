@@ -13,6 +13,7 @@ h2{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);
 .row{display:flex;align-items:center;gap:10px;margin:9px 0}
 .row label{flex:0 0 168px;font-size:13px;font-weight:600;color:#2b3752}
 .row input[type=range]{flex:1;accent-color:var(--teal)}
+.tgl{position:relative;display:flex;flex:1;align-items:center}.tgl input{position:absolute;opacity:0;width:0;height:0}.tsl{width:46px;height:26px;background:#cfd7e6;border-radius:26px;position:relative;transition:.2s;cursor:pointer}.tsl::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}.tgl input:checked+.tsl{background:var(--teal)}.tgl input:checked+.tsl::after{transform:translateX(20px)}
 .row .v{flex:0 0 62px;text-align:right;font-weight:700;color:var(--navy);font-size:14px}
 .gaugewrap{text-align:center;margin:4px 0 8px}
 .lam{font-size:64px;font-weight:800;line-height:1;color:var(--navy)}
@@ -25,7 +26,7 @@ h2{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);
 .orow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:12.5px}
 .orow .on{flex:0 0 96px;color:#2b3752;font-weight:600}
 .otrack{flex:1;height:12px;background:#eef1f6;border-radius:6px;overflow:hidden}
-.ofill{height:100%;border-radius:6px}
+.ofill{display:block;height:100%;border-radius:6px}
 .orow .oz{flex:0 0 116px;text-align:right;color:var(--grey);font-size:11.5px}
 .idx{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
 .idx div{flex:1;min-width:120px;background:#f4f6fb;border-radius:10px;padding:9px 12px}
@@ -79,7 +80,7 @@ h2{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);
   <div class="row"><label>Hemoglobin (g/dL)</label><input id="i_hgb" type="range" min="6" max="18" step="0.1" value="14.6"><span class="v" id="v_hgb"></span></div>
   <div class="row"><label>Age (years)</label><input id="i_age" type="range" min="20" max="100" step="1" value="55"><span class="v" id="v_age"></span></div>
   <div class="row"><label>BMI</label><input id="i_bmi" type="range" min="16" max="46" step="0.5" value="26"><span class="v" id="v_bmi"></span></div>
-  <div class="row"><label>Smoker (0/1)</label><input id="i_smk" type="range" min="0" max="1" step="1" value="0"><span class="v" id="v_smk"></span></div>
+  <div class="row"><label>Smoker</label><label class="tgl"><input type="checkbox" id="i_smk" onchange="calc()"><span class="tsl"></span></label><span class="v" id="v_smk">no</span></div>
   <div class="row"><label>Prior Λ (optional)</label><input id="i_prev" type="range" min="0" max="9" step="0.1" value="0"><span class="v" id="v_prev"></span></div>
   <div class="traj" id="traj"></div>
  </div>
@@ -178,8 +179,8 @@ function calc(){
  if(prev<=0) tj.innerHTML='Enter a prior Λ to show trajectory (dΛ/dt).';
  else{const d=L-prev;tj.innerHTML=d<-0.05?`Trajectory: <span class="dn">▼ improving</span> (dΛ = ${d.toFixed(2)}) — responding to care.`:d>0.05?`Trajectory: <span class="up">▲ deteriorating</span> (dΛ = +${d.toFixed(2)}) — escalate review.`:`Trajectory: stable (dΛ = ${d.toFixed(2)}).`;}
  // learned prognosis — distilled SVM (deterioration) + SVR (future Λ)
- const age=+document.getElementById('i_age').value,bmi=+document.getElementById('i_bmi').value,smk=+document.getElementById('i_smk').value;
- document.getElementById('v_age').textContent=age;document.getElementById('v_bmi').textContent=bmi.toFixed(1);document.getElementById('v_smk').textContent=smk;
+ const age=+document.getElementById('i_age').value,bmi=+document.getElementById('i_bmi').value,smk=document.getElementById('i_smk').checked?1:0;
+ document.getElementById('v_age').textContent=age;document.getElementById('v_bmi').textContent=bmi.toFixed(1);document.getElementById('v_smk').textContent=smk?'yes':'no';
  const dLdt=prev>0?(L-prev)/0.5:0;
  const f=[dbi,vti,rci,+document.getElementById('i_ren').value,+document.getElementById('i_car').value,+document.getElementById('i_hep').value,+document.getElementById('i_inf').value,+document.getElementById('i_hgb').value,age,bmi,smk,L,dLdt];
  let zl=0,zr=0;for(let i=0;i<13;i++){const zf=(f[i]-D.mean[i])/D.scale[i];zl+=D.lc[i]*zf;zr+=D.rc[i]*zf;}
@@ -220,7 +221,7 @@ function showTab(s){if(s===1)s='query';if(s===0)s='list';var q=s==='query',l=s==
 function loadPatient(id){var r=PT.find(function(p){return p.id==id;});if(!r)return;
  document.getElementById('psel').value=id;
  var ids=['i_met','i_ren','i_pul','i_car','i_hep','i_inf','i_hgb','i_age','i_bmi','i_smk','i_prev'];
- var vids=['v_met','v_ren','v_pul','v_car','v_hep','v_inf','v_hgb','v_age','v_bmi','v_smk','v_prev'];for(var k=0;k<ids.length;k++){document.getElementById(ids[k]).value=r.b[k];var ve=document.getElementById(vids[k]);if(ve)ve.textContent=document.getElementById(ids[k]).value;}
+ var vids=['v_met','v_ren','v_pul','v_car','v_hep','v_inf','v_hgb','v_age','v_bmi','v_smk','v_prev'];for(var k=0;k<ids.length;k++){var el=document.getElementById(ids[k]);if(ids[k]==='i_smk'){el.checked=!!r.b[k];var ve=document.getElementById(vids[k]);if(ve)ve.textContent=r.b[k]?'yes':'no';}else{el.value=r.b[k];var ve=document.getElementById(vids[k]);if(ve)ve.textContent=el.value;}}
  var S=stageOf(r.L);document.getElementById('lam').textContent=r.L.toFixed(2);
  var se=document.getElementById('stage');se.textContent=S[2];se.style.background=S[3];
  document.getElementById('tick').style.left=(Math.min(r.L,9)/9*100)+'%';
