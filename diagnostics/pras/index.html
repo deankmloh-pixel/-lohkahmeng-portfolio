@@ -142,7 +142,7 @@ input[type=range]{width:100%;accent-color:var(--teal)}.slider{flex:1;margin:0 10
   <table style="border-collapse:collapse;width:100%;margin:4px 0 4px">
     <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">Screening call</td><td style="padding:3px 0;vertical-align:top">logistic-regression surrogate of the full SVM (6 features: age, smoking, pack-years, CAT, asthma, peak flow) — 99.1% agreement with the full SVM (ACC 96.3%, macro-F1 0.90).</td></tr>
     <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">Severity estimate</td><td style="padding:3px 0;vertical-align:top">linear-regression surrogate of the SVR predicting FEV1% predicted — R²=0.85 vs the full SVR.</td></tr>
-    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">Planned cost method</td><td style="padding:3px 0;vertical-align:top">patients × COPD severity multiplier × per-capita anchor; avoidable via early smoking-cessation / bronchodilator — to be wired with the 24-country panel.</td></tr>
+    <tr><td style="padding:3px 8px 3px 0;font-weight:700;color:#1F3864;white-space:nowrap;vertical-align:top">Cost method</td><td style="padding:3px 0;vertical-align:top">wired into the market-planning panel above: patients × COPD severity multiplier (Normal 1.0 / At-risk 1.5 / COPD-Obstructed 3.0) × per-capita anchor; avoidable = At-risk × per-capita × 45% (early smoking-cessation / bronchodilator effect). Per-capita anchors: WHO / World Bank, compiled mid-2026, SGD.</td></tr>
   </table>
   Cohort is the synthetic <b>PRAS-RP</b> dataset (6,000 patients). Every row carries the SYNTHETIC label; a clinician makes every call.
 </div>
@@ -173,9 +173,11 @@ input[type=range]{width:100%;accent-color:var(--teal)}.slider{flex:1;margin:0 10
   this is a modelling assumption, not real patient data. L3 population: 300 real asthma-cohort
   patients for smoking/comorbidity signal. L4 utilisation: 15,108 real respiratory hospital
   encounters (130-hospital dataset, ICD-9 490&ndash;496/466/480&ndash;488/786 subset;
-  readmit30=8.1%, mean LOS=4.2 days), resampled by class. L5 economics: deferred this session
-  (Umbrella 24-country cost anchors not wired in) &mdash; a documented next step, not silently
-  skipped.<br/><br/>
+  readmit30=8.1%, mean LOS=4.2 days), resampled by class. L5 economics: Umbrella 24-country
+  per-capita anchors (WHO / World Bank, compiled mid-2026, SGD), wired into the market-planning
+  panel above &mdash; patients × COPD severity multiplier (1.0 / 1.5 / 3.0) × per-capita anchor,
+  avoidable = At-risk × per-capita × 45% early-cessation effect. Illustrative planning figures, not
+  billed costs.<br/><br/>
 
   <b>Theoretical grounding.</b> Thesis Vol.1 Ch.3 &ldquo;Lung Ventilation Modeling and
   Assessment&rdquo;, S3.12&ndash;3.13, develops a damped-oscillator model of lung volume in terms of
