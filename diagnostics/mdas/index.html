@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AEGIS Λ Console · Chronic-Disease Health-State Index</title>
+<style>
+:root{--navy:#1F3864;--teal:#2E8B84;--gold:#C9A227;--red:#B4462F;--ink:#1a2230;--paper:#eef1f6;--card:#fff;--grey:#8792a4}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--paper);color:var(--ink)}
+.wrap{max-width:1000px;margin:0 auto;padding:0 18px 46px}
+.top{background:linear-gradient(100deg,var(--navy),#16324f);color:#fff;margin:0 -18px 18px;padding:20px 26px;border-bottom:3px solid var(--gold)}
+.top h1{margin:0;font-size:22px;letter-spacing:.3px}.top .s{font-size:12.5px;color:#c7d2e6;margin-top:3px}
+.top .r{float:right;text-align:right;font-size:11.5px;color:#aebbd4;line-height:1.5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border-radius:14px;padding:18px 20px;box-shadow:0 1px 5px rgba(20,30,60,.08)}
+h2{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin:0 0 14px}
+.row{display:flex;align-items:center;gap:10px;margin:9px 0}
+.row label{flex:0 0 168px;font-size:13px;font-weight:600;color:#2b3752}
+.row input[type=range]{flex:1;accent-color:var(--teal)}
+.row .v{flex:0 0 62px;text-align:right;font-weight:700;color:var(--navy);font-size:14px}
+.gaugewrap{text-align:center;margin:4px 0 8px}
+.lam{font-size:64px;font-weight:800;line-height:1;color:var(--navy)}
+.lam small{font-size:20px;color:var(--grey);font-weight:600}
+.stage{display:inline-block;margin-top:8px;padding:6px 16px;border-radius:22px;color:#fff;font-weight:700;font-size:15px}
+.bar{height:26px;border-radius:8px;margin:14px 0 6px;position:relative;overflow:hidden;background:#e6ebf3;
+ background-image:linear-gradient(90deg,#2E8B84 0%,#7fb2a8 11%,#C9A227 28%,#d98b3a 55%,#B4462F 89%,#6b1f16 100%)}
+.tick{position:absolute;top:-3px;width:3px;height:32px;background:#111;border-radius:2px}
+.scale{display:flex;justify-content:space-between;font-size:10px;color:var(--grey);margin-top:2px}
+.orow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:12.5px}
+.orow .on{flex:0 0 96px;color:#2b3752;font-weight:600}
+.otrack{flex:1;height:12px;background:#eef1f6;border-radius:6px;overflow:hidden}
+.ofill{height:100%;border-radius:6px}
+.orow .oz{flex:0 0 116px;text-align:right;color:var(--grey);font-size:11.5px}
+.idx{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.idx div{flex:1;min-width:120px;background:#f4f6fb;border-radius:10px;padding:9px 12px}
+.idx b{display:block;color:var(--navy);font-size:17px}.idx span{font-size:11px;color:var(--grey)}
+.route{margin-top:12px;padding:13px 15px;border-radius:11px;background:linear-gradient(90deg,var(--navy),var(--teal));color:#fff;font-size:13.5px;line-height:1.5}
+.route a{color:#ffe;text-decoration:underline}
+.hic{margin-top:12px;font-size:12px;color:#5a6478;border-left:3px solid var(--gold);padding-left:11px;line-height:1.5}
+.foot{margin-top:16px;font-size:11px;color:var(--grey);line-height:1.6}
+.traj{font-size:12.5px;margin-top:8px;color:#2b3752}
+.up{color:var(--red);font-weight:700}.dn{color:var(--teal);font-weight:700}
+</style></head><body><div class="wrap">
+<div class="top"><div class="r">AEGIS · Project 13<br>CD-NDI · AEGIS-P13-CDNDI-001<br>human-in-command</div>
+<h1>Λ — Chronic-Disease Health-State Index</h1><div class="s">One dimensionless number, no-disease → deterioration → death · grounded in Ghista's NDPI &amp; Loh's DBI/VTI</div></div>
+
+<div class="grid">
+ <div class="card"><h2>1 · Enter the panel</h2>
+  <div class="row"><label>HbA1c (%) — metabolic</label><input id="i_met" type="range" min="4.5" max="14" step="0.1" value="5.4"><span class="v" id="v_met"></span></div>
+  <div class="row"><label>eGFR (mL/min) — renal</label><input id="i_ren" type="range" min="8" max="120" step="1" value="95"><span class="v" id="v_ren"></span></div>
+  <div class="row"><label>FEV1 (% pred) — pulmonary</label><input id="i_pul" type="range" min="20" max="120" step="1" value="100"><span class="v" id="v_pul"></span></div>
+  <div class="row"><label>Troponin (ng/L) — cardiac</label><input id="i_car" type="range" min="1" max="120" step="1" value="4"><span class="v" id="v_car"></span></div>
+  <div class="row"><label>ALT (U/L) — hepatic</label><input id="i_hep" type="range" min="10" max="200" step="1" value="24"><span class="v" id="v_hep"></span></div>
+  <div class="row"><label>CRP (mg/L) — inflammation</label><input id="i_inf" type="range" min="0.2" max="80" step="0.2" value="1.2"><span class="v" id="v_inf"></span></div>
+  <div class="row"><label>Hemoglobin (g/dL)</label><input id="i_hgb" type="range" min="6" max="18" step="0.1" value="14.6"><span class="v" id="v_hgb"></span></div>
+  <div class="row"><label>Prior Λ (optional)</label><input id="i_prev" type="range" min="0" max="9" step="0.1" value="0"><span class="v" id="v_prev"></span></div>
+  <div class="traj" id="traj"></div>
+ </div>
+
+ <div class="card"><h2>2 · Health-state read-out</h2>
+  <div class="gaugewrap"><div class="lam"><span id="lam">0.0</span><small> Λ</small></div>
+   <div><span class="stage" id="stage">Healthy</span></div></div>
+  <div class="bar" id="bar"><div class="tick" id="tick"></div></div>
+  <div class="scale"><span>0 Healthy</span><span>1</span><span>2.5</span><span>5</span><span>8 Terminal</span></div>
+  <div class="idx">
+    <div><b id="dbi">–</b><span>DBI (Diabetes Index = A·Td)</span></div>
+    <div><b id="vti">–</b><span>VTI (Ventilatory Index)</span></div>
+    <div><b id="rci">–</b><span>RCI (Renal clearance = 90/eGFR)</span></div>
+  </div>
+  <div style="margin-top:14px"><h2 style="margin-bottom:8px">Organ contribution to Λ</h2><div id="organs"></div></div>
+  <div class="route" id="route"></div>
+  <div class="hic"><b>The number flags; a clinician decides.</b> Λ integrates the panel into one health-state number and points to the pathway — it does not diagnose. Every call stays with the medical team.</div>
+ </div>
+</div>
+<div class="foot"><b>How Λ is derived.</b> Each organ marker becomes a dimensionless deviation z = (value−normal)/(critical−normal) against standard clinical reference ranges (z=0 healthy, z=1 at the critical threshold). Λ = √(Σ wᵢ·zᵢ²), a weighted physiological load; weights (cardiac 1.3, renal 1.2, metabolic/pulmonary 1.0, hepatic 0.9, inflammation 0.8, haematologic 0.7). Bands: Healthy&lt;0.5 · At-risk&lt;1 · Established&lt;2.5 · Progressive&lt;5 · Critical&lt;8 · Terminal≥8. DBI, VTI, RCI shown are the named indices from D.N. Ghista (Nondimensional Physiological Indices, 2009) and Loh Kah Meng's thesis. <b>Illustrative, synthetic research scaffold — not a clinical device; not for patient care.</b></div>
+</div>
+<script>
+const AX={
+ met:{el:'met',normal:5.2,crit:6.5,dir:'hi',w:1.0,name:'Metabolic',unit:''},
+ ren:{el:'ren',normal:95,crit:60,dir:'lo',w:1.2,name:'Renal',unit:''},
+ pul:{el:'pul',normal:100,crit:80,dir:'lo',w:1.0,name:'Pulmonary',unit:''},
+ car:{el:'car',normal:5,crit:20,dir:'hi',w:1.3,name:'Cardiac',unit:''},
+ hep:{el:'hep',normal:25,crit:55,dir:'hi',w:0.9,name:'Hepatic',unit:''},
+ inf:{el:'inf',normal:1.5,crit:10,dir:'hi',w:0.8,name:'Inflammatory',unit:''},
+ hgb:{el:'hgb',normal:14.5,crit:10,dir:'lo',w:0.7,name:'Haematologic',unit:''}};
+const BANDS=[[0,.5,'Healthy','#2E8B84'],[.5,1,'At-risk','#5c9e94'],[1,2.5,'Established','#C9A227'],[2.5,5,'Progressive','#d98b3a'],[5,8,'Critical','#B4462F'],[8,99,'Terminal','#6b1f16']];
+function zof(k,x){const a=AX[k];let z=a.dir=='hi'?(x-a.normal)/(a.crit-a.normal):(a.normal-x)/(a.normal-a.crit);return Math.max(0,z);}
+function stageOf(L){for(const b of BANDS)if(L<b[1])return b;return BANDS[5];}
+function calc(){
+ let sum=0,zs={},contrib={};
+ for(const k in AX){const x=parseFloat(document.getElementById('i_'+k).value);document.getElementById('v_'+k).textContent=x;
+   const z=zof(k,x);zs[k]=z;const c=AX[k].w*z*z;contrib[k]=c;sum+=c;}
+ const L=Math.sqrt(sum);
+ document.getElementById('lam').textContent=L.toFixed(2);
+ const st=stageOf(L);const se=document.getElementById('stage');se.textContent=st[2];se.style.background=st[3];
+ document.getElementById('tick').style.left=(Math.min(L,9)/9*100)+'%';
+ // named indices (saturating displays)
+ const dbi=1.35+3.55*(1-Math.exp(-1.3*zs.met));const vti=34+110*(1-Math.exp(-1.2*zs.pul));const rci=90/parseFloat(document.getElementById('i_ren').value);
+ document.getElementById('dbi').textContent=dbi.toFixed(2)+(dbi<1.6?' ·norm':dbi>4.5?' ·diabetic':' ·at-risk');
+ document.getElementById('vti').textContent=vti.toFixed(0)+(vti<45?' ·norm':vti>110?' ·obstructive':' ·mild');
+ document.getElementById('rci').textContent=rci.toFixed(2)+(rci<1.05?' ·norm':rci>1.5?' ·CKD':' ·mild');
+ // organ bars
+ let html='';const maxc=Math.max(0.001,...Object.values(contrib));let domK='met',domC=-1;
+ for(const k in AX){if(contrib[k]>domC){domC=contrib[k];domK=k;}}
+ for(const k in AX){const frac=contrib[k]/maxc;const col=zs[k]<0.5?'#2E8B84':zs[k]<1?'#C9A227':zs[k]<2?'#d98b3a':'#B4462F';
+   html+=`<div class="orow"><span class="on">${AX[k].name}</span><span class="otrack"><span class="ofill" style="width:${(frac*100).toFixed(0)}%;background:${col}"></span></span><span class="oz">z=${zs[k].toFixed(2)} · +${contrib[k].toFixed(2)}</span></div>`;}
+ document.getElementById('organs').innerHTML=html;
+ // routing
+ const R={met:['DRAS','diabetes','/diagnostics/dras/'],pul:['PRAS','pulmonary','/diagnostics/pras/'],ren:['RRAS','renal','/diagnostics/rras/']};
+ let rt;
+ if(L<0.5) rt='No pre-emptive flag — Λ in the healthy range. Routine monitoring.';
+ else if(R[domK]) rt=`Leading system: <b>${AX[domK].name}</b>. Route to the <b>${R[domK][0]}</b> ${R[domK][1]} console → <a href="${R[domK][2]}">open</a>. ${L>=5?'<b>Λ critical — escalate to clinician now.</b>':''}`;
+ else rt=`Leading system: <b>${AX[domK].name}</b> — no dedicated console yet; <b>refer to a clinician.</b> ${L>=5?' <b>Λ critical — urgent.</b>':''}`;
+ document.getElementById('route').innerHTML='➜ '+rt;
+ // trajectory
+ const prev=parseFloat(document.getElementById('i_prev').value);document.getElementById('v_prev').textContent=prev.toFixed(1);
+ const tj=document.getElementById('traj');
+ if(prev<=0) tj.innerHTML='Enter a prior Λ to show trajectory (dΛ/dt).';
+ else{const d=L-prev;tj.innerHTML=d<-0.05?`Trajectory: <span class="dn">▼ improving</span> (dΛ = ${d.toFixed(2)}) — responding to care.`:d>0.05?`Trajectory: <span class="up">▲ deteriorating</span> (dΛ = +${d.toFixed(2)}) — escalate review.`:`Trajectory: stable (dΛ = ${d.toFixed(2)}).`;}
+}
+for(const k in AX)document.getElementById('i_'+k).addEventListener('input',calc);
+document.getElementById('i_prev').addEventListener('input',calc);
+calc();
+</script></body></html>
