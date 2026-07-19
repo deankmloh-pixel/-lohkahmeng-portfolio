@@ -64,7 +64,7 @@ h2{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);
   <div id="tl" style="display:flex;align-items:center;gap:14px;margin:14px 0 4px;padding:13px 16px;border-radius:12px;border:1px solid #e3e8f0">
     <div id="tldot" style="width:34px;height:34px;border-radius:50%;flex:0 0 34px;box-shadow:0 0 0 4px rgba(0,0,0,.05)"></div>
     <div><b id="tlband" style="font-size:16px">—</b><div id="tlaction" style="font-size:12.5px;color:#4a5568"></div></div>
-    <div style="margin-left:auto;text-align:right"><b id="tlomega" style="font-size:24px">–</b><div style="font-size:10px;color:#8792a4">Ω · trajectory</div></div>
+    <div style="margin-left:auto;text-align:right"><b id="tlhealth" style="font-size:32px">–</b><b style="font-size:16px;color:#8792a4">%</b><div style="font-size:10.5px;color:#8792a4">Health Score (100 = healthy) · <span id="tltrend"></span></div><div style="font-size:9.5px;color:#aab3c4">Λ <span id="tllam"></span> · Ω <span id="tlomega"></span></div></div>
   </div>
   <button id="idxtog" onclick="var p=document.getElementById('idxpanel');var s=p.style.display=='none';p.style.display=s?'flex':'none';this.textContent=(s?'– Hide':'+ Show')+' organ indices (DBI · VTI · RCI)';" style="margin:6px 0;background:#eef1f6;border:none;border-radius:8px;padding:7px 12px;font-size:12px;color:#1F3864;font-weight:600;cursor:pointer">+ Show organ indices (DBI · VTI · RCI)</button>
   <div class="idx" id="idxpanel" style="display:none">
@@ -147,7 +147,12 @@ function calc(){
  document.getElementById('tl').style.background=TL[1];
  const tb=document.getElementById('tlband');tb.textContent=TL[2];tb.style.color=TL[0];
  document.getElementById('tlaction').textContent=TL[3];
- const tlo=document.getElementById('tlomega');tlo.textContent=om.toFixed(2);tlo.style.color=TL[0];
+ const H=Math.max(0,Math.min(100,Math.round(100*(1-om/11))));   // 100 = healthy, 0 = beyond help
+ const hh=document.getElementById('tlhealth');hh.textContent=H;hh.style.color=TL[0];
+ document.getElementById('tlomega').textContent=om.toFixed(1);
+ document.getElementById('tllam').textContent=L.toFixed(2);
+ const dd=prev>0?(L-prev):(futL-L);
+ document.getElementById('tltrend').innerHTML=dd>0.03?'<b style="color:#C0392B">▼ deteriorating</b>':dd<-0.03?'<b style="color:#22A45D">▲ improving</b>':'stable';
 }
 for(const k in AX)document.getElementById('i_'+k).addEventListener('input',calc);
 ['i_prev','i_age','i_bmi','i_smk'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
