@@ -55,10 +55,11 @@ h2{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);
 .auth b{color:#1F3864}.auth input{padding:8px 11px;border:1px solid #cfd7e6;border-radius:9px;font-size:13px}
 .wbtn{background:#1F3864;color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer}.wbtn:disabled{background:#cfd6e2;color:#7a8699}
 @media print{.top .r,.chips,.ctl,.auth,.tabbar,#tabSingle,.foot .noprint{display:none!important}.wrap{max-width:100%}body{background:#fff}.wtable th{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
-</style></head><body><div class="wrap">
+.rhero{position:relative;border-radius:14px;overflow:hidden;margin:14px 0 4px;box-shadow:0 2px 10px rgba(20,30,60,.12)}.rhero img{display:block;width:100%;height:auto}.rband{position:relative;border-radius:14px;overflow:hidden;margin:18px 0 4px;box-shadow:0 2px 10px rgba(20,30,60,.12)}.rband img{display:block;width:100%;height:auto}.rband .cap{position:absolute;left:0;right:0;bottom:0;padding:16px 20px;background:linear-gradient(0deg,rgba(15,25,45,.82),rgba(15,25,45,.30) 55%,rgba(15,25,45,0));color:#fff}.rband .cap b{font-size:16px;display:block;margin-bottom:2px}.rband .cap span{font-size:12px;color:#dbe3f0}@media print{.rhero,.rband{display:none!important}}</style></head><body><div class="wrap">
 <div class="top"><div class="r">AEGIS · Project 13<br>CD-NDI · AEGIS-P13-CDNDI-001<br>human-in-command</div>
 <h1>Λ — Chronic-Disease Health-State Index</h1><div class="s">One dimensionless number, no-disease → deterioration → death · grounded in Ghista's NDPI &amp; Loh's DBI/VTI</div></div>
 
+<div class="rhero"><img src="../img/mdas-hero.jpg" alt="A physician in command before a luminous data wall where seven organ-system signals converge into a single dimensionless health index tracing a green-to-red trajectory"/></div>
 <div class="tabbar" id="tabbar"><button class="tabbtn active" id="tb1" onclick="showTab(1)">Patient Query</button><button class="tabbtn" id="tb2" onclick="showTab(0)">Patient watchlist &mdash; who needs attention</button></div>
 <div id="tabSingle">
 <div class="grid">
@@ -115,6 +116,7 @@ h2{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);
 <table class="wtable"><thead><tr><th onclick="wsort('rank')">#</th><th onclick="wsort('id')">Patient</th><th onclick="wsort('age')">Age</th><th onclick="wsort('H')">Health Score</th><th onclick="wsort('band')">Band</th><th onclick="wsort('L')">&Lambda;</th><th onclick="wsort('O')">&Omega;</th><th onclick="wsort('risk')">2-yr risk</th><th onclick="wsort('trend')">Trend</th><th onclick="wsort('lead')">Lead system</th><th>Route</th></tr></thead><tbody id="rows"></tbody></table>
 <div class="foot"><b>Illustrative synthetic research scaffold &mdash; not a clinical device; not for patient care.</b></div>
 </div>
+<div class="rband"><img src="../img/mdas-clinician.jpg" alt="A clinician commanding a four-colour traffic-light triage wall, making the final call"/><div class="cap"><b>The index ranks every life by urgency. The clinician commands every call.</b><span>&Lambda;/&Omega; surfaces who is deteriorating and who can still be saved &mdash; then hands the judgement to a human. Augmenting the clinician, never replacing them.</span></div></div>
 </div>
 <script>
 const AX={
