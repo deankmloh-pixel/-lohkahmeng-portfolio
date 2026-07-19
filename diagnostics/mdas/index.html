@@ -59,15 +59,15 @@ h2{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);
 <div class="top"><div class="r">AEGIS · Project 13<br>CD-NDI · AEGIS-P13-CDNDI-001<br>human-in-command</div>
 <h1>Λ — Chronic-Disease Health-State Index</h1><div class="s">One dimensionless number, no-disease → deterioration → death · grounded in Ghista's NDPI &amp; Loh's DBI/VTI</div></div>
 
-<div class="tabbar" id="tabbar"><button class="tabbtn active" id="tb1" onclick="showTab(1)">Single patient</button><button class="tabbtn" id="tb2" onclick="showTab(0)">Patient watchlist &mdash; who needs attention</button></div>
+<div class="tabbar" id="tabbar"><button class="tabbtn active" id="tb1" onclick="showTab(1)">Patient Query</button><button class="tabbtn" id="tb2" onclick="showTab(0)">Patient watchlist &mdash; who needs attention</button></div>
 <div id="tabSingle">
 <div class="grid">
  <div class="card"><h2>1 · Enter the panel</h2>
   <div style="position:relative;margin-bottom:12px">
- <label style="font-weight:600;font-size:13px;color:#2b3752">Load patient by ID</label>
- <input id="psel" placeholder="type patient ID e.g. CDNDI-00001…" autocomplete="off" oninput="ptype(this.value)" style="width:100%;padding:8px 11px;border:1px solid #cfd7e6;border-radius:9px;font-size:13px;margin-top:4px">
- <div id="pdrop" style="position:absolute;left:0;right:0;background:#fff;border:1px solid #cfd7e6;border-radius:9px;box-shadow:0 4px 12px rgba(20,30,60,.12);z-index:9;display:none;max-height:230px;overflow:auto"></div>
- <div style="font-size:11px;color:#8792a4;margin-top:4px" id="pmode">Pick a patient to load their record (results &amp; trend from their visit history), or move the sliders below for a manual what-if.</div>
+ <label style="font-weight:600;font-size:13px;color:#2b3752">Patient</label>
+ <select id="psel" onchange="loadPatient(this.value)" style="width:100%;padding:8px 11px;border:1px solid #cfd7e6;border-radius:9px;font-size:13px;margin-top:4px;background:#fff"><option value="">— select a patient (or type the number to jump) —</option></select>
+ 
+ <div style="font-size:11px;color:#8792a4;margin-top:4px" id="pmode">Choose a patient from the list to load their record (results &amp; trend from their visit history), or move the sliders below for a manual what-if.</div>
 </div>
 <div class="row"><label>HbA1c (%) — metabolic</label><input id="i_met" type="range" min="4.5" max="14" step="0.1" value="5.4"><span class="v" id="v_met"></span></div>
   <div class="row"><label>eGFR (mL/min) — renal</label><input id="i_ren" type="range" min="8" max="120" step="1" value="95"><span class="v" id="v_ren"></span></div>
@@ -200,16 +200,12 @@ const _RT={'DRAS/diabetes':'/diagnostics/dras/','RRAS/renal':'/diagnostics/rras/
 let _bf='',_sk='O',_sd=-1;
 function chips(){const c={};WL.forEach(r=>c[r.band]=(c[r.band]||0)+1);document.getElementById('chips').innerHTML=Object.keys(c).map(b=>`<div class="chip ${_bf&&_bf!=b?'off':''}" style="background:${_BC[b]}" onclick="_bf=_bf=='${b}'?'':'${b}';chips();wrender()">${b} <small>&middot; ${c[b]}</small></div>`).join('')+`<div class="chip ${_bf?'off':''}" style="background:#5a6478" onclick="_bf='';chips();wrender()">All <small>&middot; ${WL.length}</small></div>`;}
 function wsort(k){_sd=(_sk==k)?-_sd:1;_sk=k;wrender();}
-function wrender(){const q=document.getElementById('q').value.toUpperCase(),ld=document.getElementById('lead').value;let rows=WL.filter(r=>(!_bf||r.band==_bf)&&(!ld||r.lead==ld)&&(!q||r.id.includes(q)));rows.sort((a,b)=>{let x=a[_sk],y=b[_sk];if(typeof x=='string')return _sd*x.localeCompare(y);return _sd*(x-y);});document.getElementById('count').textContent=rows.length+' patients';document.getElementById('rows').innerHTML=rows.slice(0,600).map((r,i)=>{const col=r.H>=70?'#22A45D':r.H>=35?'#E8801A':'#C0392B';const rt=_RT[r.lead]?`<span class="wroute"><a href="${_RT[r.lead]}">${r.lead.split('/')[0]} &rarr;</a></span>`:r.lead.split('/')[0];const tr=r.trend=='down'?'<b style="color:#C0392B">&#9660; deteriorating</b>':r.trend=='up'?'<b style="color:#22A45D">&#9650; improving</b>':'stable';return `<tr><td>${i+1}</td><td><b>${r.id}</b></td><td>${r.age}</td><td class="hscore" style="color:${col}">${r.H}%</td><td><span class="dot" style="background:${_BC[r.band]}"></span>${r.band}</td><td>${r.L}</td><td>${r.O}</td><td><span class="pill" style="background:${r.risk>=70?'#C0392B':r.risk>=30?'#E8801A':'#E6B800'}">${r.risk}%</span></td><td>${tr}</td><td>${r.lead}</td><td>${rt}</td></tr>`;}).join('')+(rows.length>600?`<tr><td colspan="11" style="text-align:center;color:#8792a4">showing top 600 of ${rows.length} &mdash; filter to narrow</td></tr>`:'');}
+function wrender(){const q=document.getElementById('q').value.toUpperCase(),ld=document.getElementById('lead').value;let rows=WL.filter(r=>(!_bf||r.band==_bf)&&(!ld||r.lead==ld)&&(!q||r.id.includes(q)));rows.sort((a,b)=>{let x=a[_sk],y=b[_sk];if(typeof x=='string')return _sd*x.localeCompare(y);return _sd*(x-y);});document.getElementById('count').textContent=rows.length+' patients';document.getElementById('rows').innerHTML=rows.slice(0,600).map((r,i)=>{const col=r.H>=70?'#22A45D':r.H>=35?'#E8801A':'#C0392B';const rt=_RT[r.lead]?`<span class="wroute"><a href="${_RT[r.lead]}">${r.lead.split('/')[0]} &rarr;</a></span>`:r.lead.split('/')[0];const tr=r.trend=='down'?'<b style="color:#C0392B">&#9660; deteriorating</b>':r.trend=='up'?'<b style="color:#22A45D">&#9650; improving</b>':'stable';return `<tr><td>${i+1}</td><td><b>${r.id.replace('CDNDI-','')}</b></td><td>${r.age}</td><td class="hscore" style="color:${col}">${r.H}%</td><td><span class="dot" style="background:${_BC[r.band]}"></span>${r.band}</td><td>${r.L}</td><td>${r.O}</td><td><span class="pill" style="background:${r.risk>=70?'#C0392B':r.risk>=30?'#E8801A':'#E6B800'}">${r.risk}%</span></td><td>${tr}</td><td>${r.lead}</td><td>${rt}</td></tr>`;}).join('')+(rows.length>600?`<tr><td colspan="11" style="text-align:center;color:#8792a4">showing top 600 of ${rows.length} &mdash; filter to narrow</td></tr>`:'');}
 function tryAuth(){const ok=document.getElementById('code').value.trim().toUpperCase()==='AEGIS-2026';document.getElementById('pdfbtn').disabled=!ok;document.getElementById('authmsg').innerHTML=ok?'<span style="color:#22A45D">&#10003; unlocked</span>':'<span style="color:#C0392B">&#10007; incorrect code</span>';}
 function showTab(s){document.getElementById('tabSingle').style.display=s?'block':'none';document.getElementById('tabList').style.display=s?'none':'block';document.getElementById('tb1').classList.toggle('active',!!s);document.getElementById('tb2').classList.toggle('active',!s);if(!s&&!window._wi){window._wi=1;chips();wrender();}}
 
 
-function ptype(v){v=v.toUpperCase().trim();const d=document.getElementById('pdrop');if(v.length<2){d.style.display='none';return;}
- const m=PT.filter(r=>r.id.indexOf(v)>=0).slice(0,15);
- d.innerHTML=m.length?m.map(r=>`<div onclick="loadPatient('${r.id}')" style="padding:7px 11px;font-size:13px;cursor:pointer;border-bottom:1px solid #f0f3f8"><b>${r.id}</b> &middot; ${r.band} &middot; ${r.H}%</div>`).join(''):'<div style="padding:7px 11px;color:#8792a4;font-size:12px">no match</div>';
- d.style.display='block';}
-function loadPatient(id){const r=PT.find(p=>p.id==id);if(!r)return;document.getElementById('pdrop').style.display='none';document.getElementById('psel').value=id;
+function loadPatient(id){const r=PT.find(p=>p.id==id);if(!r){return;}document.getElementById('psel').value=id;
  const S=stageOf(r.L);document.getElementById('lam').textContent=r.L.toFixed(2);
  const se=document.getElementById('stage');se.textContent=S[2];se.style.background=S[3];
  document.getElementById('tick').style.left=(Math.min(r.L,9)/9*100)+'%';
@@ -229,8 +225,11 @@ function loadPatient(id){const r=PT.find(p=>p.id==id);if(!r)return;document.getE
  document.getElementById('tlomega').textContent=r.O.toFixed(1);document.getElementById('tllam').textContent=r.L.toFixed(2);
  document.getElementById('tltrend').innerHTML=r.trend=='down'?'<b style="color:#C0392B">▼ deteriorating</b>':r.trend=='up'?'<b style="color:#22A45D">▲ improving</b>':'stable';
  document.getElementById('traj').innerHTML=`From this patient's visit history: d&Lambda;/dt = ${r.dL>0?'+':''}${r.dL.toFixed(2)}/yr · `+(r.trend=='down'?'<b style="color:#C0392B">deteriorating</b>':r.trend=='up'?'<b style="color:#22A45D">improving</b>':'stable');
- document.getElementById('pmode').innerHTML=`Loaded <b>${id}</b> — showing the patient's record; trend from their visit history. Move a slider for a manual what-if.`;
+ document.getElementById('pmode').innerHTML=`Loaded patient <b>${disp(id)}</b> — showing their record; trend from visit history. Move a slider for a manual what-if.`;
 }
-document.addEventListener('click',function(e){var t=e.target;if(t.id!='psel'&&!(t.closest&&t.closest('#pdrop')))document.getElementById('pdrop').style.display='none';});
 
+
+
+function disp(id){return (''+id).replace('CDNDI-','');}
+(function(){var s=document.getElementById('psel');if(!s||typeof PT==='undefined')return;var o=PT.slice().sort(function(a,b){return a.id<b.id?-1:a.id>b.id?1:0;}).map(function(r){return '<option value="'+r.id+'">'+disp(r.id)+' \u00b7 '+r.band+' \u00b7 '+r.H+'%</option>';}).join('');s.insertAdjacentHTML('beforeend',o);})();
 </script></body></html>
