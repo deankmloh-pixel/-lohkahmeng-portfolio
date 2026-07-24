@@ -192,4 +192,5 @@ function drawGauge(e){const s=$('gsvg'),cx=150,cy=138,r=108;
   o+=`<text x="30" y="146" font-size="9" fill="#8894ac">0</text><text x="262" y="146" font-size="9" fill="#8894ac">120</text>`;s.innerHTML=o;}
 $('foot').innerHTML='Engine: <b>RRAS SVM classifier</b> (FULL: ACC '+P.svm_full.acc+', F1 '+P.svm_full.f1+', ROC-AUC '+P.svm_full.roc_auc+') decides obstruction; <b>RRAS SVR severity</b> (per-class eGFR '+P.svr_full.egfr_by_class.Clear+' / '+P.svr_full['egfr_by_class']['Early-obstruction']+' / '+P.svr_full.egfr_by_class.Obstructed+') grades it. Browser runs a distilled scorer agreeing with the full SVM on '+(P.clf.agreement*100).toFixed(1)+'% of cases and reproducing the SVR at R²='+P.sev.r2+'. Cohort is <b>SYNTHETIC</b> (RRAS-RP) — research scaffold, screening estimate for reference only, a clinician makes every call. Not for clinical use. Same SVM+SVR pair as the DRAS Console (Project 10).';
 update();
-</script></body></html>
+</script><script src="/disclaimer.js" defer></script>
+</body></html>
