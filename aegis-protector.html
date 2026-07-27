@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#060c1a">
+<title>AEGIS Protector</title>
+<style>
+  :root{
+    --bg:#070d1c; --bg2:#0a1428; --card:#0c1730; --card2:#0f1d3a; --line:#22314f;
+    --ink:#eef2f8; --muted:#8b97ad; --steel:#cdd3dc; --steel-d:#7c8598;
+    --gold:#c9a24b; --gold-l:#e6c877; --gold-d:#8f7433;
+    --green:#3ecf8e; --yellow:#f2c94c; --orange:#f2994a; --red:#eb5757;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%}
+  body{background:radial-gradient(900px 460px at 50% -8%,#123059,#060b17 62%,#04070f);
+       font-family:var(--sans);color:var(--ink);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+  .phone{width:394px;height:852px;max-height:94vh;background:#04070f;border-radius:46px;padding:12px;
+         box-shadow:0 40px 90px rgba(0,0,0,.65),0 0 0 2px #223050,inset 0 0 0 6px #070d1c;position:relative}
+  .screen{width:100%;height:100%;background:linear-gradient(180deg,#070d1c,#0a1326);border-radius:36px;overflow:hidden;display:flex;flex-direction:column;position:relative}
+  .notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:118px;height:26px;background:#04070f;border-radius:16px;z-index:40}
+  @media(max-width:460px){body{padding:0}.phone{width:100vw;height:100vh;max-height:none;border-radius:0;padding:0;box-shadow:none}.screen{border-radius:0}.notch{display:none}}
+
+  .statusbar{display:flex;justify-content:space-between;align-items:center;padding:12px 22px 4px;font-size:13px;font-weight:600}
+  .statusbar .r{font-size:12px;color:var(--gold-l)}
+  .appbar{display:flex;align-items:center;gap:11px;padding:4px 16px 8px}
+  .mark{height:34px;width:34px;flex:0 0 auto;filter:drop-shadow(0 2px 6px rgba(201,162,75,.3))}
+  .brandtxt .n{font-family:var(--serif);font-size:19px;letter-spacing:.14em;color:var(--gold-l);font-weight:600;line-height:1}
+  .brandtxt .s{font-size:8px;letter-spacing:.30em;color:var(--gold-d);text-transform:uppercase;margin-top:3px}
+  .appbar .spacer{flex:1}
+  .sync{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--gold-l);border:1px solid var(--gold-d);border-radius:999px;padding:4px 9px}
+  .sync .live{width:6px;height:6px;border-radius:50%;background:var(--gold-l);animation:blink 1.4s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+  @keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .content{flex:1;overflow-y:auto;padding:10px 13px 24px}
+  h3.sec{font-family:var(--serif);font-size:12px;letter-spacing:.05em;color:var(--gold-l);margin:14px 4px 8px;font-weight:600;display:flex;align-items:center;gap:7px}
+  h3.sec .par{font-family:var(--sans);font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--steel-d);border:1px solid var(--line);border-radius:999px;padding:2px 7px}
+  .card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:15px;margin-bottom:11px}
+  .pad{padding:12px 13px}
+
+  /* activity context */
+  .actwrap{display:flex;gap:6px;padding:2px 0 2px}
+  .act{flex:1;text-align:center;font-size:11px;padding:7px 2px 6px;border-radius:10px;border:1px solid var(--line);color:var(--muted);background:var(--bg2);cursor:pointer;transition:.15s}
+  .act .em{display:block;font-size:15px;margin-bottom:2px;filter:grayscale(.3)}
+  .act.on{color:var(--ink);border-color:var(--gold-d);background:linear-gradient(180deg,#16294a,#0f1d38);font-weight:700}
+  .memrow{margin-top:9px}
+  .mem{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:10.5px}
+  .mem .ml{width:52px;color:var(--muted);flex:0 0 auto}
+  .mem .track{flex:1;height:6px;background:var(--bg2);border-radius:4px;overflow:hidden}
+  .mem .fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));border-radius:4px;transition:width .5s}
+  .mem .mv{width:34px;text-align:right;font-family:var(--mono);color:var(--steel);flex:0 0 auto}
+  .ctxnote{font-size:10px;color:var(--muted);margin-top:8px;line-height:1.45}
+
+  /* ECG */
+  .monitor{border:1px solid #3a4a63;border-radius:13px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.4)}
+  .mon-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 11px;background:#0d1830;border-bottom:1px solid var(--line)}
+  .mon-lead{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);font-weight:700}
+  .mon-src{flex:1;color:var(--muted);font-size:8.5px}
+  .mon-bpm{font-family:var(--mono);font-size:15px;color:#b3261e;display:flex;align-items:center;gap:5px}
+  .mon-beat{width:7px;height:7px;border-radius:50%;background:#b3261e;box-shadow:0 0 6px rgba(179,38,30,.7);animation:blink 1s infinite}
+  #ecg{display:block;width:100%;height:110px;background:
+    repeating-linear-gradient(0deg,transparent 0 22px,rgba(214,92,92,.5) 22px 23px),
+    repeating-linear-gradient(90deg,transparent 0 22px,rgba(214,92,92,.5) 22px 23px),
+    linear-gradient(180deg,#fff2f0,#ffe9e6)}
+  .kwave-tag{display:flex;align-items:center;gap:6px;padding:6px 11px;background:#0d1830;border-top:1px solid var(--line);font-size:10px;color:var(--muted)}
+  .kwave-tag b{color:var(--steel)} .kdot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 7px currentColor;flex:0 0 auto}
+
+  /* parallel streams */
+  .streams{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .stream{background:radial-gradient(120% 120% at 50% 15%,#12294f,#0a1730 70%);border:1px solid var(--line);border-radius:12px;padding:9px 10px;position:relative}
+  .stream .sl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:flex;justify-content:space-between}
+  .stream .sv{font-family:var(--mono);font-size:20px;font-weight:600;margin-top:3px} .stream .sv small{font-size:10px;color:var(--muted);margin-left:2px}
+  .stream .base{font-size:9px;color:var(--steel-d);margin-top:2px}
+  .stream .flag{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 7px currentColor}
+
+  /* learn-normal / deviation */
+  .devwrap{display:flex;align-items:center;gap:12px}
+  .devmeter{flex:1}
+  .devbar{height:9px;border-radius:6px;background:linear-gradient(90deg,var(--green) 0 35%,var(--yellow) 35% 60%,var(--orange) 60% 80%,var(--red) 80% 100%);position:relative}
+  .devknob{position:absolute;top:-4px;width:4px;height:17px;background:#fff;border-radius:2px;box-shadow:0 0 6px #fff;transition:left .5s}
+  .devnums{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:4px}
+  .learn{font-size:10px;color:var(--muted);margin-top:9px;line-height:1.45}
+  .learn b{color:var(--gold-l)}
+
+  /* guardian ribbon */
+  .rib{display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:14px;border:1px solid var(--line);cursor:default}
+  .rib .dot{width:13px;height:13px;border-radius:50%;flex:0 0 auto;box-shadow:0 0 10px currentColor}
+  .rib .band{font-family:var(--serif);font-size:17px;font-weight:700;letter-spacing:.05em}
+  .rib .sub{font-size:10.5px;color:var(--muted);line-height:1.35;margin-top:1px}
+  .rib .risk{margin-left:auto;text-align:right;flex:0 0 auto}
+  .rib .risk .rv{font-family:var(--mono);font-size:20px;font-weight:700} .rib .risk .rl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+
+  /* scenario buttons */
+  .scen{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .sbtn{font-size:11.5px;padding:10px 6px;border-radius:10px;border:1px solid var(--line);background:var(--bg2);color:var(--steel);cursor:pointer;font-weight:600;transition:.12s}
+  .sbtn:active{transform:scale(.97)}
+  .sbtn.k{border-color:#7a5b2a;color:var(--gold-l)} .sbtn.e{border-color:#7a2a2a;color:#ff8a8a} .sbtn.d{border-color:#2a4a7a;color:#8ab4ff}
+  .sbtn.on{background:linear-gradient(180deg,#16294a,#0f1d38);box-shadow:inset 0 0 0 1px var(--steel-d)}
+
+  /* event trigger contract */
+  .evt{font-family:var(--mono);font-size:10.5px;line-height:1.6;background:#050a15;border:1px solid var(--line);border-radius:11px;padding:11px 12px;color:var(--steel);white-space:pre-wrap;word-break:break-word}
+  .evt .k{color:var(--gold-d)} .evt .t-card{color:var(--gold-l)} .evt .t-warn{color:var(--orange)} .evt .t-crit{color:#ff6b6b} .evt .t-ok{color:var(--green)} .evt .t-dur{color:#8ab4ff}
+  .locale{display:flex;align-items:center;gap:7px;margin-top:9px;font-size:11px}
+  .locale select{background:var(--bg2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:11px}
+  .locale .act-line{color:var(--muted)} .locale .act-line b{color:#ff8a8a}
+
+  .foot{font-size:9px;color:var(--steel-d);text-align:center;line-height:1.5;margin:14px 6px 4px}
+  .foot b{color:var(--muted)}
+
+  /* full-screen overlays */
+  .ov{position:absolute;inset:0;z-index:80;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px}
+  .ov.on{display:flex}
+  .ov.red{background:radial-gradient(120% 120% at 50% 30%,#3a0d0d,#160406);animation:blink .9s 4}
+  .ov.blue{background:radial-gradient(120% 120% at 50% 30%,#0a1c3a,#04060f)}
+  .ov .big{font-family:var(--serif);font-size:34px;font-weight:700;letter-spacing:.03em}
+  .ov.red .big{color:#ff5c5c;text-shadow:0 0 24px rgba(235,87,87,.6)}
+  .ov.blue .big{color:#8ab4ff;text-shadow:0 0 24px rgba(90,140,255,.5)}
+  .ov .osub{font-size:12.5px;margin:7px 0 16px;color:#f4b3b3}
+  .ov.blue .osub{color:#b3c8f4}
+  .esteps{width:100%;max-width:300px;text-align:left}
+  .estep{font-size:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:10px;padding:9px 12px;margin-bottom:7px;animation:up .35s;display:flex;gap:8px}
+  .estep .n{color:var(--gold-l);font-weight:700;flex:0 0 auto}
+  .ov .obtn{margin-top:16px;font-size:13px;padding:11px 26px;border-radius:11px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-weight:600}
+
+  /* view tabs */
+  .tabs{display:flex;gap:7px;padding:2px 16px 8px}
+  .tabs button{flex:1;font-size:12px;padding:8px 0;border-radius:9px;border:1px solid var(--line);background:var(--bg2);color:var(--muted);font-weight:600;cursor:pointer;letter-spacing:.03em}
+  .tabs button.on{color:#06101f;background:linear-gradient(180deg,var(--gold-l),var(--gold));border-color:var(--gold)}
+  .view{display:none} .view.on{display:block}
+  /* functions page */
+  .fhero{text-align:center;padding:14px 10px 6px}
+  .fhero .ft{font-family:var(--serif);font-size:21px;color:var(--gold-l);letter-spacing:.06em}
+  .fhero .fp{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.5}
+  .fn{display:flex;gap:11px;padding:12px 12px;border:1px solid var(--line);border-radius:13px;margin-bottom:9px;background:linear-gradient(180deg,var(--card),var(--card2))}
+  .fn .ic{font-size:19px;flex:0 0 auto;line-height:1.2}
+  .fn .ft{font-size:13px;font-weight:700;color:var(--ink)}
+  .fn .fd{font-size:11px;color:var(--muted);line-height:1.5;margin-top:3px}
+  .ctrlrow{display:flex;gap:10px;align-items:stretch;margin:2px 0 10px}
+  .bigbtn{flex:1;font-size:12.5px;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--bg2);color:var(--gold-l);cursor:pointer;font-weight:700}
+  .bigbtn.off{color:var(--muted)}
+  .minibtn{flex:0 0 auto;font-size:10px;padding:0 11px;border-radius:9px;border:1px solid #7a2a2a;background:#1a0c0e;color:#ff8a8a;cursor:pointer;font-weight:600}
+  .minibtn.off{border-color:#2a3550;background:var(--bg2);color:var(--steel-d);opacity:.55}
+  .ftag{text-align:center;font-family:var(--serif);font-size:13px;color:var(--gold-l);line-height:1.6;margin:14px 8px 4px}
+
+  /* clinical monitor */
+  .mon-clin{background:#000;border:1px solid #1c2740;border-radius:12px;padding:8px}
+  #clin{display:block;width:100%;height:246px;background:#000;border-radius:6px}
+  .ptiles{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+  .ptile{background:#050608;border:1px solid #1c2740;border-radius:9px;padding:7px 9px}
+  .ptile .pl{font-size:9px;letter-spacing:.07em;text-transform:uppercase;opacity:.85;display:flex;justify-content:space-between}
+  .ptile .pv{font-family:var(--mono);font-weight:700;line-height:1;margin-top:3px}
+  .ptile .pv .big{font-size:30px} .ptile .pv small{font-size:11px;opacity:.7}
+  .ptile .px{font-size:9px;opacity:.75;margin-top:3px;font-family:var(--mono)}
+  .p-hr{color:#35e07a} .p-nibp{color:#ff6b6b} .p-spo2{color:#f2d94c} .p-rr{color:#5aa0ff}
+  .ptile.alarm{animation:blink .7s infinite;border-color:#ff5c5c}
+  .cbanner{text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:.15em;color:#ff5c5c;padding:6px 0;display:none}
+  .cbanner.on{display:block;animation:blink .7s infinite}
+  .trend{width:100%;border-collapse:collapse;margin-top:9px;font-family:var(--mono);font-size:9.5px}
+  .trend th{color:var(--steel-d);font-weight:600;text-align:right;padding:3px 4px;border-bottom:1px solid var(--line)}
+  .trend td{text-align:right;padding:3px 4px;color:var(--steel);border-bottom:1px solid #16223c}
+  .trend th:first-child,.trend td:first-child{text-align:left}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="notch"></div>
+  <div class="screen">
+    <div class="statusbar"><span>9:41</span><span class="r">AEGIS · always-on</span></div>
+    <div class="appbar">
+      <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
+        <defs><radialGradient id="g" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#e6c877"/><stop offset="100%" stop-color="#8f7433"/></radialGradient></defs>
+        <g fill="none" stroke="url(#g)" stroke-width="1.6" stroke-linecap="round">
+          <path d="M20 20 m-13 0 a13 13 0 1 1 4 9"/><path d="M20 20 m-8 0 a8 8 0 1 0 6 -6.5"/>
+        </g><circle cx="20" cy="20" r="3.1" fill="url(#g)"/>
+      </svg>
+      <div class="brandtxt"><div class="n">AEGIS</div><div class="s">Protector · wearable</div></div>
+      <div class="spacer"></div>
+      <div class="sync"><span class="live"></span> LIVE</div>
+    </div>
+
+    <div class="tabs">
+      <button class="on" id="tab_clin" onclick="showView('clin')">Monitor</button>
+      <button id="tab_func" onclick="showView('func')">Functions</button>
+    </div>
+
+    <div class="content">
+      <div class="view" id="v_monitor">
+
+      <h3 class="sec">Activity context <span class="par">fuzzy · always learning</span></h3>
+      <div class="card"><div class="pad">
+        <div class="actwrap" id="actwrap"></div>
+        <div class="memrow" id="memrow"></div>
+        <div class="ctxnote" id="ctxnote"></div>
+      </div></div>
+
+      <h3 class="sec">Live streams <span class="par">4 sensors · in parallel</span></h3>
+      <div class="monitor">
+        <div class="mon-head">
+          <span class="mon-lead">ECG · Lead II</span>
+          <span class="mon-src">on-body · 250 Hz</span>
+          <span class="mon-bpm"><span class="mon-beat"></span><span id="bpm">72</span><b style="font-size:9px;color:#a86b6b">bpm</b></span>
+        </div>
+        <canvas id="ecg" width="368" height="110"></canvas>
+        <div class="kwave-tag"><span class="kdot" id="kdot"></span><span id="kwtxt"><b>K-wave (J/Osborn):</b> clear</span></div>
+      </div>
+      <div class="streams" id="streams" style="margin-top:9px"></div>
+
+      <h3 class="sec">Your normal <span class="par">learned · per activity</span></h3>
+      <div class="card"><div class="pad">
+        <div class="devwrap">
+          <div class="devmeter">
+            <div class="devbar"><div class="devknob" id="devknob" style="left:8%"></div></div>
+            <div class="devnums"><span>on your baseline</span><span>deviation →</span></div>
+          </div>
+        </div>
+        <div class="learn" id="learn"></div>
+      </div></div>
+
+      <h3 class="sec">Protection status</h3>
+      <div class="card" style="margin-bottom:11px"><div class="pad" style="padding:0">
+        <div class="rib" id="rib">
+          <span class="dot" id="ribdot" style="color:var(--green)"></span>
+          <div><div class="band" id="ribband" style="color:var(--green)">CLEAR</div>
+               <div class="sub" id="ribsub">All streams within your normal.</div></div>
+          <div class="risk"><div class="rv" id="riskv">0.06</div><div class="rl">risk</div></div>
+        </div>
+      </div></div>
+
+
+      <h3 class="sec">Trigger output <span class="par">the only thing the AI emits</span></h3>
+      <div class="card"><div class="pad">
+        <div class="evt" id="evt"></div>
+        <div class="locale">
+          <span>Region</span>
+          <select id="loc" onchange="renderEvent()">
+            <option value="SG">Singapore</option>
+            <option value="CN">China</option>
+            <option value="US">United States</option>
+            <option value="UK">United Kingdom</option>
+          </select>
+          <span class="act-line" id="actline"></span>
+        </div>
+      </div></div>
+
+      <div class="foot">
+        <b>Demonstration / simulation.</b> Signals are simulated; detection logic is distilled from the AEGIS P16 models.<br>
+        Human-in-command · the app maps the trigger to a local action · real emergency dispatch requires clinical validation &amp; certification.
+      </div>
+      </div><!-- /v_monitor -->
+
+      <div class="view" id="v_func">
+        <div class="fhero">
+          <div class="ft">One device. Every stream. Your normal.</div>
+          <div class="fp">AEGIS Protector is an always-on personal wearable that learns your body, understands your day, and steps in the moment something is wrong — cardiac or personal.</div>
+        </div>
+        <div class="fn"><span class="ic">🫀</span><div><div class="ft">Continuous, always-on</div><div class="fd">Watches over you around the clock — awake, working, exercising, asleep. Never off duty.</div></div></div>
+        <div class="fn"><span class="ic">📡</span><div><div class="ft">Parallel multi-sensor</div><div class="fd">Reads ECG, heart rate, blood-oxygen, heart sounds and motion together, in real time — many signals at once, not one at a time.</div></div></div>
+        <div class="fn"><span class="ic">🧠</span><div><div class="ft">Learns your normal</div><div class="fd">Builds a personal baseline and keeps adapting to your lifestyle — so it knows what healthy looks like for <i>you</i>, not an average stranger.</div></div></div>
+        <div class="fn"><span class="ic">🏃</span><div><div class="ft">Understands what you're doing</div><div class="fd">Recognises and blends your activities as your day flows. A high heart rate at the gym is expected; the same at rest is not — and it knows the difference.</div></div></div>
+        <div class="fn"><span class="ic">⚡</span><div><div class="ft">Early cardiac warning (K-wave)</div><div class="fd">Watches for the earliest electrical signs of an impending heart attack — before you feel a thing — and other cardiac irregularities.</div></div></div>
+        <div class="fn"><span class="ic">🔎</span><div><div class="ft">Flags anything abnormal</div><div class="fd">Because it learns what's normal, it catches <i>any</i> departure — not just a short pre-programmed list of conditions.</div></div></div>
+        <div class="fn"><span class="ic">🚨</span><div><div class="ft">Acts when it matters</div><div class="fd">Raises one clear alert with a severity and the reason. The app decides the response — sound an alarm, show a first-aid card, notify trusted contacts, or call the local ambulance.</div></div></div>
+        <div class="fn"><span class="ic">🌍</span><div><div class="ft">Anywhere in the world</div><div class="fd">Knows the right emergency number for where you are — 995 in Singapore, 120 in China, 911 in the US, and beyond.</div></div></div>
+        <div class="fn"><span class="ic">🛡️</span><div><div class="ft">Silent personal-safety mode</div><div class="fd">A secret phrase only you and your device know can silently call the police with your location — for a robbery or personal threat, without alerting anyone near you.</div></div></div>
+        <div class="fn"><span class="ic">🙋</span><div><div class="ft">You stay in command</div><div class="fd">It flags; you — or a clinician — decide. It never acts silently on its own for a medical event, and you can always stand it down.</div></div></div>
+        <div class="fn"><span class="ic">🔒</span><div><div class="ft">Private by design</div><div class="fd">Sensitive processing stays on the device. Your audio never leaves the watch.</div></div></div>
+        <div class="ftag">Real-time protection — cardiac and personal —<br>that learns, adapts, and never looks away.</div>
+        <div class="foot"><b>Demonstration / simulation</b> of the AEGIS Protector concept.</div>
+      </div>
+
+      <div class="view on" id="v_clin">
+        <h3 class="sec">Clinical monitor <span class="par">bedside · multi-parameter</span></h3>
+        <div class="cbanner" id="cbanner">** CARDIAC ALARM **</div>
+        <div class="mon-clin">
+          <canvas id="clin" width="344" height="246"></canvas>
+          <div class="ptiles">
+            <div class="ptile p-hr" id="t_hr"><div class="pl"><span>ECG · HR</span><span>bpm</span></div><div class="pv"><span class="big" id="c_hr">--</span></div><div class="px" id="c_hr_x">ST normal</div></div>
+            <div class="ptile p-nibp" id="t_nibp"><div class="pl"><span>NIBP</span><span>mmHg</span></div><div class="pv"><span class="big" id="c_nibp">--</span></div><div class="px" id="c_nibp_x">mean -- · PR --</div></div>
+            <div class="ptile p-spo2" id="t_spo2"><div class="pl"><span>SpO&#8322;</span><span>%</span></div><div class="pv"><span class="big" id="c_spo2">--</span></div><div class="px">perfusion ok</div></div>
+            <div class="ptile p-rr" id="t_rr"><div class="pl"><span>Resp</span><span>rpm</span></div><div class="pv"><span class="big" id="c_rr">--</span></div><div class="px">regular</div></div>
+          </div>
+          <table class="trend"><thead><tr><th>TIME</th><th>NIBP</th><th>MEAN</th><th>HR</th><th>SpO&#8322;</th><th>RR</th></tr></thead><tbody id="trendbody"></tbody></table>
+        </div>
+        <div class="ctrlrow">
+          <button id="deterBtn" class="minibtn off" onclick="toggleDeter()">🔇 Duress</button>
+          <button id="muteBtn" class="bigbtn" onclick="toggleMute()">🔊 Alarm sound: ON</button>
+        </div>
+        <h3 class="sec" style="margin-top:14px">Simulate <span class="par">drive the monitor</span></h3>
+        <div class="scen">
+          <button class="sbtn on" data-s="normal" onclick="setScenario('normal')">● Normal day</button>
+          <button class="sbtn k" data-s="onset" onclick="setScenario('onset')">◑ K-wave onset</button>
+          <button class="sbtn e" data-s="event" onclick="setScenario('event')">▲ Cardiac event</button>
+          <button class="sbtn d" data-s="duress" onclick="triggerDuress()">◆ Duress phrase</button>
+        </div>
+        <div class="foot">One detection core &mdash; the same engine behind a clinician-grade monitor. Demonstration / simulation.</div>
+      </div>
+    </div>
+
+    <!-- escalation overlay -->
+    <div class="ov red" id="ovEsc">
+      <div class="big">CARDIAC ALERT</div>
+      <div class="osub" id="ovEscSub">Imminent-event pattern · K-wave + ST elevation</div>
+      <div class="esteps" id="ovEscSteps"></div>
+      <button class="obtn" onclick="standDown()">I'm OK — stand down</button>
+    </div>
+    <!-- duress overlay -->
+    <div class="ov blue" id="ovDur">
+      <div class="big" id="ovDurBig">SILENT DURESS</div>
+      <div class="osub" id="ovDurSub">Secret phrase recognised on-device · nothing shown to a bystander</div>
+      <div class="esteps" id="ovDurSteps"></div>
+      <button class="obtn" onclick="standDown()">Cancel (hold)</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---------------------------------------------------------------- model state
+const ACT = {
+  rest:  {em:"🛋", label:"Rest",    hr:64,  spo2:98, mo:2,  hrv:58, resp:14},
+  walk:  {em:"🚶", label:"Walking", hr:96,  spo2:97, mo:34, hrv:42, resp:20},
+  gym:   {em:"🏋", label:"Gym",     hr:138, spo2:96, mo:78, hrv:28, resp:30},
+  sleep: {em:"🌙", label:"Sleep",   hr:52,  spo2:97, mo:1,  hrv:72, resp:11},
+};
+const ORDER = ["rest","walk","gym","sleep"];
+let target = "rest";                       // where the person is headed
+let mem = {rest:1,walk:0,gym:0,sleep:0};   // fuzzy activity membership (blends toward target)
+let scenario = "normal";
+let kSev = 0;          // K-wave severity 0..1 (rises on onset/event)
+let risk = 0.06;
+let tier = "OK";
+let escalated = false, duress = false;
+let hr=64, spo2=98, motion=2, hrv=58;
+
+// ---------------------------------------------------------------- activity UI
+const actwrap=document.getElementById("actwrap"), memrow=document.getElementById("memrow");
+ORDER.forEach(k=>{
+  const b=document.createElement("div"); b.className="act"+(k===target?" on":""); b.id="act_"+k;
+  b.innerHTML=`<span class="em">${ACT[k].em}</span>${ACT[k].label}`;
+  b.onclick=()=>{target=k; document.querySelectorAll(".act").forEach(a=>a.classList.remove("on")); b.classList.add("on");};
+  actwrap.appendChild(b);
+});
+ORDER.forEach(k=>{
+  const r=document.createElement("div"); r.className="mem";
+  r.innerHTML=`<span class="ml">${ACT[k].label}</span><span class="track"><span class="fill" id="mem_${k}"></span></span><span class="mv" id="memv_${k}">0%</span>`;
+  memrow.appendChild(r);
+});
+
+// ---------------------------------------------------------------- parallel streams
+const streamsEl=document.getElementById("streams");
+const STREAMS=[
+  {id:"hr",  l:"Heart rate", u:"bpm"},
+  {id:"spo2",l:"SpO₂",       u:"%"},
+  {id:"mo",  l:"Motion",     u:"g·act"},
+  {id:"hrv", l:"HRV",        u:"ms"},
+];
+STREAMS.forEach(s=>{
+  const d=document.createElement("div"); d.className="stream";
+  d.innerHTML=`<span class="flag" id="fl_${s.id}"></span>
+    <div class="sl"><span>${s.l}</span></div>
+    <div class="sv"><span id="sv_${s.id}">–</span><small>${s.u}</small></div>
+    <div class="base" id="ba_${s.id}">normal –</div>`;
+  streamsEl.appendChild(d);
+});
+
+// ---------------------------------------------------------------- ECG canvas
+const cvs=document.getElementById("ecg"), ctx=cvs.getContext("2d");
+const W=cvs.width, H=cvs.height, buf=new Array(W).fill(H*0.55);
+let phase=0, beatLen=60;
+function ecgSample(t){ // t in [0,1) across one beat
+  // baseline
+  let y=0;
+  const p=0.16, q=0.30, r=0.34, s=0.38, jStart=0.40, tC=0.62;
+  if(t<p) y+=0.10*Math.exp(-Math.pow((t-0.10)/0.03,2));          // P
+  y-=0.14*Math.exp(-Math.pow((t-q)/0.012,2));                    // Q
+  y+=1.00*Math.exp(-Math.pow((t-r)/0.012,2));                    // R
+  y-=0.22*Math.exp(-Math.pow((t-s)/0.014,2));                    // S
+  // J-wave / Osborn (K-wave) — appears with severity
+  if(kSev>0) y+=(0.05+0.42*kSev)*Math.exp(-Math.pow((t-jStart)/0.02,2));
+  // ST segment elevation with severity
+  const stLev=(0.10+0.55*kSev);
+  if(t>=jStart && t<tC) y+=stLev*(kSev>0?1:0)*0.5;
+  // T wave — broad/asymmetric & tall when severity high
+  const tw=0.03+0.05*kSev, ta=0.16+0.55*kSev;
+  y+=ta*Math.exp(-Math.pow((t-tC)/tw,2));
+  return y;
+}
+function drawECG(){
+  // scroll one column
+  const speed=Math.max(1,Math.round(2.0*(hr/72)));
+  for(let k=0;k<speed;k++){
+    phase+=1/beatLen;
+    if(phase>=1) phase-=1;
+    const y=H*0.60 - ecgSample(phase)*H*0.42;
+    buf.push(y); buf.shift();
+  }
+  ctx.clearRect(0,0,W,H);
+  ctx.lineWidth=1.8; ctx.strokeStyle="#b3261e"; ctx.lineJoin="round";
+  ctx.beginPath();
+  for(let x=0;x<W;x++){ const y=buf[x]; if(x===0)ctx.moveTo(x,y); else ctx.lineTo(x,y); }
+  ctx.stroke();
+}
+
+// ---------------------------------------------------------------- main loop
+function stepMembership(){
+  // blend membership toward the target activity (fuzzy, gradual — models transitions)
+  for(const k of ORDER){ const goal=(k===target)?1:0; mem[k]+=(goal-mem[k])*0.05; }
+  let s=0; for(const k of ORDER) s+=mem[k]; for(const k of ORDER) mem[k]/=s;
+}
+function blended(field){ let v=0; for(const k of ORDER) v+=mem[k]*ACT[k][field]; return v; }
+
+function tickVitals(){
+  // K-wave severity ramps toward scenario target
+  const kTarget = scenario==="event"?0.92 : scenario==="onset"?0.45 : 0.0;
+  kSev += (kTarget-kSev)*0.14;
+  if(kSev<0.02) kSev=0;
+
+  const bHr=blended("hr"), bSpo=blended("spo2"), bMo=blended("mo"), bHrv=blended("hrv");
+  const jit=(a)=>(Math.random()-0.5)*a;
+  // event pushes HR up & SpO2 down, independent of activity (the deviation from normal)
+  const evHr = scenario==="event"?38:scenario==="onset"?10:0;
+  const evSpo= scenario==="event"?-4:scenario==="onset"?-1:0;
+  hr    = Math.round(bHr + evHr + jit(2));
+  spo2  = Math.max(85,Math.round(bSpo + evSpo + jit(0.4)));
+  motion= Math.max(0,Math.round(bMo + jit(3)));
+  hrv   = Math.max(6,Math.round(bHrv - (evHr*0.4) + jit(3)));
+  beatLen = Math.max(26, Math.round(60*(72/Math.max(40,hr))));
+
+  // deviation from the LEARNED normal for the CURRENT (blended) activity
+  const hrDev = Math.abs(hr - bHr)/40;             // how far off your activity-normal HR
+  const spoDev= Math.max(0,(bSpo - spo2))/6;
+  const dev = Math.min(1, 0.55*hrDev + 0.30*spoDev + 0.15*(hrv< bHrv*0.55?1:0));
+
+  // fused risk: deviation-from-normal + the dedicated K-wave cardiac axis (weighted high)
+  risk = Math.min(1, 0.45*dev + 0.72*kSev);
+  updateTier();
+  render();
+}
+
+function updateTier(){
+  let nt;
+  if(risk>=0.80) nt="ESCALATE"; else if(risk>=0.58) nt="CONFIRM";
+  else if(risk>=0.34) nt="ALERT"; else nt="NUDGE";
+  if(risk<0.18) nt="OK";
+  tier=nt;
+  if(tier==="ESCALATE" && !escalated && !duress){ escalated=true; openEscal(); }
+}
+
+// ---------------------------------------------------------------- rendering
+function bandFor(r){
+  if(r>=0.80) return {c:"var(--red)",   n:"CRITICAL", s:"Imminent-event pattern — escalating."};
+  if(r>=0.58) return {c:"var(--orange)",n:"ELEVATED", s:"Abnormal for your activity — confirming."};
+  if(r>=0.34) return {c:"var(--yellow)",n:"WATCH",    s:"Mild deviation from your normal."};
+  return {c:"var(--green)", n:"CLEAR", s:"All streams within your normal."};
+}
+function render(){
+  // activity chips + membership
+  ORDER.forEach(k=>{
+    const pct=Math.round(mem[k]*100);
+    document.getElementById("mem_"+k).style.width=pct+"%";
+    document.getElementById("memv_"+k).textContent=pct+"%";
+  });
+  const dom=ORDER.reduce((a,b)=>mem[a]>mem[b]?a:b);
+  document.getElementById("ctxnote").innerHTML=
+    `Now: <b style="color:var(--gold-l)">${ACT[dom].label}</b> — the device blends states as you transition (walk → gym), and judges you against the <b style="color:var(--gold-l)">normal for what you're doing now</b>.`;
+
+  // ECG head
+  document.getElementById("bpm").textContent=hr;
+  const kdot=document.getElementById("kdot"), kw=document.getElementById("kwtxt");
+  if(kSev>=0.6){kdot.style.background="var(--red)";kw.innerHTML="<b>K-wave (J/Osborn):</b> pronounced + ST elevation";}
+  else if(kSev>=0.2){kdot.style.background="var(--orange)";kw.innerHTML="<b>K-wave (J/Osborn):</b> emerging notch";}
+  else{kdot.style.background="var(--green)";kw.innerHTML="<b>K-wave (J/Osborn):</b> clear";}
+
+  // streams + per-stream normal band & flags
+  const bHr=blended("hr"),bSpo=blended("spo2"),bMo=blended("mo"),bHrv=blended("hrv");
+  setStream("hr",hr,`normal ${Math.round(bHr-12)}–${Math.round(bHr+12)}`, Math.abs(hr-bHr)>22);
+  setStream("spo2",spo2,`normal ≥ ${Math.round(bSpo-2)}`, spo2 < bSpo-3);
+  setStream("mo",motion,`normal ~${Math.round(bMo)}`, false);
+  setStream("hrv",hrv,`normal ~${Math.round(bHrv)}`, hrv < bHrv*0.55);
+
+  // deviation knob
+  document.getElementById("devknob").style.left=(6+risk*88)+"%";
+  document.getElementById("learn").innerHTML=
+    `The model was trained on <b>normal only</b> and flags departure. Right now you are <b>${Math.round(Math.min(100,risk*100))}%</b> toward the abnormal edge for <b>${ACT[dom].label.toLowerCase()}</b>.`;
+
+  // guardian ribbon
+  const b=bandFor(risk);
+  document.getElementById("ribdot").style.color=b.c;
+  const rb=document.getElementById("ribband"); rb.textContent=b.n; rb.style.color=b.c;
+  document.getElementById("ribsub").textContent=b.s;
+  document.getElementById("riskv").textContent=risk.toFixed(2);
+  document.getElementById("riskv").style.color=b.c;
+
+  renderEvent();
+  updateClinical();
+}
+function setStream(id,val,base,flag){
+  document.getElementById("sv_"+id).textContent=val;
+  document.getElementById("ba_"+id).textContent=base;
+  const f=document.getElementById("fl_"+id);
+  f.style.background = flag? "var(--red)" : (id==="hr"&&kSev>=0.2?"var(--orange)":"var(--green)");
+}
+
+// ---------------------------------------------------------------- event contract
+const LOCALE={SG:{amb:"995",pol:"999"},CN:{amb:"120",pol:"110"},US:{amb:"911",pol:"911"},UK:{amb:"999",pol:"999"}};
+function renderEvent(){
+  const el=document.getElementById("evt"); if(!el) return;
+  const loc=document.getElementById("loc").value, L=LOCALE[loc];
+  const dom=ORDER.reduce((a,b)=>mem[a]>mem[b]?a:b);
+  let type,cls,drivers,act;
+  if(duress){
+    type="DURESS"; cls="t-dur";
+    drivers=['"secret phrase" recognised on-device','panic physiology corroborated'];
+    act=`silent call → police <b>${L.pol}</b> + live location`;
+  } else if(scenario==="event"||risk>=0.80){
+    type="CARDIAC_IMMINENT"; cls="t-crit";
+    drivers=["J-wave/K-wave elevation lead II","ST elevation +0.2 mV","HR "+hr+" — off your "+ACT[dom].label.toLowerCase()+" baseline"];
+    act=`escalate → ambulance <b>${L.amb}</b> + guardian + location`;
+  } else if(scenario==="onset"||risk>=0.34){
+    type="CARDIAC_IRREGULAR"; cls="t-warn";
+    drivers=["emerging J-wave notch","mild ST shift","HR mildly above "+ACT[dom].label.toLowerCase()+" normal"];
+    act="alert + on-screen check-in (confirm within 30 s)";
+  } else {
+    type="—"; cls="t-ok"; drivers=["all streams within learned normal"]; act="monitor only";
+  }
+  const sev=duress?0.99:risk;
+  el.innerHTML =
+`{
+  <span class="k">type</span>:     <span class="${cls}">"${type}"</span>,
+  <span class="k">severity</span>: ${sev.toFixed(2)},
+  <span class="k">tier</span>:     "${duress?"ESCALATE":tier}",
+  <span class="k">context</span>:  "${ACT[dom].label}"  (rest ${Math.round(mem.rest*100)} · walk ${Math.round(mem.walk*100)} · gym ${Math.round(mem.gym*100)} · sleep ${Math.round(mem.sleep*100)}),
+  <span class="k">drivers</span>:  [${drivers.map(d=>'"'+d+'"').join(", ")}]
+}`;
+  document.getElementById("actline").innerHTML="app action: <b>"+act+"</b>";
+}
+
+// ---------------------------------------------------------------- scenarios & escalation
+function setScenario(s){
+  ensureAudio();
+  scenario=s; escalated=false; duress=false;
+  document.querySelectorAll(".sbtn").forEach(b=>b.classList.toggle("on", b.dataset.s===s));
+  closeOverlays();
+}
+function openEscal(){
+  const L=LOCALE[document.getElementById("loc").value];
+  const dom=ORDER.reduce((a,b)=>mem[a]>mem[b]?a:b);
+  document.getElementById("ovEscSub").textContent="Imminent-event pattern · K-wave + ST elevation · during "+ACT[dom].label.toLowerCase();
+  const steps=[
+    "Trigger emitted: CARDIAC_IMMINENT · severity "+risk.toFixed(2),
+    "Alarm + haptics on watch — 10 s to cancel",
+    "Ambulance <b>"+L.amb+"</b> dialled with live location",
+    "Trusted contacts notified · first-aid card on screen",
+  ];
+  const box=document.getElementById("ovEscSteps"); box.innerHTML="";
+  steps.forEach((t,i)=>setTimeout(()=>{
+    const d=document.createElement("div"); d.className="estep";
+    d.innerHTML=`<span class="n">${i+1}</span><span>${t}</span>`; box.appendChild(d);
+  }, i*650));
+  document.getElementById("ovEsc").classList.add("on");
+}
+function triggerDuress(){
+  ensureAudio(); duress=true; scenario="normal"; escalated=false; if(duressDeterrent) setAlarm("deter"); else stopAlarm();
+  document.querySelectorAll(".sbtn").forEach(b=>b.classList.toggle("on", b.dataset.s==="duress"));
+  const L=LOCALE[document.getElementById("loc").value];
+  let steps;
+  if(duressDeterrent){
+    document.getElementById("ovDurBig").textContent="DURESS · DETERRENT";
+    document.getElementById("ovDurSub").textContent="Piercing alarm sounding + silent police call";
+    steps=[ "Loud high-pitch alarm firing to deter the attacker",
+            "Phone silently dials police <b>"+L.pol+"</b> in the background",
+            "Live location + mic stream shared with dispatch" ];
+  } else {
+    document.getElementById("ovDurBig").textContent="SILENT DURESS";
+    document.getElementById("ovDurSub").textContent="Secret phrase recognised on-device \u00b7 nothing shown to a bystander";
+    steps=[ "On-device keyword match \u2014 audio never leaves the watch",
+            "No sound, no screen change a robber could see",
+            "Phone silently dials police <b>"+L.pol+"</b>",
+            "Live location + mic stream shared with dispatch" ];
+  }
+  const box=document.getElementById("ovDurSteps"); box.innerHTML="";
+  steps.forEach((t,i)=>setTimeout(()=>{
+    const d=document.createElement("div"); d.className="estep";
+    d.innerHTML=`<span class="n">${i+1}</span><span>${t}</span>`; box.appendChild(d);
+  }, i*650));
+  document.getElementById("ovDur").classList.add("on");
+  renderEvent();
+}
+function standDown(){ escalated=false; duress=false; scenario="normal"; stopAlarm();
+  document.querySelectorAll(".sbtn").forEach(b=>b.classList.toggle("on", b.dataset.s==="normal"));
+  closeOverlays(); }
+function closeOverlays(){ document.getElementById("ovEsc").classList.remove("on"); document.getElementById("ovDur").classList.remove("on"); }
+
+// ---------------------------------------------------------------- clinical monitor
+let clinActive=true, clinParams={rr:14,sys:118,dia:74,mean:89,pr:64}, trendRows=[];
+// --- alarm sound (Web Audio; only after a user gesture / button click) ---
+let audioCtx=null, alarmTimer=null, alarmMode=null, muted=false, duressDeterrent=false;
+function ensureAudio(){ try{ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); if(audioCtx.state==="suspended") audioCtx.resume(); }catch(e){} }
+function beep(freq,dur,delay){ if(!audioCtx) return; const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type="square"; o.frequency.value=freq; const t=audioCtx.currentTime+delay; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.22,t+0.008); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t+dur+0.03); }
+function tone(freq,dur,delay){ if(!audioCtx) return; const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type="sawtooth"; o.frequency.value=freq; const t=audioCtx.currentTime+delay; g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(0.20,t+0.03); g.gain.setValueAtTime(0.20,t+Math.max(0.08,dur-0.05)); g.gain.linearRampToValueAtTime(0.0001,t+dur); o.connect(g); g.connect(audioCtx.destination); o.start(t); o.stop(t+dur+0.03); }
+function setAlarm(mode){ if(muted && mode!=="deter"){ stopAlarm(); return; } if(alarmMode===mode) return; stopAlarm(); if(!audioCtx) return; alarmMode=mode;
+  if(mode==="siren"){ const c=()=>{ tone(770,0.5,0); tone(640,0.5,0.5); }; c(); alarmTimer=setInterval(c,1000); }        // ambulance "nee-naw"
+  else if(mode==="deter"){ const c=()=>{ tone(3200,0.13,0); tone(2650,0.13,0.13); }; c(); alarmTimer=setInterval(c,270); } // piercing personal-safety screech
+  else { const c=()=>{ beep(950,0.14,0); }; c(); alarmTimer=setInterval(c,850); }                                         // K-wave continuous beep
+}
+function stopAlarm(){ if(alarmTimer){ clearInterval(alarmTimer); alarmTimer=null; } alarmMode=null; }
+function toggleMute(){ muted=!muted; const b=document.getElementById("muteBtn"); b.textContent="🔊 Alarm sound: "+(muted?"OFF":"ON"); b.classList.toggle("off",muted); if(muted) stopAlarm(); else ensureAudio(); }
+function toggleDeter(){ duressDeterrent=!duressDeterrent; const b=document.getElementById("deterBtn"); b.textContent=(duressDeterrent?"📢 Duress ON":"🔇 Duress"); b.classList.toggle("off",!duressDeterrent); if(duressDeterrent){ ensureAudio(); if(duress) setAlarm("deter"); } else if(duress) stopAlarm(); }
+const clin=document.getElementById("clin"), cctx=clin.getContext("2d");
+const cW=clin.width, cH=clin.height, laneH=cH/3;
+const ecgB=new Array(cW).fill(laneH*0.5), respB=new Array(cW).fill(laneH*1.5), plethB=new Array(cW).fill(laneH*2.5);
+let pE=0,pR=0,pP=0;
+function plethWave(t){ let y=Math.exp(-Math.pow((t-0.16)/0.085,2)); y+=0.32*Math.exp(-Math.pow((t-0.44)/0.10,2)); return y; }
+function drawClinical(){
+  if(!clinActive) return;
+  const rr=clinParams.rr, cpb=70;
+  for(let c=0;c<2;c++){
+    pE+=1/cpb; if(pE>=1)pE-=1;
+    pP+=1/cpb; if(pP>=1)pP-=1;
+    pR+=rr/(cpb*Math.max(40,hr)); if(pR>=1)pR-=1;
+    ecgB.push(laneH*0.5 - ecgSample(pE)*laneH*0.34); ecgB.shift();
+    respB.push(laneH*1.5 - Math.sin(2*Math.PI*pR)*laneH*0.30); respB.shift();
+    plethB.push(laneH*2.5 - (plethWave(pP)-0.42)*laneH*0.55); plethB.shift();
+  }
+  cctx.fillStyle="#000"; cctx.fillRect(0,0,cW,cH);
+  cctx.strokeStyle="#10192c"; cctx.lineWidth=1;
+  for(let i=1;i<3;i++){ cctx.beginPath(); cctx.moveTo(0,i*laneH); cctx.lineTo(cW,i*laneH); cctx.stroke(); }
+  const lanes=[["II","#35e07a",ecgB],["Resp","#35c9e0",respB],["SpO2","#f2d94c",plethB]];
+  cctx.font="9px ui-monospace,monospace"; cctx.textBaseline="top";
+  lanes.forEach((L,i)=>{
+    cctx.fillStyle=L[1]; cctx.globalAlpha=.85; cctx.fillText(L[0],5,i*laneH+4); cctx.globalAlpha=1;
+    cctx.strokeStyle=L[1]; cctx.lineWidth=1.6; cctx.lineJoin="round"; cctx.beginPath();
+    const b=L[2]; for(let x=0;x<cW;x++){ if(x===0)cctx.moveTo(x,b[x]); else cctx.lineTo(x,b[x]); }
+    cctx.stroke();
+  });
+}
+function updateClinical(){
+  const ev = scenario==="event";
+  clinParams.rr = Math.max(6, Math.round(blended("resp") + (ev?7:scenario==="onset"?2:0)));
+  const sys = Math.round(100 + hr*0.33 + (ev?22:0)); const dia = Math.round(sys*0.63);
+  clinParams.sys=sys; clinParams.dia=dia; clinParams.mean=Math.round(dia+(sys-dia)/3); clinParams.pr=hr;
+  const almode = duress ? (duressDeterrent?"deter":null) : ((ev||risk>=0.8||spo2<92)?"siren":((scenario==="onset"||risk>=0.34)?"beep":null));
+  if(almode && !muted) setAlarm(almode); else stopAlarm();
+  if(!clinActive) return;
+  document.getElementById("c_hr").textContent=hr;
+  document.getElementById("c_spo2").textContent=spo2;
+  document.getElementById("c_nibp").textContent=sys+"/"+dia;
+  document.getElementById("c_rr").textContent=clinParams.rr;
+  document.getElementById("c_nibp_x").textContent="mean "+clinParams.mean+" \u00b7 PR "+hr;
+  document.getElementById("c_hr_x").textContent = kSev>=0.4?"ST ELEVATION":(kSev>=0.15?"ST watch":"ST normal");
+  ["t_hr","t_nibp","t_spo2"].forEach(id=>document.getElementById(id).classList.toggle("alarm", almode==="siren"));
+  const cb=document.getElementById("cbanner");
+  if(almode==="siren"){ cb.textContent="** CARDIAC ALARM **"; cb.style.color="#ff5c5c"; cb.classList.add("on"); }
+  else if(almode==="beep"){ cb.textContent="◉ K-WAVE WATCH — alarm"; cb.style.color="#f2994a"; cb.classList.add("on"); }
+  else cb.classList.remove("on");
+}
+function pushTrend(){
+  const d=new Date(), pad=x=>String(x).padStart(2,"0");
+  const t=pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds());
+  trendRows.unshift({t,nibp:clinParams.sys+"/"+clinParams.dia,mean:clinParams.mean,hr,spo2,rr:clinParams.rr});
+  trendRows=trendRows.slice(0,5);
+  const b=document.getElementById("trendbody"); if(!b)return;
+  b.innerHTML=trendRows.map(r=>"<tr><td>"+r.t+"</td><td>"+r.nibp+"</td><td>"+r.mean+"</td><td>"+r.hr+"</td><td>"+r.spo2+"</td><td>"+r.rr+"</td></tr>").join("");
+}
+setInterval(pushTrend, 4000);
+
+// ---------------------------------------------------------------- view tabs
+function showView(v){
+  document.getElementById("v_func").classList.toggle("on", v==="func");
+  document.getElementById("v_clin").classList.toggle("on", v==="clin");
+  document.getElementById("tab_func").classList.toggle("on", v==="func");
+  document.getElementById("tab_clin").classList.toggle("on", v==="clin");
+  var vm=document.getElementById("v_monitor"); if(vm) vm.classList.remove("on");
+  clinActive = (v==="clin");
+}
+
+// ---------------------------------------------------------------- run
+function frame(){ stepMembership(); drawECG(); drawClinical(); requestAnimationFrame(frame); }
+setInterval(tickVitals, 500);
+tickVitals(); frame();
+</script>
+</body>
+</html>
