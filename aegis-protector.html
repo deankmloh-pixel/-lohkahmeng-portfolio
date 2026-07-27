@@ -97,6 +97,10 @@
 
   /* scenario buttons */
   .scen{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .ndisub{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin:5px 0}
+  .ndisub>span{width:110px;flex:0 0 auto}
+  .ndibar{flex:1;height:7px;background:#0a1428;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .ndibar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));transition:width .3s}
   .sbtn{font-size:11.5px;padding:10px 6px;border-radius:10px;border:1px solid var(--line);background:var(--bg2);color:var(--steel);cursor:pointer;font-weight:600;transition:.12s}
   .sbtn:active{transform:scale(.97)}
   .sbtn.k{border-color:#7a5b2a;color:var(--gold-l)} .sbtn.e{border-color:#7a2a2a;color:#ff8a8a} .sbtn.d{border-color:#2a4a7a;color:#8ab4ff}
@@ -180,13 +184,14 @@
 
     <div class="tabs">
       <button class="on" id="tab_clin" onclick="showView('clin')">Monitor</button>
+      <button id="tab_ndi" onclick="showView('ndi')">Clinical</button>
       <button id="tab_func" onclick="showView('func')">Functions</button>
     </div>
 
     <div class="content">
       <div class="view" id="v_monitor">
 
-      <h3 class="sec">Activity context <span class="par">fuzzy · always learning</span></h3>
+      <h3 class="sec">Activity context <span class="par">adaptive · always learning</span></h3>
       <div class="card"><div class="pad">
         <div class="actwrap" id="actwrap"></div>
         <div class="memrow" id="memrow"></div>
@@ -294,6 +299,26 @@
         </div>
         <div class="foot">One detection core &mdash; the same engine behind a clinician-grade monitor. Demonstration / simulation.</div>
       </div>
+
+      <div class="view" id="v_ndi">
+        <h3 class="sec">Cardiac&#8209;Ischaemia NDI <span class="par">population&#8209;referenced &middot; clinical</span></h3>
+        <div class="card"><div class="pad">
+          <div style="display:flex;gap:14px;align-items:center">
+            <svg id="ndiGauge" viewBox="0 0 200 118" style="width:186px;flex:0 0 auto"></svg>
+            <div style="flex:1;min-width:0">
+              <div id="ndiVal" style="font-family:var(--serif);font-size:30px;color:var(--gold-l);line-height:1">&mdash;</div>
+              <div id="ndiBand" style="font-size:12px;margin:3px 0 9px;color:var(--muted)">&mdash;</div>
+              <div class="ndisub"><span>K&#8209;wave (J/Osborn)</span><div class="ndibar"><i id="ndiKw"></i></div></div>
+              <div class="ndisub"><span>ST&#8209;T ischaemia</span><div class="ndibar"><i id="ndiSt"></i></div></div>
+            </div>
+          </div>
+        </div></div>
+        <div class="card"><div class="pad" style="font-size:12.5px;color:var(--muted);line-height:1.5">
+          Untrained dimensionless index scored against a <b style="color:var(--steel)">healthy population</b> (P17 &middot; 45,152 patients, Chapman + PTB&#8209;XL). Monotone healthy&rarr;disease, ROC&#8209;AUC &asymp; 0.88, gain/rate&#8209;invariant.
+          <div style="margin-top:8px"><b style="color:var(--gold-l)">Clinical only.</b> The NDI needs a population reference &mdash; the <b>Monitor</b> tab judges you against <b>your own</b> baseline instead. <b style="color:var(--gold-l)">Power&#8209;adaptive:</b> full power reads the K&#8209;wave (Osborn notch, 1000&nbsp;Hz); as power drops it falls back to ST/T&#8209;delay the 4 leads deliver at 100&nbsp;Hz.</div>
+        </div></div>
+        <div class="foot">Population&#8209;referenced severity dial &middot; complements the on&#8209;device detector &middot; demonstration / simulation.</div>
+      </div>
     </div>
 
     <!-- escalation overlay -->
@@ -323,8 +348,8 @@ const ACT = {
 };
 const ORDER = ["rest","walk","gym","sleep"];
 let target = "rest";                       // where the person is headed
-let mem = {rest:1,walk:0,gym:0,sleep:0};   // fuzzy activity membership (blends toward target)
-let scenario = "normal";
+let mem = {rest:1,walk:0,gym:0,sleep:0};   // adaptive activity membership (blends toward target)
+let scenario = "normal"; let ndiCur=52,kwCur=1,stCur=1;
 let kSev = 0;          // K-wave severity 0..1 (rises on onset/event)
 let risk = 0.06;
 let tier = "OK";
@@ -402,7 +427,7 @@ function drawECG(){
 
 // ---------------------------------------------------------------- main loop
 function stepMembership(){
-  // blend membership toward the target activity (fuzzy, gradual — models transitions)
+  // blend membership toward the target activity (adaptive, gradual — models transitions)
   for(const k of ORDER){ const goal=(k===target)?1:0; mem[k]+=(goal-mem[k])*0.05; }
   let s=0; for(const k of ORDER) s+=mem[k]; for(const k of ORDER) mem[k]/=s;
 }
@@ -664,17 +689,38 @@ function pushTrend(){
 setInterval(pushTrend, 4000);
 
 // ---------------------------------------------------------------- view tabs
+function renderNDI(){
+  var g=document.getElementById("ndiGauge"); if(!g) return;
+  var tv = scenario==="event"?92 : scenario==="onset"?70 : 52;
+  var tk = scenario==="event"?2.6 : scenario==="onset"?1.5 : 1.0;
+  var ts = scenario==="event"?3.0 : scenario==="onset"?1.5 : 1.0;
+  ndiCur+=(tv-ndiCur)*0.08; kwCur+=(tk-kwCur)*0.08; stCur+=(ts-stCur)*0.08;
+  var v=ndiCur, E=[57.3,66.2,74.6], COL=["#3ecf8e","#f2c94c","#f2994a","#eb5757"], NM=["Green \u00b7 well","Yellow \u00b7 watch","Orange \u00b7 concern","Red \u00b7 danger"];
+  var band=v<E[0]?0:v<E[1]?1:v<E[2]?2:3, cx=100,cy=106,r=80;
+  function ang(x){return Math.PI*(1-x/100);} function pt(x,rr){return [cx+rr*Math.cos(ang(x)),cy-rr*Math.sin(ang(x))];}
+  function arc(x0,x1,c){var p0=pt(x0,r),p1=pt(x1,r);return '<path d="M'+p0[0].toFixed(1)+','+p0[1].toFixed(1)+' A'+r+','+r+' 0 0 1 '+p1[0].toFixed(1)+','+p1[1].toFixed(1)+'" fill="none" stroke="'+c+'" stroke-width="13"/>';}
+  var s=arc(0,E[0],COL[0])+arc(E[0],E[1],COL[1])+arc(E[1],E[2],COL[2])+arc(E[2],100,COL[3]);
+  var nn=pt(v,r-15), bb=pt(v,10);
+  s+='<line x1="'+bb[0].toFixed(1)+'" y1="'+bb[1].toFixed(1)+'" x2="'+nn[0].toFixed(1)+'" y2="'+nn[1].toFixed(1)+'" stroke="#eef2f8" stroke-width="3"/><circle cx="'+cx+'" cy="'+cy+'" r="5" fill="#eef2f8"/>';
+  g.innerHTML=s;
+  document.getElementById("ndiVal").textContent=v.toFixed(0)+" /100";
+  document.getElementById("ndiBand").innerHTML='<b style="color:'+COL[band]+'">'+NM[band]+'</b>';
+  document.getElementById("ndiKw").style.width=Math.min(100,kwCur/3*100).toFixed(0)+"%";
+  document.getElementById("ndiSt").style.width=Math.min(100,stCur/3*100).toFixed(0)+"%";
+}
 function showView(v){
   document.getElementById("v_func").classList.toggle("on", v==="func");
   document.getElementById("v_clin").classList.toggle("on", v==="clin");
+  document.getElementById("v_ndi").classList.toggle("on", v==="ndi");
   document.getElementById("tab_func").classList.toggle("on", v==="func");
   document.getElementById("tab_clin").classList.toggle("on", v==="clin");
+  document.getElementById("tab_ndi").classList.toggle("on", v==="ndi");
   var vm=document.getElementById("v_monitor"); if(vm) vm.classList.remove("on");
   clinActive = (v==="clin");
 }
 
 // ---------------------------------------------------------------- run
-function frame(){ stepMembership(); drawECG(); drawClinical(); requestAnimationFrame(frame); }
+function frame(){ stepMembership(); drawECG(); drawClinical(); try{renderNDI();}catch(e){} requestAnimationFrame(frame); }
 setInterval(tickVitals, 500);
 tickVitals(); frame();
 </script>
