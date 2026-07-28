@@ -303,19 +303,38 @@
       <div class="view" id="v_ndi">
         <h3 class="sec">Cardiac&#8209;Ischaemia NDI <span class="par">population&#8209;referenced &middot; clinical</span></h3>
         <div class="card"><div class="pad">
-          <div style="display:flex;gap:14px;align-items:center">
-            <svg id="ndiGauge" viewBox="0 0 200 118" style="width:186px;flex:0 0 auto"></svg>
-            <div style="flex:1;min-width:0">
-              <div id="ndiVal" style="font-family:var(--serif);font-size:30px;color:var(--gold-l);line-height:1">&mdash;</div>
-              <div id="ndiBand" style="font-size:12px;margin:3px 0 9px;color:var(--muted)">&mdash;</div>
-              <div class="ndisub"><span>K&#8209;wave (J/Osborn)</span><div class="ndibar"><i id="ndiKw"></i></div></div>
-              <div class="ndisub"><span>ST&#8209;T ischaemia</span><div class="ndibar"><i id="ndiSt"></i></div></div>
+          <div style="display:flex;gap:8px;text-align:center;align-items:flex-end">
+            <div style="flex:1.7">
+              <svg id="ksGauge" viewBox="0 0 200 118" style="width:100%;max-width:200px"></svg>
+              <div id="ksVal" style="font-family:var(--serif);font-size:30px;color:var(--gold-l);line-height:1;margin-top:1px">&mdash;</div>
+              <div style="font-size:10.5px;color:var(--muted);letter-spacing:.3px;margin-top:2px">K&#8209;wave / ST&#8209;T &middot; ischaemia signal</div>
+            </div>
+            <div style="flex:1">
+              <svg id="ndiGauge" viewBox="0 0 200 118" style="width:100%"></svg>
+              <div id="ndiVal" style="font-family:var(--serif);font-size:18px;color:var(--gold-l);line-height:1;margin-top:1px">&mdash;</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">NDI &middot; severity</div>
+              <div id="ndiBand" style="font-size:10.5px;margin-top:1px">&mdash;</div>
+            </div>
+            <div style="flex:1">
+              <svg id="spGauge" viewBox="0 0 200 118" style="width:100%"></svg>
+              <div id="spVal" style="font-family:var(--serif);font-size:18px;color:var(--gold-l);line-height:1;margin-top:1px">&mdash;</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">SpO&#8322; &middot; %</div>
             </div>
           </div>
         </div></div>
         <div class="card"><div class="pad" style="font-size:12.5px;color:var(--muted);line-height:1.5">
           An <b style="color:var(--gold-l)">Advanced-AI</b> severity score, placed against a <b style="color:var(--steel)">healthy population</b> (45,152 patients, Chapman + PTB&#8209;XL). Rises steadily from healthy to unwell, <b style="color:var(--gold-l)">~88% accurate</b>, and reads the same on any device.
           <div style="margin-top:8px"><b style="color:var(--gold-l)">Clinical only.</b> The NDI needs a population reference &mdash; the <b>Monitor</b> tab judges you against <b>your own</b> baseline instead. It <b style="color:var(--gold-l)">integrates into the hospital desktop</b> — one clinician watches every patient. <b style="color:var(--gold-l)">Power&#8209;adaptive:</b> full power reads the K&#8209;wave (Osborn notch, 1000&nbsp;Hz); as power drops it falls back to ST/T&#8209;delay the 4 leads deliver at 100&nbsp;Hz.</div>
+        </div></div>
+        <div class="card"><div class="pad" style="font-size:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:9px;border-bottom:1px solid rgba(255,255,255,.07)">
+            <span style="color:var(--muted)">Hospital Desktop</span>
+            <span style="color:#3ecf8e;font-weight:700">&#9679; Linked &middot; in&#8209;patient (Ward B &middot; Bay 7)</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:9px">
+            <span style="color:var(--muted)">Clinical Control Centre <span style="color:#3ecf8e;font-weight:700">&#10003; subscribed</span></span>
+            <a href="clinical-control-centre.html" target="_blank" rel="noopener" style="color:var(--gold-l);font-weight:700;text-decoration:none">Open the ward view &rarr;</a>
+          </div>
         </div></div>
         <div class="foot">Population&#8209;referenced severity dial &middot; complements the on&#8209;device detector &middot; demonstration / simulation.</div>
       </div>
@@ -689,24 +708,43 @@ function pushTrend(){
 setInterval(pushTrend, 4000);
 
 // ---------------------------------------------------------------- view tabs
+let ndiT=0;
+function drawDial(g,val,edges,cols){
+  if(!g) return;
+  var cx=100,cy=106,r=80;
+  function ang(x){return Math.PI*(1-x/100);}
+  function pt(x,rr){return [cx+rr*Math.cos(ang(x)),cy-rr*Math.sin(ang(x))];}
+  function arc(x0,x1,c){var p0=pt(x0,r),p1=pt(x1,r);return '<path d="M'+p0[0].toFixed(1)+','+p0[1].toFixed(1)+' A'+r+','+r+' 0 0 1 '+p1[0].toFixed(1)+','+p1[1].toFixed(1)+'" fill="none" stroke="'+c+'" stroke-width="13"/>';}
+  var s='',a=0;
+  for(var i=0;i<cols.length;i++){var b=i<edges.length?edges[i]:100;s+=arc(a,b,cols[i]);a=b;}
+  var vv=Math.max(0,Math.min(100,val)),nn=pt(vv,r-15),bb=pt(vv,10);
+  s+='<line x1="'+bb[0].toFixed(1)+'" y1="'+bb[1].toFixed(1)+'" x2="'+nn[0].toFixed(1)+'" y2="'+nn[1].toFixed(1)+'" stroke="#eef2f8" stroke-width="3"/><circle cx="'+cx+'" cy="'+cy+'" r="5" fill="#eef2f8"/>';
+  g.innerHTML=s;
+}
 function renderNDI(){
   var g=document.getElementById("ndiGauge"); if(!g) return;
+  ndiT+=0.06;
   var tv = scenario==="event"?92 : scenario==="onset"?70 : 52;
   var tk = scenario==="event"?2.6 : scenario==="onset"?1.5 : 1.0;
   var ts = scenario==="event"?3.0 : scenario==="onset"?1.5 : 1.0;
   ndiCur+=(tv-ndiCur)*0.08; kwCur+=(tk-kwCur)*0.08; stCur+=(ts-stCur)*0.08;
-  var v=ndiCur, E=[57.3,66.2,74.6], COL=["#3ecf8e","#f2c94c","#f2994a","#eb5757"], NM=["Green \u00b7 well","Yellow \u00b7 watch","Orange \u00b7 concern","Red \u00b7 danger"];
-  var band=v<E[0]?0:v<E[1]?1:v<E[2]?2:3, cx=100,cy=106,r=80;
-  function ang(x){return Math.PI*(1-x/100);} function pt(x,rr){return [cx+rr*Math.cos(ang(x)),cy-rr*Math.sin(ang(x))];}
-  function arc(x0,x1,c){var p0=pt(x0,r),p1=pt(x1,r);return '<path d="M'+p0[0].toFixed(1)+','+p0[1].toFixed(1)+' A'+r+','+r+' 0 0 1 '+p1[0].toFixed(1)+','+p1[1].toFixed(1)+'" fill="none" stroke="'+c+'" stroke-width="13"/>';}
-  var s=arc(0,E[0],COL[0])+arc(E[0],E[1],COL[1])+arc(E[1],E[2],COL[2])+arc(E[2],100,COL[3]);
-  var nn=pt(v,r-15), bb=pt(v,10);
-  s+='<line x1="'+bb[0].toFixed(1)+'" y1="'+bb[1].toFixed(1)+'" x2="'+nn[0].toFixed(1)+'" y2="'+nn[1].toFixed(1)+'" stroke="#eef2f8" stroke-width="3"/><circle cx="'+cx+'" cy="'+cy+'" r="5" fill="#eef2f8"/>';
-  g.innerHTML=s;
-  document.getElementById("ndiVal").textContent=v.toFixed(0)+" /100";
+  var E=[57.3,66.2,74.6], COL=["#3ecf8e","#f2c94c","#f2994a","#eb5757"], NM=["Green \u00b7 well","Yellow \u00b7 watch","Orange \u00b7 concern","Red \u00b7 danger"];
+  // NDI is a smooth, STABLE population score — no jitter; it holds steady (that's the point)
+  var vD=ndiCur;
+  var band=ndiCur<E[0]?0:ndiCur<E[1]?1:ndiCur<E[2]?2:3;
+  drawDial(g,vD,E,COL);
+  // K-wave / ST-T ischaemia signal — the big DYNAMIC dial (varies beat to beat), high=bad
+  var ksBase=Math.min(100,Math.max(kwCur,stCur)/3*100);
+  var ksD=ksBase+Math.sin(ndiT*1.6)*4.6+Math.sin(ndiT*3.3+1)*2.1+Math.sin(ndiT*0.7)*1.9;
+  drawDial(document.getElementById("ksGauge"),ksD,[45,72],["#3ecf8e","#f2c94c","#eb5757"]);
+  // SpO2 — a real live vital; gentle 97-99 tick; high=good, colours reversed, zoomed 88..100
+  var spShow=spo2+Math.sin(ndiT*1.7)*0.9;
+  var spD=Math.max(0,Math.min(100,(spShow-88)/12*100));
+  drawDial(document.getElementById("spGauge"),spD,[33,58],["#eb5757","#f2c94c","#3ecf8e"]);
+  document.getElementById("ndiVal").textContent=vD.toFixed(0)+" /100";
   document.getElementById("ndiBand").innerHTML='<b style="color:'+COL[band]+'">'+NM[band]+'</b>';
-  document.getElementById("ndiKw").style.width=Math.min(100,kwCur/3*100).toFixed(0)+"%";
-  document.getElementById("ndiSt").style.width=Math.min(100,stCur/3*100).toFixed(0)+"%";
+  var ks=document.getElementById("ksVal"); if(ks) ks.textContent=Math.max(0,ksD).toFixed(0);
+  var sp=document.getElementById("spVal"); if(sp) sp.textContent=spShow.toFixed(0);
 }
 function showView(v){
   document.getElementById("v_func").classList.toggle("on", v==="func");

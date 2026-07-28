@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS Clinical Control Centre — Ward Overview</title>
+<meta name="description" content="The AEGIS Clinical Control Centre: one clinician watches every in-patient at once on the population Cardiac-Ischaemia NDI, sorted by danger. Demonstration / simulation.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<style>
+  :root{ --bg:#06110f; --panel:#0c1b18; --line:#16302b; --teal:#2fd6c3; --teal-l:#7ff0e0;
+         --muted:#7f9c96; --green:#3ecf8e; --amber:#f2c94c; --orange:#f2994a; --red:#eb5757; --ink:#e7f4f1; }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(120% 90% at 50% 0%,#0a1a17,#06110f 70%);color:var(--ink);
+       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;min-height:100vh}
+  .wrap{max-width:1120px;margin:0 auto;padding:22px 18px 40px}
+  header.cc{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+       border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:18px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand h1{font-size:19px;margin:0;letter-spacing:.5px}
+  .brand .sub{font-size:11px;color:var(--teal);letter-spacing:2px;text-transform:uppercase}
+  .live{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--teal-l);
+        border:1px solid var(--line);border-radius:999px;padding:5px 11px}
+  .live .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(62,207,142,.6);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(62,207,142,.55)}70%{box-shadow:0 0 0 9px rgba(62,207,142,0)}100%{box-shadow:0 0 0 0 rgba(62,207,142,0)}}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 15px;min-width:120px}
+  .stat .k{font-size:11px;color:var(--muted);letter-spacing:.4px;text-transform:uppercase}
+  .stat .v{font-size:26px;font-weight:700;line-height:1.1}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:11px}
+  .pt{background:var(--panel);border:1px solid var(--line);border-left-width:4px;border-radius:12px;padding:12px 13px;
+      transition:border-color .4s,transform .3s}
+  .pt .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .pt .bed{font-size:11px;color:var(--muted);letter-spacing:.5px}
+  .pt .name{font-weight:700;font-size:14.5px;margin:1px 0 0}
+  .pt .ndi{font-size:30px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+  .pt .band{font-size:11px;font-weight:700;margin-top:1px}
+  .pt .row{display:flex;gap:14px;margin-top:9px;font-size:11.5px;color:var(--muted)}
+  .pt .row b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+  .pt .bar{height:5px;border-radius:3px;background:#0a1512;margin-top:9px;overflow:hidden}
+  .pt .bar i{display:block;height:100%;transition:width .5s,background .5s}
+  .foot{margin-top:20px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.6}
+  .foot a{color:var(--teal-l)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="cc">
+    <div class="brand">
+      <div>
+        <div class="sub">AEGIS · Clinical</div>
+        <h1>Clinical Control Centre</h1>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <span style="font-size:12px;color:var(--muted)">Ward B &middot; one clinician, every patient</span>
+      <span class="live"><span class="dot"></span> LIVE</span>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="k">In-patients linked</div><div class="v" id="sTot">—</div></div>
+    <div class="stat"><div class="k">Green &middot; well</div><div class="v" style="color:var(--green)" id="sGrn">—</div></div>
+    <div class="stat"><div class="k">Watch / concern</div><div class="v" style="color:var(--amber)" id="sAmb">—</div></div>
+    <div class="stat"><div class="k">Red &middot; needs you</div><div class="v" style="color:var(--red)" id="sRed">—</div></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="foot">
+    Every tile is an in-patient&rsquo;s own AEGIS wearable, streamed to this desk on the population
+    Cardiac-Ischaemia NDI &mdash; the system surfaces the few who drift into danger so attention goes where it matters.
+    The clinician confirms every alert; nothing here acts on its own. Demonstration / simulation.<br>
+    <a href="project-17-cardiac.html">&larr; Back to AEGIS Clinical</a>
+  </div>
+</div>
+<script>
+(function(){
+  var E=[57.3,66.2,74.6], COL=["#3ecf8e","#f2c94c","#f2994a","#eb5757"], NM=["Green","Watch","Concern","Red"];
+  var names=["A. Tan","R. Kumar","M. Lee","S. Wong","J. Ng","P. Iyer","H. Chua","D. Lim","F. Goh","B. Rao","K. Sim","V. Das"];
+  var P=names.map(function(n,i){
+    var base = i===2?71 : i===7?68 : (46+((i*13)%16));   // a couple start elevated
+    return {bed:"B-"+(101+i), name:n, ndi:base, t:i*0.7, hr:58+((i*7)%26), spo2:97+((i)%3), drift:0.6+((i%3)*0.25)};
+  });
+  var grid=document.getElementById("grid");
+  var cards=P.map(function(p){
+    var el=document.createElement("div"); el.className="pt";
+    el.innerHTML='<div class="top"><div><div class="bed">'+p.bed+'</div><div class="name">'+p.name+'</div></div>'+
+      '<div style="text-align:right"><div class="ndi"></div><div class="band"></div></div></div>'+
+      '<div class="row"><span>HR <b class="hr"></b></span><span>SpO&#8322; <b class="sp"></b></span><span>NDI trend</span></div>'+
+      '<div class="bar"><i></i></div>';
+    grid.appendChild(el); return el;
+  });
+  var tt=0;
+  function band(v){return v<E[0]?0:v<E[1]?1:v<E[2]?2:3;}
+  function step(){
+    tt+=0.05;
+    P.forEach(function(p,i){
+      p.t+=0.03;
+      // slow wander + gentle breathing so every number is alive
+      p.ndi += (Math.sin(p.t)*0.5 + (Math.random()-0.5)*0.4);
+      if(p.ndi<40)p.ndi+= (40-p.ndi)*0.05; if(p.ndi>96)p.ndi+=(96-p.ndi)*0.05;
+      p.hr += Math.round((Math.random()-0.5)*2); if(p.hr<48)p.hr=48; if(p.hr>132)p.hr=132;
+      var spv = p.spo2 + Math.sin(p.t*1.7)*0.6;
+    });
+    // sort a shadow order by NDI desc (danger to top) without reordering DOM violently — recolor in place
+    P.forEach(function(p,i){
+      var b=band(p.ndi), c=COL[b], el=cards[i];
+      el.style.borderLeftColor=c;
+      el.querySelector(".ndi").textContent=p.ndi.toFixed(0);
+      el.querySelector(".ndi").style.color=c;
+      el.querySelector(".band").textContent=NM[b];
+      el.querySelector(".band").style.color=c;
+      el.querySelector(".hr").textContent=p.hr;
+      el.querySelector(".sp").textContent=(p.spo2 + Math.sin(p.t*1.7)*0.6).toFixed(0);
+      var bar=el.querySelector(".bar i");
+      bar.style.width=Math.max(4,Math.min(100,p.ndi)).toFixed(0)+"%";
+      bar.style.background=c;
+    });
+    var g=0,a=0,r=0;
+    P.forEach(function(p){var b=band(p.ndi); if(b===0)g++; else if(b===3)r++; else a++;});
+    document.getElementById("sTot").textContent=P.length;
+    document.getElementById("sGrn").textContent=g;
+    document.getElementById("sAmb").textContent=a;
+    document.getElementById("sRed").textContent=r;
+  }
+  step(); setInterval(step, 700);
+})();
+</script>
+</body>
+</html>
