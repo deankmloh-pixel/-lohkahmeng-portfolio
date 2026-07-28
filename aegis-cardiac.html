@@ -119,10 +119,10 @@
   /* full-screen overlays */
   .ov{position:absolute;inset:0;z-index:80;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px}
   .ov.on{display:flex}
-  .ov.red{background:radial-gradient(120% 120% at 50% 30%,#3a0d0d,#160406);animation:blink .9s 4}
+  .ov.red{background:radial-gradient(120% 120% at 50% 30%,#3a0d0d,#160406)}
   .ov.blue{background:radial-gradient(120% 120% at 50% 30%,#0a1c3a,#04060f)}
   .ov .big{font-family:var(--serif);font-size:34px;font-weight:700;letter-spacing:.03em}
-  .ov.red .big{color:#ff5c5c;text-shadow:0 0 24px rgba(235,87,87,.6)}
+  .ov.red .big{color:#ff5c5c;text-shadow:0 0 24px rgba(235,87,87,.6);animation:blink .9s 5}
   .ov.blue .big{color:#8ab4ff;text-shadow:0 0 24px rgba(90,140,255,.5)}
   .ov .osub{font-size:12.5px;margin:7px 0 16px;color:#f4b3b3}
   .ov.blue .osub{color:#b3c8f4}
@@ -295,6 +295,7 @@
           <button class="sbtn on" data-s="normal" onclick="setScenario('normal')">● Normal day</button>
           <button class="sbtn k" data-s="onset" onclick="setScenario('onset')">◑ K-wave onset</button>
           <button class="sbtn e" data-s="event" onclick="setScenario('event')">▲ Cardiac event</button>
+          <button class="sbtn e" data-s="hypoxia" onclick="setScenario('hypoxia')">▼ Low SpO₂</button>
           <button class="sbtn d" data-s="duress" onclick="triggerDuress()">◆ Duress phrase</button>
         </div>
         <div class="foot">One detection core &mdash; the same engine behind a clinician-grade monitor. Demonstration / simulation.</div>
@@ -303,23 +304,23 @@
       <div class="view on" id="v_ndi">
         <h3 class="sec">Cardiac&#8209;Ischaemia NDI <span class="par">population&#8209;referenced &middot; clinical</span></h3>
         <div class="card"><div class="pad">
-          <div style="display:flex;gap:8px;text-align:center;align-items:flex-end">
-            <div style="flex:1.7">
-              <svg id="ksGauge" viewBox="0 0 200 118" style="width:100%;max-width:200px"></svg>
-              <div id="ksVal" style="font-family:var(--serif);font-size:30px;color:var(--gold-l);line-height:1;margin-top:1px">&mdash;</div>
-              <div style="font-size:10.5px;color:var(--muted);letter-spacing:.3px;margin-top:2px">K&#8209;wave / ST&#8209;T &middot; ischaemia signal</div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px">
+            <div style="width:31%;text-align:center">
+              <svg id="ndiGauge" viewBox="0 0 200 118" style="width:100%;max-width:110px"></svg>
+              <div id="ndiVal" style="font-family:var(--serif);font-size:16px;color:var(--gold-l);line-height:1">&mdash;</div>
+              <div style="font-size:9.5px;color:var(--muted)">NDI &middot; severity</div>
+              <div id="ndiBand" style="font-size:10px">&mdash;</div>
             </div>
-            <div style="flex:1">
-              <svg id="ndiGauge" viewBox="0 0 200 118" style="width:100%"></svg>
-              <div id="ndiVal" style="font-family:var(--serif);font-size:18px;color:var(--gold-l);line-height:1;margin-top:1px">&mdash;</div>
-              <div style="font-size:10px;color:var(--muted);margin-top:2px">NDI &middot; severity</div>
-              <div id="ndiBand" style="font-size:10.5px;margin-top:1px">&mdash;</div>
+            <div style="width:40%;text-align:center">
+              <svg id="spGauge" viewBox="0 0 200 118" style="width:100%;max-width:145px"></svg>
+              <div id="spVal" style="font-family:var(--serif);font-size:20px;color:var(--gold-l);line-height:1">&mdash;</div>
+              <div style="font-size:9.5px;color:var(--muted)">SpO&#8322; &middot; %</div>
             </div>
-            <div style="flex:1">
-              <svg id="spGauge" viewBox="0 0 200 118" style="width:100%"></svg>
-              <div id="spVal" style="font-family:var(--serif);font-size:18px;color:var(--gold-l);line-height:1;margin-top:1px">&mdash;</div>
-              <div style="font-size:10px;color:var(--muted);margin-top:2px">SpO&#8322; &middot; %</div>
-            </div>
+          </div>
+          <div style="text-align:center;margin-top:0">
+            <svg id="ksGauge" viewBox="0 0 200 118" style="width:100%;max-width:225px"></svg>
+            <div id="ksVal" style="font-family:var(--serif);font-size:34px;color:var(--gold-l);line-height:1">&mdash;</div>
+            <div style="font-size:11px;color:var(--muted)">K&#8209;wave / ST&#8209;T &middot; ischaemia signal &mdash; pre&#8209;emptive detection</div>
           </div>
         </div></div>
         <div class="card"><div class="pad" style="font-size:12.5px;color:var(--muted);line-height:1.5">
@@ -335,6 +336,10 @@
             <span style="color:var(--muted)">Clinical Control Centre <span style="color:#3ecf8e;font-weight:700">&#10003; subscribed</span></span>
             <a href="clinical-control-centre.html" target="_blank" rel="noopener" style="color:var(--gold-l);font-weight:700;text-decoration:none">Open the ward view &rarr;</a>
           </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:9px;margin-top:9px;border-top:1px solid rgba(255,255,255,.07)">
+            <span style="color:var(--muted)">Auto-admit <span style="font-size:10px">&mdash; escalate without asking</span></span>
+            <button id="autoBtn" class="minibtn off" onclick="toggleAuto()" style="cursor:pointer">Auto-admit: OFF</button>
+          </div>
         </div></div>
         <div class="foot">Population&#8209;referenced severity dial &middot; complements the on&#8209;device detector &middot; demonstration / simulation.</div>
       </div>
@@ -342,9 +347,10 @@
 
     <!-- escalation overlay -->
     <div class="ov red" id="ovEsc">
-      <div class="big">CARDIAC ALERT</div>
+      <div class="big" id="ovEscTitle">CARDIAC ALERT</div>
       <div class="osub" id="ovEscSub">Imminent-event pattern · K-wave + ST elevation</div>
       <div class="esteps" id="ovEscSteps"></div>
+      <div id="ovEscDecide"></div>
       <button class="obtn" onclick="standDown()">I'm OK — stand down</button>
     </div>
     <!-- duress overlay -->
@@ -372,7 +378,7 @@ let scenario = "normal"; let ndiCur=52,kwCur=1,stCur=1;
 let kSev = 0;          // K-wave severity 0..1 (rises on onset/event)
 let risk = 0.06;
 let tier = "OK";
-let escalated = false, duress = false;
+let escalated = false, duress = false, autoAdmit = false, escCause = "cardiac";
 let hr=64, spo2=98, motion=2, hrv=58;
 
 // ---------------------------------------------------------------- activity UI
@@ -462,9 +468,9 @@ function tickVitals(){
   const jit=(a)=>(Math.random()-0.5)*a;
   // event pushes HR up & SpO2 down, independent of activity (the deviation from normal)
   const evHr = scenario==="event"?38:scenario==="onset"?10:0;
-  const evSpo= scenario==="event"?-4:scenario==="onset"?-1:0;
+  const evSpo= scenario==="hypoxia"?-16:scenario==="event"?-4:scenario==="onset"?-1:0;
   hr    = Math.round(bHr + evHr + jit(2));
-  spo2  = Math.max(85,Math.round(bSpo + evSpo + jit(0.4)));
+  spo2  = Math.max(78,Math.round(bSpo + evSpo + jit(0.4)));
   motion= Math.max(0,Math.round(bMo + jit(3)));
   hrv   = Math.max(6,Math.round(bHrv - (evHr*0.4) + jit(3)));
   beatLen = Math.max(26, Math.round(60*(72/Math.max(40,hr))));
@@ -486,7 +492,8 @@ function updateTier(){
   else if(risk>=0.34) nt="ALERT"; else nt="NUDGE";
   if(risk<0.18) nt="OK";
   tier=nt;
-  if(tier==="ESCALATE" && !escalated && !duress){ escalated=true; openEscal(); }
+  var hypox = spo2 < 90;
+  if((tier==="ESCALATE" || hypox) && !escalated && !duress){ escalated=true; escCause = hypox ? "spo2" : "cardiac"; openEscal(); }
 }
 
 // ---------------------------------------------------------------- rendering
@@ -588,20 +595,48 @@ function setScenario(s){
 function openEscal(){
   const L=LOCALE[document.getElementById("loc").value];
   const dom=ORDER.reduce((a,b)=>mem[a]>mem[b]?a:b);
-  document.getElementById("ovEscSub").textContent="Imminent-event pattern · K-wave + ST elevation · during "+ACT[dom].label.toLowerCase();
-  const steps=[
-    "Trigger emitted: CARDIAC_IMMINENT · severity "+risk.toFixed(2),
-    "Alarm + haptics on watch — 10 s to cancel",
+  const spo = escCause==="spo2";
+  const ttl=document.getElementById("ovEscTitle"); if(ttl) ttl.textContent = spo ? "OXYGEN ALERT" : "CARDIAC ALERT";
+  document.getElementById("ovEscSub").textContent = spo
+    ? ("SpO₂ "+spo2+"% · hypoxaemia — oxygen dropping")
+    : ("Imminent-event pattern · K-wave + ST elevation · during "+ACT[dom].label.toLowerCase());
+  const steps = spo ? [
+    "Trigger: HYPOXAEMIA · SpO₂ "+spo2+"% — ambulance siren sounding",
     "Ambulance <b>"+L.amb+"</b> dialled with live location",
-    "Trusted contacts notified · first-aid card on screen",
+    "Hospital <b>Emergency Dept</b> notified — your record sent ahead",
+    "Your cardiologist informed — standing by"
+  ] : [
+    "Trigger: CARDIAC_IMMINENT · severity "+risk.toFixed(2)+" — ambulance siren sounding",
+    "Ambulance <b>"+L.amb+"</b> dialled with live location",
+    "Hospital notified — bed readied, your record sent ahead",
+    "Your cardiologist put on standby — admission incoming"
   ];
   const box=document.getElementById("ovEscSteps"); box.innerHTML="";
+  const dec=document.getElementById("ovEscDecide"); if(dec) dec.innerHTML="";
   steps.forEach((t,i)=>setTimeout(()=>{
     const d=document.createElement("div"); d.className="estep";
     d.innerHTML=`<span class="n">${i+1}</span><span>${t}</span>`; box.appendChild(d);
-  }, i*650));
+  }, i*600));
+  setTimeout(()=>{
+    if(autoAdmit){
+      const d=document.createElement("div"); d.className="estep";
+      d.innerHTML='<span class="n">✓</span><span><b style="color:#7ff0e0">AUTO-ADMIT ON</b> — admission auto-confirmed, cardiologist standing by, bed assigned.</span>';
+      box.appendChild(d);
+    } else if(dec){
+      dec.innerHTML='<div style="font-size:12.5px;color:#eef2f8;margin:8px 0 8px">Admit to hospital? <span style="color:#9fb0c4">Your call.</span></div>'+
+        '<button class="obtn" style="background:#2fd6c3;color:#04120f;margin:0 0 8px" onclick="confirmAdmit()">✓ Admit — cardiologist standby</button>';
+    }
+  }, steps.length*600+150);
   document.getElementById("ovEsc").classList.add("on");
 }
+function confirmAdmit(){
+  const dec=document.getElementById("ovEscDecide"); if(dec) dec.innerHTML='';
+  const box=document.getElementById("ovEscSteps");
+  const d=document.createElement("div"); d.className="estep";
+  d.innerHTML='<span class="n">✓</span><span><b style="color:#7ff0e0">Admission confirmed</b> — cardiologist standing by, bed assigned, ambulance en route.</span>';
+  box.appendChild(d);
+}
+function toggleAuto(){ autoAdmit=!autoAdmit; const b=document.getElementById("autoBtn"); if(b){ b.textContent="Auto-admit: "+(autoAdmit?"ON":"OFF"); b.classList.toggle("off",!autoAdmit); } }
 function triggerDuress(){
   ensureAudio(); duress=true; scenario="normal"; escalated=false; if(duressDeterrent) setAlarm("deter"); else stopAlarm();
   document.querySelectorAll(".sbtn").forEach(b=>b.classList.toggle("on", b.dataset.s==="duress"));
