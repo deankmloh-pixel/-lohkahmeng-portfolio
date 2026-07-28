@@ -722,7 +722,7 @@ function showView(v){
 // ---------------------------------------------------------------- run
 function frame(){ stepMembership(); drawECG(); drawClinical(); try{renderNDI();}catch(e){} requestAnimationFrame(frame); }
 setInterval(tickVitals, 500);
-tickVitals(); frame(); try{showView("ndi");}catch(e){}
+tickVitals(); frame(); try{showView("clin");}catch(e){}
 </script>
 </body>
 </html>
