@@ -338,7 +338,7 @@
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:9px;margin-top:9px;border-top:1px solid rgba(255,255,255,.07)">
             <span style="color:var(--muted)">Auto-admit <span style="font-size:10px">&mdash; escalate without asking</span></span>
-            <button id="autoBtn" class="minibtn off" onclick="toggleAuto()" style="cursor:pointer">Auto-admit: OFF</button>
+            <button id="autoBtn" class="minibtn" onclick="toggleAuto()" style="cursor:pointer">Auto-admit: ON</button>
           </div>
         </div></div>
         <div class="foot">Population&#8209;referenced severity dial &middot; complements the on&#8209;device detector &middot; demonstration / simulation.</div>
@@ -378,7 +378,7 @@ let scenario = "normal"; let ndiCur=52,kwCur=1,stCur=1;
 let kSev = 0;          // K-wave severity 0..1 (rises on onset/event)
 let risk = 0.06;
 let tier = "OK";
-let escalated = false, duress = false, autoAdmit = false, escCause = "cardiac";
+let escalated = false, duress = false, autoAdmit = true, escCause = "cardiac";
 let hr=64, spo2=98, motion=2, hrv=58;
 
 // ---------------------------------------------------------------- activity UI
