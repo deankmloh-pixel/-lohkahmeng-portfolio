@@ -183,8 +183,8 @@
     </div>
 
     <div class="tabs">
-      <button class="on" id="tab_clin" onclick="showView('clin')">Monitor</button>
-      <button id="tab_ndi" onclick="showView('ndi')">Clinical</button>
+      <button id="tab_clin" onclick="showView('clin')">Monitor</button>
+      <button class="on" id="tab_ndi" onclick="showView('ndi')">Clinical</button>
       <button id="tab_func" onclick="showView('func')">Functions</button>
     </div>
 
@@ -273,7 +273,7 @@
         <div class="foot"><b>Demonstration / simulation</b> of the AEGIS Protector concept.</div>
       </div>
 
-      <div class="view on" id="v_clin">
+      <div class="view" id="v_clin">
         <h3 class="sec">Clinical monitor <span class="par">bedside · multi-parameter</span></h3>
         <div class="cbanner" id="cbanner">** CARDIAC ALARM **</div>
         <div class="mon-clin">
@@ -300,7 +300,7 @@
         <div class="foot">One detection core &mdash; the same engine behind a clinician-grade monitor. Demonstration / simulation.</div>
       </div>
 
-      <div class="view" id="v_ndi">
+      <div class="view on" id="v_ndi">
         <h3 class="sec">Cardiac&#8209;Ischaemia NDI <span class="par">population&#8209;referenced &middot; clinical</span></h3>
         <div class="card"><div class="pad">
           <div style="display:flex;gap:8px;text-align:center;align-items:flex-end">
@@ -760,7 +760,7 @@ function showView(v){
 // ---------------------------------------------------------------- run
 function frame(){ stepMembership(); drawECG(); drawClinical(); try{renderNDI();}catch(e){} requestAnimationFrame(frame); }
 setInterval(tickVitals, 500);
-tickVitals(); frame(); try{showView("clin");}catch(e){}
+tickVitals(); frame(); try{showView("ndi");}catch(e){}
 </script>
 </body>
 </html>
