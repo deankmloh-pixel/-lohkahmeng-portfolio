@@ -254,7 +254,7 @@
     document.getElementById('spotAccent').style.background=it.c;
     document.getElementById('spotLink').style.color=it.c;
     var card=document.getElementById('spotCard');
-    card.setAttribute('href',it.h);
+    card.setAttribute('href','#work');
     card.style.backgroundImage='';                       // stays white until the image is confirmed loaded
     if(it.bg){ (function(src){ var im=new Image(); im.onload=function(){ if(items[cur].bg===src){ card.style.backgroundImage=scrim+",url('"+src+"')"; } }; im.src=src; })(it.bg); }
     document.getElementById('spotCount').textContent=(i+1)+' / '+N;
