@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>AEGIS — Attrition Target List</title>
 <style>
-  :root{--ink:#1a2332;--bg:#eef1f7;--card:#fff;--muted:#6b7280;--line:#e2e6ee;--accent:#2a6f97;}
+  :root{--ink:#e8eef5;--bg:#0f1720;--card:#16212e;--muted:#93a4b8;--line:#26374a;--accent:#5a9fd4;}
   *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',-apple-system,system-ui,sans-serif;}
   html,body{height:100%;}
   body{background:var(--bg);color:var(--ink);height:100vh;display:flex;flex-direction:column;overflow:hidden;padding:10px 14px;gap:8px;}
   .top{display:flex;align-items:center;justify-content:space-between;}
   .brand{font-size:18px;font-weight:800;}.brand span{color:var(--accent);}
   .topright{display:flex;align-items:center;gap:10px;}
-  select.role{font-size:12.5px;font-weight:600;border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:#fff;color:var(--ink);cursor:pointer;}
+  select.role{font-size:12.5px;font-weight:600;border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:#1b2836;color:var(--ink);cursor:pointer;}
   .exp{font-size:12.5px;font-weight:700;color:#fff;background:var(--accent);border:none;border-radius:8px;padding:8px 15px;cursor:pointer;}
-  .exp:disabled{background:#c2c9d6;cursor:not-allowed;}
+  .exp:disabled{background:#2f4256;cursor:not-allowed;}
   .pill{font-weight:800;border-radius:12px;white-space:nowrap;display:inline-block;}
   .p-sm{font-size:11px;padding:2px 11px;}
   .b-l{background:#2e9e4f;color:#fff;} .b-m{background:#f2c94c;color:#5a4a00;}
@@ -26,13 +26,13 @@
   .summary .m{font-size:13px;color:var(--muted);} .summary .m b{color:var(--ink);font-size:16px;}
   .tablewrap{flex:1;overflow:auto;}
   table{width:100%;border-collapse:collapse;font-size:12.5px;}
-  thead th{position:sticky;top:0;background:#fff;text-align:left;padding:7px 16px;font-size:10px;
+  thead th{position:sticky;top:0;background:#1b2836;text-align:left;padding:7px 16px;font-size:10px;
            text-transform:uppercase;letter-spacing:.4px;color:var(--muted);border-bottom:1px solid var(--line);}
   tbody td{padding:6px 16px;border-bottom:1px solid #f0f2f7;}
-  tbody tr:hover{background:#f7f9fc;}
+  tbody tr:hover{background:#1f2c3a;}
   .idcell{color:var(--muted);font-variant-numeric:tabular-nums;} .rolecell{font-weight:600;}
   /* STATUS = last row of the display */
-  .cardfoot{border-top:1px solid var(--line);background:#f7f9fc;padding:10px 16px;
+  .cardfoot{border-top:1px solid var(--line);background:#1f2c3a;padding:10px 16px;
             display:grid;grid-template-columns:repeat(7,1fr);gap:9px 14px;align-content:center;min-height:82px;}
   .scell{display:flex;align-items:baseline;gap:5px;font-size:10px;line-height:1.25;min-width:0;white-space:nowrap;overflow:hidden;}
   .sname{font-weight:800;color:#0d1420;flex-shrink:0;}
@@ -40,7 +40,7 @@
   .sval-none{font-style:italic;color:#aab1bf;}
   .statusnone{grid-column:1 / -1;font-size:12px;font-style:italic;color:#9aa3b2;align-self:center;}
   .sx{cursor:pointer;font-size:9px;margin-left:3px;flex-shrink:0;opacity:.75;}
-  .chip{font-size:12px;background:#fff;border:1px solid #cfd7e6;border-radius:14px;padding:2px 8px 2px 10px;font-weight:600;}
+  .chip{font-size:12px;background:#1b2836;border:1px solid #2f4256;border-radius:14px;padding:2px 8px 2px 10px;font-weight:600;}
   .chip b{color:var(--accent);} .chip .x{color:var(--muted);margin-left:5px;cursor:pointer;font-weight:700;}
   .none{font-size:12px;color:var(--muted);}
   /* INPUTS */
@@ -51,7 +51,7 @@
   .sliders{margin-left:75px;display:flex;flex-direction:column;gap:16px;}
   .fld{display:flex;flex-direction:column;gap:3px;}
   .fld label{font-size:10.5px;color:var(--muted);font-weight:600;}
-  .fld select{padding:9px 10px;border:1px solid var(--line);border-radius:9px;font-size:13px;background:#fff;color:var(--ink);}
+  .fld select{padding:9px 10px;border:1px solid var(--line);border-radius:9px;font-size:13px;background:#1b2836;color:var(--ink);}
   #paramSel{width:215px;} #valSel{width:245px;}
   .otbtn{align-self:flex-end;margin-bottom:2px;border:none;border-radius:9px;padding:9px 26px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;letter-spacing:2px;}
   .ot-on{background:#2a6f97;}
@@ -59,7 +59,7 @@
   .sl{width:340px;max-width:340px;}
   .sl label{font-size:11.5px;color:var(--muted);font-weight:600;display:flex;justify-content:space-between;align-items:baseline;}
   .sl label b{color:var(--ink);font-size:13px;}
-  .sl input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:#cfd7e6;border-radius:3px;outline:none;margin-top:7px;}
+  .sl input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:#2f4256;border-radius:3px;outline:none;margin-top:7px;}
   .sl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer;}
   .sl input[type=range]::-moz-range-thumb{width:15px;height:15px;border:none;border-radius:50%;background:var(--accent);cursor:pointer;}
 </style>
