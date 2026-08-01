@@ -52,7 +52,7 @@
   .fld{display:flex;flex-direction:column;gap:3px;}
   .fld label{font-size:10.5px;color:var(--muted);font-weight:600;}
   .fld select{padding:9px 10px;border:1px solid var(--line);border-radius:9px;font-size:13px;background:#1b2836;color:var(--ink);}
-  #paramSel{width:215px;} #valSel{width:245px;}
+  #paramSel{width:215px;}
   .otbtn{align-self:flex-end;margin-bottom:2px;border:none;border-radius:9px;padding:9px 26px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;letter-spacing:2px;}
   .ot-on{background:#2a6f97;}
   .ot-off{background:#6b7280;text-decoration:line-through;text-decoration-color:#ff4d4f;text-decoration-thickness:3px;}
@@ -67,6 +67,11 @@
 .brand-accent{position:relative;}
 
   .app-badge{font-size:10.5px;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:1px 7px;white-space:nowrap;margin-left:10px;opacity:.9;}
+
+  .valbtns{display:flex;flex-wrap:wrap;gap:6px;max-width:400px;align-content:flex-start;}
+  .valbtn{font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;border:1px solid var(--line);background:#1b2836;color:var(--ink);cursor:pointer;line-height:1.1;}
+  .valbtn:hover{border-color:var(--accent);}
+  .valbtn.active{background:var(--accent);color:#08131f;border-color:var(--accent);font-weight:800;}
 </style>
 </head>
 <body>
@@ -97,7 +102,7 @@
   <div class="inputs">
     <div class="leftinputs">
       <div class="fld"><label>Parameter</label><select id="paramSel"></select></div>
-      <div class="fld"><label>Value — pick to apply</label><select id="valSel"></select></div>
+      <div class="fld"><label>Value — pick to apply</label><div id="valBtns" class="valbtns"></div></div>
     </div>
     <div class="rightinputs">
       <button class="otbtn ot-on" id="otBtn">OT</button>
@@ -136,15 +141,27 @@ function band(p){
   return              {lab:"Low",       cls:"b-l"};
 }
 const paramSel = document.getElementById("paramSel");
-const valSel   = document.getElementById("valSel");
+const valBtns  = document.getElementById("valBtns");
 Object.keys(PARAMS).forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;paramSel.appendChild(o);});
 function fillValues(){
-  const p = PARAMS[paramSel.value]; valSel.innerHTML="";
-  const ph=document.createElement("option"); ph.value=""; ph.textContent="— select a value —"; ph.disabled=true; ph.selected=true; valSel.appendChild(ph);
+  const p = PARAMS[paramSel.value]; const paramName = paramSel.value; valBtns.innerHTML="";
   let opts = p.kind==="cat"
     ? [...new Set(DATA.map(r=>r[p.col]))].sort().map(v=>[v, (p.vlab&&p.vlab[v])||v])
     : Object.keys(p.labels).map(k=>[isNaN(+k)?k:+k, p.labels[k]]);
-  opts.forEach(([raw,lab])=>{const o=document.createElement("option");o.value=String(raw);o.textContent=lab;o.dataset.lab=lab;valSel.appendChild(o);});
+  const activeRaw = (state.scope.find(s=>s.col===p.col)||{}).raw;
+  opts.forEach(([raw,lab])=>{
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.className="valbtn"+(String(raw)===String(activeRaw)?" active":"");
+    btn.textContent=lab;
+    btn.addEventListener("click",()=>applyValue(p.col, String(raw), lab, paramName));
+    valBtns.appendChild(btn);
+  });
+}
+function applyValue(col, raw, lab, paramName){
+  state.scope = state.scope.filter(s=>s.col!==col);
+  state.scope.push({param:paramName, col:col, raw:raw, label:lab});
+  render(); fillValues();
 }
 paramSel.addEventListener("change", fillValues);
 fillValues();
@@ -182,16 +199,7 @@ function render(){
     state.scope = state.scope.filter(s=>s.param!==x.dataset.p); render();
   }));
 }
-function applyParam(){
-  if(valSel.value==="") return;
-  const p = PARAMS[paramSel.value];
-  const opt = valSel.options[valSel.selectedIndex];
-  state.scope = state.scope.filter(s=>s.col!==p.col);
-  state.scope.push({param:paramSel.value, col:p.col, raw:valSel.value, label:opt.dataset.lab});
-  valSel.selectedIndex = 0;
-  render();
-}
-valSel.addEventListener("change", applyParam);
+
 const otBtn=document.getElementById("otBtn");
 otBtn.addEventListener("click",()=>{
   state.ot = state.ot==="yes" ? "no" : "yes";
