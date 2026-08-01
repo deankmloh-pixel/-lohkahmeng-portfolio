@@ -35,7 +35,7 @@
   .cardfoot{border-top:1px solid var(--line);background:#1f2c3a;padding:10px 16px;
             display:grid;grid-template-columns:repeat(7,1fr);gap:9px 14px;align-content:center;min-height:82px;}
   .scell{display:flex;align-items:baseline;gap:5px;font-size:10px;line-height:1.25;min-width:0;white-space:nowrap;overflow:hidden;}
-  .sname{font-weight:800;color:#c3cfdd;flex-shrink:0;}
+  .sname{font-weight:800;color:#dbe6f2;flex-shrink:0;}
   .sval{font-style:italic;font-weight:700;color:#7c3aed;overflow:hidden;text-overflow:ellipsis;}
   .sval-none{font-style:italic;color:#aab1bf;}
   .statusnone{grid-column:1 / -1;font-size:12px;font-style:italic;color:#9aa3b2;align-self:center;}
@@ -68,10 +68,14 @@
 
   .app-badge{font-size:10.5px;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:1px 7px;white-space:nowrap;margin-left:10px;opacity:.9;}
 
-  .valbtns{display:flex;flex-wrap:wrap;gap:6px;max-width:400px;align-content:flex-start;}
-  .valbtn{font-size:12px;font-weight:600;padding:6px 11px;border-radius:8px;border:1px solid var(--line);background:#1b2836;color:var(--ink);cursor:pointer;line-height:1.1;}
-  .valbtn:hover{border-color:var(--accent);}
-  .valbtn.active{background:var(--accent);color:#08131f;border-color:var(--accent);font-weight:800;}
+  .valdrop{position:relative;width:245px;}
+  .valdrop-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 10px;border:1px solid var(--line);border-radius:9px;font-size:13px;background:#1b2836;color:var(--ink);cursor:pointer;text-align:left;}
+  .valdrop-btn .valdrop-caret{color:var(--muted);font-size:11px;flex-shrink:0;}
+  .valdrop-panel{display:none;position:fixed;z-index:1000;background:#16212e;border:1px solid #2f4256;border-radius:9px;box-shadow:0 10px 26px rgba(0,0,0,.55);max-height:280px;overflow-y:auto;padding:4px;}
+  .valdrop-panel.open{display:block;}
+  .valdrop-opt{padding:8px 11px;border-radius:6px;font-size:13px;color:var(--ink);cursor:pointer;white-space:nowrap;}
+  .valdrop-opt:hover{background:#22344a;}
+  .valdrop-opt.active{background:var(--accent);color:#08131f;font-weight:700;}
 </style>
 </head>
 <body>
@@ -102,7 +106,7 @@
   <div class="inputs">
     <div class="leftinputs">
       <div class="fld"><label>Parameter</label><select id="paramSel"></select></div>
-      <div class="fld"><label>Value — pick to apply</label><div id="valBtns" class="valbtns"></div></div>
+      <div class="fld"><label>Value — pick to apply</label><div class="valdrop"><button type="button" class="valdrop-btn" id="valDropBtn"><span id="valDropLabel">— select a value —</span><span class="valdrop-caret">▾</span></button><div class="valdrop-panel" id="valDropPanel"></div></div></div>
     </div>
     <div class="rightinputs">
       <button class="otbtn ot-on" id="otBtn">OT</button>
@@ -141,21 +145,25 @@ function band(p){
   return              {lab:"Low",       cls:"b-l"};
 }
 const paramSel = document.getElementById("paramSel");
-const valBtns  = document.getElementById("valBtns");
+const valDropBtn   = document.getElementById("valDropBtn");
+const valDropPanel = document.getElementById("valDropPanel");
+const valDropLabel = document.getElementById("valDropLabel");
 Object.keys(PARAMS).forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;paramSel.appendChild(o);});
 function fillValues(){
-  const p = PARAMS[paramSel.value]; const paramName = paramSel.value; valBtns.innerHTML="";
+  const p = PARAMS[paramSel.value]; const paramName = paramSel.value;
   let opts = p.kind==="cat"
     ? [...new Set(DATA.map(r=>r[p.col]))].sort().map(v=>[v, (p.vlab&&p.vlab[v])||v])
     : Object.keys(p.labels).map(k=>[isNaN(+k)?k:+k, p.labels[k]]);
   const activeRaw = (state.scope.find(s=>s.col===p.col)||{}).raw;
+  const act = opts.find(([raw])=>String(raw)===String(activeRaw));
+  valDropLabel.textContent = act ? act[1] : "— select a value —";
+  valDropPanel.innerHTML="";
   opts.forEach(([raw,lab])=>{
-    const btn=document.createElement("button");
-    btn.type="button";
-    btn.className="valbtn"+(String(raw)===String(activeRaw)?" active":"");
-    btn.textContent=lab;
-    btn.addEventListener("click",()=>applyValue(p.col, String(raw), lab, paramName));
-    valBtns.appendChild(btn);
+    const o=document.createElement("div");
+    o.className="valdrop-opt"+(String(raw)===String(activeRaw)?" active":"");
+    o.textContent=lab;
+    o.addEventListener("click",()=>{ applyValue(p.col, String(raw), lab, paramName); closeValPanel(); });
+    valDropPanel.appendChild(o);
   });
 }
 function applyValue(col, raw, lab, paramName){
@@ -163,7 +171,19 @@ function applyValue(col, raw, lab, paramName){
   state.scope.push({param:paramName, col:col, raw:raw, label:lab});
   render(); fillValues();
 }
-paramSel.addEventListener("change", fillValues);
+function openValPanel(){
+  const r=valDropBtn.getBoundingClientRect();
+  valDropPanel.style.left=r.left+"px";
+  valDropPanel.style.width=r.width+"px";
+  valDropPanel.style.top=(r.bottom+4)+"px";
+  valDropPanel.classList.add("open");
+  const ph=valDropPanel.getBoundingClientRect();
+  if(r.bottom+4+ph.height > window.innerHeight-8){ valDropPanel.style.top=Math.max(8,(r.top-4-ph.height))+"px"; }
+}
+function closeValPanel(){ valDropPanel.classList.remove("open"); }
+valDropBtn.addEventListener("click",(e)=>{ e.stopPropagation(); valDropPanel.classList.contains("open")?closeValPanel():openValPanel(); });
+document.addEventListener("click",(e)=>{ if(!valDropPanel.contains(e.target) && e.target!==valDropBtn && !valDropBtn.contains(e.target)) closeValPanel(); });
+paramSel.addEventListener("change", ()=>{ closeValPanel(); fillValues(); });
 fillValues();
 function currentRows(){
   return DATA.filter(r=>{
