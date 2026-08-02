@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS Health — Glucose Watch (P18) · Case Study | Loh Kah Meng</title>
+<meta name="description" content="The health-monitoring tier of the AEGIS wearable: a non-invasive glucose watch that reads blood glucose and SpO2 from an infrared sensor, pairs with a 4-lead Bluetooth ECG, and runs one adaptive AI engine that learns each wearer. Built on the damped-oscillator glucose model and a dimensionless diabetic index.">
+<link rel="canonical" href="https://aegishumanai.com/project-18-glucose-wearable.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AEGIS Health — Glucose Watch (P18) · Case Study | Loh Kah Meng">
+<meta property="og:description" content="A non-invasive glucose + SpO2 + ECG wearable driven by one adaptive AI engine that learns each wearer. Damped-oscillator glucose model + dimensionless diabetic index.">
+<meta property="og:image" content="https://aegishumanai.com/assets/wearable-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / AEGIS Health</div>
+    <div class="tag tag-aqua">Healthcare &middot; Wearable &middot; Health Continuous Monitoring &middot; Full Case Study</div>
+    <h1>AEGIS Health &mdash; The Non-Invasive Glucose Watch (P18)</h1>
+    <figure class="hero-image" style="margin:18px 0 10px;">
+      <img src="assets/wearable-hero.jpg" alt="The AEGIS wearable on a wrist at home, glowing softly in low light" style="width:100%;height:auto;border-radius:12px;display:block;" loading="lazy">
+    </figure>
+    <p class="lede">The AEGIS wearable has more than one tier. <strong>Lifestyle</strong> keeps watch on your wrist; <strong>Clinical</strong> unlocks the cardiac engine for the hospital desk. <strong>AEGIS Health</strong> is the continuous-monitoring tier &mdash; a <strong>non-invasive glucose watch</strong> that reads blood glucose and SpO&#8322; from an infrared sensor on the back of the case, pairs with a separate 4-lead Bluetooth ECG, and runs <strong>one adaptive AI engine that learns <em>your</em> body</strong> rather than an average one.</p>
+    <div class="button-row">
+      <a href="apps/p18-glucose-watch.html" target="_blank" rel="noopener" class="btn btn-primary">Open the 3D wearable &rarr;</a>
+      <a href="apps/p18-base-station.html" target="_blank" rel="noopener" class="btn">Open the base-station control panel &rarr;</a>
+    </div>
+    <p class="lede">One finger-free device on the wrist; one docking stand on the desk that charges it, receives the ECG stream, and shows all four AEGIS technologies at once. No lancet, no strip &mdash; the glucose reading comes from light, and the engine keeps re-learning what &ldquo;normal&rdquo; means for the person wearing it.</p>
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo &mdash; glucose model, adaptive engine, dimensionless index, 3D wearable + base-station demo</div></div>
+      <div class="meta-item"><div class="k">Model</div><div class="v">Damped-oscillator glucose response &rarr; dimensionless diabetic index <em>A</em>; artificial-pancreas insulin control</div></div>
+      <div class="meta-item"><div class="k">Method</div><div class="v">One engine, time-shared across BG &middot; SpO&#8322; &middot; ECG (SVM / SVR + fuzzy band); per-wearer on-device calibration</div></div>
+      <div class="meta-item"><div class="k">Status</div><div class="v">Feasibility prototype &mdash; the engine and index are demonstrated; the non-invasive glucose sensor is designed-for, not yet validated on device data</div></div>
+    </div>
+  </div>
+</header>
+<section style="padding:24px 0 4px;">
+  <div class="container">
+    <div style="background:#f4f6f9;border:1px solid #e6eaf1;border-radius:22px;padding:24px 18px;text-align:center;">
+      <div class="tag tag-aqua" style="margin-bottom:14px;">Live &middot; the 3D wearable, running on this page</div>
+      <iframe src="apps/p18-glucose-watch.html?v=1" title="AEGIS Health — 3D glucose watch" style="width:100%;max-width:470px;height:760px;border:0;border-radius:26px;display:inline-block;box-shadow:0 24px 60px rgba(20,30,60,.28);" loading="lazy"></iframe>
+      <p style="font-size:13px;color:var(--text-muted);margin:16px 0 0;">The 3D wearable, embedded live. <strong>Tap the watch face</strong> to move through the four technologies &mdash; Lifestyle, Clinical, Health Continuous Monitoring (glucose &middot; ECG &middot; SpO&#8322;), and Emotional. Press &ldquo;Show back&rdquo; to see the infrared glucose/SpO&#8322; sensor and the two charging contacts. Drag to rotate; open it full-screen with the button above.</p>
+    </div>
+  </div>
+</section>
+<section style="padding:8px 0 4px;">
+  <div class="container">
+
+    <h2>What this is</h2>
+    <p>AEGIS Health is the metabolic tier of a single wearable platform. The same watch a person already wears for lifestyle and cardiac watch adds a <strong>non-invasive glucose reading</strong> &mdash; blood glucose estimated from an <strong>infrared optical sensor</strong> against the skin, alongside SpO&#8322; from the same optics. There is no finger-prick and no disposable strip. A separate <strong>4-lead Bluetooth ECG</strong> band (the RA &middot; LA &middot; RL &middot; LL limb leads) streams the heart trace to the same engine when a clinical-grade tracing is wanted; the two metal contacts on the back of the watch are for <em>charging</em>, not sensing.</p>
+
+    <div class="callout">
+      <strong>Read this first &mdash; what is demonstrated, and what is designed-for.</strong> What is built and shown here is the <em>engine</em> and the <em>index</em>: a damped-oscillator model of the glucose response, a dimensionless diabetic index <em>A</em> derived from it, and an adaptive classifier/regressor that learns each wearer. The dimensionless-index approach is validated on open, physician-labelled diabetes data (the DRAS lineage, AUC &asymp; 0.96 on diabetes classification). The <strong>non-invasive infrared glucose sensor itself is a planned integration &mdash; designed for, not yet validated on real device signals.</strong> This page states that plainly on purpose, so the claim stays credible.
+    </div>
+
+    <h2>The glucose model &mdash; a damped oscillator</h2>
+    <p>After a meal, blood glucose rises, overshoots, and settles &mdash; and a healthy body damps that swing quickly, while a diabetic one rings for longer and settles higher. AEGIS models that curve directly as a <strong>damped oscillator</strong>: the same physics that describes a weight on a spring easing back to rest. Two numbers do the work &mdash; how fast the swing decays and how far it overshoots &mdash; and from them the model reads out a single <strong>dimensionless diabetic index <em>A</em></strong>. Because the index is dimensionless, it compares people and days on one scale without depending on units, sensor gain, or the exact meal.</p>
+    <p>Paired with it is an <strong>artificial-pancreas insulin-control model</strong>: a pulse-then-wait controller that fires a correction, waits for the body to respond, and re-fires &mdash; clamped so it never drives glucose below a safe baseline. Together they turn a noisy glucose trace into a short, honest summary a person (and, with consent, a clinician) can act on.</p>
+
+    <h2>One engine, time-shared &mdash; never idle</h2>
+    <p>A wrist wearable has one small processor and a tight power budget. Rather than run separate models for glucose, oxygen and heart, AEGIS runs <strong>one adaptive AI engine that time-shares</strong> across all of them &mdash; a scheme borrowed from time-division multiplexing. In each slice the engine attends to one signal (glucose, then SpO&#8322;, then ECG, then skin), so no channel is dropped and the core is never sitting idle. One engine, many senses, on a battery that has to last the day.</p>
+
+    <h2>The part that matters: it learns <em>you</em></h2>
+    <p>The strongest claim of this platform is not any single number &mdash; it is that the engine <strong>adapts on four axes at once</strong>, with a human always in command:</p>
+    <table class="data-table">
+      <thead><tr><th>Adaptive axis</th><th>What it means, plainly</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Per person</strong></td><td>The watch calibrates to <em>your</em> body on the device itself &mdash; your resting normal, your meal response &mdash; instead of assuming an average wearer.</td></tr>
+        <tr><td><strong>Over time</strong></td><td>A &ldquo;grey window&rdquo; watches for drift; when your baseline moves, it re-learns rather than quietly going wrong.</td></tr>
+        <tr><td><strong>To context</strong></td><td>A fuzzy in-range band widens or tightens with what you are doing &mdash; resting, moving, eating &mdash; so a normal swing is not read as an alarm.</td></tr>
+        <tr><td><strong>Across sensors</strong></td><td>What it learns from one signal transfers to help read the others, so a new sensor starts smarter.</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13.5px;color:var(--text-muted);margin-top:-8px;">On the rim of any reading &mdash; where the model is unsure &mdash; the system defers to the person and, where relevant, a clinician. It flags; a human decides.</p>
+
+    <h2>The base station &mdash; all four technologies on one glass panel</h2>
+    <p>The wearable docks in a <strong>base-station stand</strong> that charges it and receives the Bluetooth ECG. Its display is a <strong>transparent glass control panel</strong> &mdash; you can see through it &mdash; edged with a thin glowing rim, and it is a touch screen. On one panel it shows all four AEGIS technologies at once: <strong>Lifestyle</strong>, <strong>Clinical</strong> (the hospital-desktop cardiac tier), <strong>Health Continuous Monitoring</strong> (glucose &middot; ECG &middot; SpO&#8322;), and <strong>Emotional</strong> (psychophysiological support) &mdash; with a <strong>System-Level Adaptive Engine</strong> band across the top making the four adaptive axes visible. Tap a tile to focus it.</p>
+    <div style="background:#f4f6f9;border:1px solid #e6eaf1;border-radius:22px;padding:24px 18px;text-align:center;margin:14px 0;">
+      <div class="tag tag-aqua" style="margin-bottom:14px;">Live &middot; the base-station control panel</div>
+      <iframe src="apps/p18-base-station.html?v=1" title="AEGIS Health — base-station control panel" style="width:100%;max-width:820px;height:600px;border:0;border-radius:20px;display:inline-block;box-shadow:0 24px 60px rgba(20,30,60,.28);" loading="lazy"></iframe>
+      <p style="font-size:13px;color:var(--text-muted);margin:16px 0 0;">Transparent glass, thin glowing edge, touch to focus a tile. The watch sits in the dock, charging, while the 4-lead ECG streams in. Drag to rotate.</p>
+    </div>
+
+    <h2>One platform, four technologies</h2>
+    <p>AEGIS Health does not stand alone. It is one pocket of a single wearable that carries the technologies for <strong>Lifestyle</strong>, <strong>Clinical</strong> (validated on 66,951 physician-labelled ECGs across two independent datasets), <strong>Health Continuous Monitoring</strong> (this page &mdash; glucose, ECG, SpO&#8322;), and <strong>Emotional</strong> support. One device on the wrist, one engine underneath, four ways it looks after the person wearing it.</p>
+
+    <div class="callout">
+      <strong>Stated plainly, so it stays credible.</strong> This is a feasibility demonstration of a <em>method</em> &mdash; a damped-oscillator glucose model, a dimensionless diabetic index, and an adaptive per-wearer engine &mdash; presented as an interactive 3D prototype, not a certified medical device. The non-invasive glucose sensor is a designed-for integration; forward-validation against repeated HbA1c, real on-device SpO&#8322;/ECG, and a bio-impedance channel are open items on the roadmap. It flags; a person, and in time a certified pathway, decides. Dedicated to Professor Dhanjoo N. Ghista, whose nondimensional-index lineage this work continues.
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+<script src="script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script>
+<script src="/disclaimer.js" defer></script>
+</body>
+</html>
