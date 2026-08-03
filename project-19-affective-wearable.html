@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS Emotional — Affective Wearable (P19) · Case Study | Loh Kah Meng</title>
+<meta name="description" content="The emotional / psychophysiological tier of the AEGIS wearable: a daily electrode-based band that reads stress, arousal, cognitive load and recovery from EDA, HR/HRV, skin temperature and motion — one adaptive grey-zone engine that learns each wearer and defers to a human when unsure. A live in-browser Sentinel with a human-face display.">
+<link rel="canonical" href="https://aegishumanai.com/project-19-affective-wearable.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AEGIS Emotional — Affective Wearable (P19) · Case Study | Loh Kah Meng">
+<meta property="og:description" content="A daily affective wearable reading stress / arousal / cognitive-load / recovery, with a human-face Sentinel and a defer-to-human grey zone. Honest arousal-vs-valence limits stated plainly.">
+<meta property="og:image" content="https://aegishumanai.com/assets/wearable-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / AEGIS Emotional</div>
+    <div class="tag tag-aqua">Healthcare &middot; Wearable &middot; Psychophysiological &middot; Full Case Study</div>
+    <h1>AEGIS Emotional &mdash; The Affective Wearable (P19)</h1>
+    <figure class="hero-image" style="margin:18px 0 10px;">
+      <img src="assets/wearable-hero.jpg" alt="The AEGIS wearable on a wrist at home, glowing softly in low light" style="width:100%;height:auto;border-radius:12px;display:block;" loading="lazy">
+    </figure>
+    <p class="lede">The AEGIS wearable has more than one tier. <strong>Lifestyle</strong> keeps watch on your wrist; <strong>Clinical</strong> unlocks the cardiac engine for the hospital desk; <strong>Health</strong> reads glucose and oxygen. <strong>AEGIS Emotional</strong> is the psychophysiological tier &mdash; a daily <strong>electrode-based band</strong> that reads <strong>stress, arousal, cognitive load and recovery</strong> from skin conductance, heart rate &amp; variability, skin temperature and motion, and runs <strong>one adaptive grey-zone engine that learns <em>your</em> body</strong> and defers to a human when it is unsure.</p>
+    <div class="button-row">
+      <a href="apps/aegis-p19-sentinel.html" target="_blank" rel="noopener" class="btn btn-primary">Open the live Sentinel &rarr;</a>
+    </div>
+    <p class="lede">One band on the wrist reads the autonomic signals; a human-face display shows the state at a glance &mdash; calm, cognitive load, emotional stress, or physical exertion &mdash; with a plain-language read-out and, where it matters, an offer to contact a caregiver. The engine keeps re-learning what &ldquo;calm&rdquo; means for the person wearing it.</p>
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo &mdash; feature engine, per-person calibration, grey-zone modelling, &Psi; arousal index, live human-face Sentinel</div></div>
+      <div class="meta-item"><div class="k">Model</div><div class="v">SVM / SVR / Nu + native fuzzy-inference (Mamdani &middot; ANFIS &middot; Interval Type-2) &mdash; graded output, defer-to-human grey zone; &Psi; nondimensional arousal index</div></div>
+      <div class="meta-item"><div class="k">Method</div><div class="v">Per-wearer calibration to the person&rsquo;s own calm baseline; subject-independent LOSO validation; activity gate separates exertion from emotion</div></div>
+      <div class="meta-item"><div class="k">Status</div><div class="v">Feasibility prototype &mdash; the engine, the index and the Sentinel are demonstrated on open affective datasets; a strong arousal / stress-load reader, not a discrete-emotion namer or a diagnosis</div></div>
+    </div>
+  </div>
+</header>
+<section style="padding:24px 0 4px;">
+  <div class="container">
+    <div style="background:#f4f6f9;border:1px solid #e6eaf1;border-radius:22px;padding:24px 18px;text-align:center;">
+      <div class="tag tag-aqua" style="margin-bottom:14px;">Live &middot; the Sentinel, running on this page</div>
+      <iframe src="apps/aegis-p19-sentinel.html?v=1" title="AEGIS Emotional — live affective Sentinel" style="width:100%;max-width:470px;height:820px;border:0;border-radius:26px;display:inline-block;box-shadow:0 24px 60px rgba(20,30,60,.28);" loading="lazy"></iframe>
+      <p style="font-size:13px;color:var(--text-muted);margin:16px 0 0;">The Sentinel, embedded live. Switch between <strong>Data-stream</strong> (real recorded subjects) and <strong>Simulate</strong> (drive the sliders yourself). The <strong>human face</strong> morphs with the state and intensity; the traffic-light band and plain-language read-out show what the wrist is seeing. When arousal is high but the <em>type</em> is uncertain, it defers to you and offers to contact a caregiver.</p>
+    </div>
+  </div>
+</section>
+<section style="padding:8px 0 4px;">
+  <div class="container">
+
+    <h2>What this is</h2>
+    <p>AEGIS Emotional is the psychophysiological tier of a single wearable platform. The same band a person wears through the day reads the <strong>autonomic signature of stress</strong> &mdash; electrodermal activity (skin conductance), heart rate and its variability, skin temperature, and motion &mdash; and turns it into a live, plain-language read of how the body is coping. There is no diary and no self-report: the signals are continuous, and the engine calibrates to the individual rather than to an average person.</p>
+
+    <div class="callout">
+      <strong>Read this first &mdash; what is demonstrated, and what is designed-for.</strong> What is built and shown here is the <em>engine</em>, the <em>index</em> and the <em>Sentinel</em>: a per-person feature engine, a defer-to-human grey-zone classifier/regressor, the &Psi; nondimensional arousal index, and a live human-face display. These are validated on open, labelled affective datasets (the PhysioNet Non-EEG cohort; WESAD extracted for the emotional axis). Honestly stated: this is a strong <strong>moment-to-moment arousal / stress-load reader</strong> and a powerful <strong>longitudinal mood / resilience tracker</strong> &mdash; <strong>not a discrete-emotion namer and not a diagnosis</strong>. A human is always in command.
+    </div>
+
+    <h2>It reads <em>you</em> &mdash; calibrated to your own calm</h2>
+    <p>Resting skin conductance varies roughly <strong>179&times; between people</strong>, so an absolute threshold is meaningless. AEGIS z-scores every signal to <strong>your own Relax baseline</strong> &mdash; the core idea &mdash; so only <em>your</em> deviation from <em>your</em> calm counts. From those calibrated signals a single <strong>&Psi; (Psi) arousal index</strong> &mdash; a weighted root-mean-square of the autonomic markers, floored at your personal calm &mdash; rises monotonically from rest to stress. On the honest subject-independent test (Leave-One-Subject-Out, the wearer never seen in training) the stress-vs-calm detector reaches <strong>ROC-AUC &asymp; 0.92</strong>, deferring only the uncertain ~10% of moments to a human.</p>
+
+    <h2>Four states, and the honest limit</h2>
+    <p>The Sentinel resolves four non-EEG states &mdash; <strong>Relax</strong>, <strong>Cognitive load</strong>, <strong>Emotional stress</strong>, and <strong>Physical exertion</strong> &mdash; each at an intensity from mild to extreme, shown on a human face. An <strong>activity gate</strong> (the motion channel) separates a racing heart from a run versus a racing heart from distress &mdash; without it, exertion masquerades as emotion. The honest boundary is <strong>arousal vs valence</strong>: the wrist reads <em>how activated</em> you are strongly, but <em>whether it is pleasant or unpleasant</em> weakly &mdash; true valence needs facial signals the wrist cannot see. So on the rim, where cognitive and emotional stress look alike, the Sentinel says so and defers.</p>
+    <table class="data-table">
+      <thead><tr><th>Adaptive axis</th><th>What it means, plainly</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Per person</strong></td><td>The band calibrates to <em>your</em> calm baseline on the device &mdash; your resting normal &mdash; instead of assuming an average wearer.</td></tr>
+        <tr><td><strong>Over time</strong></td><td>A &ldquo;grey window&rdquo; tracks drift; as your baseline moves (sleep, illness, training), it re-learns rather than quietly going wrong.</td></tr>
+        <tr><td><strong>To context</strong></td><td>The motion gate widens or tightens the read &mdash; resting, moving, exerting &mdash; so a normal exertion swing is not read as an emotional alarm.</td></tr>
+        <tr><td><strong>Defer-to-human</strong></td><td>On the rim &mdash; high arousal but ambiguous type &mdash; it flags uncertainty and offers to contact a caregiver. It flags; a person decides.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>The grey-zone engine &mdash; why fuzzy fits the body</h2>
+    <p>Human physiological signals are <strong>fuzzy</strong>: imprecise, person-specific, and graded rather than crisp. So the primary engine gives a <strong>graded closest-fit output with a native grey zone</strong>, not a hard split. AEGIS runs the whole grey-zone family &mdash; <strong>SVM</strong> (signed margin), <strong>SVR / Nu</strong> (&epsilon;-tube), and native <strong>fuzzy-inference</strong> (Mamdani, ANFIS, Interval Type-2) &mdash; and on an equal footing they tie (SVR &asymp; SVM &asymp; ANFIS within 0.01). The learned fuzzy engine (ANFIS) is the most cautious &mdash; it defers more &mdash; but is surest when it does act, exactly the profile a human-in-command safety wearable wants. Tree ensembles are kept only as a reference benchmark; they have no grey zone, so they are not used to decide.</p>
+    <p style="font-size:13.5px;color:var(--text-muted);margin-top:-8px;">Part of the reusable AEGIS model framework: a <strong>39-engine roster</strong> &mdash; the 19-model standard board, the Fuzzy SVM/SVR/Nu family carried since P16, and the 3 native fuzzy-inference engines added here &mdash; every wearable judgement made inside the person&rsquo;s grey band.</p>
+
+    <h2>One platform, four technologies</h2>
+    <p>AEGIS Emotional does not stand alone. It is one pocket of a single wearable that carries the technologies for <strong>Lifestyle</strong>, <strong>Clinical</strong> (validated on 66,951 physician-labelled ECGs across two independent datasets), <strong>Health Continuous Monitoring</strong> (glucose, ECG, SpO&#8322;), and <strong>Emotional</strong> (this page &mdash; stress, arousal, cognitive load, recovery). One device on the wrist, one engine underneath, four ways it looks after the person wearing it.</p>
+
+    <div class="callout">
+      <strong>Stated plainly, so it stays credible.</strong> This is a feasibility demonstration of a <em>method</em> &mdash; a per-person feature engine, a defer-to-human grey-zone model, the &Psi; arousal index, and a live human-face Sentinel &mdash; presented as an interactive in-browser prototype, not a certified medical device. It reads arousal and stress-load well; it does not name a discrete emotion and does not diagnose. Escalation to a caregiver is always an offered action a person confirms, never an automatic call. Dedicated to Professor Dhanjoo N. Ghista, whose nondimensional-index lineage this work continues.
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+<script src="script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script>
+<script src="/disclaimer.js" defer></script>
+</body>
+</html>

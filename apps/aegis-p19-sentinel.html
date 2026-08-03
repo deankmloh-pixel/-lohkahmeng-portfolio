@@ -1,0 +1,201 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AEGIS Sentinel — P19 Psychophysiological Wearable</title>
+<style>
+:root{--bg:#0e1621;--panel:#16212e;--panel2:#1b2a3a;--ink:#e8eef5;--muted:#8b97ad;
+--navy:#26406e;--teal:#2E8B84;--gold:#C9A227;--g:#2fb16b;--a:#e8b53a;--o:#e8791f;--r:#e0473a;}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(1200px 600px at 70% -10%,#16263a 0,#0e1621 60%);
+color:var(--ink);font:15px/1.5 system-ui,Segoe UI,Roboto,Arial}
+a{color:var(--teal)}.wrap{max-width:1120px;margin:0 auto;padding:18px}
+header{display:flex;align-items:center;gap:12px;border-bottom:2px solid rgba(201,162,39,.5);padding-bottom:12px}
+.shield{width:34px;height:34px;flex:0 0 auto}
+.brand{font-weight:800;letter-spacing:.5px;font-size:19px}.brand b{color:var(--gold)}
+.badge{font-size:11px;color:#06202a;background:var(--gold);border-radius:20px;padding:3px 10px;font-weight:700}
+.sub{color:var(--muted);font-size:12.5px;margin-left:auto;text-align:right}
+.disc{color:var(--muted);font-size:11.5px;margin-top:6px;font-style:italic}
+.modebar{display:flex;gap:8px;margin:16px 0}
+.modebar button{background:var(--panel);color:var(--ink);border:1px solid #2b3b4e;border-radius:10px;padding:9px 16px;font-weight:600;cursor:pointer}
+.modebar button.on{background:var(--gold);color:#06202a;border-color:var(--gold)}
+.grid{display:grid;grid-template-columns:340px 1fr;gap:16px}@media(max-width:820px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid #223347;border-radius:14px;padding:16px}
+.orbwrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+.orb{position:relative;width:210px;height:210px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.4s}
+.orb .ring{position:absolute;inset:0;border-radius:50%;border:2px solid;opacity:.35;animation:pulse 2.4s infinite ease-out}
+@keyframes pulse{0%{transform:scale(.85);opacity:.5}100%{transform:scale(1.25);opacity:0}}
+.psi{font-size:52px;font-weight:800;line-height:1}.psilab{font-size:12px;color:var(--muted);letter-spacing:2px}
+.state{font-weight:800;font-size:20px;margin-top:4px}
+.zonebar{height:16px;border-radius:8px;margin:12px 0 4px;background:linear-gradient(90deg,var(--g) 0 30%,var(--a) 30% 55%,var(--o) 55% 78%,var(--r) 78% 100%);position:relative}
+.zonebar .mk{position:absolute;top:-4px;width:3px;height:24px;background:#fff;border-radius:2px;box-shadow:0 0 6px #000;transition:.3s}
+.zlabs{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted)}
+.esc{margin-top:14px;border-radius:10px;padding:12px;font-size:13.5px;border:1px solid #2b3b4e;background:var(--panel2)}
+.esc b{display:block;margin-bottom:6px}
+.esc .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.esc button{border:0;border-radius:8px;padding:8px 12px;font-weight:700;cursor:pointer;background:#2b3b4e;color:var(--ink)}
+.esc button.act{background:var(--gold);color:#06202a}
+.note{font-size:11.5px;color:var(--muted);margin-top:8px}
+.slider{margin:14px 0}
+.slider .top{display:flex;align-items:center;gap:8px;font-weight:600}
+.slider .ic{font-size:18px}.slider .lv{margin-left:auto;font-size:12.5px;color:var(--gold);font-weight:700}
+.slider input[type=range]{-webkit-appearance:none;width:100%;height:14px;border-radius:8px;margin:8px 0 2px;
+background:linear-gradient(90deg,var(--g) 0 30%,var(--a) 30% 55%,var(--o) 55% 78%,var(--r) 78% 100%);outline:none}
+.slider input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid #06202a;cursor:pointer;box-shadow:0 1px 4px #000}
+.slider input[type=range]:disabled{filter:grayscale(.15) brightness(.92)}
+.slider input[type=range]:disabled::-webkit-slider-thumb{cursor:default;background:#cfd8e3}
+.ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.streamctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.streamctl select,.streamctl button{background:var(--panel2);color:var(--ink);border:1px solid #2b3b4e;border-radius:8px;padding:7px 12px;font-weight:600;cursor:pointer}
+.truth{font-size:12.5px;color:var(--muted)}.truth b{color:var(--teal)}
+.hidden{display:none}
+footer{margin-top:18px;border-top:1px solid #223347;padding-top:10px;color:var(--muted);font-size:11.5px;display:flex;align-items:center;gap:10px}
+.seal{width:22px;height:22px}
+.gate{font-size:12px;color:var(--o);margin-top:6px;min-height:16px}
+.hz{font-size:11.5px;color:var(--muted);margin-top:2px}
+</style></head><body><div class="wrap">
+<header>
+<svg class="shield" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" fill="#C9A227" opacity=".18" stroke="#C9A227" stroke-width="1.3"/><path d="M12 6v9M8.5 10.5h7" stroke="#C9A227" stroke-width="1.3" stroke-linecap="round"/></svg>
+<div><div class="brand">AEGIS <b>Sentinel</b></div><div style="font-size:11.5px;color:var(--muted)">Psychophysiological / Affective Wearable</div></div>
+<span class="badge">P19 · AEGIS · static</span>
+<div class="sub">Stress · arousal · recovery<br>reads your body, guards your mind</div>
+</header>
+<div class="disc">Illustrative research demonstration — <b>not a clinical device</b>. Every reading is judged against the person's own calibrated baseline (grey zone), human-in-command. Real-data mode replays recorded research signals (PhysioNet Non-EEG); simulate mode is synthetic.</div>
+
+<div class="modebar">
+<button id="mStream" class="on" onclick="setMode('stream')">▶ Data stream (real)</button>
+<button id="mSim" onclick="setMode('sim')">🎛 Simulate (sliders)</button>
+</div>
+
+<div class="grid">
+ <div class="card orbwrap">
+   <div class="streamctl" id="streamCtl">
+     <select id="subjSel" onchange="pickSubj()"></select>
+     <button id="playBtn" onclick="togglePlay()">⏸ Pause</button>
+     <span class="truth">actual: <b id="truth">—</b></span>
+   </div>
+   <svg id="face" viewBox="0 0 200 200" width="198" height="198" style="filter:drop-shadow(0 0 26px #0006)">
+     <circle id="f_head" cx="100" cy="100" r="82" fill="#2fb16b22" stroke="#2fb16b" stroke-width="3"/>
+     <ellipse id="f_eyeL" cx="74" cy="94" rx="10.5" ry="14" fill="#0e1621"/><circle cx="77" cy="90" r="3" fill="#cfe0f2"/>
+     <ellipse id="f_eyeR" cx="126" cy="94" rx="10.5" ry="14" fill="#0e1621"/><circle cx="129" cy="90" r="3" fill="#cfe0f2"/>
+     <path id="f_browL" d="M54,68 L90,68" stroke="#e8eef5" stroke-width="5" stroke-linecap="round" fill="none"/>
+     <path id="f_browR" d="M146,68 L110,68" stroke="#e8eef5" stroke-width="5" stroke-linecap="round" fill="none"/>
+     <path id="f_mouth" d="M64,138 Q100,154 136,138" stroke="#e8eef5" stroke-width="6" fill="none" stroke-linecap="round"/>
+     <path id="f_sweat" d="M46,58 q-7,11 0,18 q7,-7 0,-18z" fill="#57b0ff" opacity="0"/>
+   </svg>
+   <div style="text-align:center;margin-top:-2px"><span class="psi" id="psi" style="font-size:24px">0</span> <span class="psilab">Ψ AROUSAL</span></div>
+   <div class="state" id="state">—</div>
+   <div class="hz" id="hz">personal calm baseline · grey zone = defer to human</div>
+   <div class="gate" id="gate"></div>
+   <div id="states4" style="width:100%;margin:2px 0 4px"></div>
+   <div style="width:100%">
+     <div class="zonebar"><div class="mk" id="mk"></div></div>
+     <div class="zlabs"><span>Calm</span><span>Rising (grey)</span><span>High</span><span>Critical</span></div>
+   </div>
+   <div class="esc" id="esc" style="width:100%"></div>
+ </div>
+
+ <div class="card">
+   <div style="font-weight:700;margin-bottom:4px">Inputs <span style="color:var(--muted);font-weight:400;font-size:12px">— 4-colour traffic light · slide in Simulate mode</span></div>
+   <div id="sliders"></div>
+ </div>
+</div>
+
+<footer>
+<svg class="seal" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="#C9A227" stroke-width="1.2"/><path d="M12 5a7 7 0 100 14" fill="none" stroke="#C9A227" stroke-width="1.2"/><circle cx="12" cy="12" r="2" fill="#C9A227"/></svg>
+<span>AEGIS — AI augments judgment, it does not replace it. Built with real data and honest write-ups. · <a href="https://aegishumanai.com">aegishumanai.com</a></span>
+</footer>
+</div>
+<script>
+const STREAMS = {"subjects": [{"id": "NonEEG S1", "states": ["Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "EmotionalStress", "EmotionalStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax"], "ch": {"sweat": [30, 30, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 32, 32, 32, 34, 55, 90, 100, 100, 88, 71, 71, 66, 58, 52, 63, 87, 92, 83, 80, 77, 76, 80, 84, 79, 72, 65, 61, 73, 76, 64, 56, 52, 48, 44, 42, 41, 40, 42, 45, 45, 43, 42, 40, 39, 39, 38, 37, 37, 37, 37, 36, 36, 36, 36, 35, 35, 35], "hr": [51, 34, 28, 30, 27, 31, 34, 36, 37, 38, 50, 68, 75, 76, 94, 100, 100, 100, 100, 100, 100, 100, 73, 49, 43, 44, 48, 47, 43, 43, 50, 72, 78, 57, 50, 55, 56, 57, 58, 56, 62, 65, 65, 77, 77, 59, 45, 42, 45, 42, 44, 46, 46, 66, 87, 69, 43, 38, 38, 39, 40, 41, 40, 43, 59, 63, 52, 44, 40, 36, 35, 42], "hrv": [37, 39, 56, 56, 63, 57, 63, 62, 64, 57, 16, 5, 46, 42, 19, 49, 51, 45, 36, 32, 2, 2, 2, 57, 48, 50, 65, 65, 64, 66, 47, 19, 22, 29, 66, 69, 62, 58, 60, 59, 54, 59, 59, 47, 42, 47, 55, 63, 59, 69, 70, 69, 65, 16, 45, 4, 42, 70, 71, 66, 67, 70, 71, 63, 24, 29, 55, 52, 54, 57, 63, 66], "temp": [100, 100, 93, 87, 82, 77, 74, 70, 67, 64, 59, 56, 52, 50, 50, 50, 50, 50, 51, 53, 55, 56, 55, 54, 51, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 53, 55, 56, 56, 56, 53, 50, 46, 42, 41, 41, 40, 38, 36, 35, 32, 30, 30, 30, 31, 31, 31, 30, 30, 30, 29, 27, 24, 23, 23, 24, 25, 26, 29, 30, 30, 30], "motion": [95, 64, 28, 24, 25, 25, 27, 31, 32, 59, 85, 89, 86, 82, 80, 91, 100, 100, 100, 99, 55, 32, 28, 41, 52, 29, 31, 42, 52, 86, 78, 18, 2, 2, 2, 2, 2, 2, 40, 72, 58, 49, 66, 82, 82, 77, 68, 71, 80, 85, 85, 82, 91, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 80, 34, 27, 33, 32, 32, 36, 41, 42], "spo2": [63, 63, 56, 51, 51, 49, 52, 55, 55, 53, 52, 64, 66, 57, 57, 65, 66, 64, 68, 57, 46, 56, 62, 59, 55, 56, 56, 55, 55, 54, 58, 70, 60, 45, 54, 63, 60, 61, 64, 62, 52, 51, 58, 63, 55, 43, 44, 44, 39, 47, 49, 37, 37, 52, 58, 55, 53, 45, 41, 45, 47, 53, 46, 40, 44, 47, 43, 44, 37, 39, 40, 34]}}, {"id": "NonEEG S6", "states": ["Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "PhysicalStress", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "EmotionalStress", "EmotionalStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "CognitiveStress", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "EmotionalStress", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax", "Relax"], "ch": {"sweat": [17, 17, 18, 19, 19, 20, 21, 22, 23, 24, 26, 26, 27, 28, 28, 30, 31, 32, 32, 34, 37, 39, 39, 40, 41, 42, 43, 44, 44, 47, 47, 45, 45, 49, 51, 51, 51, 51, 51, 51, 52, 53, 56, 60, 60, 60, 61, 61, 63, 63, 64, 64, 64, 65, 65, 65, 65, 66, 67, 67, 68, 68, 69, 71, 73, 75, 78, 82, 82, 82, 82, 82], "hr": [47, 43, 52, 61, 55, 56, 67, 79, 77, 86, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 58, 57, 70, 61, 50, 48, 58, 69, 79, 76, 59, 64, 54, 46, 46, 49, 56, 56, 46, 48, 54, 49, 46, 39, 36, 35, 37, 37, 47, 47, 31, 18, 22, 28, 20, 19, 17, 18, 22, 27, 22, 18, 39, 50, 37, 22, 11, 12, 20, 34, 38], "hrv": [53, 55, 44, 52, 53, 55, 60, 61, 48, 8, 17, 51, 66, 59, 61, 64, 21, 23, 40, 2, 2, 39, 47, 51, 46, 64, 65, 47, 50, 28, 24, 60, 58, 46, 60, 66, 62, 54, 54, 58, 57, 64, 63, 50, 56, 60, 59, 65, 67, 55, 55, 54, 61, 46, 53, 59, 61, 70, 66, 66, 49, 45, 65, 27, 40, 59, 58, 67, 66, 64, 50, 56], "temp": [100, 100, 97, 91, 87, 82, 78, 74, 71, 67, 63, 60, 57, 55, 54, 53, 53, 51, 50, 49, 47, 45, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 42, 41, 40, 40, 40, 40, 39, 38, 37, 37, 36, 35, 35, 35, 35, 35, 35, 35, 35, 36, 35, 35, 35, 34, 34, 33, 33, 32, 33, 33, 33, 34, 35, 35, 35, 35, 36, 37, 37, 39], "motion": [23, 29, 41, 47, 48, 51, 53, 52, 53, 61, 66, 64, 78, 89, 86, 88, 91, 90, 85, 86, 89, 66, 50, 53, 55, 58, 61, 62, 63, 69, 66, 62, 67, 57, 45, 46, 47, 36, 23, 34, 31, 7, 34, 79, 76, 74, 70, 62, 56, 55, 54, 58, 61, 54, 46, 44, 46, 46, 46, 46, 44, 43, 44, 61, 78, 49, 13, 6, 7, 8, 8, 9], "spo2": [37, 35, 37, 39, 39, 41, 41, 41, 44, 47, 51, 49, 48, 47, 41, 33, 26, 24, 28, 41, 50, 50, 48, 50, 56, 56, 52, 52, 50, 45, 51, 60, 59, 60, 61, 61, 59, 55, 47, 42, 51, 60, 40, 40, 49, 45, 48, 53, 52, 49, 55, 60, 62, 60, 59, 58, 56, 60, 60, 61, 61, 61, 60, 60, 59, 56, 58, 61, 61, 61, 61, 61]}}]};
+STREAMS.subjects.push({"id": "🎬 Demo: A day (scripted)", "states": ["Content / happy 🙂", "Content / happy 🙂", "Content / happy 🙂", "Content / happy 🙂", "Content / happy 🙂", "Content / happy 🙂", "Content / happy 🙂", "Content / happy 🙂", "Focused (mild)", "Focused (mild)", "Focused (mild)", "Focused (mild)", "Focused (mild)", "Focused (mild)", "Focused (mild)", "Stressed", "Stressed", "Stressed", "Stressed", "Stressed", "Stressed", "Very stressed", "Very stressed", "Very stressed", "Very stressed", "Very stressed", "Very stressed", "Very stressed", "Very stressed", "Very stressed", "Very stressed", "Active (exertion)", "Active (exertion)", "Active (exertion)", "Active (exertion)", "Active (exertion)", "Active (exertion)", "Active (exertion)", "Active (exertion)", "Recovering", "Recovering", "Recovering", "Recovering", "Recovering", "Recovering", "Recovering", "Recovering", "Recovering", "Happy / content 🙂", "Happy / content 🙂", "Happy / content 🙂", "Happy / content 🙂", "Happy / content 🙂", "Happy / content 🙂"], "ch": {"sweat": [19, 15, 15, 22, 20, 18, 22, 22, 54, 51, 55, 56, 54, 53, 55, 72, 67, 69, 73, 74, 68, 88, 90, 96, 94, 91, 93, 89, 90, 89, 89, 72, 72, 74, 78, 73, 75, 73, 73, 41, 39, 43, 40, 40, 40, 44, 42, 44, 18, 20, 14, 17, 20, 13], "hr": [18, 21, 22, 22, 16, 22, 18, 17, 45, 42, 45, 46, 40, 47, 41, 65, 67, 66, 66, 64, 61, 87, 86, 80, 86, 81, 80, 85, 84, 87, 82, 94, 94, 94, 94, 92, 86, 91, 87, 41, 40, 35, 36, 41, 34, 37, 42, 36, 22, 14, 16, 22, 14, 22], "hrv": [20, 14, 20, 14, 17, 16, 15, 14, 57, 53, 57, 52, 51, 57, 50, 64, 64, 70, 72, 70, 66, 84, 90, 89, 83, 85, 83, 82, 87, 89, 83, 68, 68, 73, 76, 71, 68, 75, 71, 36, 39, 42, 38, 41, 36, 39, 39, 36, 14, 19, 19, 20, 15, 19], "temp": [16, 24, 17, 17, 16, 24, 19, 19, 48, 42, 45, 46, 49, 42, 45, 65, 61, 65, 62, 63, 60, 82, 83, 86, 85, 85, 78, 79, 83, 85, 83, 54, 59, 53, 56, 54, 55, 56, 58, 37, 37, 37, 30, 32, 31, 30, 35, 35, 22, 16, 15, 22, 17, 22], "motion": [5, 7, 7, 7, 12, 5, 9, 11, 7, 6, 3, 4, 7, 3, 9, 8, 7, 4, 5, 9, 6, 8, 9, 10, 10, 6, 6, 7, 11, 11, 8, 97, 93, 94, 92, 97, 96, 94, 92, 15, 12, 16, 12, 18, 18, 14, 14, 17, 4, 2, 10, 9, 6, 2], "spo2": [12, 4, 5, 4, 6, 8, 5, 12, 10, 14, 7, 13, 11, 10, 10, 9, 9, 9, 13, 10, 10, 9, 11, 15, 9, 10, 17, 15, 10, 13, 16, 17, 13, 15, 15, 19, 16, 13, 17, 5, 10, 5, 11, 12, 6, 7, 12, 12, 10, 4, 2, 3, 2, 3]}});
+// slider config: right end = more stress; weight = Ψ contribution; gate/health flagged
+const SL=[
+ {k:'sweat',ic:'💧',name:'Sweat (EDA)',w:1.3,lv:['no sweat','little sweat','sweating','sweat profusely'],ends:['dry','drenched']},
+ {k:'hr',ic:'❤️',name:'Heart rate',w:1.0,lv:['calm','elevated','fast','racing'],ends:['resting','racing']},
+ {k:'hrv',ic:'〰️',name:'HRV',w:1.0,lv:['relaxed (high)','moderate','low','very low'],ends:['high / calm','very low']},
+ {k:'resp',ic:'🫁',name:'Respiration',w:1.0,lv:['slow','normal','fast','rapid / erratic'],ends:['slow','rapid']},
+ {k:'temp',ic:'🌡️',name:'Skin temp',w:0.8,lv:['warm','cooling','cool','cold / clammy'],ends:['warm','clammy']},
+ {k:'emg',ic:'💪',name:'Muscle (EMG)',w:0.9,lv:['relaxed','slight tension','tense','clenched'],ends:['relaxed','clenched']},
+ {k:'motion',ic:'🏃',name:'Motion (gate)',w:0,gate:1,lv:['still','light','active','vigorous'],ends:['still','vigorous']},
+ {k:'spo2',ic:'🩸',name:'SpO₂ (health)',w:0,health:1,lv:['normal','slightly low','low','very low'],ends:['98–100%','<90%']},
+];
+const V={sweat:20,hr:22,hrv:24,resp:22,temp:24,emg:18,motion:12,spo2:6}; // 0..100, start calm
+let mode='stream',playing=true,timer=null,subj=0,idx=0;
+
+const ST4=[{k:'relax',n:'Relax',ic:'😌',c:'#2fb16b'},{k:'cog',n:'Cognitive stress',ic:'🧠',c:'#e8b53a'},{k:'emo',n:'Emotional stress',ic:'😰',c:'#e8791f'},{k:'phy',n:'Physical stress',ic:'🏃',c:'#2E8B84'}];
+const LEVELS=['mild','moderate','very','extreme'];
+function classify(ar){const m=V.motion;let sc={relax:Math.max(0,100-ar),phy:ar*(m/100)*1.5,cog:ar*(1-m/100)*(0.55+V.sweat/250),emo:ar*(1-m/100)*(0.45+V.emg/250+V.temp/300)};let tot=sc.relax+sc.phy+sc.cog+sc.emo+1e-6,mem={};for(const k in sc)mem[k]=sc[k]/tot;let arr=Object.entries(mem).sort((a,b)=>b[1]-a[1]);return{mem,dom:arr[0][0],grey:(arr[0][1]-arr[1][1])<0.15};}
+const FP={relax:{a:0,s:16,e:1.0},cog:{a:11,s:-3,e:0.72},emo:{a:-14,s:-16,e:1.25},phy:{a:16,s:-5,e:0.62}};
+function setA(id,at,v){const el=document.getElementById(id);if(el)el.setAttribute(at,v);}
+function updateFace(dom,z,ar,col){const P=FP[dom]||FP.relax,k=0.45+z*0.22,a=P.a*k,s=P.s*(0.5+0.5*k),e=1-(1-P.e)*k;
+ setA('f_browL','d','M54,'+(70-a*0.35)+' L90,'+(70+a));setA('f_browR','d','M146,'+(70-a*0.35)+' L110,'+(70+a));
+ setA('f_eyeL','ry',14*e);setA('f_eyeR','ry',14*e);
+ setA('f_mouth','d','M64,138 Q100,'+(138+s)+' 136,138');
+ setA('f_head','stroke',col);setA('f_head','fill',col+'22');
+ const sw=document.getElementById('f_sweat');if(sw)sw.style.opacity=Math.max(0,Math.min(1,(ar-45)/40));}
+function bandOf(p){ if(p<30)return{n:'Calm',c:'--g',z:0}; if(p<55)return{n:'Rising — grey zone',c:'--a',z:1}; if(p<78)return{n:'High stress',c:'--o',z:2}; return{n:'Critical',c:'--r',z:3}; }
+function psiCalc(){
+  let num=0,den=0; SL.forEach(s=>{ if(s.w>0){const a=V[s.k]/100; num+=s.w*a*a; den+=s.w;} });
+  let p=Math.sqrt(num/den)*100;
+  // motion gate: high motion → discount arousal (attribute to activity, not emotion)
+  const m=V.motion, disc=m>60?0.55*((m-60)/40):0; p=p*(1-disc);
+  return {p:Math.max(0,Math.min(100,p)),disc};
+}
+function lvIdx(v){return Math.min(3,Math.floor(v/25));}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+
+function render(){
+  const {p,disc}=psiCalc(); const b=bandOf(p); const col=css('--'+b.c.replace('--',''));
+  document.getElementById('psi').textContent=Math.round(p);
+  const cl=classify(p), dom=ST4.find(s=>s.k===cl.dom), lv=LEVELS[b.z];
+  updateFace(cl.dom,b.z,p,col);
+  const lbl = cl.dom==='relax' ? (p<15?'Deeply calm':'Relaxed') : (cl.grey?('Uncertain · '+lv):(dom.n+' · '+lv));
+  document.getElementById('state').textContent=lbl; document.getElementById('state').style.color=cl.grey?css('--a'):dom.c;
+  document.getElementById('mk').style.left=p+'%';
+  document.getElementById('gate').textContent=disc>0?('🏃 Activity detected — arousal discounted ('+Math.round(disc*100)+'%): credited to exertion, not emotion'):'';
+  const s4=document.getElementById('states4'); if(s4)s4.innerHTML=ST4.map(s=>{const pc=Math.round((cl.mem[s.k]||0)*100),on=s.k===cl.dom&&!cl.grey;return '<div style="display:flex;align-items:center;gap:6px;margin:3px 0;font-size:12px;'+(on?'font-weight:700':'opacity:.8')+'"><span style="width:16px">'+s.ic+'</span><span style="width:118px">'+s.n+'</span><span style="flex:1;height:9px;background:#0e1621;border-radius:5px;overflow:hidden"><span style="display:block;height:100%;width:'+pc+'%;background:'+s.c+'"></span></span><span style="width:30px;text-align:right;color:var(--muted)">'+pc+'%</span></div>';}).join('');
+  const lowO2=V.spo2>62, esc=document.getElementById('esc'); let h='';
+  if(lowO2)h+='<b style="color:var(--r)">🩸 Health: SpO₂ low — check oxygenation.</b>';
+  if(cl.grey)h+='<b style="color:var(--a)">'+lv.charAt(0).toUpperCase()+lv.slice(1)+' arousal — TYPE uncertain.</b>High arousal, but the wrist can\'t tell cognitive vs emotional apart. <span class="note">Human-in-command: contact a caregiver?</span><div class="btns"><button class="act" onclick="ack(this,\'✓ Caregiver contacted (demo)\')">Contact Caregiver</button><button onclick="ack(this,\'✓ Noted\')">OK, noted</button></div>';
+  else if(cl.dom==='relax')h+='<b style="color:var(--g)">Relaxed — passive monitoring.</b><div class="note">Within your personal baseline.</div>';
+  else if(cl.dom==='phy')h+='<b style="color:var(--teal)">Physical activity — '+lv+'.</b>Arousal is exertion, not distress — the motion gate at work. No action.';
+  else if(cl.dom==='cog')h+='<b style="color:var(--a)">Cognitive load — '+lv+'.</b>Sustained mental effort. Suggest a short break.<div class="btns"><button class="act" onclick="ack(this,\'✓ Break logged\')">Take a break</button><button onclick="ack(this,\'✓ Noted\')">Dismiss</button></div>';
+  else {const crit=b.z>=3;h+='<b style="color:'+(crit?'var(--r)':'var(--o)')+'">Emotional stress — '+lv+'.</b>Human-in-command: '+(crit?'confirm to alert caretaker &amp; doctor.':'notify a caretaker?')+'<div class="btns"><button class="act" onclick="ack(this,\''+(crit?'✓ Caretaker + doctor alerted (demo)':'✓ Caretaker notified (demo)')+'\')">'+(crit?'Alert caretaker &amp; doctor':'Notify caretaker')+'</button><button onclick="ack(this,\'✓ I am OK\')">I am OK</button></div>';}
+  esc.innerHTML=h;
+  // sliders
+  SL.forEach(s=>{ const el=document.getElementById('s_'+s.k); if(el)el.value=V[s.k];
+    const lab=document.getElementById('lv_'+s.k); if(lab)lab.textContent=s.lv[lvIdx(V[s.k])]; });
+}
+function ack(btn,msg){btn.parentElement.innerHTML='<span style="color:var(--teal);font-weight:700">'+msg+'</span>';}
+
+function buildSliders(){
+  const c=document.getElementById('sliders'); c.innerHTML='';
+  SL.forEach(s=>{ const d=document.createElement('div'); d.className='slider';
+    d.innerHTML=`<div class="top"><span class="ic">${s.ic}</span><span>${s.name}</span><span class="lv" id="lv_${s.k}"></span></div>
+    <input type="range" min="0" max="100" id="s_${s.k}" value="${V[s.k]}">
+    <div class="ends"><span>${s.ends[0]}</span><span>${s.ends[1]}</span></div>`;
+    c.appendChild(d);
+    const inp=d.querySelector('input');
+    inp.addEventListener('input',e=>{ if(mode==='sim'){V[s.k]=+e.target.value; render();} });
+  });
+  setDisabled();
+}
+function setDisabled(){ SL.forEach(s=>{const el=document.getElementById('s_'+s.k); if(el)el.disabled=(mode==='stream');}); }
+
+function setMode(m){ mode=m; document.getElementById('mStream').classList.toggle('on',m==='stream');
+  document.getElementById('mSim').classList.toggle('on',m==='sim');
+  document.getElementById('streamCtl').style.display=(m==='stream')?'flex':'none';
+  setDisabled(); if(m==='stream'){startStream();} else {stopStream();} render(); }
+
+function fillSubjSel(){ const sel=document.getElementById('subjSel'); sel.innerHTML='';
+  STREAMS.subjects.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=s.id;sel.appendChild(o);}); }
+function pickSubj(){ subj=+document.getElementById('subjSel').value; idx=0; }
+function togglePlay(){ playing=!playing; document.getElementById('playBtn').textContent=playing?'⏸ Pause':'▶ Play'; }
+function startStream(){ stopStream(); playing=true; document.getElementById('playBtn').textContent='⏸ Pause';
+  timer=setInterval(()=>{ if(!playing)return; const S=STREAMS.subjects[subj]; const n=S.states.length;
+    ['sweat','hr','hrv','temp','motion','spo2'].forEach(k=>{ if(S.ch[k]) V[k]=S.ch[k][idx]; });
+    V.resp=Math.round(18+0.35*(V.sweat+V.hr)/2*0.6); V.emg=Math.round(14+0.3*V.hr); // watch-inferred (Non-EEG lacks resp/EMG)
+    document.getElementById('truth').textContent=S.states[idx];
+    render(); idx=(idx+1)%n; },700); }
+function stopStream(){ if(timer){clearInterval(timer);timer=null;} }
+
+buildSliders(); fillSubjSel(); setMode('stream');
+</script></body></html>
