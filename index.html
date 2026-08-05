@@ -168,61 +168,51 @@
   </div>
 </nav>
 
-<header class="hero">
-  <div class="container">
-    <div class="eyebrow">Decision Support Systems &middot; AI &amp; Data Science</div>
-    <h1>AI that makes people better decision-makers — not AI that decides for them.</h1>
-    <p class="lede">I build systems that sit next to human judgment, not in front of it: transparent models,
-      honest uncertainty, and interfaces that explain themselves. At the center is a mission — augmenting the
-      people who care for patients — with the same principle proven across workforce, credit, aerospace, and
-      customer-retention decisions.</p>
-    <div class="button-row">
-      <a href="#work" class="btn btn-primary">See the work</a>
-      <a href="#philosophy" class="btn btn-secondary">Read the philosophy</a>
-    </div>
-  </div>
-</header>
-
-<!-- ============ FEATURED TODAY — daily rotating spotlight ============ -->
+<!-- ============ FEATURED TODAY — daily rotating spotlight (redesigned · top of page) ============ -->
 <style>
-#spotlight{padding:0 0 6px;}
-#spotlight .spot-card{display:block;text-decoration:none;position:relative;background:#fff;border:1px solid #e6eaf1;border-radius:16px;background-repeat:no-repeat;background-position:center,right center;background-size:cover,cover;transition:background-image .35s ease;
-  padding:24px 28px 24px 30px;box-shadow:0 6px 22px rgba(20,30,60,.08);overflow:hidden;}
-#spotlight .spot-accent{position:absolute;left:0;top:0;bottom:0;width:6px;background:#2E8B84;}
-#spotlight .spot-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;}
-#spotlight .spot-kicker{font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#C9A227;}
-#spotlight .spot-nav{display:flex;align-items:center;gap:8px;}
-#spotlight .spot-nav button{width:30px;height:30px;border-radius:8px;border:1px solid #dbe1ea;background:#f6f8fb;
-  color:#1F3864;font-size:16px;line-height:1;cursor:pointer;transition:background .15s;}
-#spotlight .spot-nav button:hover{background:#eef2f7;}
-#spotlight .spot-count{font-size:12px;color:#8792a4;min-width:44px;text-align:center;font-variant-numeric:tabular-nums;}
-#spotlight .spot-eyebrow{font-size:12.5px;font-weight:700;color:#5C7086;margin-bottom:5px;}
-#spotlight .spot-title{font-size:22px;line-height:1.2;color:#1F3864;margin:0 0 8px;}
-#spotlight .spot-blurb{font-size:14.5px;line-height:1.58;color:#43506a;margin:0 0 15px;max-width:70ch;}
-#spotlight .spot-link{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:14px;
-  text-decoration:none;color:#1F3864;}
-#spotlight .spot-link:hover{gap:11px;}
-@media(max-width:680px){#spotlight .spot-title{font-size:18px;}}
+#spotlight{padding:22px 0 10px;}
+#spotlight .spot-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px;flex-wrap:wrap;}
+#spotlight .spot-kicker{display:inline-flex;align-items:center;gap:9px;font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#C9A227;}
+#spotlight .spot-kicker .cnt{color:#8792a4;font-weight:700;letter-spacing:.5px;}
+#spotlight .spot-nav{display:flex;align-items:center;gap:9px;}
+#spotlight .spot-nav button{width:40px;height:40px;border-radius:11px;border:1px solid #cfd7e2;background:#fff;color:#1F3864;font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(31,56,100,.08);transition:.15s;}
+#spotlight .spot-nav button:hover{background:#1F3864;color:#fff;border-color:#1F3864;}
+#spotlight .spot-card{display:block;text-decoration:none;position:relative;background:#fff;border:1px solid #e6eaf1;border-radius:20px;background-repeat:no-repeat;background-position:center,right center;background-size:cover,cover;transition:background-image .35s ease;overflow:hidden;box-shadow:0 16px 42px rgba(31,56,100,.13);min-height:250px;}
+#spotlight .spot-accent{position:absolute;left:0;top:0;bottom:0;width:8px;background:#2E8B84;z-index:3;}
+#spotlight .spot-body{position:relative;z-index:2;padding:32px 40px 30px;}
+#spotlight .spot-eyebrow{font-size:13.5px;font-weight:800;color:#5C7086;letter-spacing:.4px;margin-bottom:9px;text-transform:uppercase;}
+#spotlight .spot-title{font-family:Georgia,"Times New Roman",serif;font-size:37px;line-height:1.13;color:#1F3864;margin:0 0 14px;font-weight:800;letter-spacing:-.5px;}
+#spotlight .spot-blurb{font-size:17px;line-height:1.6;color:#3a4763;margin:0 0 22px;max-width:66ch;}
+#spotlight .spot-link{display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:16px;text-decoration:none;color:#2E8B84;}
+#spotlight .spot-link:hover{gap:13px;}
+#spotlight .spot-prog{position:absolute;left:0;bottom:0;height:4px;background:#C9A227;width:0;z-index:4;}
+#spotlight .spot-dots{display:flex;gap:8px;justify-content:center;margin-top:15px;flex-wrap:wrap;}
+#spotlight .spot-dots button{width:9px;height:9px;padding:0;border:0;border-radius:50%;background:#c3ccd9;cursor:pointer;transition:.2s;}
+#spotlight .spot-dots button.on{background:#1F3864;width:26px;border-radius:5px;}
+@media(max-width:680px){#spotlight .spot-title{font-size:25px;}#spotlight .spot-body{padding:24px 22px;}}
 </style>
 <section id="spotlight" aria-label="Featured today">
   <div class="container">
+    <div class="spot-head">
+      <span class="spot-kicker">&#9733;&nbsp; Featured today <span class="cnt" id="spotCount">1 / 15</span></span>
+      <div class="spot-nav">
+        <button type="button" id="spotPrev" aria-label="Previous project">&lsaquo;</button>
+        <button type="button" id="spotNext" aria-label="Next project">&rsaquo;</button>
+      </div>
+    </div>
     <a class="spot-card" id="spotCard" href="#">
       <span class="spot-accent" id="spotAccent"></span>
-      <div class="spot-top">
-        <span class="spot-kicker">&#9733;&nbsp; Featured today</span>
-        <div class="spot-nav">
-          <button type="button" id="spotPrev" aria-label="Previous project">&lsaquo;</button>
-          <span class="spot-count" id="spotCount">1 / 10</span>
-          <button type="button" id="spotNext" aria-label="Next project">&rsaquo;</button>
-        </div>
+      <div class="spot-body">
+        <div class="spot-eyebrow" id="spotEyebrow"></div>
+        <h3 class="spot-title" id="spotTitle"></h3>
+        <p class="spot-blurb" id="spotBlurb"></p>
+        <span class="spot-link" id="spotLink">Explore this system
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
       </div>
-      <div class="spot-eyebrow" id="spotEyebrow"></div>
-      <h3 class="spot-title" id="spotTitle"></h3>
-      <p class="spot-blurb" id="spotBlurb"></p>
-      <span class="spot-link" id="spotLink">Explore this system
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </span>
+      <span class="spot-prog" id="spotProg"></span>
     </a>
+    <div class="spot-dots" id="spotDots"></div>
   </div>
 </section>
 <script>
@@ -239,13 +229,16 @@
     {eb:"Decision intelligence", t:"Loan Default Risk Decision Support", b:"A loan default-risk system that explains each risk call to a human underwriter instead of issuing a silent verdict.", h:"#w-loan", c:"#24506e", bg:"assets/spot/bg-loan.jpg"},
     {eb:"Decision intelligence", t:"Customer Retention Decision Support", b:"A marketing decision-support system that predicts customer churn early enough for a team to retain the relationship.", h:"#w-telco", c:"#24506e", bg:"assets/spot/bg-churn.jpg"},
     {eb:"New series · Now live", t:"AEGIS Ocular Station — Eye-Disease Screening", b:"One pass over a retinal photo screens for diabetic retinopathy, AMD, glaucoma and hypertensive retinopathy — the ODIR baseline raised by four dedicated-data specialists (ROC-AUC 0.90–0.99). A public 'Spot the Disease' learning game and screening aid, with a clinician in command.", h:"#w-das", c:"#C9A227", bg:"assets/spot/bg-oras.jpg"},
-    {eb:"New \u00b7 Wearable & cardiovascular", t:"AEGIS Protector \u2014 Your Personal 25/8 Body Guard", b:"A wearable that learns your normal, catches the earliest electrical signs of a heart attack \u2014 the K-wave \u2014 and streams clinician-grade vitals to the hospital station. One device from the wrist to the ward, with a live interactive demo.", h:"#w-protector", c:"#C9A227", bg:"assets/spot/bg-wearable.jpg"}
+    {eb:"New \u00b7 Wearable & cardiovascular", t:"AEGIS Protector \u2014 Your Personal 25/8 Body Guard", b:"A wearable that learns your normal, catches the earliest electrical signs of a heart attack \u2014 the K-wave \u2014 and streams clinician-grade vitals to the hospital station. One device from the wrist to the ward, with a live interactive demo.", h:"#w-protector", c:"#C9A227", bg:"assets/spot/bg-wearable.jpg"},
+    {eb:"New series · Affective wearable", t:"AEGIS Emotional — Sensing How You Feel", b:"An electrode wearable that reads stress and affect from your own physiological signals, judged inside your personal band — the fourth AEGIS wearable tier, human-in-command.", h:"#w-emotional", c:"#C9A227", bg:"assets/spot/bg-wearable.jpg"},
+    {eb:"New series · Health monitoring", t:"AEGIS Health — Continuous Glucose, No Needle", b:"A buttonless smartwatch and a glass base-station fuse four sensing technologies for continuous glucose tracking — the everyday health tier between lifestyle and clinical.", h:"#w-health", c:"#2E8B84", bg:"assets/spot/bg-wearable.jpg"}
   ];
   var N=items.length;
-  var day=Math.floor(Date.now()/86400000);        // days since epoch (UTC) — advances once per day
-  var today=((day%N)+N)%N;
-  var cur=today;
+  var day=Math.floor(Date.now()/86400000);
+  var cur=((day%N)+N)%N;   // start on today's daily pick, then auto-advance
   var scrim="linear-gradient(90deg,#fff 0%,rgba(255,255,255,.93) 42%,rgba(255,255,255,.5) 72%,rgba(255,255,255,.2) 100%)";
+  var dotsWrap=document.getElementById('spotDots');
+  items.forEach(function(_,i){ var b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label','Feature '+(i+1)); b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();cur=i;render(cur);resetProg();}); dotsWrap.appendChild(b); });
   function render(i){
     var it=items[i];
     document.getElementById('spotEyebrow').textContent=it.eb;
@@ -255,16 +248,42 @@
     document.getElementById('spotLink').style.color=it.c;
     var card=document.getElementById('spotCard');
     card.setAttribute('href',it.h);
-    card.style.backgroundImage='';                       // stays white until the image is confirmed loaded
+    card.style.backgroundImage='';
     if(it.bg){ (function(src){ var im=new Image(); im.onload=function(){ if(items[cur].bg===src){ card.style.backgroundImage=scrim+",url('"+src+"')"; } }; im.src=src; })(it.bg); }
     document.getElementById('spotCount').textContent=(i+1)+' / '+N;
+    var ch=dotsWrap.children; for(var k=0;k<ch.length;k++){ ch[k].className=(k===i?'on':''); }
   }
-  function go(d,ev){ if(ev){ev.preventDefault();ev.stopPropagation();} cur=((cur+d)%N+N)%N; render(cur); }
+  var prog=0, timer=null;
+  function step(){ prog+=100/60; document.getElementById('spotProg').style.width=Math.min(prog,100)+'%'; if(prog>=100){ prog=0; cur=(cur+1)%N; render(cur); } }
+  function resetProg(){ prog=0; document.getElementById('spotProg').style.width='0%'; }
+  function startAuto(){ if(!timer) timer=setInterval(step,100); }
+  function stopAuto(){ clearInterval(timer); timer=null; }
+  function go(d,ev){ if(ev){ev.preventDefault();ev.stopPropagation();} cur=((cur+d)%N+N)%N; render(cur); resetProg(); }
   document.getElementById('spotPrev').addEventListener('click',function(e){go(-1,e);});
   document.getElementById('spotNext').addEventListener('click',function(e){go(1,e);});
-  render(cur);
+  var cardEl=document.getElementById('spotCard');
+  cardEl.addEventListener('mouseenter',stopAuto);
+  cardEl.addEventListener('mouseleave',startAuto);
+  render(cur); startAuto();
 })();
 </script>
+
+<header class="hero">
+  <div class="container">
+    <div class="eyebrow">Decision Support Systems &middot; AI &amp; Data Science</div>
+    <h1>AI that makes people better decision-makers — not AI that decides for them.</h1>
+    <p class="lede">I build systems that sit next to human judgment, not in front of it: transparent models,
+      honest uncertainty, and interfaces that explain themselves. At the center is a mission — augmenting the
+      people who care for patients — with the same principle proven across workforce, credit, aerospace, and
+      customer-retention decisions.</p>
+    <div class="button-row">
+      <a href="#work" class="btn btn-primary">See the work</a>
+      <a href="#philosophy" class="btn btn-secondary">Read the philosophy</a>
+    </div>
+  </div>
+</header>
+
+
 
 <section id="philosophy">
   <div class="container">
