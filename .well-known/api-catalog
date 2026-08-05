@@ -1,0 +1,21 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://aegishumanai.com/",
+      "service-doc": [
+        {
+          "href": "https://aegishumanai.com/llms.txt",
+          "type": "text/plain",
+          "title": "AEGIS site guide for AI agents (llms.txt)"
+        }
+      ],
+      "describedby": [
+        {
+          "href": "https://aegishumanai.com/sitemap.xml",
+          "type": "application/xml",
+          "title": "AEGIS sitemap"
+        }
+      ]
+    }
+  ]
+}

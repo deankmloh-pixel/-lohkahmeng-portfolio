@@ -1,0 +1,54 @@
+# AEGIS - Human-AI Augmenting Systems
+
+> AEGIS builds decision-support systems that augment human experts, never replace them. Founded by Dr Loh Kah Meng (Singapore). Every system pairs real, often-forgotten public data with an interpretable model and keeps a human in command. Mission: give dead datasets a faithful second life - "augment, never replace; honest metrics; share the knowledge."
+
+## About
+- [About AEGIS](https://aegishumanai.com/about.html): who we are and the human-in-command philosophy.
+- [Prof Dhanjoo Ghista](https://aegishumanai.com/prof-dhanjoo-ghista.html): the Nondimensional Physiological Index lineage behind AEGIS.
+- [Disclaimer](https://aegishumanai.com/disclaimer.html): illustrative research, not certified medical devices.
+
+## Diagnostic consoles (DAS series)
+- [Diagnostics hub](https://aegishumanai.com/diagnostics/): all live diagnostic augmenting consoles.
+- [DRAS - Diabetes Risk](https://aegishumanai.com/diagnostics/dras/)
+- [RRAS - Renal Risk](https://aegishumanai.com/diagnostics/rras/)
+- [PRAS - Pulmonary Risk](https://aegishumanai.com/diagnostics/pras/)
+- [MDAS - Chronic-Disease Nondimensional Index (Lambda/Omega)](https://aegishumanai.com/diagnostics/mdas/)
+- [CRAS - Cardiac Nondimensional Index](https://aegishumanai.com/diagnostics/cras/)
+- [ORAS - Ocular Risk / Spot the Disease](https://aegishumanai.com/diagnostics/oras/)
+
+## Wearable technology (four tiers: Lifestyle, Health, Clinical, Emotional)
+- [Wearable technology overview](https://aegishumanai.com/wearable-technology.html)
+- [AEGIS Protector - Lifestyle](https://aegishumanai.com/aegis-protector.html)
+- [AEGIS Clinical - cardiac](https://aegishumanai.com/aegis-cardiac.html)
+- [AEGIS Health - glucose wearable (P18)](https://aegishumanai.com/project-18-glucose-wearable.html)
+- [AEGIS Emotional - affective wearable (P19)](https://aegishumanai.com/project-19-affective-wearable.html)
+
+## Project case studies
+- [P1 Nurse Augmenting System](https://aegishumanai.com/project-1-nurse-augmenting-system.html)
+- [P2 Medication Adherence](https://aegishumanai.com/project-2-medication-adherence.html)
+- [P3 Loan-Approval Advisory](https://aegishumanai.com/project-3-loan-default-risk.html)
+- [P4 Telco Churn](https://aegishumanai.com/project-4-telco-churn.html)
+- [P5 Workforce Income Analytics](https://aegishumanai.com/project-5-workforce-income.html)
+- [P6 Orbital Watch](https://aegishumanai.com/project-6-aegis-orbital-watch.html)
+- [P7 Predictive Maintenance](https://aegishumanai.com/project-7-predictive-maintenance.html)
+- [P8 Turbofan RUL](https://aegishumanai.com/project-8-turbofan-rul.html)
+- [P9 Attrition Target List](https://aegishumanai.com/project-9-attrition-target-list.html)
+- [P17 Cardiac Fuzzy](https://aegishumanai.com/project-17-cardiac.html)
+
+## Interactive apps (run fully in-browser, no server, models embedded)
+- [Nurse readmission](https://aegishumanai.com/apps/nurse-readmission.html)
+- [Medication adherence](https://aegishumanai.com/apps/medication-adherence.html)
+- [Loan screening](https://aegishumanai.com/apps/loan-screening.html)
+- [Telco churn](https://aegishumanai.com/apps/telco.html)
+- [Orbital watch](https://aegishumanai.com/apps/orbit.html)
+- [Predictive maintenance](https://aegishumanai.com/apps/maintenance.html)
+- [Turbofan RUL](https://aegishumanai.com/apps/rul.html)
+- [Attrition](https://aegishumanai.com/apps/attrition.html)
+- [P18 glucose watch](https://aegishumanai.com/apps/p18-glucose-watch.html)
+- [P18 base station](https://aegishumanai.com/apps/p18-base-station.html)
+- [P19 Sentinel](https://aegishumanai.com/apps/aegis-p19-sentinel.html)
+
+## Notes for agents
+- All apps run entirely client-side; there is no backend REST API. Models are embedded and reproducible.
+- Content is illustrative research for augmenting human experts - not a certified medical device.
+- Contact: dean.kmloh@aegishumanai.com
