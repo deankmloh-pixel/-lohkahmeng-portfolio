@@ -1,4 +1,8 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!DOCTYPE html><html lang="en"><head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>AEGIS · RRAS Console</title><style>
 :root{--navy:#1F3864;--teal:#2E8B84;--gold:#C9A227;--red:#B4462F;--ink:#16233b;--paper:#eef1f6;--line:#dce3ee}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--paper);color:var(--ink)}
@@ -193,4 +197,10 @@ function drawGauge(e){const s=$('gsvg'),cx=150,cy=138,r=108;
 $('foot').innerHTML='Engine: <b>RRAS SVM classifier</b> (FULL: ACC '+P.svm_full.acc+', F1 '+P.svm_full.f1+', ROC-AUC '+P.svm_full.roc_auc+') decides obstruction; <b>RRAS SVR severity</b> (per-class eGFR '+P.svr_full.egfr_by_class.Clear+' / '+P.svr_full['egfr_by_class']['Early-obstruction']+' / '+P.svr_full.egfr_by_class.Obstructed+') grades it. Browser runs a distilled scorer agreeing with the full SVM on '+(P.clf.agreement*100).toFixed(1)+'% of cases and reproducing the SVR at R²='+P.sev.r2+'. Cohort is <b>SYNTHETIC</b> (RRAS-RP) — research scaffold, screening estimate for reference only, a clinician makes every call. Not for clinical use. Same SVM+SVR pair as the DRAS Console (Project 10).';
 update();
 </script><script src="/disclaimer.js" defer></script>
+
+<!-- AEGIS site-wide subscribe button (added 2026-08-05) -->
+<a href="/subscribe" id="aegis-sub-btn" aria-label="Subscribe for new AEGIS app alerts" style="position:fixed;right:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;padding:11px 16px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);line-height:1"><span style="font-size:15px">📬</span> Get new-app alerts</a>
+
+<!-- AEGIS site-wide contact button (added 2026-08-05) -->
+<a href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20enquiry" id="aegis-contact-btn" aria-label="Contact AEGIS" style="position:fixed;right:18px;bottom:70px;z-index:99999;display:inline-flex;align-items:center;gap:8px;background:rgba(18,28,40,.96);color:#e8eef5;font-weight:600;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;padding:10px 16px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);border:1px solid rgba(201,162,75,.45);line-height:1"><span style="font-size:15px">✉</span> Contact us</a>
 </body></html>
