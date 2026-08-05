@@ -14,7 +14,7 @@ export async function onRequestPost(context) {
     const rows = await env.DB.prepare("SELECT email FROM subscribers").all();
     const emails = (rows.results || []).map(r => r.email).filter(Boolean);
     if (!emails.length) return json({ ok:true, sent:0, note:"no subscribers yet" });
-    const FROM = env.FROM_EMAIL || "AEGIS <hello@aegishumanai.com>";
+    const FROM = env.FROM_EMAIL || "Dr Loh Kah Meng · AEGIS <aegisloh@aegishumanai.com>";
     let sent = 0, failed = 0, errors = [];
     for (let i = 0; i < emails.length; i += 100) {
       const chunk = [];
@@ -24,7 +24,7 @@ export async function onRequestPost(context) {
         chunk.push({
           from: FROM, to: [to], subject,
           html: html.split("%%UNSUBSCRIBE%%").join(unsub),
-          headers: { "List-Unsubscribe": "<" + unsub + ">", "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" },
+          headers: { "List-Unsubscribe": "<" + unsub + ">", "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" }, reply_to: env.REPLY_TO || "aegisloh@aegishumanai.com",
         });
       }
       const resp = await fetch("https://api.resend.com/emails/batch", {

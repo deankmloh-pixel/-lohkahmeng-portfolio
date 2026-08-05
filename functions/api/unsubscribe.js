@@ -18,8 +18,8 @@ async function farewell(env, email){
      <p style="margin:0 0 16px">If it wasn't what you hoped for, that's on us to earn back. No hard feelings either way — thank you for having given us a look.</p>
      <p style="margin:0 0 22px"><b>The door stays open.</b> Whenever you're curious again, you're welcome to rejoin — same promise, no spam.</p>`,
     "Rejoin anytime", "https://aegishumanai.com/subscribe");
-  const FROM = env.FROM_EMAIL || "AEGIS <hello@aegishumanai.com>";
-  await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Authorization":"Bearer "+env.RESEND_API_KEY,"Content-Type":"application/json"},body:JSON.stringify({from:FROM,to:[email],subject:"You've left the AEGIS list — the door stays open",html})});
+  const FROM = env.FROM_EMAIL || "Dr Loh Kah Meng · AEGIS <aegisloh@aegishumanai.com>";
+  await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Authorization":"Bearer "+env.RESEND_API_KEY,"Content-Type":"application/json"},body:JSON.stringify({from:FROM,to:[email],subject:"You've left the AEGIS list — the door stays open",html,reply_to:env.REPLY_TO||"aegisloh@aegishumanai.com"})});
 }
 async function tok(email, secret){ const b=await crypto.subtle.digest("SHA-256", new TextEncoder().encode(email+":"+secret)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("").slice(0,24); }
 function page(msg, status=200){ return new Response(`<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>AEGIS</title><body style="font-family:-apple-system,Segoe UI,Arial,sans-serif;background:#0f1720;color:#e8eef5;display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center;padding:24px;margin:0"><div><div style="color:#c9a24b;font-weight:700;letter-spacing:3px;margin-bottom:12px">A E G I S</div><p style="max-width:42ch;line-height:1.6;color:#c7d2dd">${msg}</p></div>`,{status,headers:{"content-type":"text/html; charset=utf-8"}}); }

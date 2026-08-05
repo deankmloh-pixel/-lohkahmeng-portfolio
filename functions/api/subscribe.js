@@ -30,11 +30,11 @@ async function welcome(env, email, name) {
   await send(env, email, "Welcome to AEGIS — you're on the list", html, unsub);
 }
 async function send(env, to, subject, html, unsub) {
-  const FROM = env.FROM_EMAIL || "AEGIS <hello@aegishumanai.com>";
+  const FROM = env.FROM_EMAIL || "Dr Loh Kah Meng · AEGIS <aegisloh@aegishumanai.com>";
   const headers = unsub ? { "List-Unsubscribe":"<"+unsub+">", "List-Unsubscribe-Post":"List-Unsubscribe=One-Click" } : undefined;
   await fetch("https://api.resend.com/emails", { method:"POST",
     headers:{ "Authorization":"Bearer "+env.RESEND_API_KEY, "Content-Type":"application/json" },
-    body: JSON.stringify({ from:FROM, to:[to], subject, html, headers }) });
+    body: JSON.stringify({ from:FROM, to:[to], subject, html, headers, reply_to: env.REPLY_TO || "aegisloh@aegishumanai.com" }) });
 }
 async function tok(email, secret){ const b=await crypto.subtle.digest("SHA-256", new TextEncoder().encode(email+":"+secret)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("").slice(0,24); }
 function json(o,s=200){ return new Response(JSON.stringify(o),{status:s,headers:{"content-type":"application/json","access-control-allow-origin":"*"}}); }
