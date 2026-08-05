@@ -1,0 +1,61 @@
+<!-- =============================================================
+     AEGIS — reusable "NEW APP LAUNCH" email template
+     How to use each launch (Level 1):
+       MailerLite -> Campaigns -> New -> choose your "AEGIS Subscribers" group
+       -> pick "custom HTML" editor -> paste this whole file
+       -> replace the {{PLACEHOLDERS}} below -> Preview -> Send.
+     Replace:
+       {{APP_NAME}}        e.g. AEGIS Ocular Station
+       {{APP_TAGLINE}}     one line, e.g. "Spot eye disease from a single fundus photo."
+       {{APP_PARA}}        2-3 sentences on what it does + the honest note
+       {{APP_IMAGE_URL}}   a screenshot URL (https, hosted on aegishumanai.com/assets/...)
+       {{APP_URL}}         e.g. https://aegishumanai.com/apps/xxxx.html
+     ============================================================= -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0f1720;margin:0;padding:0">
+  <tr><td align="center" style="padding:0">
+    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;font-family:Arial,Helvetica,sans-serif">
+
+      <!-- Header band -->
+      <tr><td align="center" style="background:#0f1720;padding:28px 24px 18px">
+        <img src="https://aegishumanai.com/assets/aegis-mark-gold.png" width="46" height="46" alt="AEGIS" style="display:block;margin:0 auto 8px">
+        <div style="color:#c9a24b;font-size:13px;letter-spacing:4px;font-weight:bold">A E G I S</div>
+        <div style="color:#8aa0b4;font-size:11px;letter-spacing:1px;margin-top:2px">HUMAN-AI AUGMENTING SYSTEMS</div>
+      </td></tr>
+
+      <!-- Gold rule -->
+      <tr><td style="padding:0 24px"><div style="height:2px;background:linear-gradient(90deg,rgba(201,162,75,0),#c9a24b,rgba(201,162,75,0))"></div></td></tr>
+
+      <!-- Content -->
+      <tr><td style="background:#ffffff;padding:34px 34px 10px">
+        <div style="color:#c9a24b;font-size:12px;letter-spacing:2px;font-weight:bold;text-transform:uppercase">New app just launched</div>
+        <h1 style="color:#12202e;font-family:Georgia,'Times New Roman',serif;font-size:26px;line-height:1.25;margin:8px 0 6px">{{APP_NAME}}</h1>
+        <div style="color:#5a6b7b;font-size:16px;font-style:italic;margin-bottom:20px">{{APP_TAGLINE}}</div>
+
+        <a href="{{APP_URL}}" style="text-decoration:none">
+          <img src="{{APP_IMAGE_URL}}" width="532" alt="{{APP_NAME}} preview" style="display:block;width:100%;max-width:532px;border-radius:10px;border:1px solid #e3e9ef;margin-bottom:22px">
+        </a>
+
+        <p style="color:#33475b;font-size:15px;line-height:1.6;margin:0 0 24px">{{APP_PARA}}</p>
+
+        <!-- Button -->
+        <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 26px">
+          <tr><td align="center" bgcolor="#c9a24b" style="border-radius:10px">
+            <a href="{{APP_URL}}" style="display:inline-block;padding:14px 30px;color:#0f1720;font-size:16px;font-weight:bold;text-decoration:none;border-radius:10px">Try it live &rarr;</a>
+          </td></tr>
+        </table>
+      </td></tr>
+
+      <!-- Footer -->
+      <tr><td style="background:#ffffff;padding:0 34px 30px">
+        <div style="height:1px;background:#e6ebf0;margin-bottom:16px"></div>
+        <div style="color:#c9a24b;font-size:13px;font-style:italic;margin-bottom:8px">AEGIS &mdash; AI augments judgment, it does not replace it.</div>
+        <div style="color:#93a4b4;font-size:12px;line-height:1.6">
+          Real working tools, honest write-ups. You're receiving this because you subscribed at
+          <a href="https://aegishumanai.com/" style="color:#5a9fd4;text-decoration:none">aegishumanai.com</a>.<br>
+          &copy; 2026 AEGIS &middot; Human-AI Augmenting Systems &middot; <a href="%%UNSUBSCRIBE%%" style="color:#93a4b4">Unsubscribe</a>
+        </div>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
