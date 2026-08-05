@@ -95,22 +95,14 @@
         <h1>Be first to know when we launch</h1>
         <p class="sub">Join the list and get a short note <b>every time a new AEGIS app goes live</b> — real working tools, honest write-ups. Nothing else.</p>
 
-        <!-- ============================================================
-             ONE-TIME SETUP: paste your MailerLite form action URL below.
-             In MailerLite: Forms > Embedded form > "Code" / custom HTML,
-             copy the <form action="..."> value and paste it as ML_ACTION.
-             (Field names below already match MailerLite: fields[email], fields[name].)
-             ============================================================ -->
-        <form id="subForm" method="post" target="ml_iframe"
-              action="PASTE_YOUR_MAILERLITE_FORM_ACTION_URL_HERE">
+        <!-- Cloudflare-native: posts to the Pages Function /api/subscribe -> D1 database. No third party. -->
+        <form id="subForm">
           <div class="row">
-            <input type="text" name="fields[name]" placeholder="First name (optional)" autocomplete="given-name">
+            <input type="text" name="name" id="name" placeholder="First name (optional)" autocomplete="given-name">
           </div>
           <div class="row">
-            <input type="email" name="fields[email]" id="email" placeholder="you@email.com" required autocomplete="email">
+            <input type="email" name="email" id="email" placeholder="you@email.com" required autocomplete="email">
           </div>
-          <input type="hidden" name="ml-submit" value="1">
-          <input type="hidden" name="anticsrf" value="true">
           <button type="submit" id="btn">Notify me of new apps</button>
           <div class="err" id="err"></div>
         </form>
@@ -136,22 +128,25 @@
     <div>&copy; 2026 AEGIS · Human-AI Augmenting Systems · <a href="https://aegishumanai.com/">aegishumanai.com</a></div>
   </footer>
 
-  <iframe name="ml_iframe" style="display:none" title="subscribe"></iframe>
   <script>
     (function(){
       var form=document.getElementById('subForm'), btn=document.getElementById('btn'),
-          err=document.getElementById('err'), email=document.getElementById('email'),
+          err=document.getElementById('err'), email=document.getElementById('email'), name=document.getElementById('name'),
           formView=document.getElementById('formView'), successView=document.getElementById('successView');
       var re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       form.addEventListener('submit',function(e){
-        err.textContent='';
-        if(!re.test(email.value.trim())){ e.preventDefault(); err.textContent='Please enter a valid email address.'; email.focus(); return; }
-        if(form.getAttribute('action').indexOf('PASTE_YOUR')===0){
-          // Not wired to MailerLite yet — show success preview, block the empty POST.
-          e.preventDefault();
-        }
+        e.preventDefault(); err.textContent='';
+        var addr=email.value.trim();
+        if(!re.test(addr)){ err.textContent='Please enter a valid email address.'; email.focus(); return; }
         btn.disabled=true; btn.textContent='Subscribing…';
-        setTimeout(function(){ formView.style.display='none'; successView.style.display='block'; }, 500);
+        fetch('/api/subscribe',{method:'POST',headers:{'content-type':'application/json'},
+          body:JSON.stringify({email:addr,name:(name.value||'').trim()})})
+          .then(function(r){return r.json().catch(function(){return {ok:r.ok};});})
+          .then(function(d){
+            if(d&&d.ok){ formView.style.display='none'; successView.style.display='block'; }
+            else { err.textContent=(d&&d.error==='invalid email')?'Please enter a valid email address.':'Something went wrong — please try again.'; btn.disabled=false; btn.textContent='Notify me of new apps'; }
+          })
+          .catch(function(){ err.textContent='Network error — please try again.'; btn.disabled=false; btn.textContent='Notify me of new apps'; });
       });
     })();
   </script>

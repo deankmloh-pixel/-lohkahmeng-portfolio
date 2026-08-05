@@ -1,0 +1,12 @@
+<!-- ===== AEGIS footer signup — paste just before </footer> on any page. Posts to /api/subscribe (Cloudflare D1). ===== -->
+<div style="max-width:520px;margin:26px auto 8px;text-align:center;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif">
+  <div style="color:#c9a24b;font-weight:600;letter-spacing:.06em;font-size:.9rem;margin-bottom:8px">STAY UPDATED</div>
+  <div style="color:#9fb0c0;font-size:.9rem;margin-bottom:12px">Get a note the moment a new AEGIS app launches. No spam.</div>
+  <form class="aegis-sub" onsubmit="return (function(f){var e=f.querySelector('input[type=email]');var b=f.querySelector('button');if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.value.trim())){e.focus();return false;}b.disabled=true;b.textContent='…';fetch('/api/subscribe',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:e.value.trim()})}).then(function(r){return r.json().catch(function(){return{ok:r.ok};});}).then(function(d){b.textContent=d&&d.ok?'Subscribed ✓':'Try again';if(!(d&&d.ok))b.disabled=false;}).catch(function(){b.textContent='Try again';b.disabled=false;});return false;})(this);"
+        style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+    <input type="email" placeholder="you@email.com" required
+           style="flex:1;min-width:220px;background:#1c2a3a;border:1px solid #26374a;color:#e8eef5;border-radius:10px;padding:12px 14px;font-size:.95rem">
+    <button type="submit" style="background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;font-size:.95rem">Notify me</button>
+  </form>
+</div>
+<!-- ===== end AEGIS footer signup ===== -->
