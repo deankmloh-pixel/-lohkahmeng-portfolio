@@ -228,8 +228,8 @@
     {eb:"Decision intelligence", t:"Workforce Income Analytics & Decision Support", b:"Workforce income analytics that surface pay patterns for fairer, better-informed compensation decisions.", h:"#w-workforce", c:"#24506e", bg:"assets/spot/bg-workforce.jpg"},
     {eb:"Decision intelligence", t:"Loan Default Risk Decision Support", b:"A loan default-risk system that explains each risk call to a human underwriter instead of issuing a silent verdict.", h:"#w-loan", c:"#24506e", bg:"assets/spot/bg-loan.jpg"},
     {eb:"Decision intelligence", t:"Customer Retention Decision Support", b:"A marketing decision-support system that predicts customer churn early enough for a team to retain the relationship.", h:"#w-telco", c:"#24506e", bg:"assets/spot/bg-churn.jpg"},
-    {eb:"New series · Now live", t:"AEGIS Ocular Station — Eye-Disease Screening", b:"One pass over a retinal photo screens for diabetic retinopathy, AMD, glaucoma and hypertensive retinopathy — the ODIR baseline raised by four dedicated-data specialists (ROC-AUC 0.90–0.99). A public 'Spot the Disease' learning game and screening aid, with a clinician in command.", h:"diagnostics/oras/", c:"#C9A227", bg:"assets/spot/bg-oras.jpg"},
-    {eb:"New series · Now live", t:"AEGIS Breast — Unified Breast Station", b:"One engine routes each breast modality — mammogram, histology, ultrasound, fine-needle-aspirate — to its own specialist, each with an honest score and a defer-to-human grey zone (ROC-AUC up to 0.9955). A public 'Spot the Finding' clinical game, with a clinician in command.", h:"project-20-breast-cancer.html", c:"#C9A227", bg:"assets/p20/hero.jpg"},
+    {eb:"New series · Now live", t:"AEGIS Ocular Station — Eye-Disease Screening", b:"One pass over a retinal photo screens for diabetic retinopathy, AMD, glaucoma and hypertensive retinopathy — the ODIR baseline raised by four dedicated-data specialists (ROC-AUC 0.90–0.99). A public 'Spot the Disease' learning game and screening aid, with a clinician in command.", h:"#w-ocular", c:"#C9A227", bg:"assets/spot/bg-oras.jpg"},
+    {eb:"New series · Now live", t:"AEGIS Breast — Unified Breast Station", b:"One engine routes each breast modality — mammogram, histology, ultrasound, fine-needle-aspirate — to its own specialist, each with an honest score and a defer-to-human grey zone (ROC-AUC up to 0.9955). A public 'Spot the Finding' clinical game, with a clinician in command.", h:"#w-breast", c:"#C9A227", bg:"assets/p20/hero.jpg"},
     {eb:"New \u00b7 Wearable & cardiovascular", t:"AEGIS Protector \u2014 Your Personal 25/8 Body Guard", b:"A wearable that learns your normal, catches the earliest electrical signs of a heart attack \u2014 the K-wave \u2014 and streams clinician-grade vitals to the hospital station. One device from the wrist to the ward, with a live interactive demo.", h:"#w-protector", c:"#C9A227", bg:"assets/spot/bg-wearable.jpg"},
     {eb:"New series · Affective wearable", t:"AEGIS Emotional — Sensing How You Feel", b:"An electrode wearable that reads stress and affect from your own physiological signals, judged inside your personal band — the fourth AEGIS wearable tier, human-in-command.", h:"#w-emotional", c:"#C9A227", bg:"assets/spot/bg-wearable.jpg"},
     {eb:"New series · Health monitoring", t:"AEGIS Health — Continuous Glucose, No Needle", b:"A buttonless smartwatch and a glass base-station fuse four sensing technologies for continuous glucose tracking — the everyday health tier between lifestyle and clinical.", h:"#w-health", c:"#2E8B84", bg:"assets/spot/bg-wearable.jpg"}
@@ -265,6 +265,22 @@
   var cardEl=document.getElementById('spotCard');
   cardEl.addEventListener('mouseenter',stopAuto);
   cardEl.addEventListener('mouseleave',startAuto);
+  // Reliable landing: lazy images/reveal shift layout mid-scroll, so re-align to the
+  // target card a few times until it settles; abort the instant the user scrolls.
+  cardEl.addEventListener('click',function(e){
+    var href=cardEl.getAttribute('href')||'';
+    if(href.charAt(0)!=='#') return;            // real page links navigate normally
+    e.preventDefault();
+    var el=document.getElementById(href.slice(1));
+    if(!el) return;
+    var NAV=72, stop=false;
+    var abort=function(){ stop=true; };
+    window.addEventListener('wheel',abort,{passive:true,once:true});
+    window.addEventListener('touchmove',abort,{passive:true,once:true});
+    function jump(){ if(stop) return; var y=el.getBoundingClientRect().top+window.pageYOffset-NAV; window.scrollTo({top:y,behavior:'smooth'}); }
+    jump(); setTimeout(jump,300); setTimeout(jump,700); setTimeout(jump,1200); setTimeout(jump,1800);
+    if(history.replaceState) history.replaceState(null,'',href);
+  });
   render(cur); startAuto();
 })();
 </script>
@@ -369,6 +385,43 @@
         </span>
       </div>
     </a>
+
+    <!-- ============ NEW: Imaging Diagnostic Stations (P15 Ocular, P20 Breast) ============ -->
+    <div class="group-hero reveal">
+      <div class="group-hero-body">
+        <div class="section-label">Diagnostic Stations &middot; Medical Imaging</div>
+        <h2>Imaging Diagnostic Stations</h2>
+        <p>One image, read by a panel of specialists and routed to the right expert &mdash; for the eye and for the breast. Honest per-specialist scores, a defer-to-clinician grey zone, and a public learning game. A clinician always stays in command.</p>
+      </div>
+    </div>
+    <div class="project-grid">
+      <article id="w-ocular" class="project-card reveal" style="border-top:3px solid var(--gold,#C9A227);">
+        <div class="tag tag-aqua">Healthcare &middot; Ocular &middot; Now Live</div>
+        <h3>AEGIS Ocular Station &mdash; Eye-Disease Screening</h3>
+        <p>One pass over a retinal fundus photo screens for diabetic retinopathy, AMD, glaucoma and hypertensive retinopathy &mdash; the ODIR baseline raised by four dedicated-data specialists. A public &ldquo;Spot the Disease&rdquo; learning game and screening aid.</p>
+        <div style="display:flex;gap:22px;flex-wrap:wrap;margin:16px 0 6px;">
+          <div><div style="font-size:20px;font-weight:700;">0.90&ndash;0.99</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">ROC-AUC across<br>four specialists</div></div>
+          <div><div style="font-size:20px;font-weight:700;">4</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">dedicated-data<br>specialists (D&middot;A&middot;G&middot;H)</div></div>
+          <div><div style="font-size:20px;font-weight:700;">1 pass</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">read by every<br>specialist at once</div></div>
+        </div>
+        <a href="diagnostics/oras/" class="card-link">Open the Ocular Station
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </article>
+      <article id="w-breast" class="project-card reveal" style="border-top:3px solid var(--gold,#C9A227);">
+        <div class="tag tag-aqua">Healthcare &middot; Oncology &middot; Now Live</div>
+        <h3>AEGIS Breast &mdash; The Unified Breast Station</h3>
+        <p>One engine routes each breast modality &mdash; mammogram, histology, ultrasound, fine-needle-aspirate &mdash; to its own specialist, each with an honest score and a defer-to-human grey zone. A public &ldquo;Spot the Finding&rdquo; clinical game.</p>
+        <div style="display:flex;gap:22px;flex-wrap:wrap;margin:16px 0 6px;">
+          <div><div style="font-size:20px;font-weight:700;">0.9955</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">top-specialist<br>ROC-AUC (WDBC)</div></div>
+          <div><div style="font-size:20px;font-weight:700;">Multi</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">modality router<br>(imaging + tabular)</div></div>
+          <div><div style="font-size:20px;font-weight:700;">Grey-zone</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">defer-to-clinician<br>on the rim</div></div>
+        </div>
+        <a href="project-20-breast-cancer.html" class="card-link">Open the Breast Station
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </article>
+    </div>
 
         <!-- ============ DOMAIN: Biomedical Intelligence ============ -->
     <div class="group-hero reveal">
