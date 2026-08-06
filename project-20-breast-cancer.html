@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS Breast — Unified Breast Station (P20) · Case Study | Loh Kah Meng</title>
+<meta name="description" content="The AEGIS Unified Breast Station: one engine that routes each breast modality — mammogram, histology, ultrasound, and fine-needle-aspirate measures — to its own specialist, each reporting its own honest score with a defer-to-human grey zone. Includes an educational 'Spot the Finding' game. Illustrative, not a diagnosis.">
+<link rel="canonical" href="https://aegishumanai.com/project-20-breast-cancer.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AEGIS Breast — Unified Breast Station (P20) · Case Study | Loh Kah Meng">
+<meta property="og:description" content="One engine, many breast modalities — mammogram, histology, ultrasound, WDBC measures — each with an honest score and a defer-to-human grey zone. Play the 'Spot the Finding' game. Illustrative, not a diagnosis.">
+<meta property="og:image" content="https://aegishumanai.com/assets/p20/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* P20 game — scoped */
+  .p20-game{background:#0f1a2e;border-radius:22px;padding:26px 20px;color:#e8eef5;text-align:center;box-shadow:0 24px 60px rgba(20,30,60,.28);}
+  .p20-game .p20-modality{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#c9a24b;font-weight:700;margin-bottom:12px;}
+  .p20-card{position:relative;max-width:420px;margin:0 auto;border-radius:16px;overflow:hidden;background:#000;aspect-ratio:1/1;}
+  .p20-card img{width:100%;height:100%;object-fit:cover;display:block;}
+  .p20-synthtag{position:absolute;left:8px;bottom:8px;background:rgba(8,14,26,.82);color:#cfd8e6;font-size:10.5px;letter-spacing:.03em;padding:4px 9px;border-radius:999px;border:1px solid rgba(201,162,75,.4);}
+  .p20-q{font-size:18px;font-weight:700;margin:18px 0 14px;color:#fff;}
+  .p20-choices{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  .p20-btn{cursor:pointer;border:1px solid rgba(255,255,255,.22);background:#16243c;color:#e8eef5;font-weight:700;font-size:15px;padding:12px 22px;border-radius:999px;transition:transform .1s,background .15s;}
+  .p20-btn:hover{background:#1e3050;transform:translateY(-1px);}
+  .p20-btn.benign:hover{background:#12402f;}
+  .p20-btn.suspicious:hover{background:#4a1f22;}
+  .p20-analyzing{height:60px;display:flex;align-items:center;justify-content:center;gap:10px;color:#c9a24b;font-weight:600;font-size:14px;}
+  .p20-spinner{width:22px;height:22px;border:3px solid rgba(201,162,75,.28);border-top-color:#c9a24b;border-radius:50%;animation:p20spin .7s linear infinite;}
+  @keyframes p20spin{to{transform:rotate(360deg);}}
+  .p20-reveal{margin-top:16px;text-align:left;background:#12203a;border:1px solid rgba(201,162,75,.28);border-radius:14px;padding:16px 18px;}
+  .p20-verdict{font-weight:800;font-size:16px;margin-bottom:6px;}
+  .p20-verdict.right{color:#5ad19a;}
+  .p20-verdict.wrong{color:# e88;color:#ef9aa0;}
+  .p20-truth{font-size:14px;color:#cdd8e8;margin-bottom:8px;}
+  .p20-explain{font-size:13.5px;color:#aeb9cc;line-height:1.55;}
+  .p20-score{margin-top:16px;font-size:13px;color:#8fa0b8;}
+  .p20-next{margin-top:14px;}
+  .indemnity{background:#fff7ec;border:1px solid #e7cfa0;border-left:5px solid #c9a24b;border-radius:14px;padding:18px 20px;font-size:13.5px;line-height:1.62;color:#4a3d24;}
+  .indemnity strong{color:#7a5b17;}
+  .submit-cta{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-size:15px;padding:13px 24px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.2);}
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / AEGIS Breast</div>
+    <div class="tag tag-aqua">Healthcare &middot; Oncology &middot; Multi-modality Screening &middot; Full Case Study</div>
+    <h1>AEGIS Breast &mdash; The Unified Breast Station (P20)</h1>
+    <figure class="hero-image" style="margin:18px 0 10px;">
+      <img src="assets/p20/hero.jpg" alt="Abstract AEGIS breast-screening banner uniting mammography, histology and ultrasound" style="width:100%;height:auto;border-radius:12px;display:block;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration — AI-generated, decorative.</figcaption>
+    </figure>
+    <p class="lede">Breast cancer is not read one way. A radiologist reads a <strong>mammogram</strong>; a pathologist reads a <strong>histology slide</strong>; a sonographer reads an <strong>ultrasound</strong>; a lab reads <strong>fine-needle-aspirate measurements</strong>. You cannot push a mammogram through a histology model. So AEGIS Breast is not one classifier &mdash; it is a <strong>Unified Breast Station</strong>: one engine that <strong>routes each modality to its own specialist</strong>, and each specialist reports <strong>its own honest score</strong> with a defer-to-human grey zone. No score is ever fused into a single false verdict.</p>
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo &mdash; modality router engine, per-specialist feature pipelines, fuzzy grey-zone modelling, station UI</div></div>
+      <div class="meta-item"><div class="k">Model</div><div class="v">Per modality: ResNet-50 features &rarr; scaler &rarr; PCA &rarr; specialist (CatBoost / LogReg / Nu-SVC / Fuzzy SVM); tabular via sklearn pipeline</div></div>
+      <div class="meta-item"><div class="k">Method</div><div class="v">Each specialist trained &amp; validated on its own public dataset; patient-separated where applicable; seed 42; grey-zone defer 0.40&ndash;0.60</div></div>
+      <div class="meta-item"><div class="k">Status</div><div class="v">Feasibility research programme &mdash; a bench of validated single-modality screeners under one roof; illustrative, not a certified medical device</div></div>
+    </div>
+  </div>
+</header>
+
+<section style="padding:8px 0 4px;">
+  <div class="container">
+    <h2>What this is</h2>
+    <p>The AEGIS Unified Breast Station brings every AEGIS breast specialist under one roof and routes each <strong>modality</strong> to the specialist that reads it. It runs entirely on a local machine &mdash; no image leaves it &mdash; and it is honest by construction: each specialist stands on <em>its own</em> validated metric, and any case that lands in the grey zone is <strong>flagged for a clinician, never auto-called</strong>. AEGIS scores; a clinician confirms.</p>
+
+    <div class="callout">
+      <strong>Read this first &mdash; what is built, and what it is not.</strong> This is a <em>feasibility research programme</em>: a bench of single-modality screeners, each trained and validated on a public research dataset, unified by one routing engine. Every number below is an honestly-reported validation AUC on held-out data &mdash; not a clinical-trial result. AEGIS Breast does <strong>not diagnose</strong>. It is decision support with a human always in command.
+    </div>
+
+    <h2>The specialists &mdash; honest metrics</h2>
+    <p>Each row is a separate validated specialist. The strong diagnostic-grade readers clear the conventional 0.90 floor; the weaker ones are reported <em>as</em> weaker, with the reason, rather than dressed up &mdash; that honesty is the point.</p>
+    <table class="data-table">
+      <thead><tr><th>Specialist</th><th>Modality / input</th><th>Champion</th><th>Validation ROC-AUC</th></tr></thead>
+      <tbody>
+        <tr><td><strong>DIAG</strong></td><td>WDBC fine-needle-aspirate (30 nucleus measures)</td><td>Fuzzy Linear-SVC</td><td><strong>0.9955</strong></td></tr>
+        <tr><td><strong>US</strong></td><td>Breast ultrasound (BUSI)</td><td>Nu-SVC</td><td><strong>0.9328</strong></td></tr>
+        <tr><td><strong>BreaKHis</strong></td><td>Tissue microscopy (patient-separated)</td><td>Fuzzy SVM-RBF</td><td><strong>0.9302</strong></td></tr>
+        <tr><td><strong>BACH</strong></td><td>Histology microscopy (4-class carcinoma)</td><td>Nu-SVC</td><td><strong>0.9048</strong></td></tr>
+        <tr><td><strong>HIST</strong></td><td>Histology H&amp;E patch (PatchCamelyon)</td><td>Logistic Regression</td><td><strong>0.9014</strong></td></tr>
+        <tr><td>MAMM</td><td>Mammogram (CBIS-DDSM, whole-film @224px)</td><td>Logistic Regression</td><td>0.7149 <em>(screening baseline &mdash; see note)</em></td></tr>
+        <tr><td>PROG</td><td>WPBC prognostic measures (recurrence, n=198)</td><td>Logistic Regression</td><td>0.6595 <em>(risk aid, not a gate)</em></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px;color:var(--text-muted);">Honest notes: <strong>MAMM 0.71</strong> is a legitimate whole-film screening baseline &mdash; malignancy is a small region of a large mammogram, and downscaling to 224px sheds the fine calcification detail; ROI-cropped patches at higher resolution are the lever to lift it. <strong>PROG 0.66</strong> is recurrence prediction on 198 single-source patients &mdash; genuinely hard, so it is a risk aid with a caveat, never a diagnostic gate. HIST, DIAG, US, BACH and BreaKHis are the real diagnostic-grade gates.</p>
+  </div>
+</section>
+
+<section style="padding:8px 0 4px;">
+  <div class="container">
+    <h2>Play: Spot the Finding</h2>
+    <p>A quick, honest way to feel what these specialists do. You are shown a breast image from one of the modalities; decide whether it looks <strong>benign / normal</strong> or <strong>suspicious &mdash; refer</strong>. The AEGIS engine then reveals what to look for. It is harder than it sounds &mdash; which is exactly why a screening aid, and a human in command, help.</p>
+    <div class="p20-game" id="p20game">
+      <div class="p20-modality" id="p20modality">Ultrasound</div>
+      <div class="p20-card">
+        <img id="p20img" src="assets/p20/clinical/us_benign.jpg" alt="Breast screening image to classify">
+        <span class="p20-synthtag">Real de-identified research image · BUSI / BACH / CBIS-DDSM</span>
+      </div>
+      <div class="p20-q" id="p20q">Benign or suspicious?</div>
+      <div class="p20-choices" id="p20choices">
+        <button class="p20-btn benign" onclick="p20guess('benign')">Benign / normal</button>
+        <button class="p20-btn suspicious" onclick="p20guess('suspicious')">Suspicious — refer</button>
+      </div>
+      <div id="p20result"></div>
+      <div class="p20-score" id="p20score">Score: 0 / 0</div>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:10px;">Game images are <strong>real, de-identified samples from public research datasets</strong> — breast ultrasound (BUSI), histology microscopy (ICIAR-2018 BACH), and mammography (CBIS-DDSM) — shown for education only, never a diagnosis. Ground-truth labels are the datasets&rsquo; own. The decorative banner at the top is an AI-generated illustration.</p>
+  </div>
+</section>
+
+<section style="padding:8px 0 6px;">
+  <div class="container">
+    <h2>Want AEGIS to look at an image?</h2>
+    <p>AEGIS Breast is a research demonstration. If you would like to share a breast image for an <strong>illustrative, educational</strong> read &mdash; not a diagnosis &mdash; you can reach the programme through the Contact channel. Please read the terms below first; sending an image means you accept them.</p>
+    <div class="indemnity">
+      <strong>Please read &mdash; terms of any image you submit.</strong><br>
+      1. <strong>Not a medical device and not a diagnosis.</strong> AEGIS is a research and educational demonstration. Nothing it outputs is medical advice, a diagnosis, a screening result, or a substitute for a qualified clinician. No doctor&ndash;patient relationship is created.<br>
+      2. <strong>Do not send identifiable patient data.</strong> Remove all names, IDs, dates of birth, and any protected health information (PHI) before sending. Only submit an image you have the right to share. Do not send anyone else&rsquo;s medical data without their consent.<br>
+      3. <strong>You release AEGIS from liability.</strong> By submitting, you agree to <strong>indemnify and hold harmless</strong> AEGIS, Dr Loh Kah Meng, and anyone associated with the programme from any and all claims, losses, or liability arising from your use of, or reliance on, anything AEGIS provides. You use it entirely at your own risk.<br>
+      4. <strong>Always consult a licensed clinician.</strong> For any real health concern, see a qualified doctor. Do not delay or disregard professional medical advice because of anything here.
+    </div>
+    <div class="button-row" style="margin-top:16px;">
+      <a class="submit-cta" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20Breast%20%E2%80%94%20illustrative%20image%20read&body=I%20have%20read%20and%20accept%20the%20terms%20on%20the%20AEGIS%20Breast%20page%20(not%20a%20diagnosis%3B%20no%20identifiable%20patient%20data%3B%20I%20release%20AEGIS%20from%20liability).%20My%20de-identified%20image%20is%20attached.">✉ Contact AEGIS to submit an image</a>
+    </div>
+    <p style="font-size:12.5px;color:var(--text-muted);margin-top:12px;">This opens your email app to <strong>aegisloh@aegishumanai.com</strong> with the terms pre-acknowledged. Attach your de-identified image before sending.</p>
+
+    <div class="callout" style="margin-top:22px;">
+      <strong>One programme, one honest promise.</strong> AEGIS augments, it never replaces. Every specialist reports its own real number; grey-zone cases defer to a person; nothing is auto-called; and no work is dressed up beyond what the data supports. Dedicated to Professor Dhanjoo N. Ghista, whose nondimensional-index lineage this work continues.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+  var P20_DECK = [
+    {img:"assets/p20/clinical/us_benign.jpg", modality:"Ultrasound · BUSI", truth:"benign",
+     explain:"Benign ultrasound cue: a smooth, well-circumscribed, wider-than-tall oval with clean margins — typical of a simple cyst or fibroadenoma."},
+    {img:"assets/p20/clinical/us_malignant.jpg", modality:"Ultrasound · BUSI", truth:"suspicious",
+     explain:"Malignant ultrasound cue: an irregular, taller-than-wide hypoechoic mass with angular/spiculated margins and posterior shadowing — features that warrant referral."},
+    {img:"assets/p20/clinical/histo_benign.jpg", modality:"Histology · BACH", truth:"benign",
+     explain:"Benign histology cue: orderly glandular architecture, uniform small nuclei, regular spacing — organised tissue."},
+    {img:"assets/p20/clinical/histo_invasive.jpg", modality:"Histology · BACH", truth:"suspicious",
+     explain:"Invasive-carcinoma cue: crowded, disorganised cells with enlarged, dark, pleomorphic nuclei and lost architecture."},
+    {img:"assets/p20/clinical/histo_normal.jpg", modality:"Histology · BACH", truth:"benign",
+     explain:"Normal-tissue cue: tidy, evenly-spaced structures with small regular nuclei — no crowding or architectural breakdown."},
+    {img:"assets/p20/clinical/mammo_benign.jpg", modality:"Mammography · CBIS-DDSM", truth:"benign",
+     explain:"Benign mammogram cue: fibroglandular tissue without a spiculated mass or suspicious clustered microcalcifications. (The MAMM whole-film screener is a 0.71 baseline — a helper, not a decider.)"},
+    {img:"assets/p20/clinical/mammo_malignant.jpg", modality:"Mammography · CBIS-DDSM", truth:"suspicious",
+     explain:"Malignant mammogram cue: an irregular spiculated mass and/or clustered microcalcifications — a classic refer-for-workup pattern."}
+  ];
+  var p20i = -1, p20right = 0, p20total = 0, p20locked = false;
+  function p20shuffleNext(){
+    var n; do { n = Math.floor(Math.random()*P20_DECK.length); } while (n === p20i && P20_DECK.length>1);
+    p20i = n;
+    var c = P20_DECK[p20i];
+    document.getElementById('p20modality').textContent = c.modality;
+    document.getElementById('p20img').src = c.img;
+    document.getElementById('p20q').textContent = 'Benign or suspicious?';
+    document.getElementById('p20choices').style.display = 'flex';
+    document.getElementById('p20result').innerHTML = '';
+    p20locked = false;
+  }
+  function p20guess(pick){
+    if (p20locked) return; p20locked = true;
+    var c = P20_DECK[p20i];
+    document.getElementById('p20choices').style.display = 'none';
+    var res = document.getElementById('p20result');
+    res.innerHTML = '<div class="p20-analyzing"><span class="p20-spinner"></span>AEGIS engine reading the image…</div>';
+    setTimeout(function(){
+      p20total++;
+      var correct = (pick === c.truth);
+      if (correct) p20right++;
+      var truthLabel = (c.truth === 'benign') ? 'Benign / normal' : 'Suspicious — refer';
+      res.innerHTML =
+        '<div class="p20-reveal">' +
+          '<div class="p20-verdict ' + (correct?'right':'wrong') + '">' + (correct?'✓ Correct':'✗ Not quite') + '</div>' +
+          '<div class="p20-truth">Ground truth (this illustrative image): <strong>' + truthLabel + '</strong></div>' +
+          '<div class="p20-explain">' + c.explain + ' In the real Station this would carry a probability and, if it landed in the 0.40–0.60 grey zone, it would <strong>defer to a clinician</strong> rather than force a call.</div>' +
+          '<div class="p20-next"><button class="p20-btn" onclick="p20shuffleNext()">Next image →</button></div>' +
+        '</div>';
+      document.getElementById('p20score').textContent = 'Score: ' + p20right + ' / ' + p20total;
+    }, 900 + Math.random()*700);
+  }
+  p20shuffleNext();
+</script>
+<script src="script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script>
+<script src="/disclaimer.js" defer></script>
+
+<!-- AEGIS site-wide subscribe button -->
+<a href="/subscribe" id="aegis-sub-btn" aria-label="Subscribe for new AEGIS app alerts" style="position:fixed;right:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;padding:11px 16px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);line-height:1"><span style="font-size:15px">📬</span> Get new-app alerts</a>
+<!-- AEGIS site-wide contact button -->
+<a href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20enquiry" id="aegis-contact-btn" aria-label="Contact AEGIS" style="position:fixed;right:18px;bottom:70px;z-index:99999;display:inline-flex;align-items:center;gap:8px;background:rgba(18,28,40,.96);color:#e8eef5;font-weight:600;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;padding:10px 16px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);border:1px solid rgba(201,162,75,.45);line-height:1"><span style="font-size:15px">✉</span> Contact us</a>
+</body>
+</html>
