@@ -78,6 +78,28 @@
   </div>
 </header>
 
+<section style="padding:16px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">Play: Spot the Finding</h2>
+    <p>A quick, honest way to feel what these specialists do. You are shown a real breast image from one of the modalities; decide whether it looks <strong>benign / normal</strong> or <strong>suspicious &mdash; refer</strong>. The AEGIS engine then reveals what to look for. It is harder than it sounds &mdash; which is exactly why a screening aid, and a human in command, help.</p>
+    <div class="p20-game" id="p20game">
+      <div class="p20-modality" id="p20modality">Ultrasound</div>
+      <div class="p20-card">
+        <img id="p20img" src="assets/p20/clinical/us_benign.jpg" alt="Breast screening image to classify">
+        <span class="p20-synthtag">Real de-identified research image · BUSI / BACH / CBIS-DDSM</span>
+      </div>
+      <div class="p20-q" id="p20q">Benign or suspicious?</div>
+      <div class="p20-choices" id="p20choices">
+        <button class="p20-btn benign" onclick="p20guess('benign')">Benign / normal</button>
+        <button class="p20-btn suspicious" onclick="p20guess('suspicious')">Suspicious — refer</button>
+      </div>
+      <div id="p20result"></div>
+      <div class="p20-score" id="p20score">Score: 0 / 0</div>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:10px;">Game images are <strong>real, de-identified samples from public research datasets</strong> — breast ultrasound (BUSI), histology microscopy (ICIAR-2018 BACH), and mammography (CBIS-DDSM) — shown for education only, never a diagnosis. Ground-truth labels are the datasets&rsquo; own. The decorative banner at the top is an AI-generated illustration.</p>
+  </div>
+</section>
+
 <section style="padding:8px 0 4px;">
   <div class="container">
     <h2>What this is</h2>
@@ -102,28 +124,6 @@
       </tbody>
     </table>
     <p style="font-size:13px;color:var(--text-muted);">Honest notes: <strong>MAMM 0.71</strong> is a legitimate whole-film screening baseline &mdash; malignancy is a small region of a large mammogram, and downscaling to 224px sheds the fine calcification detail; ROI-cropped patches at higher resolution are the lever to lift it. <strong>PROG 0.66</strong> is recurrence prediction on 198 single-source patients &mdash; genuinely hard, so it is a risk aid with a caveat, never a diagnostic gate. HIST, DIAG, US, BACH and BreaKHis are the real diagnostic-grade gates.</p>
-  </div>
-</section>
-
-<section style="padding:8px 0 4px;">
-  <div class="container">
-    <h2>Play: Spot the Finding</h2>
-    <p>A quick, honest way to feel what these specialists do. You are shown a breast image from one of the modalities; decide whether it looks <strong>benign / normal</strong> or <strong>suspicious &mdash; refer</strong>. The AEGIS engine then reveals what to look for. It is harder than it sounds &mdash; which is exactly why a screening aid, and a human in command, help.</p>
-    <div class="p20-game" id="p20game">
-      <div class="p20-modality" id="p20modality">Ultrasound</div>
-      <div class="p20-card">
-        <img id="p20img" src="assets/p20/clinical/us_benign.jpg" alt="Breast screening image to classify">
-        <span class="p20-synthtag">Real de-identified research image · BUSI / BACH / CBIS-DDSM</span>
-      </div>
-      <div class="p20-q" id="p20q">Benign or suspicious?</div>
-      <div class="p20-choices" id="p20choices">
-        <button class="p20-btn benign" onclick="p20guess('benign')">Benign / normal</button>
-        <button class="p20-btn suspicious" onclick="p20guess('suspicious')">Suspicious — refer</button>
-      </div>
-      <div id="p20result"></div>
-      <div class="p20-score" id="p20score">Score: 0 / 0</div>
-    </div>
-    <p style="font-size:12px;color:var(--text-muted);margin-top:10px;">Game images are <strong>real, de-identified samples from public research datasets</strong> — breast ultrasound (BUSI), histology microscopy (ICIAR-2018 BACH), and mammography (CBIS-DDSM) — shown for education only, never a diagnosis. Ground-truth labels are the datasets&rsquo; own. The decorative banner at the top is an AI-generated illustration.</p>
   </div>
 </section>
 
