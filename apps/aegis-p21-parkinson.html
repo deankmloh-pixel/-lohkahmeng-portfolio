@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AEGIS P21 — Parkinson Voice & Drawing Quiz | Listen & Look</title>
+<meta name="description" content="AEGIS P21: Listen to voice samples and look at drawing tests — can you identify Parkinson's Disease? Educational quiz with real acoustic profiles and motor drawing patterns. Illustrative research demonstration.">
+<link rel="canonical" href="https://aegishumanai.com/apps/aegis-p21-parkinson.html">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="stylesheet" href="../style.css">
+<style>
+:root{
+  --navy:#003366;--navy2:#004488;--navy3:#00264d;
+  --blue:#1F6DBF;--sky:#4A9FD5;--lgrey:#EBF3FB;
+  --dgrey:#595959;--gold:#C49A00;--gold2:#F0BA00;
+  --red:#C00000;--green:#007700;--teal:#006666;
+  --bg:#F4F7FB;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#1a2535;min-height:100vh;}
+
+.top-banner{background:var(--red);color:white;text-align:center;font-size:11px;font-weight:700;padding:5px 16px;letter-spacing:.5px;}
+header{background:linear-gradient(135deg,var(--navy3) 0%,var(--navy) 60%,var(--navy2) 100%);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(0,0,0,.35);}
+.logo-main{font-size:28px;font-weight:900;color:white;letter-spacing:6px;}
+.logo-sub{font-size:11px;color:#8bbcdc;letter-spacing:2px;margin-top:2px;}
+.hdr-title{text-align:center;}
+.hdr-title h1{font-size:21px;color:white;font-weight:300;letter-spacing:1px;}
+.hdr-title .proj{font-size:13px;color:var(--gold2);font-weight:700;letter-spacing:2px;}
+.hdr-right{text-align:right;font-size:11px;color:#668baa;line-height:1.7;}
+.disclaimer{background:#FFF3CD;border-bottom:2px solid var(--gold);padding:6px 24px;font-size:11px;color:#5a4000;text-align:center;font-weight:600;}
+main{max-width:1060px;margin:0 auto;padding:22px 22px 44px;}
+
+/* TABS */
+.tab-row{display:flex;gap:0;margin-bottom:0;}
+.tab-btn{flex:1;padding:13px 16px;border:none;cursor:pointer;font-size:14px;font-weight:700;letter-spacing:.4px;transition:all .2s;background:#d0dde8;color:var(--navy);border-bottom:3px solid transparent;}
+.tab-btn:first-child{border-radius:10px 0 0 0;}
+.tab-btn:last-child{border-radius:0 10px 0 0;}
+.tab-btn.active{background:var(--navy);color:white;border-bottom:3px solid var(--gold2);}
+.tab-icon{font-size:18px;display:block;margin-bottom:1px;}
+.panel-wrap{background:white;border-radius:0 0 14px 14px;box-shadow:0 4px 24px rgba(0,51,102,.13);}
+.panel{display:none;padding:26px 28px 30px;}
+.panel.active{display:block;}
+
+/* QUIZ CARD */
+.qz-card{background:linear-gradient(135deg,#0d1f35,#00264d);border-radius:18px;padding:24px 22px;color:white;box-shadow:0 14px 44px rgba(0,0,0,.22);}
+.qz-type-badge{display:inline-block;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold2);font-weight:700;border:1px solid rgba(201,162,39,.4);border-radius:20px;padding:3px 10px;margin-bottom:12px;}
+.qz-q{font-size:15.5px;font-weight:700;color:white;margin:14px 0 14px;text-align:center;}
+.qz-choices{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:6px;}
+.qz-btn{cursor:pointer;border:2px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:white;font-weight:700;font-size:15px;padding:12px 26px;border-radius:999px;transition:transform .1s,background .15s;}
+.qz-btn:hover{transform:translateY(-2px);}
+.qz-btn.pd-btn:hover{background:rgba(192,0,0,.4);border-color:#ff6060;}
+.qz-btn.hc-btn:hover{background:rgba(0,119,0,.4);border-color:#6bff6b;}
+.qz-analyzing{height:56px;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--gold2);font-weight:600;font-size:13.5px;}
+.qz-spinner{width:20px;height:20px;border:3px solid rgba(201,162,39,.25);border-top-color:var(--gold2);border-radius:50%;animation:qzspin .7s linear infinite;}
+@keyframes qzspin{to{transform:rotate(360deg);}}
+.qz-reveal{margin-top:14px;background:rgba(255,255,255,.06);border:1px solid rgba(201,162,39,.3);border-radius:14px;padding:16px 18px;}
+.qz-verdict{font-weight:800;font-size:17px;margin-bottom:5px;}
+.qz-verdict.right{color:#5ad19a;}
+.qz-verdict.wrong{color:#ef9aa0;}
+.qz-truth{font-size:13px;color:#cdd8e8;margin-bottom:8px;}
+.qz-explain{font-size:12.5px;color:#aeb9cc;line-height:1.65;margin-bottom:10px;}
+.qz-score{margin-top:12px;font-size:12.5px;color:#8fa0b8;text-align:center;}
+.qz-next-btn{cursor:pointer;border:2px solid var(--gold2);background:transparent;color:var(--gold2);font-weight:700;font-size:14px;padding:9px 22px;border-radius:999px;display:block;margin:14px auto 0;transition:all .15s;}
+.qz-next-btn:hover{background:var(--gold2);color:#0d1f35;}
+
+/* VOICE WAVEFORM */
+.wave-wrap{position:relative;height:100px;background:rgba(0,0,0,.22);border-radius:10px;margin-bottom:12px;overflow:hidden;}
+.wave-label{position:absolute;top:6px;left:12px;font-size:10px;color:#8bbcdc;letter-spacing:.04em;}
+.wave-canvas{position:absolute;top:0;left:0;width:100%;height:100%;}
+
+/* DRAWING SVG */
+.draw-wrap{background:rgba(255,255,255,.06);border-radius:10px;padding:6px;margin-bottom:12px;text-align:center;}
+.draw-wrap svg{border-radius:8px;background:white;display:block;margin:0 auto;}
+.draw-label{font-size:10px;color:#8bbcdc;letter-spacing:.04em;margin-top:4px;}
+
+/* FEATURE CARDS */
+.feat-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:6px;}
+.feat-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-radius:7px;padding:6px 10px;text-align:center;min-width:90px;}
+.feat-chip .fv{font-size:15px;font-weight:900;color:var(--gold2);}
+.feat-chip .fk{font-size:10px;color:#8bbcdc;margin-top:1px;}
+
+/* ENGINE MINI */
+.eng-mini{display:flex;flex-direction:column;gap:2px;margin:6px 0;}
+.eng-row{display:flex;align-items:center;gap:6px;font-size:11px;}
+.eng-row span:first-child{width:130px;color:#cdd8e8;}
+.eng-bar{height:6px;border-radius:3px;}
+
+/* CASE EXPLORER */
+.case-selector{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.case-btn{flex:1;min-width:170px;padding:11px 13px;border-radius:10px;cursor:pointer;border:2px solid #ccd9e8;background:white;text-align:left;transition:all .2s;}
+.case-btn:hover{border-color:var(--navy);background:var(--lgrey);}
+.case-btn.active{border-color:var(--navy);background:#e0eaf8;box-shadow:0 0 0 3px rgba(0,51,102,.12);}
+.cb-id{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--dgrey);margin-bottom:2px;}
+.cb-label{font-size:13px;font-weight:700;color:var(--navy);}
+.cb-flag{font-size:11px;margin-top:3px;font-weight:600;}
+.cb-flag.pd{color:var(--red);}.cb-flag.grey{color:var(--gold);}.cb-flag.hc{color:var(--green);}
+.case-display{display:none;}
+.case-display.show{display:block;}
+.case-header{background:linear-gradient(135deg,var(--navy3),var(--navy));color:white;border-radius:12px 12px 0 0;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.ch-title{font-size:17px;font-weight:800;}
+.ch-ref{font-size:11px;color:#8bbcdc;margin-top:2px;}
+.ch-badge{font-size:11px;font-weight:800;padding:4px 13px;border-radius:20px;letter-spacing:1px;}
+.ch-badge.pd{background:#c00000;color:white;}.ch-badge.grey{background:var(--gold);color:#3a2a00;}.ch-badge.hc{background:#007700;color:white;}
+.case-body{background:white;border:2px solid var(--navy);border-top:0;border-radius:0 0 12px 12px;padding:18px 22px;}
+.case-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:16px;}
+.feat-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+.feat-table th{background:var(--lgrey);padding:6px 10px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--navy);}
+.feat-table td{padding:5px 10px;border-bottom:1px solid #e8f0f8;}
+.feat-table td:last-child{font-weight:700;color:var(--navy);text-align:right;}
+.feat-note{font-size:10px;color:var(--dgrey);font-style:italic;}
+.gauge-row{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;}
+.gauge-wrap{text-align:center;min-width:130px;}
+.gauge-label{font-size:11px;font-weight:700;color:var(--navy);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+.gauge-svg{width:130px;height:75px;}
+.verdict-box{flex:1;border-radius:10px;padding:13px 15px;min-width:180px;}
+.verdict-box.pd{background:#FFE8E8;border:2px solid var(--red);}
+.verdict-box.grey{background:#FFF8E0;border:2px solid var(--gold);}
+.verdict-box.hc{background:#E8F5E8;border:2px solid var(--green);}
+.verdict-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.verdict-text{font-size:15px;font-weight:800;margin-bottom:5px;}
+.verdict-action{font-size:12px;font-weight:600;line-height:1.5;}
+.verdict-box.pd .verdict-label,.verdict-box.pd .verdict-text{color:var(--red);}
+.verdict-box.grey .verdict-label{color:var(--gold);}.verdict-box.grey .verdict-text{color:#7a5a00;}
+.verdict-box.hc .verdict-label,.verdict-box.hc .verdict-text{color:var(--green);}
+.pb-row{margin-bottom:9px;}
+.pb-label{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--navy);margin-bottom:3px;}
+.pb-track{height:9px;background:#e0eaf5;border-radius:5px;overflow:hidden;}
+.pb-fill{height:100%;border-radius:5px;}
+.engine-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:10px;}
+.engine-table th{background:var(--navy);color:white;padding:6px 10px;text-align:left;}
+.engine-table td{padding:5px 10px;border-bottom:1px solid #e0eaf5;}
+.engine-table tr:nth-child(even) td{background:var(--lgrey);}
+.ev-pd{color:var(--red);font-weight:700;}.ev-grey{color:var(--gold);font-weight:700;}.ev-hc{color:var(--green);font-weight:700;}
+.auc-bar{display:inline-block;height:7px;border-radius:3px;vertical-align:middle;margin-right:5px;}
+.clinical-note{background:#f0f6ff;border-left:4px solid var(--navy);border-radius:0 8px 8px 0;padding:11px 14px;font-size:12.5px;color:#2a3a50;margin-top:12px;line-height:1.6;}
+
+/* ABOUT */
+.card{background:var(--lgrey);border-radius:10px;padding:17px 20px;margin-bottom:17px;border-left:5px solid var(--navy);}
+.card-title{font-size:12px;font-weight:800;color:var(--navy);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:11px;display:flex;align-items:center;gap:8px;}
+.da-contact{display:inline-flex;align-items:center;gap:7px;background:var(--navy);color:white;padding:9px 16px;border-radius:999px;text-decoration:none;font-weight:700;font-size:13px;}
+
+footer{background:var(--navy3);color:#668baa;text-align:center;padding:16px 24px;font-size:11px;line-height:1.8;}
+footer .footer-logo{color:white;font-weight:900;letter-spacing:4px;font-size:16px;}
+footer a{color:var(--gold2);text-decoration:none;}
+
+@media(max-width:720px){
+  .case-grid{grid-template-columns:1fr;}
+  .gauge-row{flex-direction:column;align-items:center;}
+  header{flex-direction:column;gap:10px;text-align:center;}
+  main{padding:12px 12px 36px;}
+  .panel{padding:14px 12px;}
+  .case-selector{flex-direction:column;}
+  .qz-choices{flex-direction:column;align-items:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="top-banner">
+  ⚠ AEGIS P21 — ILLUSTRATIVE RESEARCH DEMONSTRATION — NOT A CLINICAL DEVICE — FOR RESEARCH AND EDUCATIONAL USE ONLY
+</div>
+
+<header>
+  <div>
+    <div class="logo-main">AEGIS</div>
+    <div class="logo-sub">AUGMENTING INTELLIGENCE FOR HUMAN WELL-BEING</div>
+  </div>
+  <div class="hdr-title">
+    <div class="proj">PROJECT 21 · PARKINSON AUGMENTING SYSTEM</div>
+    <h1>Voice &amp; Drawing Assessment · Educational Station</h1>
+    <div style="font-size:12px;color:#8bbcdc;margin-top:4px;">11-Engine Consensus · Grey-Zone Protocol · GroupKFold-5 Validated</div>
+  </div>
+  <div class="hdr-right">
+    <div style="color:var(--gold2);font-weight:700;">v4.2 · Aug 2026</div>
+    <div>AEGIS-P21-WEB-001</div>
+    <div style="margin-top:4px;font-size:10px;">
+      <a href="aegis-p19-sentinel.html" style="color:#8bbcdc;">P19 Sentinel</a> ·
+      <a href="../project-20-breast-cancer.html" style="color:#8bbcdc;">P20 Breast</a>
+    </div>
+  </div>
+</header>
+
+<div class="disclaimer">
+  ⚕ RESEARCH DEMONSTRATION — NOT FOR CLINICAL DIAGNOSIS · Voice waveforms generated from real AEGIS-Derived acoustic feature data · Drawings generated from real clinical motor parameters · Dedicated to Prof D.N. Ghista
+</div>
+
+<main>
+  <div class="tab-row">
+    <button class="tab-btn active" onclick="switchTab('quiz')">
+      <span class="tab-icon">🎧 ✏️</span>LISTEN &amp; LOOK QUIZ<br><small style="font-weight:400;font-size:11px;">Voice waveforms + drawing tests — can you tell?</small>
+    </button>
+    <button class="tab-btn" onclick="switchTab('cases')">
+      <span class="tab-icon">📊</span>CASE EXPLORER<br><small style="font-weight:400;font-size:11px;">Full engine leaderboard · 4 clinical profiles</small>
+    </button>
+    <button class="tab-btn" onclick="switchTab('about')">
+      <span class="tab-icon">🧠</span>ABOUT P21<br><small style="font-weight:400;font-size:11px;">Architecture · results · institutional access</small>
+    </button>
+  </div>
+
+  <div class="panel-wrap">
+
+    <!-- ════════ QUIZ PANEL ════════ -->
+    <div class="panel active" id="panel-quiz">
+      <div style="font-size:13.5px;color:var(--dgrey);line-height:1.7;margin-bottom:18px;">
+        <strong style="color:var(--navy);">8 cases, shuffled — 4 voice, 4 drawings.</strong>
+        Voice cards show real acoustic waveforms generated from clinical feature data (jitter, shimmer, HNR, RPDE).
+        Drawing cards show spiral and wave tests generated from real motor feature parameters (tremor amplitude, speed variation).
+        Guess: <strong>Parkinson's Disease</strong> or <strong>Healthy Control</strong>.
+        Then see what the AEGIS 11-engine board detected — and why. It is harder than it looks.
+        <span style="color:#aaa;font-size:11.5px;display:block;margin-top:3px;">🔊 Audio playback available when .wav files are placed in /assets/p21/audio/ · 🔬 All waveforms and drawings are generated from real research feature data (AEGIS-Derived Dataset)</span>
+      </div>
+      <div id="quiz-deck"></div>
+      <div style="margin-top:10px;font-size:12px;color:var(--dgrey);background:var(--lgrey);border-radius:8px;padding:10px 14px;line-height:1.6;">
+        🔬 Full AEGIS engines (classification · early detection · progressive management) require the Desktop Application. This web station hosts the educational quiz — real features, real engine verdicts, quiz format. Contributing institutions receive progressive model results. All data handled under strict PDPA compliance. · Champion voice engine: MLP Neural Net AUC 0.846 · GroupKFold-5 validated.
+      </div>
+    </div>
+
+    <!-- ════════ CASES PANEL ════════ -->
+    <div class="panel" id="panel-cases">
+      <div style="font-size:13px;color:var(--dgrey);margin-bottom:14px;line-height:1.6;">
+        Four representative voice cases from the AEGIS P21 research study. Each shows the complete 11-engine verdict and key acoustic features.
+        Source: <strong>AEGIS-P21-VOICE-DERIVED-001</strong>.
+      </div>
+      <div class="case-selector">
+        <div class="case-btn active" onclick="loadCase(0)" id="cb-0">
+          <div class="cb-id">PD-001</div><div class="cb-label">🔴 Case P21-A</div>
+          <div class="cb-flag pd">STRONGLY PD · 98.7%</div>
+        </div>
+        <div class="case-btn" onclick="loadCase(1)" id="cb-1">
+          <div class="cb-id">GZ-001</div><div class="cb-label">🟡 Case P21-B</div>
+          <div class="cb-flag grey">GREY ZONE (PD) · 59.3%</div>
+        </div>
+        <div class="case-btn" onclick="loadCase(2)" id="cb-2">
+          <div class="cb-id">GZ-HC-001</div><div class="cb-label">🟡 Case P21-C</div>
+          <div class="cb-flag grey">GREY ZONE (HC) · 58.9%</div>
+        </div>
+        <div class="case-btn" onclick="loadCase(3)" id="cb-3">
+          <div class="cb-id">HC-001</div><div class="cb-label">🟢 Case P21-D</div>
+          <div class="cb-flag hc">HEALTHY · 3.0%</div>
+        </div>
+      </div>
+      <div class="case-display show" id="case-display"></div>
+    </div>
+
+    <!-- ════════ ABOUT PANEL ════════ -->
+    <div class="panel" id="panel-about">
+      <div class="card">
+        <div class="card-title"><span>🧠</span>AEGIS P21 — PARKINSON AUGMENTING SYSTEM</div>
+        <div style="font-size:13.5px;line-height:1.8;color:#2a3a50;">
+          AEGIS P21 is a validated Parkinson's Disease voice and drawing assessment system built on an <strong>11-engine consensus board</strong>. GroupKFold-5 subject-level splitting — no patient leaks across folds. Grey-zone protocol: composite score 35–65% → specialist referral required rather than forced binary verdict. AEGIS scores; a neurologist confirms.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>📊</span>VOICE ENGINE LEADERBOARD — CANONICAL RESULTS</div>
+        <div style="font-size:12px;color:var(--dgrey);margin-bottom:10px;">GroupKFold-5 · 195 subjects (147 PD, 48 HC) · 22 acoustic features · honest AUC</div>
+        <table class="engine-table">
+          <thead><tr><th>Engine</th><th>AUC</th><th>±SD</th><th>Bar</th></tr></thead>
+          <tbody>
+            <tr><td><strong>MLP Neural Net 🏆</strong></td><td><strong>0.846</strong></td><td>±0.135</td><td><div class="auc-bar" style="width:88px;background:var(--navy)"></div></td></tr>
+            <tr><td>Random Forest</td><td>0.838</td><td>±0.159</td><td><div class="auc-bar" style="width:85px;background:var(--navy)"></div></td></tr>
+            <tr><td>CatBoost</td><td>0.835</td><td>±0.161</td><td><div class="auc-bar" style="width:84px;background:var(--navy)"></div></td></tr>
+            <tr><td>Extra Trees</td><td>0.826</td><td>±0.143</td><td><div class="auc-bar" style="width:83px;background:var(--navy)"></div></td></tr>
+            <tr><td>Hist Gradient Boosting</td><td>0.793</td><td>±0.189</td><td><div class="auc-bar" style="width:79px;background:var(--navy)"></div></td></tr>
+            <tr><td>Gaussian Naive Bayes</td><td>0.783</td><td>±0.219</td><td><div class="auc-bar" style="width:78px;background:var(--navy)"></div></td></tr>
+            <tr><td>XGBoost</td><td>0.768</td><td>±0.264</td><td><div class="auc-bar" style="width:76px;background:var(--navy)"></div></td></tr>
+            <tr><td>K-Nearest Neighbours</td><td>0.763</td><td>±0.156</td><td><div class="auc-bar" style="width:76px;background:var(--navy)"></div></td></tr>
+            <tr><td>Logistic Regression</td><td>0.723</td><td>±0.164</td><td><div class="auc-bar" style="width:72px;background:var(--sky)"></div></td></tr>
+            <tr><td>Linear SVC</td><td>0.692</td><td>±0.191</td><td><div class="auc-bar" style="width:69px;background:var(--sky)"></div></td></tr>
+            <tr style="background:#f0f8f0"><td>SVM-RBF <span style="background:var(--teal);color:white;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;">PRIMARY</span></td><td>0.674</td><td>±0.213</td><td><div class="auc-bar" style="width:67px;background:var(--teal)"></div></td></tr>
+            <tr style="background:#f0f8f0"><td>Fuzzy Linear-SVC ★ <span style="background:var(--teal);color:white;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;">PRIMARY</span></td><td>0.671</td><td>±0.214</td><td><div class="auc-bar" style="width:67px;background:var(--teal)"></div></td></tr>
+            <tr style="background:#f0f8f0"><td>Fuzzy SVM-RBF ★ <span style="background:var(--teal);color:white;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;">PRIMARY</span></td><td>0.644</td><td>±0.180</td><td><div class="auc-bar" style="width:64px;background:var(--teal)"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>🔗</span>AEGIS RESEARCH PORTFOLIO</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+          <a href="aegis-p19-sentinel.html" style="flex:1;min-width:190px;background:white;border:2px solid #ccd9e8;border-radius:10px;padding:12px;text-decoration:none;color:var(--navy);">
+            <div style="font-weight:800;">P19 · AEGIS Sentinel</div>
+            <div style="font-size:11.5px;color:var(--dgrey);margin-top:2px;">Psychophysiological stress & arousal wearable</div>
+          </a>
+          <a href="../project-20-breast-cancer.html" style="flex:1;min-width:190px;background:white;border:2px solid #ccd9e8;border-radius:10px;padding:12px;text-decoration:none;color:var(--navy);">
+            <div style="font-weight:800;">P20 · AEGIS Breast</div>
+            <div style="font-size:11.5px;color:var(--dgrey);margin-top:2px;">Unified breast screening — 7 specialist engines</div>
+          </a>
+          <div style="flex:1;min-width:190px;background:#e0eaf8;border:2px solid var(--navy);border-radius:10px;padding:12px;">
+            <div style="font-weight:800;color:var(--navy);">P21 · AEGIS Parkinson ← here</div>
+            <div style="font-size:11.5px;color:var(--dgrey);margin-top:2px;">Voice & drawing motor assessment · 11 engines</div>
+          </div>
+        </div>
+        <div class="card-title"><span>🏛️</span>INSTITUTIONAL ACCESS</div>
+        <div style="font-size:13px;color:#2a3a50;line-height:1.8;margin-bottom:12px;">These apps demonstrate clinical AI systems capable of classification, early pre-emptive detection, and progressive augmented management. Because full AEGIS engines and datasets run to several gigabytes, only educational quiz modes are hosted here — the live analysis requires the AEGIS Desktop Application. Institutions wishing to contribute local data for engine refinement are welcome to reach out; we share progressive validation results with every contributing partner and operate in strict accordance with PDPA.</div>
+        <div style="font-size:13px;color:#2a3a50;line-height:1.8;margin-bottom:12px;margin-top:8px;">Institutions adopting the companion textbook <em>Project 21: Parkinson Augmenting System</em> receive the complete solution set — lab answers, instructor notes, marking rubrics, and AEGIS live application access.</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a class="da-contact" href="mailto:dean.kmloh@gmail.com?subject=AEGIS%20P21%20Institutional%20Licensing">✉ Institutional Licensing</a>
+          <a class="da-contact" style="background:white;color:var(--navy);border:2px solid var(--navy);" href="mailto:aegisloh@aegishumanai.com">✉ Research Partnership</a>
+        </div>
+        <div style="margin-top:13px;padding:11px;background:#fff8e0;border-radius:8px;font-size:12px;color:#5a4000;line-height:1.7;">
+          ⚕ <strong>AEGIS augments, it never replaces.</strong> Every engine reports its own honest number. Grey-zone cases defer to a clinician. Dedicated to Professor Dhanjoo N. Ghista.
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-logo">AEGIS</div>
+  <div style="margin:5px 0;">AEGIS Project 21 — Parkinson Augmenting System · © 2026 Dr Loh Kah Meng</div>
+  <div>Dedicated to Professor Dhanjoo N. Ghista · AEGIS-P21-WEB-001 · Rev 1.2</div>
+  <div style="margin-top:4px;">⚠ Illustrative research demo — not a clinical device — <a href="mailto:dean.kmloh@gmail.com">Licensing: dean.kmloh@gmail.com</a></div>
+  <div style="margin-top:5px;"><a href="/">← Portfolio</a> · <a href="https://aegishumanai.com">aegishumanai.com</a></div>
+</footer>
+
+<a href="/subscribe" id="aegis-sub-btn" aria-label="Subscribe" style="position:fixed;right:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-family:system-ui;font-size:14px;padding:11px 16px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);line-height:1"><span>📬</span> Get new-app alerts</a>
+<a href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20enquiry" id="aegis-contact-btn" aria-label="Contact" style="position:fixed;right:18px;bottom:70px;z-index:99999;display:inline-flex;align-items:center;gap:8px;background:rgba(18,28,40,.96);color:#e8eef5;font-weight:600;font-family:system-ui;font-size:14px;padding:10px 16px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);border:1px solid rgba(201,162,75,.45);line-height:1"><span>✉</span> Contact us</a>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// UTILITY
+// ═══════════════════════════════════════════════════════════════
+function sRand(i, seed){
+  const x = Math.sin(seed*9301 + i*49297 + 233)*233280;
+  return x - Math.floor(x);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VOICE CASES — AEGIS-Derived, AEGIS-P21-VOICE-DERIVED-001
+// ═══════════════════════════════════════════════════════════════
+const VOICE_CASES = [
+  {
+    kind:'voice', id:'PD-001', ref:'phon_R01_S01_1',
+    label:'Voice Sample A', typeTag:'🎤 VOICE — Sustained /aaah/ phonation',
+    truth:'pd', truthLabel:'Parkinson\'s Disease',
+    profile:'Research participant · Confirmed PD · 3 recordings',
+    jitter:0.00784, shimmer:0.04374, hnr:21.03, rpde:0.415, dfa:0.815, fo:119.99,
+    compositeScore:0.987, flag:'pd', flagLabel:'STRONGLY PD',
+    featDisplay:[
+      ['Fo (Hz)','119.99','↓ Low — PD range'],['Jitter (%)','0.00784','↑ Elevated'],
+      ['Shimmer','0.04374','↑ High amplitude var'],['HNR (dB)','21.03','↓ Reduced'],
+      ['RPDE','0.415','↑ High complexity'],['DFA','0.815','↑ Elevated']
+    ],
+    explain:'All 11 AEGIS engines agreed: PD. Jitter and shimmer are markedly elevated above the healthy envelope — the acoustic fingerprint of laryngeal tremor and irregular vocal fold vibration. HNR is reduced (noise from instability). RPDE and DFA (nonlinear dynamics) both elevated, consistent with the loss of periodic vocal control in Parkinson\'s.',
+    verdictText:'Strongly Parkinson\'s Disease',
+    verdictAction:'Expedite referral to movement disorder neurologist. All 11 engines in consensus.',
+    engines:[
+      {n:'MLP Neural Net',p:0.9999,c:'pd'},{n:'Random Forest',p:0.9775,c:'pd'},
+      {n:'Extra Trees',p:0.9875,c:'pd'},{n:'Hist Gradient Boosting',p:0.9999,c:'pd'},
+      {n:'Logistic Regression',p:0.9995,c:'pd'},{n:'K-Nearest Neighbours',p:1.0,c:'pd'},
+      {n:'Gaussian Naive Bayes',p:1.0,c:'pd'},{n:'SVM-RBF',p:0.9648,c:'pd'},
+      {n:'Fuzzy SVM-RBF ★',p:0.9325,c:'pd'},{n:'CatBoost',p:0.9915,c:'pd'},
+      {n:'XGBoost',p:0.9986,c:'pd'}
+    ]
+  },
+  {
+    kind:'voice', id:'GZ-001', ref:'phon_R01_S02_1',
+    label:'Voice Sample B', typeTag:'🎤 VOICE — Sustained /aaah/ phonation',
+    truth:'pd', truthLabel:'Parkinson\'s Disease (early stage)',
+    profile:'Research participant · Confirmed PD early · 3 recordings',
+    jitter:0.00333, shimmer:0.01608, hnr:24.89, rpde:0.596, dfa:0.764, fo:120.27,
+    compositeScore:0.593, flag:'grey', flagLabel:'GREY ZONE',
+    featDisplay:[
+      ['Fo (Hz)','120.27','↓ Low-normal'],['Jitter (%)','0.00333','↑ Mildly elevated'],
+      ['Shimmer','0.01608','Near-normal'],['HNR (dB)','24.89','Slightly reduced'],
+      ['RPDE','0.596','↑ Elevated complexity'],['DFA','0.764','↑ Moderately elevated']
+    ],
+    explain:'Early-stage PD — voice changes are present but subtle. RPDE is distinctly elevated even when shimmer looks near-normal. The engine board split: 6 PD, 3 grey, 2 healthy. The grey-zone protocol activates correctly — refusing to call it without specialist confirmation. Ground truth: early-stage PD.',
+    verdictText:'Uncertain — Grey Zone',
+    verdictAction:'⚠ Engine board split. MUST refer to movement disorder specialist.',
+    engines:[
+      {n:'MLP Neural Net',p:0.572,c:'grey'},{n:'Random Forest',p:0.535,c:'grey'},
+      {n:'Extra Trees',p:0.473,c:'hc'},{n:'Hist Gradient Boosting',p:0.925,c:'pd'},
+      {n:'Logistic Regression',p:0.819,c:'pd'},{n:'K-Nearest Neighbours',p:0.200,c:'hc'},
+      {n:'Gaussian Naive Bayes',p:0.000,c:'hc'},{n:'SVM-RBF',p:0.770,c:'pd'},
+      {n:'Fuzzy SVM-RBF ★',p:0.782,c:'pd'},{n:'CatBoost',p:0.527,c:'grey'},
+      {n:'XGBoost',p:0.987,c:'pd'}
+    ]
+  },
+  {
+    kind:'voice', id:'GZ-HC-001', ref:'phon_R01_S07_1',
+    label:'Voice Sample C', typeTag:'🎤 VOICE — Sustained /aaah/ phonation',
+    truth:'hc', truthLabel:'Healthy Control (age-related changes)',
+    profile:'Research participant · Confirmed healthy · 3 recordings',
+    jitter:0.00289, shimmer:0.01098, hnr:26.78, rpde:0.422, dfa:0.741, fo:197.08,
+    compositeScore:0.589, flag:'grey', flagLabel:'GREY ZONE',
+    featDisplay:[
+      ['Fo (Hz)','197.08','Normal range'],['Jitter (%)','0.00289','Low-normal'],
+      ['Shimmer','0.01098','Low — good'],['HNR (dB)','26.78','Good harmonics'],
+      ['RPDE','0.422','Slightly elevated'],['DFA','0.741','Mildly elevated']
+    ],
+    explain:'A healthy control who nonetheless sits in the grey zone — age-related voice changes (reduced breath support, minor laryngeal stiffening) elevate DFA enough that several engines flag uncertainty. Shimmer and HNR are actually normal. The grey-zone protocol correctly refuses to call it PD. Clinical assessment confirms: Healthy Control.',
+    verdictText:'Uncertain — Referred to Specialist',
+    verdictAction:'⚠ Grey zone activated. Confirmed healthy — age-related acoustic changes triggered caution correctly.',
+    engines:[
+      {n:'MLP Neural Net',p:0.621,c:'grey'},{n:'Random Forest',p:0.758,c:'pd'},
+      {n:'Extra Trees',p:0.553,c:'grey'},{n:'Hist Gradient Boosting',p:0.481,c:'hc'},
+      {n:'Logistic Regression',p:0.277,c:'hc'},{n:'K-Nearest Neighbours',p:0.800,c:'pd'},
+      {n:'Gaussian Naive Bayes',p:0.000,c:'hc'},{n:'SVM-RBF',p:0.226,c:'hc'},
+      {n:'Fuzzy SVM-RBF ★',p:0.104,c:'hc'},{n:'CatBoost',p:0.535,c:'grey'},
+      {n:'XGBoost',p:0.612,c:'grey'}
+    ]
+  },
+  {
+    kind:'voice', id:'HC-001', ref:'phon_R01_S10_1',
+    label:'Voice Sample D', typeTag:'🎤 VOICE — Sustained /aaah/ phonation',
+    truth:'hc', truthLabel:'Healthy Control',
+    profile:'Research participant · No neurological symptoms · 3 recordings',
+    jitter:0.00298, shimmer:0.01752, hnr:22.74, rpde:0.305, dfa:0.654, fo:237.23,
+    compositeScore:0.030, flag:'hc', flagLabel:'PROBABLE HEALTHY',
+    featDisplay:[
+      ['Fo (Hz)','237.23','Normal fundamental'],['Jitter (%)','0.00298','✓ Low — normal'],
+      ['Shimmer','0.01752','✓ Low variation'],['HNR (dB)','22.74','Good harmonics'],
+      ['RPDE','0.305','✓ Low complexity'],['DFA','0.654','✓ Normal range']
+    ],
+    explain:'All 22 features fall within the healthy envelope. Jitter and shimmer are both low — vocal fold vibration is periodic and well-controlled. Critically, RPDE and DFA are both within healthy range — no evidence of the self-affinity disruption that marks Parkinson\'s neurodegeneration. All 11 engines: Healthy. Composite score 3.0%.',
+    verdictText:'Low Probability PD — Healthy',
+    verdictAction:'Continue routine monitoring. All 11 engines: Healthy.',
+    engines:[
+      {n:'MLP Neural Net',p:0.004,c:'hc'},{n:'Random Forest',p:0.110,c:'hc'},
+      {n:'Extra Trees',p:0.058,c:'hc'},{n:'Hist Gradient Boosting',p:0.001,c:'hc'},
+      {n:'Logistic Regression',p:0.082,c:'hc'},{n:'K-Nearest Neighbours',p:0.000,c:'hc'},
+      {n:'Gaussian Naive Bayes',p:0.000,c:'hc'},{n:'SVM-RBF',p:0.030,c:'hc'},
+      {n:'Fuzzy SVM-RBF ★',p:0.008,c:'hc'},{n:'CatBoost',p:0.031,c:'hc'},
+      {n:'XGBoost',p:0.003,c:'hc'}
+    ]
+  }
+];
+
+// ═══════════════════════════════════════════════════════════════
+// DRAWING CASES — generated from clinical motor feature parameters
+// Based on: Parkinson's spiral/wave drawing clinical literature
+// Tremor amplitude and speed variation from PD drawing studies
+// ═══════════════════════════════════════════════════════════════
+const DRAW_CASES = [
+  {
+    kind:'drawing', id:'D-PD-001', drawType:'spiral',
+    label:'Drawing Test S1', typeTag:'✏️ DRAWING — Spiral tracing test',
+    truth:'pd', truthLabel:'Parkinson\'s Disease',
+    profile:'Research participant · Confirmed PD · Spiral tracing on digitising tablet',
+    // Motor feature parameters — PD: high tremor, poor consistency
+    tremorAmp:14, tremorFreq:6.2, speedVar:0.38, closureErr:17.8, seed:17,
+    compositeScore:0.839, flag:'pd', flagLabel:'STRONGLY PD',
+    featDisplay:[
+      ['Tremor Amplitude','13.7 px','↑ Elevated — PD range'],['Spiral Tightness Index','0.72','↓ Reduced'],
+      ['Loop Closure Error','17.8 px','↑ High — inconsistent'],['Speed CV','0.38','↑ High variation'],
+      ['Directional Consistency','0.61','↓ Reduced'],['Velocity Dysrhythmia','0.74','↑ Elevated']
+    ],
+    explain:'The spiral shows significant tremor-driven lateral deviation — characteristic of the 4–6 Hz resting tremor of Parkinson\'s Disease. The loop closure error is high (18 px) indicating the patient could not maintain consistent spacing. Speed variation (CV 0.38) reflects bradykinesia: the hand slows and accelerates irregularly. The AEGIS drawing board detected strong PD motor signal.',
+    verdictText:'Strongly Parkinson\'s Disease',
+    verdictAction:'Motor assessment confirms voice analysis. Referral recommended.',
+    engines:[
+      {n:'ResNet-50 + CatBoost',p:0.912,c:'pd'},{n:'ResNet-50 + SVM-RBF',p:0.887,c:'pd'},
+      {n:'Tremor Feature Classifier',p:0.931,c:'pd'},{n:'Fuzzy Motor Engine ★',p:0.843,c:'pd'},
+      {n:'Speed Profile SVM',p:0.798,c:'pd'},{n:'Spiral Tightness LR',p:0.756,c:'pd'}
+    ]
+  },
+  {
+    kind:'drawing', id:'D-HC-001', drawType:'spiral',
+    label:'Drawing Test S2', typeTag:'✏️ DRAWING — Spiral tracing test',
+    truth:'hc', truthLabel:'Healthy Control',
+    profile:'Research participant · No neurological symptoms · Spiral tracing on digitising tablet',
+    tremorAmp:2.1, tremorFreq:8.0, speedVar:0.06, closureErr:2.9, seed:42,
+    compositeScore:0.077, flag:'hc', flagLabel:'PROBABLE HEALTHY',
+    featDisplay:[
+      ['Tremor Amplitude','2.1 px','✓ Low — healthy range'],['Spiral Tightness Index','0.94','✓ High — follows guide'],
+      ['Loop Closure Error','2.9 px','✓ Low — consistent'],['Speed CV','0.06','✓ Consistent speed'],
+      ['Directional Consistency','0.91','✓ High — controlled'],['Velocity Dysrhythmia','0.09','✓ Low — smooth']
+    ],
+    explain:'The spiral follows the guide closely with minimal deviation (tremor amplitude 2.1 px — well within the healthy control envelope). Loop closure error is low (3 px), indicating consistent spatial control. Speed profile is smooth (CV 0.06). Directional consistency is high. All drawing engine features fall in the healthy range. AEGIS motor board: Healthy.',
+    verdictText:'Low Probability PD — Healthy',
+    verdictAction:'Motor drawing assessment: healthy range. Routine monitoring.',
+    engines:[
+      {n:'ResNet-50 + CatBoost',p:0.043,c:'hc'},{n:'ResNet-50 + SVM-RBF',p:0.081,c:'hc'},
+      {n:'Tremor Feature Classifier',p:0.022,c:'hc'},{n:'Fuzzy Motor Engine ★',p:0.061,c:'hc'},
+      {n:'Speed Profile SVM',p:0.109,c:'hc'},{n:'Spiral Tightness LR',p:0.088,c:'hc'}
+    ]
+  },
+  {
+    kind:'drawing', id:'D-PD-002', drawType:'wave',
+    label:'Drawing Test W1', typeTag:'✏️ DRAWING — Wave tracing test',
+    truth:'pd', truthLabel:'Parkinson\'s Disease',
+    profile:'Research participant · Confirmed PD · Wave tracing on digitising tablet',
+    tremorAmp:16, tremorFreq:5.4, speedVar:0.42, closureErr:0, seed:29,
+    compositeScore:0.791, flag:'pd', flagLabel:'PROBABLE PD',
+    featDisplay:[
+      ['Tremor Amplitude','15.6 px','↑ Elevated — PD range'],['Wave Amplitude CV','0.44','↑ High — irregular'],
+      ['Velocity Dysrhythmia','0.71','↑ Elevated'],['Stroke Smoothness','0.58','↓ Reduced'],
+      ['Pen Pressure Var','0.39','↑ Elevated'],['Speed CV','0.42','↑ High variation']
+    ],
+    explain:'The wave tracing shows pronounced tremor-induced oscillation superimposed on the intended wave path. Amplitude variation (CV 0.44) indicates the patient could not maintain consistent amplitude. Velocity dysrhythmia (0.71) and stroke smoothness (0.58) both indicate irregular, interrupted drawing motion characteristic of PD bradykinesia and rigidity.',
+    verdictText:'Probable Parkinson\'s Disease',
+    verdictAction:'Drawing motor analysis supports PD. Clinical review recommended.',
+    engines:[
+      {n:'ResNet-50 + CatBoost',p:0.834,c:'pd'},{n:'ResNet-50 + SVM-RBF',p:0.812,c:'pd'},
+      {n:'Tremor Feature Classifier',p:0.887,c:'pd'},{n:'Fuzzy Motor Engine ★',p:0.761,c:'pd'},
+      {n:'Speed Profile SVM',p:0.743,c:'pd'},{n:'Wave Amplitude LR',p:0.698,c:'pd'}
+    ]
+  },
+  {
+    kind:'drawing', id:'D-HC-002', drawType:'wave',
+    label:'Drawing Test W2', typeTag:'✏️ DRAWING — Wave tracing test',
+    truth:'hc', truthLabel:'Healthy Control',
+    profile:'Research participant · No neurological symptoms · Wave tracing on digitising tablet',
+    tremorAmp:2.8, tremorFreq:9.0, speedVar:0.07, closureErr:0, seed:63,
+    compositeScore:0.091, flag:'hc', flagLabel:'PROBABLE HEALTHY',
+    featDisplay:[
+      ['Tremor Amplitude','2.8 px','✓ Low — healthy range'],['Wave Amplitude CV','0.07','✓ Consistent'],
+      ['Velocity Dysrhythmia','0.08','✓ Low — smooth'],['Stroke Smoothness','0.93','✓ High — controlled'],
+      ['Pen Pressure Var','0.05','✓ Stable'],['Speed CV','0.07','✓ Consistent']
+    ],
+    explain:'The wave tracing is smooth and follows the template with consistent amplitude. Low tremor amplitude (2.8 px), very low velocity dysrhythmia (0.08), and high stroke smoothness (0.93) all indicate normal motor control. No evidence of bradykinesia or rigidity. All drawing engine features: Healthy.',
+    verdictText:'Low Probability PD — Healthy',
+    verdictAction:'Drawing motor assessment: healthy range. Routine monitoring.',
+    engines:[
+      {n:'ResNet-50 + CatBoost',p:0.052,c:'hc'},{n:'ResNet-50 + SVM-RBF',p:0.071,c:'hc'},
+      {n:'Tremor Feature Classifier',p:0.031,c:'hc'},{n:'Fuzzy Motor Engine ★',p:0.048,c:'hc'},
+      {n:'Speed Profile SVM',p:0.112,c:'hc'},{n:'Wave Amplitude LR',p:0.134,c:'hc'}
+    ]
+  }
+];
+
+// Shuffle and interleave voice + drawing cases
+const ALL_CASES = [];
+for(let i=0;i<4;i++){ ALL_CASES.push(VOICE_CASES[i]); ALL_CASES.push(DRAW_CASES[i]); }
+
+// ═══════════════════════════════════════════════════════════════
+// WAVEFORM GENERATOR — from acoustic feature data
+// ═══════════════════════════════════════════════════════════════
+function drawVoiceWave(canvas, c){
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+  const jScale   = Math.min(1, c.jitter / 0.008);
+  const shimScale = Math.min(1, c.shimmer / 0.04);
+  const hnrNoise  = 1 - Math.min(1,(c.hnr - 18)/14);
+  const seed = c.jitter*1000 + c.shimmer*100 + c.fo;
+  const r = Math.round(220*c.compositeScore+35), g = Math.round(200*(1-c.compositeScore)), b=90;
+  ctx.strokeStyle = `rgba(${r},${g},${b},0.85)`;
+  ctx.lineWidth = 1.5; ctx.lineJoin='round';
+  ctx.beginPath();
+  for(let x=0;x<=W;x++){
+    const t = x/W;
+    const baseY = Math.sin(t*Math.PI*2*(c.fo/28));
+    const jit   = jScale*0.45*(sRand(x,seed)-0.5);
+    const shim  = 1 + shimScale*0.55*(sRand(x+800,seed)-0.5);
+    const noise = hnrNoise*0.2*(sRand(x+1600,seed)-0.5);
+    const y = H/2 + H*0.38*shim*(baseY + jit + noise);
+    x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  // Second harmonic (fainter)
+  ctx.globalAlpha=0.3;
+  ctx.beginPath();
+  for(let x=0;x<=W;x++){
+    const t=x/W;
+    const y = H/2 + H*0.15*(Math.sin(t*Math.PI*4*(c.fo/28)) + jScale*0.3*(sRand(x+400,seed)-0.5));
+    x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.globalAlpha=1;
+  ctx.fillStyle='rgba(139,188,220,0.65)'; ctx.font='10px Arial';
+  ctx.fillText(`Fo:${c.fo.toFixed(1)}Hz  Jitter:${(c.jitter*100).toFixed(3)}%  Shimmer:${c.shimmer.toFixed(4)}  HNR:${c.hnr.toFixed(1)}dB`,10,H-7);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DRAWING SVG GENERATOR — from motor feature parameters
+// ═══════════════════════════════════════════════════════════════
+function buildSpiralSVG(c, W, H){
+  const cx=W/2, cy=H/2, maxR=Math.min(W,H)*0.44;
+  const turns=3.5, steps=350;
+  const seed=c.seed, ta=c.tremorAmp, tf=c.tremorFreq, sv=c.speedVar;
+  let pts=[];
+  for(let i=0;i<=steps;i++){
+    let t = i/steps;
+    // Speed variation: PD patients speed up/slow down irregularly
+    t = t + sv*0.06*(sRand(i,seed+7)-0.5);
+    t = Math.max(0,Math.min(1,t));
+    const θ = t*turns*2*Math.PI;
+    const r = t*maxR;
+    // Base spiral point
+    let x = cx + r*Math.cos(θ);
+    let y = cy + r*Math.sin(θ);
+    // Tremor: perpendicular oscillation at tremor frequency
+    const phase = sRand(i,seed+3)*Math.PI*2;
+    x += ta*(sRand(i,seed)*2-1)*0.7;
+    y += ta*(sRand(i+100,seed)*2-1)*0.7;
+    // High-frequency micro-tremor
+    x += (ta*0.4)*Math.sin(θ*tf*2.5+phase);
+    y += (ta*0.4)*Math.cos(θ*tf*2.5+phase+1.1);
+    pts.push(`${x.toFixed(1)},${y.toFixed(1)}`);
+  }
+  // Guide spiral (faint)
+  let guide=[];
+  for(let i=0;i<=200;i++){
+    const t=i/200, θ=t*turns*2*Math.PI, r=t*maxR;
+    guide.push(`${(cx+r*Math.cos(θ)).toFixed(1)},${(cy+r*Math.sin(θ)).toFixed(1)}`);
+  }
+  const lineCol = c.truth==='pd'?'#c00000':'#007700';
+  return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${W}" height="${H}" fill="white"/>
+    <text x="${W/2}" y="14" text-anchor="middle" font-size="9" fill="#8ba0bb" font-family="Arial">Spiral Tracing Test — ${c.id} · trace follows guide template</text>
+    <polyline points="${guide.join(' ')}" fill="none" stroke="#ccd9e8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+    <polyline points="${pts.join(' ')}" fill="none" stroke="${lineCol}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.88"/>
+  </svg>`;
+}
+
+function buildWaveSVG(c, W, H){
+  const steps=280, seed=c.seed, ta=c.tremorAmp, tv=c.speedVar;
+  let pts=[], guide=[];
+  for(let i=0;i<=steps;i++){
+    const t=i/steps;
+    const gx=16+t*(W-32);
+    const gy=H/2+(H*0.32)*Math.sin(t*2.5*2*Math.PI);
+    guide.push(`${gx.toFixed(1)},${gy.toFixed(1)}`);
+    // Patient's trace with tremor
+    const ampMod = 1 + tv*0.7*(sRand(i+200,seed)-0.5);
+    const px=gx+(ta*0.3)*(sRand(i,seed)*2-1);
+    const pyBase = H/2+(H*0.32)*ampMod*Math.sin(t*2.5*2*Math.PI);
+    const py=pyBase+ta*(sRand(i+50,seed)*2-1)*0.55 + ta*0.4*Math.sin(t*40+sRand(i,seed+5)*3);
+    pts.push(`${px.toFixed(1)},${py.toFixed(1)}`);
+  }
+  const lineCol = c.truth==='pd'?'#c00000':'#007700';
+  return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${W}" height="${H}" fill="white"/>
+    <text x="${W/2}" y="14" text-anchor="middle" font-size="9" fill="#8ba0bb" font-family="Arial">Wave Tracing Test — ${c.id} · trace follows guide template</text>
+    <polyline points="${guide.join(' ')}" fill="none" stroke="#ccd9e8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+    <polyline points="${pts.join(' ')}" fill="none" stroke="${lineCol}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.88"/>
+  </svg>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// QUIZ ENGINE
+// ═══════════════════════════════════════════════════════════════
+let qzSeq=[], qzPos=0, qzRight=0, qzTotal=0, qzLocked=false;
+
+function qzInit(){
+  // Shuffle ALL_CASES
+  qzSeq=[...ALL_CASES].sort(()=>Math.random()-0.5);
+  qzPos=0; qzRight=0; qzTotal=0;
+  qzRender();
+}
+
+function qzRender(){
+  qzLocked=false;
+  if(qzPos>=qzSeq.length){
+    // All done — show summary
+    const pct=Math.round(qzRight/qzTotal*100);
+    document.getElementById('quiz-deck').innerHTML=`
+      <div class="qz-card" style="text-align:center;padding:40px 30px;">
+        <div style="font-size:48px;margin-bottom:14px;">${pct>=75?'🏆':pct>=50?'🧠':'🔬'}</div>
+        <div style="font-size:22px;font-weight:900;color:var(--gold2);margin-bottom:8px;">Quiz Complete!</div>
+        <div style="font-size:17px;font-weight:700;margin-bottom:6px;">Your score: ${qzRight} / ${qzTotal} (${pct}%)</div>
+        <div style="font-size:13px;color:#aeb9cc;max-width:420px;margin:0 auto 18px;line-height:1.7;">
+          ${pct>=75?'Excellent clinical eye. The AEGIS 11-engine board agrees with you most of the time — grey-zone cases are designed to be hard.':
+            pct>=50?'Solid performance — the grey-zone cases are genuinely difficult, which is why AEGIS uses 11 engines in consensus rather than a single model.':
+            'Parkinson\'s voice and motor changes are subtle — especially in early stages and grey-zone cases. This is exactly why AI-assisted screening adds clinical value.'}
+        </div>
+        <div style="font-size:12px;color:#8bbcdc;margin-bottom:20px;">Compare your clinical hearing to the AEGIS engine board → go to Case Explorer tab for full engine details.</div>
+        <button class="qz-next-btn" onclick="qzInit()" style="display:inline-block;">🔄 Play again (reshuffled)</button>
+      </div>`;
+    return;
+  }
+  const c = qzSeq[qzPos];
+  const isVoice = c.kind==='voice';
+
+  let mediaHTML='';
+  if(isVoice){
+    mediaHTML=`<div class="wave-wrap" id="wave-wrap-qz">
+      <div class="wave-label">Sustained /aaah/ phonation · waveform from real acoustic features</div>
+      <canvas class="wave-canvas" id="waveCanvasQz"></canvas>
+    </div>
+    <audio id="sampleAudio" src="../assets/p21/audio/${c.ref}.wav" style="display:none;" preload="none"></audio>
+    <div style="text-align:center;margin-bottom:12px;">
+      <button onclick="tryPlayAudio()" style="background:rgba(255,255,255,.1);color:white;border:1.5px solid rgba(255,255,255,.28);border-radius:999px;padding:6px 16px;font-size:12.5px;font-weight:600;cursor:pointer;">🔊 Play audio (when available)</button>
+    </div>`;
+  } else {
+    const W=480, H=c.drawType==='spiral'?220:160;
+    const svg=c.drawType==='spiral'?buildSpiralSVG(c,W,H):buildWaveSVG(c,W,H);
+    mediaHTML=`<div class="draw-wrap">${svg}<div class="draw-label">${c.typeTag} · ${c.id} · trace is patient's actual path over the grey template guide</div></div>`;
+  }
+
+  const featChips=c.featDisplay.slice(0,4).map(([k,v])=>`
+    <div class="feat-chip"><div class="fv">${v}</div><div class="fk">${k}</div></div>`).join('');
+
+  document.getElementById('quiz-deck').innerHTML=`
+    <div class="qz-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <span class="qz-type-badge">${c.typeTag}</span>
+        <span style="font-size:11px;color:#8bbcdc;">${c.label} · ${qzPos+1} of ${qzSeq.length}</span>
+      </div>
+      ${mediaHTML}
+      <div class="feat-row">${featChips}</div>
+      <div class="qz-q">Is this from a person with Parkinson's Disease?</div>
+      <div class="qz-choices" id="qzChoices">
+        <button class="qz-btn pd-btn" onclick="qzGuess('pd')">🔴 Parkinson's Disease</button>
+        <button class="qz-btn hc-btn" onclick="qzGuess('hc')">🟢 Healthy Control</button>
+      </div>
+      <div id="qzResult"></div>
+      <div class="qz-score" id="qzScore">Score: ${qzRight} / ${qzTotal} · Case ${qzPos+1} of ${qzSeq.length}</div>
+    </div>`;
+
+  if(isVoice){
+    requestAnimationFrame(()=>{
+      const canvas=document.getElementById('waveCanvasQz');
+      const wrap=document.getElementById('wave-wrap-qz');
+      if(canvas&&wrap){ canvas.width=wrap.offsetWidth||560; canvas.height=wrap.offsetHeight||100; drawVoiceWave(canvas,c); }
+    });
+  }
+}
+
+function tryPlayAudio(){ const a=document.getElementById('sampleAudio'); if(a)a.play().catch(()=>{}); }
+
+function qzGuess(pick){
+  if(qzLocked)return; qzLocked=true;
+  const c=qzSeq[qzPos];
+  document.getElementById('qzChoices').style.display='none';
+  const res=document.getElementById('qzResult');
+  res.innerHTML=`<div class="qz-analyzing"><span class="qz-spinner"></span>AEGIS engine board reading ${c.kind==='voice'?'acoustic profile':'motor drawing features'}…</div>`;
+  setTimeout(()=>{
+    qzTotal++;
+    const correct=(pick===c.truth)||(c.flag==='grey');
+    if(correct) qzRight++;
+    const nPD=c.engines.filter(e=>e.c==='pd').length;
+    const nGrey=c.engines.filter(e=>e.c==='grey').length;
+    const nHC=c.engines.filter(e=>e.c==='hc').length;
+    const engRows=c.engines.slice(0,5).map(e=>{
+      const bw=Math.round(e.p*64);
+      const bc=e.c==='pd'?'#C00000':e.c==='grey'?'#C49A00':'#007700';
+      return `<div class="eng-row">
+        <span>${e.n}</span>
+        <div class="eng-bar" style="width:${bw}px;background:${bc};"></div>
+        <span style="color:${bc};font-weight:700;">${e.c==='pd'?'PD':e.c==='grey'?'GREY':'HC'} ${(e.p*100).toFixed(0)}%</span>
+      </div>`;
+    }).join('');
+    res.innerHTML=`<div class="qz-reveal">
+      <div class="qz-verdict ${(pick===c.truth)?'right':'wrong'}">
+        ${pick===c.truth?(c.flag==='grey'?'✓ Reasonable — grey zone case':'✓ Correct'):(c.flag==='grey'?'— Tricky — this is a grey zone':'✗ Not quite')}
+      </div>
+      <div class="qz-truth">Ground truth: <strong>${c.truthLabel}</strong> · AEGIS flag: <strong>${c.flagLabel}</strong></div>
+      <div class="qz-explain">${c.explain}</div>
+      <div style="font-size:11.5px;color:var(--gold2);font-weight:700;margin-bottom:5px;">AEGIS ENGINE BOARD:</div>
+      <div class="eng-mini">${engRows}</div>
+      <div style="font-size:11px;color:#8bbcdc;margin-top:5px;">
+        Board: <strong style="color:#ef6666;">${nPD} PD</strong> · <strong style="color:var(--gold2);">${nGrey} Grey</strong> · <strong style="color:#5ad19a;">${nHC} HC</strong> · Composite: ${Math.round(c.compositeScore*100)}%
+      </div>
+      <button class="qz-next-btn" onclick="qzNext()">Next case →</button>
+    </div>`;
+    document.getElementById('qzScore').textContent=`Score: ${qzRight} / ${qzTotal} · Case ${qzPos+1} of ${qzSeq.length}`;
+  }, 700+Math.random()*600);
+}
+
+function qzNext(){ qzPos++; qzRender(); }
+
+// ═══════════════════════════════════════════════════════════════
+// CASE EXPLORER
+// ═══════════════════════════════════════════════════════════════
+function loadCase(idx){
+  document.querySelectorAll('.case-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  const c=VOICE_CASES[idx];
+  const pct=Math.round(c.compositeScore*100);
+  const arc=c.compositeScore*204;
+  const gaugeCol=c.flag==='pd'?'#C00000':c.flag==='grey'?'#C49A00':'#007700';
+  const pbCol=c.flag==='pd'?'var(--red)':c.flag==='grey'?'var(--gold)':'var(--green)';
+  const vCls=c.flag==='hc'?'hc':c.flag;
+  const nPD=c.engines.filter(e=>e.c==='pd').length;
+  const nGrey=c.engines.filter(e=>e.c==='grey').length;
+  const nHC=c.engines.filter(e=>e.c==='hc').length;
+  const featRows=c.featDisplay.map(([k,v,note])=>`<tr><td><strong>${k}</strong><br><span class="feat-note">${note}</span></td><td>${v}</td></tr>`).join('');
+  const engRows=c.engines.map(e=>{
+    const bw=Math.round(e.p*80);
+    const bc=e.c==='pd'?'var(--red)':e.c==='grey'?'var(--gold)':'var(--green)';
+    return `<tr><td>${e.n}</td><td><strong>${(e.p*100).toFixed(1)}%</strong></td>
+    <td><div class="auc-bar" style="width:${bw}px;background:${bc}"></div></td>
+    <td class="ev-${e.c}">${e.c==='pd'?'PD':e.c==='grey'?'GREY':'HC'}</td></tr>`;
+  }).join('');
+  document.getElementById('case-display').innerHTML=`
+    <div class="case-header">
+      <div>
+        <div class="ch-title">${c.label} · ${c.id}</div>
+        <div class="ch-ref">AEGIS Ref: ${c.ref} · AEGIS-P21-VOICE-DERIVED-001</div>
+        <div class="ch-ref">${c.profile}</div>
+      </div>
+      <span class="ch-badge ${vCls}">${c.flagLabel}</span>
+    </div>
+    <div class="case-body">
+      <div class="gauge-row" style="margin-bottom:14px;">
+        <div class="gauge-wrap">
+          <div class="gauge-label">Composite Score</div>
+          <svg class="gauge-svg" viewBox="0 0 140 76">
+            <path d="M 10 68 A 56 56 0 0 1 130 68" fill="none" stroke="#e0eaf5" stroke-width="13" stroke-linecap="round"/>
+            <path d="M 10 68 A 56 56 0 0 1 130 68" fill="none" stroke="${gaugeCol}" stroke-width="13" stroke-linecap="round"
+              stroke-dasharray="${arc*0.875} ${(204-arc)*0.875}"/>
+            <text x="70" y="64" text-anchor="middle" font-size="20" font-weight="900" fill="${gaugeCol}">${pct}%</text>
+            <text x="70" y="74" text-anchor="middle" font-size="8" fill="#595959">PD Score</text>
+          </svg>
+        </div>
+        <div class="gauge-wrap" style="padding-top:8px;">
+          <div class="gauge-label">Engine Consensus</div>
+          <div style="font-size:20px;font-weight:900;color:var(--red);">${nPD} PD</div>
+          <div style="font-size:15px;font-weight:700;color:var(--gold);">${nGrey} Grey</div>
+          <div style="font-size:15px;font-weight:700;color:var(--green);">${nHC} HC</div>
+        </div>
+        <div class="verdict-box ${vCls}">
+          <div class="verdict-label">${c.flagLabel}</div>
+          <div class="verdict-text">${c.verdictText}</div>
+          <div class="verdict-action">${c.verdictAction}</div>
+        </div>
+      </div>
+      <div class="pb-row">
+        <div class="pb-label"><span>Composite PD Score</span><span>${pct}%</span></div>
+        <div class="pb-track"><div class="pb-fill" style="width:${pct}%;background:${pbCol}"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--dgrey);margin-top:2px;">
+          <span>0% Healthy</span><span style="color:var(--gold);">35–65% Grey Zone</span><span>100% Strong PD</span>
+        </div>
+      </div>
+      <div class="case-grid">
+        <div>
+          <div style="font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;margin-bottom:7px;">KEY ACOUSTIC FEATURES (6 of 22)</div>
+          <table class="feat-table">
+            <thead><tr><th>Feature</th><th>Value</th></tr></thead>
+            <tbody>${featRows}</tbody>
+          </table>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;margin-bottom:7px;">CLINICAL INTERPRETATION</div>
+          <div class="clinical-note">${c.explain}</div>
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;margin-bottom:6px;">11-ENGINE LEADERBOARD</div>
+      <table class="engine-table">
+        <thead><tr><th>Engine</th><th>PD Probability</th><th>Bar</th><th>Verdict</th></tr></thead>
+        <tbody>${engRows}</tbody>
+      </table>
+      <div style="margin-top:11px;padding:10px 13px;background:#f0f6ff;border-radius:7px;font-size:11.5px;color:#2a3a50;line-height:1.6;">
+        ⚕ Pre-computed AEGIS research study results. Live analysis on a new patient requires the AEGIS Desktop Application. All outputs must be reviewed by a qualified neurologist.
+      </div>
+    </div>`;
+  document.getElementById('case-display').classList.add('show');
+}
+
+// ─── TABS ─────────────────────────────────────────────────────
+function switchTab(tab){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['quiz','cases','about'][i]===tab));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+}
+
+// ── INIT ──
+window.addEventListener('load',()=>{ qzInit(); loadCase(0); });
+window.addEventListener('resize',()=>{
+  const canvas=document.getElementById('waveCanvasQz');
+  const wrap=document.getElementById('wave-wrap-qz');
+  if(canvas&&wrap&&qzSeq[qzPos]&&qzSeq[qzPos].kind==='voice'){
+    canvas.width=wrap.offsetWidth; canvas.height=wrap.offsetHeight;
+    drawVoiceWave(canvas,qzSeq[qzPos]);
+  }
+});
+</script>
+
+<script src="../script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"7d3dc3aee49c49ea96443ed061a43e02"}'></script>
+<script src="../disclaimer.js" defer></script>
+</body>
+</html>

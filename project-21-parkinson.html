@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS Parkinson — Textbook, Lab &amp; Live System (P21) · Loh Kah Meng</title>
+<meta name="description" content="AEGIS P21: A complete biomedical engineering curriculum package — companion textbook, structured lab sheet, and live AI-powered quiz station — for Parkinson's Disease voice and drawing motor assessment. Validated 11-engine consensus board. For publishers, lecturers, and students.">
+<link rel="canonical" href="https://aegishumanai.com/project-21-parkinson.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AEGIS Parkinson — Complete BME Curriculum Package (Textbook + Lab + Live System)">
+<meta property="og:description" content="A complete biomedical engineering teaching instrument: companion textbook, structured lab sheet with rubric, and live AI quiz station. 11-engine validated Parkinson's assessment. For publishers, lecturers, and students worldwide.">
+<meta property="og:image" content="https://aegishumanai.com/assets/p21/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── Audience tiles ─────────────────────────────────────── */
+.audience-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:20px 0;}
+.aud-tile{border-radius:12px;padding:16px 13px;text-align:center;cursor:default;}
+.aud-tile .aud-icon{font-size:26px;margin-bottom:8px;}
+.aud-tile .aud-who{font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px;}
+.aud-tile .aud-need{font-size:11.5px;line-height:1.55;}
+.aud-tile.pub{background:#e8f0fc;border:2px solid #003366;}.aud-tile.pub .aud-who{color:#003366;}
+.aud-tile.asr{background:#f0f8f0;border:2px solid #007700;}.aud-tile.asr .aud-who{color:#007700;}
+.aud-tile.mkt{background:#fff8e0;border:2px solid #C49A00;}.aud-tile.mkt .aud-who{color:#7a5a00;}
+.aud-tile.lec{background:#f5f0fb;border:2px solid #5a3d8c;}.aud-tile.lec .aud-who{color:#5a3d8c;}
+.aud-tile.stu{background:#fff0f0;border:2px solid #C00000;}.aud-tile.stu .aud-who{color:#C00000;}
+
+/* ── Curriculum layers ──────────────────────────────────── */
+.curriculum-stack{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0;}
+.curr-card{border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.10);}
+.curr-card-head{padding:14px 16px 12px;color:white;font-weight:800;}
+.curr-card-head .layer{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-bottom:3px;}
+.curr-card-head .title{font-size:16px;}
+.curr-card-body{padding:14px 16px;background:white;font-size:12.5px;line-height:1.7;color:#2a3a50;}
+.curr-card.book .curr-card-head{background:#003366;}
+.curr-card.lab  .curr-card-head{background:#5a3d8c;}
+.curr-card.live .curr-card-head{background:#C00000;}
+.curr-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:20px;padding:2px 8px;margin-top:8px;}
+.curr-badge.book{background:#e8f0fc;color:#003366;}
+.curr-badge.lab{background:#f5f0fb;color:#5a3d8c;}
+.curr-badge.live{background:#fff0f0;color:#C00000;}
+
+/* ── Science callouts ───────────────────────────────────── */
+.sci-duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+.sci-box{border-radius:12px;padding:16px 18px;border-left:5px solid;}
+.sci-box.voice{background:#e8f0fc;border-color:#003366;}
+.sci-box.draw{background:#fff8e0;border-color:#C49A00;}
+.sci-box .sci-head{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+.sci-box.voice .sci-head{color:#003366;}.sci-box.draw .sci-head{color:#7a5a00;}
+.sci-box p{font-size:12.5px;line-height:1.65;color:#2a3a50;}
+.sci-feat{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.sci-feat span{background:white;border:1px solid rgba(0,0,0,.12);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;color:#2a3a50;}
+
+/* ── Outcomes ───────────────────────────────────────────── */
+.outcomes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+.outcome-item{display:flex;align-items:flex-start;gap:9px;background:#f4f7fb;border-radius:9px;padding:10px 12px;font-size:12.5px;color:#2a3a50;line-height:1.55;}
+.outcome-item .oi{font-size:18px;flex-shrink:0;}
+
+/* ── Engine metrics ─────────────────────────────────────── */
+.engine-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0;}
+.engine-trio-item{background:#f0f6ff;border-radius:10px;padding:14px;border-left:4px solid #003366;text-align:center;}
+.engine-trio-item .ev{font-size:22px;font-weight:900;color:#003366;}
+.engine-trio-item .ek{font-size:11px;color:#595959;margin-top:2px;font-weight:600;letter-spacing:.5px;}
+.gz-box{background:#fff8e0;border:2px solid #C49A00;border-radius:12px;padding:16px 20px;margin:16px 0;}
+.gz-box strong{color:#7a5a00;}
+
+/* ── CTA strip ──────────────────────────────────────────── */
+.cta-strip{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0;}
+.cta-primary{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-size:14px;padding:13px 22px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.18);}
+.cta-secondary{display:inline-flex;align-items:center;gap:9px;background:white;color:#003366;font-weight:700;font-size:14px;padding:12px 20px;border-radius:999px;text-decoration:none;border:2px solid #003366;}
+.cta-tertiary{display:inline-flex;align-items:center;gap:9px;background:#5a3d8c;color:white;font-weight:700;font-size:14px;padding:12px 20px;border-radius:999px;text-decoration:none;}
+
+/* ── Indemnity ──────────────────────────────────────────── */
+.indemnity{background:#fff7ec;border:1px solid #e7cfa0;border-left:5px solid #c9a24b;border-radius:14px;padding:18px 20px;font-size:13px;line-height:1.65;color:#4a3d24;}
+.indemnity strong{color:#7a5b17;}
+
+@media(max-width:720px){
+  .audience-grid{grid-template-columns:1fr 1fr;}
+  .curriculum-stack{grid-template-columns:1fr;}
+  .sci-duo{grid-template-columns:1fr;}
+  .outcomes{grid-template-columns:1fr;}
+  .engine-trio{grid-template-columns:1fr 1fr;}
+  .cta-strip{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════════ HERO ═══════════════════════════════ -->
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / AEGIS Parkinson</div>
+    <div class="tag tag-aqua">Biomedical Engineering &middot; Neurology &middot; Academic Curriculum &middot; Institutional Adoption</div>
+    <h1>AEGIS Parkinson &mdash; Textbook, Lab &amp; Live System (P21)</h1>
+    <figure class="hero-image" style="margin:18px 0 10px;">
+      <img src="assets/p21/hero.jpg" alt="Parkinson's patient performing spiral drawing test — AEGIS P21 biomedical engineering curriculum" style="width:100%;height:auto;border-radius:12px;display:block;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative.</figcaption>
+    </figure>
+    <p class="lede">P21 is a <strong>biomedical engineering curriculum package</strong> &mdash; a validated companion textbook, a structured laboratory sheet with marking rubric, and a live AI-powered assessment station &mdash; built around the science of Parkinson&rsquo;s Disease detection through voice acoustics and motor drawing analysis. Three coherent layers, designed for institutional teaching and research adoption.</p>
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Package</div><div class="v">Companion textbook (97 pp) · Lab sheet with rubric &amp; instructor set · Live quiz station · Desktop Application (institutional)</div></div>
+      <div class="meta-item"><div class="k">Science</div><div class="v">Voice acoustic biomechanics · Motor drawing kinematics · Nonlinear dynamics (RPDE, DFA) · 11-engine ML consensus board</div></div>
+      <div class="meta-item"><div class="k">Validation</div><div class="v">GroupKFold-5 subject-level · 195 subjects · Champion AUC 0.846 · Grey-zone protocol · Fuzzy variants</div></div>
+      <div class="meta-item"><div class="k">Audience</div><div class="v">Publishers · Academic assessors · Marketers · Final-year BME &amp; Clinical AI lecturers · Students</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════ WHO THIS IS FOR ═══════════════════ -->
+<section style="padding:14px 0 6px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">Who this is for</h2>
+    <div class="audience-grid">
+      <div class="aud-tile pub">
+        <div class="aud-icon">📚</div>
+        <div class="aud-who">Publishers</div>
+        <div class="aud-need">A biomedical AI textbook with a structured lab sheet and live companion system. Validated results, honest metrics, and an institutional adoption pathway.</div>
+      </div>
+      <div class="aud-tile asr">
+        <div class="aud-icon">🔬</div>
+        <div class="aud-who">Assessors</div>
+        <div class="aud-need">Honest validated metrics. GroupKFold-5. Grey-zone protocol. Full derivations. Prof Ghista lineage. Academic rigour throughout.</div>
+      </div>
+      <div class="aud-tile mkt">
+        <div class="aud-icon">🌏</div>
+        <div class="aud-who">Marketers</div>
+        <div class="aud-need">A growing AEGIS portfolio (P19 · P20 · P21) with a live interactive demo, a human research story, and a clear institutional adoption model.</div>
+      </div>
+      <div class="aud-tile lec">
+        <div class="aud-icon">🎓</div>
+        <div class="aud-who">Lecturers</div>
+        <div class="aud-need">Course-ready: lab sheet, rubric, instructor answer set, live classroom demo. Maps to final-year BME and clinical AI curricula.</div>
+      </div>
+      <div class="aud-tile stu">
+        <div class="aud-icon">🧠</div>
+        <div class="aud-who">Students</div>
+        <div class="aud-need">Try the quiz. Hear PD voice profiles. Examine drawing tests. Then see what 11 AI engines detected — and why. Learn by doing.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CURRICULUM STACK ══════════════════ -->
+<section style="padding:14px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">The three-layer curriculum package</h2>
+    <p>Each layer is independent but designed to reinforce the others. A student reads the theory, applies it in the lab, and tests their understanding against the live system. A lecturer teaches from the book, sets the lab, and demonstrates with the app. The three layers form a self-contained curriculum instrument.</p>
+
+    <div class="curriculum-stack">
+      <div class="curr-card book">
+        <div class="curr-card-head">
+          <div class="layer">Layer 1</div>
+          <div class="title">📖 The Companion Textbook</div>
+        </div>
+        <div class="curr-card-body">
+          <strong>Project 21: Parkinson Augmenting System</strong> — 97 pages. Written for final-year biomedical engineering and clinical AI students.<br><br>
+          Covers: vocal fold biomechanics · acoustic feature derivation · motor drawing kinematics · 11-engine ML board design · grey-zone clinical protocol · validated AUC results · institutional adoption framework · full lab worked solutions.<br><br>
+          Concepts derive from first principles. Results are reported as measured, without inflation.
+          <span class="curr-badge book">97 pages · Institutional licensing</span>
+        </div>
+      </div>
+      <div class="curr-card lab">
+        <div class="curr-card-head">
+          <div class="layer">Layer 2</div>
+          <div class="title">🧪 The Laboratory Sheet</div>
+        </div>
+        <div class="curr-card-body">
+          Structured practical exercise (Appendix L). Students work through:<br><br>
+          · Acoustic feature extraction from a voice sample<br>
+          · Engine probability interpretation<br>
+          · Grey-zone case classification and referral justification<br>
+          · Drawing test kinematic analysis<br>
+          · Clinical report writing to a defined rubric<br><br>
+          Adopting institutions receive the full <strong>instructor answer set and marking rubric</strong> — ready to deploy in a three-hour lab session.
+          <span class="curr-badge lab">Rubric + answer set included</span>
+        </div>
+      </div>
+      <div class="curr-card live">
+        <div class="curr-card-head">
+          <div class="layer">Layer 3</div>
+          <div class="title">💻 The Live System</div>
+        </div>
+        <div class="curr-card-body">
+          Two tiers of live access:<br><br>
+          <strong>Public:</strong> Listen &amp; Look Quiz station (this page) — 8 shuffled cases, voice waveforms and drawing tests, real engine verdicts. Free for any student worldwide.<br><br>
+          <strong>Institutional:</strong> AEGIS Desktop Application — runs live analysis on new voice recordings and drawing inputs. Granted to adopting institutions. Full 11-engine board, grey-zone protocol, clinical report output.<br><br>
+          The quiz is the accessible entry point; the Desktop Application is for supervised laboratory use.
+          <span class="curr-badge live">Quiz: free · Desktop App: institutional</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ LIVE QUIZ ══════════════════════════ -->
+<section style="padding:10px 0 6px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">Try it now &mdash; Listen &amp; Look Quiz</h2>
+    <p>Eight cases, shuffled. Four voice waveforms generated from real AEGIS-Derived acoustic feature data. Four drawing tests generated from real motor feature parameters. Guess Parkinson&rsquo;s Disease or Healthy Control &mdash; then see what the AEGIS 11-engine board detected, and why it sometimes disagrees with itself. Suitable for classroom use: project it, pause on a case, and discuss the engine reasoning with students.</p>
+    <figure style="margin:14px 0 10px;">
+      <img src="assets/p21/voice-assess.jpg" alt="AEGIS P21 voice waveform quiz — sustained phonation acoustic analysis" style="width:100%;border-radius:12px;display:block;max-height:280px;object-fit:cover;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">Voice channel: 22 acoustic biomarkers · waveforms generated from real clinical feature data · AEGIS-P21-VOICE-DERIVED-001</figcaption>
+    </figure>
+    <div class="cta-strip">
+      <a class="cta-primary" href="apps/aegis-p21-parkinson.html">🎧 ✏️ &nbsp;Open the full interactive quiz station →</a>
+      <a class="cta-secondary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P21%20%E2%80%94%20Classroom%20Demo%20Request">🎓 &nbsp;Request a classroom demo</a>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">Quiz waveforms and drawings are generated from real AEGIS-Derived research feature data — not raw audio, not raw patient records — for educational use only. Ground truth from validated research study. Never a clinical diagnosis.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════ THE SCIENCE ════════════════════════ -->
+<section style="padding:10px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">The biomedical engineering science &mdash; for assessors and lecturers</h2>
+    <p>Every input feature in P21 has a <em>physiological and biomechanical derivation</em> — not a correlation found in data, but a measurable physical quantity with a clinical interpretation. The textbook teaches those derivations. The lab sheet tests them. What follows is the science the system is built on.</p>
+
+    <div class="sci-duo">
+      <div class="sci-box voice">
+        <div class="sci-head">🎤 Voice channel — acoustic biomechanics</div>
+        <p>The larynx is a biological oscillator. Parkinson&rsquo;s neurodegeneration disrupts basal ganglia control of vocal fold vibration, producing measurable perturbation in cycle-to-cycle frequency (<strong>jitter</strong>), amplitude (<strong>shimmer</strong>), and harmonic-to-noise energy (<strong>HNR</strong>). RPDE and DFA are nonlinear dynamical measures of the vocal system&rsquo;s departure from periodic self-organisation. Every feature derives from established acoustic biomechanics — not a correlation found in data, but a physical quantity with a physiological interpretation.</p>
+        <div class="sci-feat">
+          <span>Jitter</span><span>Shimmer</span><span>HNR</span><span>RPDE</span><span>DFA</span><span>NHR</span><span>Fo (Hz)</span><span>PPE</span><span>+14 more</span>
+        </div>
+      </div>
+      <div class="sci-box draw">
+        <div class="sci-head">✏️ Drawing channel — motor kinematics</div>
+        <p>The Archimedean spiral and wave tracing tests are established clinical instruments in movement disorder assessment. They quantify Parkinson&rsquo;s resting tremor (4&ndash;6 Hz, measured as lateral amplitude deviation from the guide), bradykinesia (low velocity with high coefficient of variation), and rigidity (reduced stroke smoothness). These are kinematic measurements — displacement, velocity, and acceleration patterns of the upper limb motor system — expressed as biomedical engineering parameters before any classifier sees them.</p>
+        <div class="sci-feat">
+          <span>Tremor amplitude</span><span>Speed CV</span><span>Loop closure error</span><span>Stroke smoothness</span><span>Velocity dysrhythmia</span><span>Directional consistency</span>
+        </div>
+      </div>
+    </div>
+
+    <figure style="margin:16px 0;">
+      <img src="assets/p21/spiral-closeup.jpg" alt="Spiral tracing comparison — Parkinson's vs healthy control motor drawing" style="width:100%;border-radius:12px;display:block;max-height:300px;object-fit:cover;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">Drawing channel: Archimedean spiral tracing · grey line = template guide · coloured line = patient trace · PD cases show tremor-driven lateral deviation and irregular amplitude</figcaption>
+    </figure>
+
+    <h2>Learning outcomes &mdash; for curriculum mapping</h2>
+    <p>Students completing the textbook and lab sheet will be able to:</p>
+    <div class="outcomes">
+      <div class="outcome-item"><span class="oi">🔊</span><span>Extract and interpret acoustic biomarkers (jitter, shimmer, HNR, RPDE, DFA) from sustained phonation recordings and explain their physiological basis</span></div>
+      <div class="outcome-item"><span class="oi">✏️</span><span>Analyse spiral and wave drawing tests using motor kinematic parameters and relate findings to PD clinical presentation</span></div>
+      <div class="outcome-item"><span class="oi">🤖</span><span>Interpret a multi-engine AI consensus board, understand why engines disagree, and apply grey-zone deferral protocol correctly</span></div>
+      <div class="outcome-item"><span class="oi">📊</span><span>Evaluate machine learning model performance using honest AUC, cross-validation methodology, and class-imbalance considerations</span></div>
+      <div class="outcome-item"><span class="oi">⚕</span><span>Write a structured clinical referral report from AI engine outputs, with appropriate uncertainty quantification and specialist referral triggers</span></div>
+      <div class="outcome-item"><span class="oi">🏛️</span><span>Apply PDPA-compliant data governance principles to a real biomedical AI data pipeline</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ENGINE BOARD ═══════════════════════ -->
+<section style="padding:8px 0 4px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">Validated results &mdash; honest AUC, reported as-is</h2>
+    <p>All engines trained and evaluated with <strong>GroupKFold-5 subject-level splitting</strong> — no patient&rsquo;s recordings appear in both training and validation. 195 research subjects (147 PD, 48 HC). Reported exactly as measured — no inflation, no cherry-picking.</p>
+
+    <div class="engine-trio">
+      <div class="engine-trio-item"><div class="ev">0.846</div><div class="ek">Champion AUC · MLP Neural Net</div></div>
+      <div class="engine-trio-item"><div class="ev">195</div><div class="ek">Subjects · 147 PD · 48 HC</div></div>
+      <div class="engine-trio-item"><div class="ev">11</div><div class="ek">Engines in consensus board</div></div>
+    </div>
+
+    <table class="data-table">
+      <thead><tr><th>Engine</th><th>Validation ROC-AUC</th><th>±SD</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td><strong>MLP Neural Net 🏆</strong></td><td><strong>0.846</strong></td><td>±0.135</td><td>Champion</td></tr>
+        <tr><td>Random Forest</td><td>0.838</td><td>±0.159</td><td>Ensemble</td></tr>
+        <tr><td>CatBoost</td><td>0.835</td><td>±0.161</td><td>Gradient boost</td></tr>
+        <tr><td>Extra Trees</td><td>0.826</td><td>±0.143</td><td>Ensemble</td></tr>
+        <tr><td>Hist Gradient Boosting</td><td>0.793</td><td>±0.189</td><td>Gradient boost</td></tr>
+        <tr><td>Gaussian Naive Bayes</td><td>0.783</td><td>±0.219</td><td>Probabilistic</td></tr>
+        <tr><td>XGBoost</td><td>0.768</td><td>±0.264</td><td>Gradient boost</td></tr>
+        <tr><td>K-Nearest Neighbours</td><td>0.763</td><td>±0.156</td><td>Instance-based</td></tr>
+        <tr><td>Logistic Regression</td><td>0.723</td><td>±0.164</td><td>Linear</td></tr>
+        <tr><td>Linear SVC</td><td>0.692</td><td>±0.191</td><td>Margin</td></tr>
+        <tr style="background:#f0f8f0"><td>SVM-RBF <span style="background:#006666;color:white;border-radius:8px;padding:1px 6px;font-size:10px;">PRIMARY</span></td><td>0.674</td><td>±0.213</td><td>Kernel SVM</td></tr>
+        <tr style="background:#f0f8f0"><td>Fuzzy Linear-SVC ★ <span style="background:#006666;color:white;border-radius:8px;padding:1px 6px;font-size:10px;">PRIMARY</span></td><td>0.671</td><td>±0.214</td><td>Fuzzy margin</td></tr>
+        <tr style="background:#f0f8f0"><td>Fuzzy SVM-RBF ★ <span style="background:#006666;color:white;border-radius:8px;padding:1px 6px;font-size:10px;">PRIMARY</span></td><td>0.644</td><td>±0.180</td><td>Fuzzy kernel</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--text-muted);">Honest note: AUC range 0.644&ndash;0.846 reflects the genuine difficulty of voice-based PD screening with class imbalance (147:48). The SVM and Fuzzy variants are clinical primaries — conservative sensitivity over optimised AUC. The full board consensus is what AEGIS reports; no single engine is used alone.</p>
+
+    <div class="gz-box">
+      <strong>Grey-zone protocol &mdash; a teachable clinical design decision.</strong> Any composite score between 35% and 65% triggers automatic specialist referral. AEGIS refuses to call it. This is a deliberate design choice — not a weakness — and it is one of the key learning outcomes in the lab sheet. Students must justify <em>why</em> a grey-zone case should not be auto-classified. That reasoning is the biomedical engineering judgement the course is teaching.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ INSTITUTIONAL ══════════════════════ -->
+<section style="padding:10px 0 6px;">
+  <div class="container">
+    <h2 style="margin-top:0;">Institutional adoption &mdash; publishers, marketers, lecturers</h2>
+
+    <figure style="margin:0 0 18px;">
+      <img src="assets/p21/partner.jpg" alt="AEGIS P21 institutional partnership — publishers, lecturers and clinicians collaborating" style="width:100%;border-radius:12px;display:block;max-height:300px;object-fit:cover;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative.</figcaption>
+    </figure>
+
+    <p>These apps demonstrate clinical AI systems capable of classification, early pre-emptive detection, and progressive augmented management. Because full AEGIS engines and datasets run to several gigabytes, only educational quiz modes are hosted here — the live analysis requires the AEGIS Desktop Application. Institutions wishing to contribute local data for engine refinement are welcome to reach out; we share progressive validation results with every contributing partner and operate in strict accordance with PDPA.</p>
+
+    <p style="margin-top:10px;"><strong>What adopting institutions receive:</strong> the complete textbook manuscript · lab sheet with marking rubric and instructor answer set · AEGIS Desktop Application licence · progressive model result updates as the engine board improves · co-attribution in the published edition where applicable.</p>
+
+    <div class="indemnity" style="margin:16px 0;">
+      <strong>Ground rules for data contribution and institutional enquiry.</strong><br>
+      1. <strong>Not a medical device and not a diagnosis.</strong> AEGIS is a research and educational demonstration. Nothing it outputs is medical advice, a diagnosis, or a substitute for a qualified clinician.<br>
+      2. <strong>De-identified data only.</strong> Remove all PHI before contributing. Only submit data under your institution&rsquo;s ethics approval and with informed consent.<br>
+      3. <strong>Liability release.</strong> Contributing institutions agree to indemnify and hold harmless AEGIS, Dr Loh Kah Meng, and associated parties from any claims arising from use of or reliance on AEGIS outputs.<br>
+      4. <strong>DUA required.</strong> A formal Data Use Agreement is required before any institutional data exchange proceeds.<br>
+      5. <strong>PDPA compliance.</strong> All data handled under strict PDPA and applicable governance frameworks.
+    </div>
+
+    <div class="cta-strip">
+      <a class="cta-primary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P21%20%E2%80%94%20Publisher%20%2F%20Licensing%20Enquiry&body=I%20have%20read%20the%20terms%20on%20the%20AEGIS%20P21%20page%20and%20wish%20to%20enquire%20about%20publishing%20%2F%20licensing%20the%20P21%20curriculum%20package.">📚 &nbsp;Publisher &amp; licensing enquiry</a>
+      <a class="cta-tertiary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P21%20%E2%80%94%20Lecturer%20Adoption%20Enquiry">🎓 &nbsp;Lecturer adoption enquiry</a>
+      <a class="cta-secondary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P21%20%E2%80%94%20Data%20Partnership">🔬 &nbsp;Data partnership</a>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">All enquiries to <strong>aegisloh@aegishumanai.com</strong>. International partnerships welcome. DUA provided before any data exchange.</p>
+
+    <!-- DEDICATION -->
+    <figure style="margin:24px 0 0;">
+      <img src="assets/p21/hands.jpg" alt="Elderly patient's hands — every number in AEGIS P21 represents a person" style="width:100%;border-radius:12px;display:block;max-height:320px;object-fit:cover;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative. Every number in this system represents a person.</figcaption>
+    </figure>
+
+    <div class="callout" style="margin-top:22px;">
+      <strong>Dedicated to Professor Dhanjoo N. Ghista.</strong> AEGIS traces its theoretical lineage to Prof Ghista&rsquo;s foundational work in biomedical engineering &mdash; his nondimensional index (NDI) framework for physiological system characterisation, and his lifelong conviction that engineering rigour and clinical compassion are the same discipline approached from two directions. The grey-zone protocol in P21 &mdash; the decision to refuse a call rather than force a verdict the system cannot honestly support &mdash; is the computational expression of that humility. AEGIS augments, it never replaces.
+    </div>
+
+    <div style="margin-top:18px;padding:13px 16px;background:#e0eaf8;border-radius:10px;font-size:13px;color:#1a2535;line-height:1.7;">
+      <strong>Also in the AEGIS portfolio:</strong> &nbsp;
+      <a href="project-20-breast-cancer.html" style="color:#003366;font-weight:700;">P20 · AEGIS Breast</a> — Unified breast screening, 7 specialist engines &nbsp;·&nbsp;
+      <a href="apps/aegis-p19-sentinel.html" style="color:#003366;font-weight:700;">P19 · AEGIS Sentinel</a> — Psychophysiological wearable
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"7d3dc3aee49c49ea96443ed061a43e02"}'></script>
+</body>
+</html>
