@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>AEGIS P21 — Parkinson Voice & Drawing Quiz | Listen & Look</title>
+<title>AEGIS P21 — Parkinson Voice & Drawing Quiz | Listen & Draw</title>
 <meta name="description" content="AEGIS P21: Listen to voice samples and look at drawing tests — can you identify Parkinson's Disease? Educational quiz with real acoustic profiles and motor drawing patterns. Illustrative research demonstration.">
 <link rel="canonical" href="https://aegishumanai.com/apps/aegis-p21-parkinson.html">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -143,6 +143,12 @@ footer{background:var(--navy3);color:#668baa;text-align:center;padding:16px 24px
 footer .footer-logo{color:white;font-weight:900;letter-spacing:4px;font-size:16px;}
 footer a{color:var(--gold2);text-decoration:none;}
 
+/* TRY IT YOURSELF */
+.try-shape-btn{cursor:pointer;border:2px solid #b0c8e0;background:white;color:var(--navy);font-weight:700;font-size:14px;padding:10px 24px;border-radius:999px;transition:all .15s;}
+.try-shape-btn.active{background:var(--navy);color:white;border-color:var(--navy);}
+.try-shape-btn:hover{transform:translateY(-2px);}
+#try-canvas{cursor:crosshair;border:2px solid #d0dde8;border-radius:12px;background:#f8fbff;display:block;margin:0 auto;touch-action:none;max-width:100%;}
+
 @media(max-width:720px){
   .case-grid{grid-template-columns:1fr;}
   .gauge-row{flex-direction:column;align-items:center;}
@@ -167,7 +173,7 @@ footer a{color:var(--gold2);text-decoration:none;}
   </div>
   <div class="hdr-title">
     <div class="proj">PROJECT 21 · PARKINSON AUGMENTING SYSTEM</div>
-    <h1>Voice &amp; Drawing Assessment · Educational Station</h1>
+    <h1>Listen &amp; Draw · Voice and Motor Assessment Station</h1>
     <div style="font-size:12px;color:#8bbcdc;margin-top:4px;">11-Engine Consensus · Grey-Zone Protocol · GroupKFold-5 Validated</div>
   </div>
   <div class="hdr-right">
@@ -187,13 +193,16 @@ footer a{color:var(--gold2);text-decoration:none;}
 <main>
   <div class="tab-row">
     <button class="tab-btn active" onclick="switchTab('quiz')">
-      <span class="tab-icon">🎧 ✏️</span>LISTEN &amp; LOOK QUIZ<br><small style="font-weight:400;font-size:11px;">Voice waveforms + drawing tests — can you tell?</small>
+      <span class="tab-icon">🎧 ✏️</span>LISTEN &amp; DRAW QUIZ<br><small style="font-weight:400;font-size:11px;">Voice waveforms + drawing tests — can you tell?</small>
     </button>
     <button class="tab-btn" onclick="switchTab('cases')">
-      <span class="tab-icon">📊</span>CASE EXPLORER<br><small style="font-weight:400;font-size:11px;">Full engine leaderboard · 4 clinical profiles</small>
+      <span class="tab-icon">📊</span>CASE EXPLORER<br><small style="font-weight:400;font-size:11px;">Voice sliders · drawing sliders · 8 profiles</small>
     </button>
     <button class="tab-btn" onclick="switchTab('about')">
       <span class="tab-icon">🧠</span>ABOUT P21<br><small style="font-weight:400;font-size:11px;">Architecture · results · institutional access</small>
+    </button>
+    <button class="tab-btn" onclick="switchTab('try')">
+      <span class="tab-icon">✍️</span>TRY IT YOURSELF<br><small style="font-weight:400;font-size:11px;">Draw a spiral or wave — see your motor profile</small>
     </button>
   </div>
 
@@ -218,7 +227,7 @@ footer a{color:var(--gold2);text-decoration:none;}
     <!-- ════════ CASES PANEL ════════ -->
     <div class="panel" id="panel-cases">
       <div style="font-size:13px;color:var(--dgrey);margin-bottom:10px;line-height:1.6;">
-        Eight profiles from the AEGIS P21 research study — 4 voice cases and 4 drawing cases. Drag sliders to explore how acoustic and motor features shape the signal.
+        Sixteen profiles from the AEGIS P21 research study — 8 voice cases and 8 drawing cases. Drag sliders to explore how acoustic and motor features shape the signal. Then go to <strong>Try It Yourself</strong> to draw your own and see your motor profile.
       </div>
       <div style="font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;margin-bottom:6px;">🎤 VOICE CASES — 11-Engine Board</div>
       <div class="case-selector">
@@ -256,6 +265,22 @@ footer a{color:var(--gold2);text-decoration:none;}
         <div class="case-btn" onclick="loadDrawCase(3)">
           <div class="cb-id">D-HC-002</div><div class="cb-label">🟢 Wave P21-H</div>
           <div class="cb-flag hc">HEALTHY · 9.1%</div>
+        </div>
+        <div class="case-btn" onclick="loadDrawCase(4)">
+          <div class="cb-id">D-PD-003</div><div class="cb-label">🔴 Spiral P21-I</div>
+          <div class="cb-flag pd">STRONGLY PD · 88.1%</div>
+        </div>
+        <div class="case-btn" onclick="loadDrawCase(5)">
+          <div class="cb-id">D-HC-003</div><div class="cb-label">🟢 Spiral P21-J</div>
+          <div class="cb-flag hc">HEALTHY · 6.2%</div>
+        </div>
+        <div class="case-btn" onclick="loadDrawCase(6)">
+          <div class="cb-id">D-PD-004</div><div class="cb-label">🔴 Wave P21-K</div>
+          <div class="cb-flag pd">STRONGLY PD · 83.4%</div>
+        </div>
+        <div class="case-btn" onclick="loadDrawCase(7)">
+          <div class="cb-id">D-HC-004</div><div class="cb-label">🟢 Wave P21-L</div>
+          <div class="cb-flag hc">HEALTHY · 7.3%</div>
         </div>
       </div>
       <div class="case-display show" id="case-display"></div>
@@ -295,6 +320,43 @@ footer a{color:var(--gold2);text-decoration:none;}
         <a href="../project-21-parkinson.html" style="display:inline-block;color:var(--navy);font-size:13px;font-weight:600;text-decoration:none;border:1.5px solid #ccd9e8;border-radius:999px;padding:8px 20px;">← Back to P21 Project Page</a>
       </div>
     </div>
+
+    <!-- ════════ TRY IT YOURSELF PANEL ════════ -->
+    <div class="panel" id="panel-try">
+      <div style="font-size:14px;color:var(--dgrey);line-height:1.75;margin-bottom:18px;">
+        <strong style="color:var(--navy);font-size:16px;">✍️ Draw It Yourself</strong><br>
+        Clinical digitising tablets reveal tremor in a patient's drawing. Now it's your turn — trace the shape below and see how your motor profile compares to the research cases.
+        <span style="display:block;margin-top:6px;font-size:12px;color:#999;">🖱 Mouse or touchpad · results are for fun and education only — real clinical assessment uses specialist equipment</span>
+      </div>
+
+      <!-- Shape selector -->
+      <div style="display:flex;gap:12px;justify-content:center;margin-bottom:22px;">
+        <button class="try-shape-btn active" id="try-spiral-btn" onclick="trySetShape('spiral')">🌀 Spiral</button>
+        <button class="try-shape-btn" id="try-wave-btn" onclick="trySetShape('wave')">〰️ Wave</button>
+      </div>
+
+      <!-- Canvas -->
+      <div style="text-align:center;">
+        <canvas id="try-canvas" width="520" height="320"></canvas>
+        <div id="try-status" style="font-size:12px;color:#6a8aaa;margin-top:8px;font-weight:600;">
+          Follow the blue guide — start at the dot and draw steadily
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:18px;flex-wrap:wrap;">
+        <button onclick="tryClear()" style="cursor:pointer;border:2px solid #b0c8e0;background:white;color:var(--navy);font-weight:700;font-size:13px;padding:9px 20px;border-radius:999px;transition:all .15s;">🔄 Clear</button>
+        <button id="try-analyse-btn" onclick="tryAnalyse()" style="cursor:pointer;border:2px solid var(--navy);background:var(--navy);color:white;font-weight:700;font-size:13px;padding:9px 22px;border-radius:999px;transition:all .15s;">🔬 Analyse My Drawing</button>
+      </div>
+
+      <!-- Results -->
+      <div id="try-results" style="display:none;margin-top:16px;"></div>
+
+      <div style="margin-top:22px;font-size:11.5px;color:#999;background:var(--lgrey);border-radius:8px;padding:10px 14px;line-height:1.65;">
+        🔬 <strong>AEGIS P21 clinical reference:</strong> Healthy Controls showed tremor amplitude 1.8–3.1 px on calibrated digitising tablets. PD participants: 13.7–18.4 px. Mouse and touchpad drawing naturally produces more variability — so this is a fun comparison, not a medical screening. True clinical assessment requires a neurologist and specialist equipment.
+      </div>
+    </div>
+
   </div>
 </main>
 
@@ -417,6 +479,102 @@ const VOICE_CASES = [
       {n:'Fuzzy SVM-RBF ★',p:0.008,c:'hc'},{n:'CatBoost',p:0.031,c:'hc'},
       {n:'XGBoost',p:0.003,c:'hc'}
     ]
+  },
+  {
+    kind:'voice', id:'PD-002', ref:'phon_R01_S03_1',
+    label:'Voice Sample E', typeTag:'🎤 VOICE — Sustained /aaah/ phonation',
+    truth:'pd', truthLabel:'Parkinson\'s Disease',
+    profile:'Research participant · Confirmed PD · 3 recordings',
+    jitter:0.01382, shimmer:0.07921, hnr:18.44, rpde:0.489, dfa:0.831, fo:124.3,
+    compositeScore:0.921, flag:'pd', flagLabel:'STRONGLY PD',
+    featDisplay:[
+      ['Fo (Hz)','124.30','↓ Low — PD range'],['Jitter (%)','0.01382','↑↑ Highly elevated'],
+      ['Shimmer','0.07921','↑↑ Strongly elevated'],['HNR (dB)','18.44','↓↓ Markedly reduced'],
+      ['RPDE','0.489','↑ High complexity'],['DFA','0.831','↑↑ Strongly elevated']
+    ],
+    explain:'Strong PD signature. Jitter is nearly twice the grey-zone threshold — the vocal folds are failing to maintain cycle-to-cycle frequency stability. Shimmer is markedly elevated (high amplitude instability). HNR at 18.44 dB signals substantial noise contamination from turbulent airflow. All 11 engines voted PD.',
+    verdictText:'Strongly Parkinson\'s Disease',
+    verdictAction:'Expedite referral. 11-engine consensus. Clinical assessment required.',
+    engines:[
+      {n:'MLP Neural Net',p:0.9987,c:'pd'},{n:'Random Forest',p:0.9641,c:'pd'},
+      {n:'Extra Trees',p:0.9812,c:'pd'},{n:'Hist Gradient Boosting',p:0.9998,c:'pd'},
+      {n:'Logistic Regression',p:0.9876,c:'pd'},{n:'K-Nearest Neighbours',p:0.9800,c:'pd'},
+      {n:'Gaussian Naive Bayes',p:0.9943,c:'pd'},{n:'SVM-RBF',p:0.9421,c:'pd'},
+      {n:'Fuzzy SVM-RBF ★',p:0.9108,c:'pd'},{n:'CatBoost',p:0.9789,c:'pd'},
+      {n:'XGBoost',p:0.9921,c:'pd'}
+    ]
+  },
+  {
+    kind:'voice', id:'PD-003', ref:'phon_R01_S05_1',
+    label:'Voice Sample F', typeTag:'🎤 VOICE — Sustained /aaah/ phonation',
+    truth:'pd', truthLabel:'Parkinson\'s Disease (moderate)',
+    profile:'Research participant · Confirmed PD moderate · 3 recordings',
+    jitter:0.00921, shimmer:0.05632, hnr:20.11, rpde:0.463, dfa:0.819, fo:108.7,
+    compositeScore:0.778, flag:'pd', flagLabel:'PROBABLE PD',
+    featDisplay:[
+      ['Fo (Hz)','108.70','↓↓ Low — clear PD range'],['Jitter (%)','0.00921','↑ Elevated'],
+      ['Shimmer','0.05632','↑ Elevated'],['HNR (dB)','20.11','↓ Reduced'],
+      ['RPDE','0.463','↑ Elevated complexity'],['DFA','0.819','↑ Elevated']
+    ],
+    explain:'Moderate PD: fundamental frequency is noticeably lowered (108.7 Hz), reflecting reduced respiratory and laryngeal drive. Jitter and shimmer both above the healthy envelope. HNR reduced. RPDE and DFA consistently elevated. Nine engines voted PD, two grey zone — engine board consensus points clearly to Parkinson\'s Disease.',
+    verdictText:'Probable Parkinson\'s Disease',
+    verdictAction:'Referral to neurologist recommended. 9 engines PD, 2 grey zone.',
+    engines:[
+      {n:'MLP Neural Net',p:0.8821,c:'pd'},{n:'Random Forest',p:0.8134,c:'pd'},
+      {n:'Extra Trees',p:0.7943,c:'pd'},{n:'Hist Gradient Boosting',p:0.9234,c:'pd'},
+      {n:'Logistic Regression',p:0.8012,c:'pd'},{n:'K-Nearest Neighbours',p:0.8000,c:'pd'},
+      {n:'Gaussian Naive Bayes',p:0.7234,c:'pd'},{n:'SVM-RBF',p:0.6812,c:'grey'},
+      {n:'Fuzzy SVM-RBF ★',p:0.5934,c:'grey'},{n:'CatBoost',p:0.8456,c:'pd'},
+      {n:'XGBoost',p:0.8723,c:'pd'}
+    ]
+  },
+  {
+    kind:'voice', id:'HC-002', ref:'phon_R01_S08_1',
+    label:'Voice Sample G', typeTag:'🎤 VOICE — Sustained /aaah/ phonation',
+    truth:'hc', truthLabel:'Healthy Control',
+    profile:'Research participant · No neurological symptoms · 3 recordings',
+    jitter:0.00198, shimmer:0.01423, hnr:29.87, rpde:0.312, dfa:0.753, fo:178.4,
+    compositeScore:0.038, flag:'hc', flagLabel:'PROBABLE HEALTHY',
+    featDisplay:[
+      ['Fo (Hz)','178.40','✓ Normal fundamental'],['Jitter (%)','0.00198','✓✓ Very low'],
+      ['Shimmer','0.01423','✓✓ Very low'],['HNR (dB)','29.87','✓✓ Excellent harmonics'],
+      ['RPDE','0.312','✓ Low complexity'],['DFA','0.753','✓ Normal range']
+    ],
+    explain:'Textbook healthy voice. Jitter at 0.00198 is well below the pathological threshold. Shimmer extremely low — amplitude is perfectly controlled cycle to cycle. HNR at 29.87 dB indicates an exceptionally clean harmonic structure with very little noise. RPDE and DFA both in the healthy range. All 11 engines: Healthy.',
+    verdictText:'Low Probability PD — Healthy',
+    verdictAction:'No neurological concern detected. Routine monitoring.',
+    engines:[
+      {n:'MLP Neural Net',p:0.012,c:'hc'},{n:'Random Forest',p:0.088,c:'hc'},
+      {n:'Extra Trees',p:0.034,c:'hc'},{n:'Hist Gradient Boosting',p:0.008,c:'hc'},
+      {n:'Logistic Regression',p:0.044,c:'hc'},{n:'K-Nearest Neighbours',p:0.000,c:'hc'},
+      {n:'Gaussian Naive Bayes',p:0.000,c:'hc'},{n:'SVM-RBF',p:0.021,c:'hc'},
+      {n:'Fuzzy SVM-RBF ★',p:0.011,c:'hc'},{n:'CatBoost',p:0.019,c:'hc'},
+      {n:'XGBoost',p:0.007,c:'hc'}
+    ]
+  },
+  {
+    kind:'voice', id:'HC-003', ref:'phon_R01_S12_1',
+    label:'Voice Sample H', typeTag:'🎤 VOICE — Sustained /aaah/ phonation',
+    truth:'hc', truthLabel:'Healthy Control',
+    profile:'Research participant · No neurological symptoms · 3 recordings',
+    jitter:0.00156, shimmer:0.01089, hnr:31.44, rpde:0.287, dfa:0.741, fo:196.5,
+    compositeScore:0.021, flag:'hc', flagLabel:'PROBABLE HEALTHY',
+    featDisplay:[
+      ['Fo (Hz)','196.50','✓ Normal fundamental'],['Jitter (%)','0.00156','✓✓ Exceptionally low'],
+      ['Shimmer','0.01089','✓✓ Exceptionally low'],['HNR (dB)','31.44','✓✓ Excellent harmonics'],
+      ['RPDE','0.287','✓ Low — highly periodic'],['DFA','0.741','✓ Normal']
+    ],
+    explain:'Exceptionally clean healthy voice. Jitter 0.00156 and shimmer 0.01089 are among the lowest in the study — extremely stable vocal fold vibration. HNR 31.44 dB is near the top of the healthy range: almost no turbulent noise. RPDE the lowest of all 8 cases — vocal production is highly periodic and self-organised. All 11 engines: Healthy.',
+    verdictText:'Low Probability PD — Healthy',
+    verdictAction:'No neurological concern. All 11 engines: Healthy.',
+    engines:[
+      {n:'MLP Neural Net',p:0.003,c:'hc'},{n:'Random Forest',p:0.052,c:'hc'},
+      {n:'Extra Trees',p:0.021,c:'hc'},{n:'Hist Gradient Boosting',p:0.002,c:'hc'},
+      {n:'Logistic Regression',p:0.031,c:'hc'},{n:'K-Nearest Neighbours',p:0.000,c:'hc'},
+      {n:'Gaussian Naive Bayes',p:0.000,c:'hc'},{n:'SVM-RBF',p:0.014,c:'hc'},
+      {n:'Fuzzy SVM-RBF ★',p:0.006,c:'hc'},{n:'CatBoost',p:0.011,c:'hc'},
+      {n:'XGBoost',p:0.004,c:'hc'}
+    ]
   }
 ];
 
@@ -510,10 +668,94 @@ const DRAW_CASES = [
       {n:'Tremor Feature Classifier',p:0.031,c:'hc'},{n:'Fuzzy Motor Engine ★',p:0.048,c:'hc'},
       {n:'Speed Profile SVM',p:0.112,c:'hc'},{n:'Wave Amplitude LR',p:0.134,c:'hc'}
     ]
+  },
+  {
+    kind:'drawing', id:'D-PD-003', drawType:'spiral',
+    label:'Drawing Test S3', typeTag:'✏️ DRAWING — Spiral tracing test',
+    truth:'pd', truthLabel:'Parkinson\'s Disease',
+    profile:'Research participant · Confirmed PD · Spiral tracing on digitising tablet',
+    tremorAmp:18, tremorFreq:4.8, speedVar:0.45, closureErr:22.1, seed:53,
+    compositeScore:0.881, flag:'pd', flagLabel:'STRONGLY PD',
+    featDisplay:[
+      ['Tremor Amplitude','17.6 px','↑↑ Strongly elevated'],['Spiral Tightness Index','0.68','↓ Reduced'],
+      ['Loop Closure Error','22.1 px','↑↑ Very high'],['Speed CV','0.45','↑↑ High'],
+      ['Directional Consistency','0.57','↓ Reduced'],['Velocity Dysrhythmia','0.79','↑ Elevated']
+    ],
+    explain:'Severe tremor-driven deviation — the patient\'s hand oscillates at 4-6 Hz throughout the spiral. Tremor amplitude 17.6 px is among the highest in the study. The spiral loops collapse inward with high closure error. Speed is extremely irregular.',
+    verdictText:'Strongly Parkinson\'s Disease',
+    verdictAction:'Motor signal strongly PD. Immediate neurological referral.',
+    engines:[
+      {n:'ResNet-50 + CatBoost',p:0.953,c:'pd'},{n:'ResNet-50 + SVM-RBF',p:0.921,c:'pd'},
+      {n:'Tremor Feature Classifier',p:0.971,c:'pd'},{n:'Fuzzy Motor Engine ★',p:0.889,c:'pd'},
+      {n:'Speed Profile SVM',p:0.841,c:'pd'},{n:'Spiral Tightness LR',p:0.812,c:'pd'}
+    ]
+  },
+  {
+    kind:'drawing', id:'D-HC-003', drawType:'spiral',
+    label:'Drawing Test S4', typeTag:'✏️ DRAWING — Spiral tracing test',
+    truth:'hc', truthLabel:'Healthy Control',
+    profile:'Research participant · No neurological symptoms · Spiral tracing on digitising tablet',
+    tremorAmp:1.8, tremorFreq:9.2, speedVar:0.05, closureErr:2.1, seed:77,
+    compositeScore:0.062, flag:'hc', flagLabel:'PROBABLE HEALTHY',
+    featDisplay:[
+      ['Tremor Amplitude','1.8 px','✓✓ Very low'],['Spiral Tightness Index','0.96','✓✓ Excellent'],
+      ['Loop Closure Error','2.1 px','✓ Very low'],['Speed CV','0.05','✓ Highly consistent'],
+      ['Directional Consistency','0.93','✓✓ Excellent'],['Velocity Dysrhythmia','0.07','✓ Very low']
+    ],
+    explain:'Near-perfect spiral tracing. Tremor amplitude is the lowest of all cases — the hand holds a very steady course. Loop closure excellent. Speed is highly consistent throughout. All motor features well within the healthy envelope.',
+    verdictText:'Low Probability PD — Healthy',
+    verdictAction:'Motor drawing assessment: healthy. Routine monitoring.',
+    engines:[
+      {n:'ResNet-50 + CatBoost',p:0.031,c:'hc'},{n:'ResNet-50 + SVM-RBF',p:0.058,c:'hc'},
+      {n:'Tremor Feature Classifier',p:0.018,c:'hc'},{n:'Fuzzy Motor Engine ★',p:0.044,c:'hc'},
+      {n:'Speed Profile SVM',p:0.092,c:'hc'},{n:'Spiral Tightness LR',p:0.071,c:'hc'}
+    ]
+  },
+  {
+    kind:'drawing', id:'D-PD-004', drawType:'wave',
+    label:'Drawing Test W3', typeTag:'✏️ DRAWING — Wave tracing test',
+    truth:'pd', truthLabel:'Parkinson\'s Disease',
+    profile:'Research participant · Confirmed PD · Wave tracing on digitising tablet',
+    tremorAmp:19, tremorFreq:5.1, speedVar:0.48, closureErr:0, seed:38,
+    compositeScore:0.834, flag:'pd', flagLabel:'STRONGLY PD',
+    featDisplay:[
+      ['Tremor Amplitude','18.4 px','↑↑ Strongly elevated'],['Wave Amplitude CV','0.51','↑↑ Very irregular'],
+      ['Velocity Dysrhythmia','0.77','↑ Elevated'],['Stroke Smoothness','0.49','↓ Reduced'],
+      ['Pen Pressure Var','0.44','↑ Elevated'],['Speed CV','0.48','↑ High variation']
+    ],
+    explain:'The wave trace is severely disrupted by resting tremor. High-amplitude oscillation (18.4 px) superimposed on the intended wave path. The patient struggles to maintain consistent amplitude. All six motor engines: Strongly PD.',
+    verdictText:'Strongly Parkinson\'s Disease',
+    verdictAction:'Motor drawing: strongly PD. Refer for clinical assessment.',
+    engines:[
+      {n:'ResNet-50 + CatBoost',p:0.891,c:'pd'},{n:'ResNet-50 + SVM-RBF',p:0.867,c:'pd'},
+      {n:'Tremor Feature Classifier',p:0.934,c:'pd'},{n:'Fuzzy Motor Engine ★',p:0.812,c:'pd'},
+      {n:'Speed Profile SVM',p:0.788,c:'pd'},{n:'Wave Amplitude LR',p:0.754,c:'pd'}
+    ]
+  },
+  {
+    kind:'drawing', id:'D-HC-004', drawType:'wave',
+    label:'Drawing Test W4', typeTag:'✏️ DRAWING — Wave tracing test',
+    truth:'hc', truthLabel:'Healthy Control',
+    profile:'Research participant · No neurological symptoms · Wave tracing on digitising tablet',
+    tremorAmp:2.2, tremorFreq:10.1, speedVar:0.05, closureErr:0, seed:91,
+    compositeScore:0.073, flag:'hc', flagLabel:'PROBABLE HEALTHY',
+    featDisplay:[
+      ['Tremor Amplitude','2.2 px','✓ Low — healthy'],['Wave Amplitude CV','0.06','✓ Consistent'],
+      ['Velocity Dysrhythmia','0.07','✓ Very low'],['Stroke Smoothness','0.94','✓ High — controlled'],
+      ['Pen Pressure Var','0.04','✓ Very stable'],['Speed CV','0.05','✓ Very consistent']
+    ],
+    explain:'Clean wave tracing throughout. Low tremor amplitude, consistent speed, high stroke smoothness. No evidence of bradykinesia or resting tremor at any frequency. All six motor engines: Healthy.',
+    verdictText:'Low Probability PD — Healthy',
+    verdictAction:'Drawing motor assessment: healthy. Routine monitoring.',
+    engines:[
+      {n:'ResNet-50 + CatBoost',p:0.041,c:'hc'},{n:'ResNet-50 + SVM-RBF',p:0.062,c:'hc'},
+      {n:'Tremor Feature Classifier',p:0.024,c:'hc'},{n:'Fuzzy Motor Engine ★',p:0.038,c:'hc'},
+      {n:'Speed Profile SVM',p:0.098,c:'hc'},{n:'Wave Amplitude LR',p:0.114,c:'hc'}
+    ]
   }
 ];
 
-// Shuffle and interleave voice + drawing cases
+// Shuffle and interleave voice + drawing cases — quiz picks 4 from each pool (8 voice, 8 draw available)
 const ALL_CASES = [];
 for(let i=0;i<4;i++){ ALL_CASES.push(VOICE_CASES[i]); ALL_CASES.push(DRAW_CASES[i]); }
 
@@ -628,10 +870,10 @@ function buildWaveSVG(c, W, H){
 let qzSeq=[], qzPos=0, qzRight=0, qzTotal=0, qzLocked=false;
 
 function qzInit(){
-  // Shuffle voice and drawing separately, then interleave: voice→draw→voice→draw…
-  // so the quiz always opens on a voice (Listen) case
-  const vs=[...VOICE_CASES].sort(()=>Math.random()-0.5);
-  const ds=[...DRAW_CASES].sort(()=>Math.random()-0.5);
+  // Shuffle all 8 voice and all 8 draw separately, pick 4 each, interleave voice→draw
+  // so quiz always opens on a voice (Listen) case
+  const vs=[...VOICE_CASES].sort(()=>Math.random()-0.5).slice(0,4);
+  const ds=[...DRAW_CASES].sort(()=>Math.random()-0.5).slice(0,4);
   qzSeq=[];
   for(let i=0;i<4;i++){ qzSeq.push(vs[i]); qzSeq.push(ds[i]); }
   qzPos=0; qzRight=0; qzTotal=0;
@@ -705,61 +947,49 @@ function qzRender(){
   }
 }
 
+function _synthBuffer(ctx, fo, jitter, shimmer, hnrDb){
+  const sr=ctx.sampleRate, dur=3.0, n=Math.floor(sr*dur);
+  const buf=ctx.createBuffer(1,n,sr), d=buf.getChannelData(0);
+  const noise=Math.pow(10,-hnrDb/20)*0.5;
+  // 5 Hz tremor AM — the defining sound of PD; depth proportional to jitter
+  const tremorDepth=Math.min(0.88,jitter*60);
+  let rs=((jitter*1e6|0)^(shimmer*1e5|0)^(fo|0))>>>0;
+  function rnd(){rs=(rs*1664525+1013904223)&0xffffffff;return(rs>>>0)/4294967296;}
+  const ph=new Float32Array(7);
+  let cf=fo,ca=0.75,sic=0,cl=Math.round(sr/fo);
+  for(let i=0;i<n;i++){
+    if(sic>=cl){
+      sic=0;
+      cf=Math.max(60,Math.min(400,fo*(1+(rnd()-0.5)*jitter*20)));
+      ca=Math.max(0.1,0.75*(1+(rnd()-0.5)*shimmer*16));
+      cl=Math.round(sr/cf);
+    }
+    sic++;
+    const trem=1+tremorDepth*Math.sin(2*Math.PI*5*i/sr);
+    let s=0;
+    for(let h=0;h<7;h++){
+      ph[h]+=2*Math.PI*cf*(h+1)/sr;
+      if(ph[h]>6.2832)ph[h]-=6.2832;
+      s+=ca*trem/(h+1)*Math.sin(ph[h]);
+    }
+    s=s*0.26+(rnd()*2-1)*noise;
+    d[i]=s*Math.min(i/(sr*0.05),1)*Math.min((n-i)/(sr*0.05),1);
+  }
+  return buf;
+}
+
 function playVoiceSynth(c){
   if(!c||c.kind!=='voice')return;
   const AudioCtx=window.AudioContext||window.webkitAudioContext;
-  if(!AudioCtx){alert('Web Audio not supported in this browser.');return;}
+  if(!AudioCtx)return;
   const btn=document.getElementById('synthBtn');
   if(btn){btn.textContent='🔊 Playing…';btn.disabled=true;}
   const ctx=new AudioCtx();
-  const sampleRate=ctx.sampleRate;
-  const dur=2.4;
-  const numSamples=Math.floor(sampleRate*dur);
-  const buffer=ctx.createBuffer(1,numSamples,sampleRate);
-  const data=buffer.getChannelData(0);
-  const fo=c.fo||120;
-  const jitter=c.jitter||0.01;
-  const shimmer=c.shimmer||0.04;
-  const hnrDb=c.hnr||20;
-  // HNR dB → noise amplitude fraction
-  const noiseAmp=Math.pow(10,-hnrDb/20)*0.45;
-  // Seeded RNG for reproducibility per case
-  let rseed=((c.jitter*1e6|0)^(c.shimmer*1e5|0)^(c.fo|0))>>>0;
-  function rand(){rseed=(rseed*1664525+1013904223)&0xffffffff;return(rseed>>>0)/4294967296;}
-  // Phase accumulators for 6 harmonics
-  const phases=new Float32Array(6);
-  let curFreq=fo,curAmp=0.78,sampInCycle=0;
-  let cycleLen=Math.round(sampleRate/fo);
-  for(let i=0;i<numSamples;i++){
-    if(sampInCycle>=cycleLen){
-      sampInCycle=0;
-      const jf=1+(rand()-0.5)*jitter*9;
-      const ja=1+(rand()-0.5)*shimmer*9;
-      curFreq=Math.max(60,Math.min(400,fo*jf));
-      curAmp=Math.max(0.15,0.78*ja);
-      cycleLen=Math.round(sampleRate/curFreq);
-    }
-    sampInCycle++;
-    let s=0;
-    for(let h=0;h<6;h++){
-      phases[h]+=2*Math.PI*curFreq*(h+1)/sampleRate;
-      if(phases[h]>2*Math.PI)phases[h]-=2*Math.PI;
-      s+=curAmp/(h+1)*Math.sin(phases[h]);
-    }
-    s*=0.32;
-    s+=(rand()*2-1)*noiseAmp;
-    const fi=Math.min(i/(sampleRate*0.07),1);
-    const fo2=Math.min((numSamples-i)/(sampleRate*0.07),1);
-    data[i]=s*fi*fo2;
-  }
   const src=ctx.createBufferSource();
-  src.buffer=buffer;
-  src.connect(ctx.destination);
-  src.start();
-  src.onended=()=>{
-    ctx.close();
-    if(btn){btn.textContent='🔊 Play voice sample';btn.disabled=false;}
-  };
+  src.buffer=_synthBuffer(ctx,c.fo||120,c.jitter||0.01,c.shimmer||0.04,c.hnr||20);
+  src.connect(ctx.destination); src.start();
+  src.onended=()=>{ctx.close();if(btn){btn.textContent='🔊 Play voice sample';btn.disabled=false;}};
+
 }
 
 // ─── CASE EXPLORER INTERACTIVE SLIDERS ───────────────────────
@@ -795,40 +1025,9 @@ function playExplorerSynth(){
   const btn=document.querySelector('button[onclick="playExplorerSynth()"]');
   if(btn){btn.textContent='🔊 Playing…';btn.disabled=true;}
   const ctx=new AudioCtx();
-  const sampleRate=ctx.sampleRate;
-  const dur=2.4;
-  const numSamples=Math.floor(sampleRate*dur);
-  const buffer=ctx.createBuffer(1,numSamples,sampleRate);
-  const data=buffer.getChannelData(0);
-  const noiseAmp=Math.pow(10,-c.hnr/20)*0.45;
-  let rseed=((c.jitter*1e6|0)^(c.shimmer*1e5|0)^(c.fo|0))>>>0;
-  function rand(){rseed=(rseed*1664525+1013904223)&0xffffffff;return(rseed>>>0)/4294967296;}
-  const phases=new Float32Array(6);
-  let curFreq=c.fo,curAmp=0.78,sampInCycle=0;
-  let cycleLen=Math.round(sampleRate/c.fo);
-  for(let i=0;i<numSamples;i++){
-    if(sampInCycle>=cycleLen){
-      sampInCycle=0;
-      const jf=1+(rand()-0.5)*c.jitter*9;
-      const ja=1+(rand()-0.5)*c.shimmer*9;
-      curFreq=Math.max(60,Math.min(400,c.fo*jf));
-      curAmp=Math.max(0.15,0.78*ja);
-      cycleLen=Math.round(sampleRate/curFreq);
-    }
-    sampInCycle++;
-    let s=0;
-    for(let h=0;h<6;h++){
-      phases[h]+=2*Math.PI*curFreq*(h+1)/sampleRate;
-      if(phases[h]>2*Math.PI)phases[h]-=2*Math.PI;
-      s+=curAmp/(h+1)*Math.sin(phases[h]);
-    }
-    s*=0.32; s+=(rand()*2-1)*noiseAmp;
-    const fi=Math.min(i/(sampleRate*0.07),1);
-    const fo2=Math.min((numSamples-i)/(sampleRate*0.07),1);
-    data[i]=s*fi*fo2;
-  }
   const src=ctx.createBufferSource();
-  src.buffer=buffer; src.connect(ctx.destination); src.start();
+  src.buffer=_synthBuffer(ctx,c.fo,c.jitter,c.shimmer,c.hnr);
+  src.connect(ctx.destination); src.start();
   src.onended=()=>{ctx.close();if(btn){btn.textContent='🔊 Play profile';btn.disabled=false;}};
 }
 function resetExplorerSliders(idx){
@@ -1113,8 +1312,192 @@ function switchTab(tab){
   document.getElementById('panel-'+tab).classList.add('active');
 }
 
+// ─── TRY IT YOURSELF GAME ──────────────────────────────────────
+let tryShape='spiral', tryPoints=[], tryGuide=[], tryDrawing=false;
+const TRY_W=520, TRY_H=320;
+
+function trySetShape(s){
+  tryShape=s;
+  const sb=document.getElementById('try-spiral-btn');
+  const wb=document.getElementById('try-wave-btn');
+  if(sb) sb.classList.toggle('active',s==='spiral');
+  if(wb) wb.classList.toggle('active',s==='wave');
+  tryClear();
+}
+
+function tryBuildGuide(){
+  const cx=TRY_W/2, cy=TRY_H/2, pts=[];
+  if(tryShape==='spiral'){
+    const maxR=Math.min(cx-18,cy-18)*0.9;
+    const turns=2.5;
+    for(let i=0;i<=400;i++){
+      const theta=(i/400)*turns*2*Math.PI;
+      const r=(theta/(turns*2*Math.PI))*maxR;
+      pts.push({x:cx+r*Math.cos(theta-Math.PI/2), y:cy+r*Math.sin(theta-Math.PI/2)});
+    }
+  } else {
+    for(let i=0;i<=300;i++){
+      const x=30+(i/300)*(TRY_W-60);
+      const y=cy+Math.sin((i/300)*3*2*Math.PI)*80;
+      pts.push({x,y});
+    }
+  }
+  return pts;
+}
+
+function tryRedraw(){
+  const canvas=document.getElementById('try-canvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,TRY_W,TRY_H);
+  // Draw wide soft guide
+  if(tryGuide.length>1){
+    ctx.strokeStyle='rgba(74,159,213,0.18)';
+    ctx.lineWidth=22; ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.beginPath(); ctx.moveTo(tryGuide[0].x,tryGuide[0].y);
+    for(let i=1;i<tryGuide.length;i++) ctx.lineTo(tryGuide[i].x,tryGuide[i].y);
+    ctx.stroke();
+    // Thin dashed line
+    ctx.strokeStyle='rgba(74,159,213,0.5)';
+    ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
+    ctx.beginPath(); ctx.moveTo(tryGuide[0].x,tryGuide[0].y);
+    for(let i=1;i<tryGuide.length;i++) ctx.lineTo(tryGuide[i].x,tryGuide[i].y);
+    ctx.stroke(); ctx.setLineDash([]);
+    // Start dot
+    ctx.fillStyle='#4A9FD5';
+    ctx.beginPath(); ctx.arc(tryGuide[0].x,tryGuide[0].y,7,0,2*Math.PI); ctx.fill();
+    ctx.fillStyle='white';
+    ctx.beginPath(); ctx.arc(tryGuide[0].x,tryGuide[0].y,3,0,2*Math.PI); ctx.fill();
+    // End dot
+    const last=tryGuide[tryGuide.length-1];
+    ctx.strokeStyle='#4A9FD5'; ctx.lineWidth=1.5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.arc(last.x,last.y,5,0,2*Math.PI); ctx.stroke();
+    // Labels
+    ctx.fillStyle='#4A9FD5'; ctx.font='bold 11px Segoe UI, Arial'; ctx.textAlign='center';
+    ctx.fillText('START',tryGuide[0].x, tryGuide[0].y-12);
+    ctx.fillText('END',last.x, last.y+(last.y<TRY_H/2?16:-12));
+  }
+  // Draw user stroke
+  if(tryPoints.length>1){
+    ctx.strokeStyle='#003366'; ctx.lineWidth=2.5; ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(tryPoints[0].x,tryPoints[0].y);
+    for(let i=1;i<tryPoints.length;i++) ctx.lineTo(tryPoints[i].x,tryPoints[i].y);
+    ctx.stroke();
+  }
+}
+
+function tryClear(){
+  tryPoints=[];
+  tryGuide=tryBuildGuide();
+  const res=document.getElementById('try-results');
+  if(res) res.style.display='none';
+  const st=document.getElementById('try-status');
+  if(st) st.textContent='Follow the blue guide — start at the dot and draw steadily';
+  tryRedraw();
+}
+
+function tryGetPos(e, canvas){
+  const r=canvas.getBoundingClientRect();
+  const scaleX=TRY_W/r.width, scaleY=TRY_H/r.height;
+  const src=e.touches ? e.touches[0] : e;
+  return {x:(src.clientX-r.left)*scaleX, y:(src.clientY-r.top)*scaleY, t:Date.now()};
+}
+
+function tryAnalyse(){
+  if(tryPoints.length<15){
+    const st=document.getElementById('try-status');
+    if(st) st.textContent='✏️ Draw more of the shape first, then click Analyse!';
+    return;
+  }
+  // RMS perpendicular distance to guide
+  const devs=tryPoints.map(p=>{
+    let minD=Infinity;
+    for(const g of tryGuide){ const d=Math.hypot(p.x-g.x,p.y-g.y); if(d<minD) minD=d; }
+    return minD;
+  });
+  const tremorAmp=Math.sqrt(devs.reduce((a,v)=>a+v*v,0)/devs.length);
+  // Speed CV
+  const speeds=[];
+  for(let i=1;i<tryPoints.length;i++){
+    const dt=Math.max(1,tryPoints[i].t-tryPoints[i-1].t);
+    speeds.push(Math.hypot(tryPoints[i].x-tryPoints[i-1].x, tryPoints[i].y-tryPoints[i-1].y)/dt);
+  }
+  const meanSpd=speeds.reduce((a,v)=>a+v,0)/speeds.length;
+  const stdSpd=Math.sqrt(speeds.reduce((a,v)=>a+(v-meanSpd)**2,0)/speeds.length);
+  const speedCV=meanSpd>0?+(stdSpd/meanSpd).toFixed(2):0;
+  const amp=+(tremorAmp).toFixed(1);
+
+  let verdict,emoji,colour,explanation,tip;
+  if(tremorAmp<9){
+    verdict='Exceptionally Steady!';
+    emoji='🌟';
+    colour='#006633';
+    explanation=`Your tremor amplitude is just <strong>${amp} px</strong> — that's beautifully controlled. In our AEGIS P21 study, Healthy Control participants using calibrated digitising tablets averaged 2–3 px. You're in outstanding company. Smooth, deliberate drawing like this reflects excellent fine motor precision.`;
+    tip='Try the other shape and see if you can keep that steadiness!';
+  } else if(tremorAmp<18){
+    verdict='Nice & Natural';
+    emoji='✅';
+    colour='#004488';
+    explanation=`Your tremor amplitude is <strong>${amp} px</strong> — completely natural for mouse or touchpad drawing. Many things shape this number: drawing speed, device sensitivity, your posture, even a cup of coffee. Clinical assessments use precision digitising tablets in a controlled setting, which is why the study numbers look so different. Your trace looks great!`;
+    tip='Try slowing down and see if your amplitude drops further — smooth wins!';
+  } else {
+    verdict='Expressive Trace!';
+    emoji='😄';
+    colour='#8b4513';
+    explanation=`Your tremor amplitude is <strong>${amp} px</strong> — your hand is full of energy! Mouse and touchpad drawing is naturally more variable than clinical digitising tablets, and drawing speed has a big impact. Try again more slowly — deliberate, gentle strokes will bring that amplitude down significantly. This is purely about device physics, not your motor system.`;
+    tip='Tip: go slowly and keep your wrist steady — you will likely score much better!';
+  }
+
+  const nextShape=tryShape==='spiral'?'wave':'spiral';
+  const nextEmoji=tryShape==='spiral'?'〰️':'🌀';
+  const nextLabel=tryShape==='spiral'?'Wave':'Spiral';
+
+  const resEl=document.getElementById('try-results');
+  resEl.style.display='block';
+  resEl.innerHTML=`
+    <div style="background:linear-gradient(135deg,#0d1f35,#00264d);border-radius:18px;padding:24px 22px;color:white;">
+      <div style="font-size:11px;color:var(--gold2);font-weight:700;letter-spacing:.12em;margin-bottom:10px;">🔬 AEGIS MOTOR ANALYSIS — YOUR TRACE</div>
+      <div style="font-size:24px;font-weight:900;margin-bottom:4px;">${emoji} ${verdict}</div>
+      <div style="display:flex;gap:16px;justify-content:center;margin:16px 0;flex-wrap:wrap;">
+        <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:12px 18px;text-align:center;min-width:110px;">
+          <div style="font-size:24px;font-weight:900;color:var(--gold2);">${amp} px</div>
+          <div style="font-size:10px;color:#8bbcdc;margin-top:3px;">Tremor Amplitude (RMS)</div>
+        </div>
+        <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:12px 18px;text-align:center;min-width:110px;">
+          <div style="font-size:24px;font-weight:900;color:var(--gold2);">${speedCV}</div>
+          <div style="font-size:10px;color:#8bbcdc;margin-top:3px;">Speed Variation (CV)</div>
+        </div>
+        <div style="background:rgba(255,255,255,.08);border-radius:10px;padding:12px 18px;text-align:center;min-width:110px;">
+          <div style="font-size:24px;font-weight:900;color:var(--gold2);">${tryPoints.length}</div>
+          <div style="font-size:10px;color:#8bbcdc;margin-top:3px;">Points Recorded</div>
+        </div>
+      </div>
+      <div style="font-size:13px;color:#cdd8e8;line-height:1.7;margin-bottom:8px;">${explanation}</div>
+      <div style="font-size:11.5px;color:var(--gold2);margin-bottom:16px;">${tip}</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="tryClear()" style="cursor:pointer;border:2px solid rgba(255,255,255,.3);background:transparent;color:white;font-weight:700;font-size:13px;padding:9px 18px;border-radius:999px;">🔄 Draw Again</button>
+        <button onclick="trySetShape('${nextShape}')" style="cursor:pointer;border:2px solid var(--gold2);background:transparent;color:var(--gold2);font-weight:700;font-size:13px;padding:9px 18px;border-radius:999px;">${nextEmoji} Try the ${nextLabel}</button>
+        <button onclick="switchTab('quiz')" style="cursor:pointer;border:2px solid var(--sky);background:transparent;color:var(--sky);font-weight:700;font-size:13px;padding:9px 18px;border-radius:999px;">🎧 Back to Quiz</button>
+      </div>
+    </div>`;
+}
+
+function tryInitCanvas(){
+  const canvas=document.getElementById('try-canvas');
+  if(!canvas) return;
+  canvas.addEventListener('mousedown',e=>{tryDrawing=true;tryPoints=[tryGetPos(e,canvas)];tryRedraw();});
+  canvas.addEventListener('mousemove',e=>{if(!tryDrawing)return;tryPoints.push(tryGetPos(e,canvas));tryRedraw();});
+  canvas.addEventListener('mouseup',()=>{tryDrawing=false;});
+  canvas.addEventListener('mouseleave',()=>{tryDrawing=false;});
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();tryDrawing=true;tryPoints=[tryGetPos(e,canvas)];tryRedraw();},{passive:false});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!tryDrawing)return;tryPoints.push(tryGetPos(e,canvas));tryRedraw();},{passive:false});
+  canvas.addEventListener('touchend',()=>{tryDrawing=false;});
+  tryClear();
+}
+
 // ── INIT ──
-window.addEventListener('load',()=>{ qzInit(); loadCase(0); });
+window.addEventListener('load',()=>{ qzInit(); loadCase(0); tryInitCanvas(); });
 window.addEventListener('resize',()=>{
   const canvas=document.getElementById('waveCanvasQz');
   const wrap=document.getElementById('wave-wrap-qz');
