@@ -764,15 +764,15 @@ function playVoiceSynth(c){
 
 // ─── CASE EXPLORER INTERACTIVE SLIDERS ───────────────────────
 function _explorerCase(){
-  // Build a synthetic case object from current slider values
-  return {
-    kind:'voice',
-    fo:   +document.getElementById('sl-fo').value,
-    jitter:+document.getElementById('sl-jitter').value,
-    shimmer:+document.getElementById('sl-shimmer').value,
-    hnr:  +document.getElementById('sl-hnr').value,
-    rpde: 0, dfa: 0, seed: 42
-  };
+  const fo     = +document.getElementById('sl-fo').value;
+  const jitter = +document.getElementById('sl-jitter').value;
+  const shimmer= +document.getElementById('sl-shimmer').value;
+  const hnr    = +document.getElementById('sl-hnr').value;
+  // Heuristic PD score from acoustic features (for waveform colour only)
+  const score = Math.min(1,Math.max(0,
+    (jitter/0.040)*0.35 + (shimmer/0.140)*0.35 + (1-Math.min(1,hnr/35))*0.30
+  ));
+  return { kind:'voice', fo, jitter, shimmer, hnr, rpde:0, dfa:0, seed:42, compositeScore:score };
 }
 function updateExplorerWave(){
   // Update displayed values
