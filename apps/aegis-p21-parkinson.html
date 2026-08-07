@@ -217,26 +217,45 @@ footer a{color:var(--gold2);text-decoration:none;}
 
     <!-- ════════ CASES PANEL ════════ -->
     <div class="panel" id="panel-cases">
-      <div style="font-size:13px;color:var(--dgrey);margin-bottom:14px;line-height:1.6;">
-        Four representative voice cases from the AEGIS P21 research study. Each shows the complete 11-engine verdict and key acoustic features.
-        Source: <strong>AEGIS-P21-VOICE-DERIVED-001</strong>.
+      <div style="font-size:13px;color:var(--dgrey);margin-bottom:10px;line-height:1.6;">
+        Eight profiles from the AEGIS P21 research study — 4 voice cases and 4 drawing cases. Drag sliders to explore how acoustic and motor features shape the signal.
       </div>
+      <div style="font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;margin-bottom:6px;">🎤 VOICE CASES — 11-Engine Board</div>
       <div class="case-selector">
-        <div class="case-btn active" onclick="loadCase(0)" id="cb-0">
-          <div class="cb-id">PD-001</div><div class="cb-label">🔴 Case P21-A</div>
+        <div class="case-btn active" onclick="loadCase(0)">
+          <div class="cb-id">PD-001</div><div class="cb-label">🔴 Voice P21-A</div>
           <div class="cb-flag pd">STRONGLY PD · 98.7%</div>
         </div>
-        <div class="case-btn" onclick="loadCase(1)" id="cb-1">
-          <div class="cb-id">GZ-001</div><div class="cb-label">🟡 Case P21-B</div>
+        <div class="case-btn" onclick="loadCase(1)">
+          <div class="cb-id">GZ-001</div><div class="cb-label">🟡 Voice P21-B</div>
           <div class="cb-flag grey">GREY ZONE (PD) · 59.3%</div>
         </div>
-        <div class="case-btn" onclick="loadCase(2)" id="cb-2">
-          <div class="cb-id">GZ-HC-001</div><div class="cb-label">🟡 Case P21-C</div>
+        <div class="case-btn" onclick="loadCase(2)">
+          <div class="cb-id">GZ-HC-001</div><div class="cb-label">🟡 Voice P21-C</div>
           <div class="cb-flag grey">GREY ZONE (HC) · 58.9%</div>
         </div>
-        <div class="case-btn" onclick="loadCase(3)" id="cb-3">
-          <div class="cb-id">HC-001</div><div class="cb-label">🟢 Case P21-D</div>
+        <div class="case-btn" onclick="loadCase(3)">
+          <div class="cb-id">HC-001</div><div class="cb-label">🟢 Voice P21-D</div>
           <div class="cb-flag hc">HEALTHY · 3.0%</div>
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;margin-bottom:6px;margin-top:12px;">✏️ DRAWING CASES — Motor Board</div>
+      <div class="case-selector">
+        <div class="case-btn" onclick="loadDrawCase(0)">
+          <div class="cb-id">D-PD-001</div><div class="cb-label">🔴 Spiral P21-E</div>
+          <div class="cb-flag pd">STRONGLY PD · 83.9%</div>
+        </div>
+        <div class="case-btn" onclick="loadDrawCase(1)">
+          <div class="cb-id">D-HC-001</div><div class="cb-label">🟢 Spiral P21-F</div>
+          <div class="cb-flag hc">HEALTHY · 7.7%</div>
+        </div>
+        <div class="case-btn" onclick="loadDrawCase(2)">
+          <div class="cb-id">D-PD-002</div><div class="cb-label">🔴 Wave P21-G</div>
+          <div class="cb-flag pd">PROBABLE PD · 79.1%</div>
+        </div>
+        <div class="case-btn" onclick="loadDrawCase(3)">
+          <div class="cb-id">D-HC-002</div><div class="cb-label">🟢 Wave P21-H</div>
+          <div class="cb-flag hc">HEALTHY · 9.1%</div>
         </div>
       </div>
       <div class="case-display show" id="case-display"></div>
@@ -743,6 +762,85 @@ function playVoiceSynth(c){
   };
 }
 
+// ─── CASE EXPLORER INTERACTIVE SLIDERS ───────────────────────
+function _explorerCase(){
+  // Build a synthetic case object from current slider values
+  return {
+    kind:'voice',
+    fo:   +document.getElementById('sl-fo').value,
+    jitter:+document.getElementById('sl-jitter').value,
+    shimmer:+document.getElementById('sl-shimmer').value,
+    hnr:  +document.getElementById('sl-hnr').value,
+    rpde: 0, dfa: 0, seed: 42
+  };
+}
+function updateExplorerWave(){
+  // Update displayed values
+  ['fo','jitter','shimmer','hnr'].forEach(k=>{
+    const el=document.getElementById('sl-'+k);
+    const vEl=document.getElementById('sl-val-'+k);
+    if(el&&vEl) vEl.textContent=parseFloat(el.value).toFixed(k==='fo'?2:5);
+  });
+  // Redraw waveform
+  const canvas=document.getElementById('caseWaveCanvas');
+  const wrap=document.getElementById('caseWaveWrap');
+  if(!canvas||!wrap)return;
+  canvas.width=wrap.offsetWidth||420; canvas.height=wrap.offsetHeight||80;
+  drawVoiceWave(canvas, _explorerCase());
+}
+function playExplorerSynth(){
+  const c=_explorerCase();
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;
+  if(!AudioCtx)return;
+  const btn=document.querySelector('button[onclick="playExplorerSynth()"]');
+  if(btn){btn.textContent='🔊 Playing…';btn.disabled=true;}
+  const ctx=new AudioCtx();
+  const sampleRate=ctx.sampleRate;
+  const dur=2.4;
+  const numSamples=Math.floor(sampleRate*dur);
+  const buffer=ctx.createBuffer(1,numSamples,sampleRate);
+  const data=buffer.getChannelData(0);
+  const noiseAmp=Math.pow(10,-c.hnr/20)*0.45;
+  let rseed=((c.jitter*1e6|0)^(c.shimmer*1e5|0)^(c.fo|0))>>>0;
+  function rand(){rseed=(rseed*1664525+1013904223)&0xffffffff;return(rseed>>>0)/4294967296;}
+  const phases=new Float32Array(6);
+  let curFreq=c.fo,curAmp=0.78,sampInCycle=0;
+  let cycleLen=Math.round(sampleRate/c.fo);
+  for(let i=0;i<numSamples;i++){
+    if(sampInCycle>=cycleLen){
+      sampInCycle=0;
+      const jf=1+(rand()-0.5)*c.jitter*9;
+      const ja=1+(rand()-0.5)*c.shimmer*9;
+      curFreq=Math.max(60,Math.min(400,c.fo*jf));
+      curAmp=Math.max(0.15,0.78*ja);
+      cycleLen=Math.round(sampleRate/curFreq);
+    }
+    sampInCycle++;
+    let s=0;
+    for(let h=0;h<6;h++){
+      phases[h]+=2*Math.PI*curFreq*(h+1)/sampleRate;
+      if(phases[h]>2*Math.PI)phases[h]-=2*Math.PI;
+      s+=curAmp/(h+1)*Math.sin(phases[h]);
+    }
+    s*=0.32; s+=(rand()*2-1)*noiseAmp;
+    const fi=Math.min(i/(sampleRate*0.07),1);
+    const fo2=Math.min((numSamples-i)/(sampleRate*0.07),1);
+    data[i]=s*fi*fo2;
+  }
+  const src=ctx.createBufferSource();
+  src.buffer=buffer; src.connect(ctx.destination); src.start();
+  src.onended=()=>{ctx.close();if(btn){btn.textContent='🔊 Play profile';btn.disabled=false;}};
+}
+function resetExplorerSliders(idx){
+  const c=VOICE_CASES[idx];
+  if(!c)return;
+  document.getElementById('sl-fo').value=c.fo;
+  document.getElementById('sl-jitter').value=c.jitter;
+  document.getElementById('sl-shimmer').value=c.shimmer;
+  document.getElementById('sl-hnr').value=c.hnr;
+  updateExplorerWave();
+}
+
 function qzGuess(pick){
   if(qzLocked)return; qzLocked=true;
   const c=qzSeq[qzPos];
@@ -848,11 +946,35 @@ function loadCase(idx){
       </div>
       <div class="case-grid">
         <div>
-          <div style="font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;margin-bottom:7px;">KEY ACOUSTIC FEATURES (6 of 22)</div>
-          <table class="feat-table">
-            <thead><tr><th>Feature</th><th>Value</th></tr></thead>
-            <tbody>${featRows}</tbody>
-          </table>
+          <div style="font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;margin-bottom:8px;">VOICE PROFILE EXPLORER</div>
+          <div class="wave-wrap" id="caseWaveWrap" style="height:80px;margin-bottom:12px;background:#f0f5fb;">
+            <div class="wave-label" style="color:var(--navy);opacity:.7;">Live waveform · drag sliders to reshape</div>
+            <canvas class="wave-canvas" id="caseWaveCanvas"></canvas>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            ${['fo','jitter','shimmer','hnr'].map(k=>{
+              const cfg={
+                fo:  {label:'Fo (Hz)',     min:80,    max:280,   step:0.5,    val:c.fo,      disp:c.fo.toFixed(2),      note:'Fundamental frequency — PD often lower'},
+                jitter:{label:'Jitter (%)',min:0.001, max:0.040, step:0.0001, val:c.jitter,  disp:c.jitter.toFixed(5),  note:'Cycle frequency irregularity — PD elevated'},
+                shimmer:{label:'Shimmer',  min:0.010, max:0.140, step:0.001,  val:c.shimmer, disp:c.shimmer.toFixed(5), note:'Cycle amplitude variation — PD elevated'},
+                hnr:  {label:'HNR (dB)',   min:5,     max:35,    step:0.1,    val:c.hnr,     disp:c.hnr.toFixed(2),     note:'Harmonic-to-noise — PD reduced'}
+              }[k];
+              return `<div>
+                <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--navy);margin-bottom:2px;">
+                  <span>${cfg.label}</span><span id="sl-val-${k}" style="color:var(--blue);">${cfg.disp}</span>
+                </div>
+                <input type="range" id="sl-${k}" min="${cfg.min}" max="${cfg.max}" step="${cfg.step}" value="${cfg.val}"
+                  style="width:100%;accent-color:var(--blue);"
+                  oninput="updateExplorerWave()">
+                <div style="font-size:10px;color:var(--dgrey);margin-top:1px;">${cfg.note}</div>
+              </div>`;
+            }).join('')}
+          </div>
+          <div style="display:flex;gap:8px;margin-top:13px;flex-wrap:wrap;">
+            <button onclick="playExplorerSynth()" style="background:var(--navy);color:white;border:none;border-radius:999px;padding:7px 18px;font-size:12.5px;font-weight:700;cursor:pointer;">🔊 Play profile</button>
+            <button onclick="resetExplorerSliders(${idx})" style="background:white;color:var(--navy);border:1.5px solid var(--navy);border-radius:999px;padding:7px 16px;font-size:12.5px;font-weight:600;cursor:pointer;">↺ Reset</button>
+          </div>
+          <div style="margin-top:9px;font-size:11px;color:var(--dgrey);line-height:1.6;">RPDE: ${c.rpde} · DFA: ${c.dfa} · fo: base frequency · Sliders shape waveform &amp; audio only — engine verdicts are pre-computed from the research case.</div>
         </div>
         <div>
           <div style="font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;margin-bottom:7px;">CLINICAL INTERPRETATION</div>
@@ -869,6 +991,119 @@ function loadCase(idx){
       </div>
     </div>`;
   document.getElementById('case-display').classList.add('show');
+  // Draw the waveform canvas now that the DOM is ready
+  requestAnimationFrame(()=>{ updateExplorerWave(); });
+}
+
+// ─── DRAWING CASE EXPLORER ─────────────────────────────────────
+function loadDrawCase(idx){
+  document.querySelectorAll('.case-btn').forEach((b,i)=>b.classList.toggle('active',i===4+idx));
+  const c=DRAW_CASES[idx];
+  const pct=Math.round(c.compositeScore*100);
+  const gaugeCol=c.flag==='pd'?'#C00000':c.flag==='grey'?'#C49A00':'#007700';
+  const pbCol=c.flag==='pd'?'var(--red)':c.flag==='grey'?'var(--gold)':'var(--green)';
+  const vCls=c.flag==='hc'?'hc':c.flag;
+  const nPD=c.engines.filter(e=>e.c==='pd').length;
+  const nHC=c.engines.filter(e=>e.c==='hc').length;
+  const engRows=c.engines.map(e=>{
+    const bw=Math.round(e.p*80);
+    const bc=e.c==='pd'?'var(--red)':'var(--green)';
+    return `<tr><td>${e.n}</td><td><strong>${(e.p*100).toFixed(1)}%</strong></td>
+    <td><div class="auc-bar" style="width:${bw}px;background:${bc}"></div></td>
+    <td class="ev-${e.c}">${e.c==='pd'?'PD':'HC'}</td></tr>`;
+  }).join('');
+  const W=420, H=c.drawType==='spiral'?200:150;
+  document.getElementById('case-display').innerHTML=`
+    <div class="case-header">
+      <div>
+        <div class="ch-title">${c.label} · ${c.id}</div>
+        <div class="ch-ref">${c.profile}</div>
+      </div>
+      <span class="ch-badge ${vCls}">${c.flagLabel}</span>
+    </div>
+    <div class="case-body">
+      <div class="pb-row" style="margin-bottom:14px;">
+        <div class="pb-label"><span>Composite PD Score</span><span>${pct}%</span></div>
+        <div class="pb-track"><div class="pb-fill" style="width:${pct}%;background:${pbCol}"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--dgrey);margin-top:2px;">
+          <span>0% Healthy</span><span style="color:var(--gold);">35–65% Grey Zone</span><span>100% Strong PD</span>
+        </div>
+      </div>
+      <div class="case-grid">
+        <div>
+          <div style="font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;margin-bottom:8px;">DRAWING EXPLORER — MOTOR FEATURES</div>
+          <div id="drawSVGWrap" style="background:#f8fafc;border-radius:10px;padding:8px;margin-bottom:12px;text-align:center;">
+            ${c.drawType==='spiral'?buildSpiralSVG(c,W,H):buildWaveSVG(c,W,H)}
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--navy);margin-bottom:2px;">
+                <span>Tremor Amplitude (px)</span><span id="dsl-val-amp" style="color:var(--blue);">${c.tremorAmp}</span>
+              </div>
+              <input type="range" id="dsl-amp" min="0.5" max="25" step="0.1" value="${c.tremorAmp}"
+                style="width:100%;accent-color:var(--blue);" oninput="updateDrawSVG(${idx})">
+              <div style="font-size:10px;color:var(--dgrey);margin-top:1px;">Lateral deviation per cycle · PD: 10–20 px · HC: 1–4 px</div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--navy);margin-bottom:2px;">
+                <span>Speed Variation (CV)</span><span id="dsl-val-spd" style="color:var(--blue);">${c.speedVar}</span>
+              </div>
+              <input type="range" id="dsl-spd" min="0.01" max="0.60" step="0.01" value="${c.speedVar}"
+                style="width:100%;accent-color:var(--blue);" oninput="updateDrawSVG(${idx})">
+              <div style="font-size:10px;color:var(--dgrey);margin-top:1px;">Coefficient of variation of drawing speed · PD: high · HC: low</div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:11.5px;font-weight:700;color:var(--navy);margin-bottom:2px;">
+                <span>Tremor Frequency (Hz)</span><span id="dsl-val-freq" style="color:var(--blue);">${c.tremorFreq}</span>
+              </div>
+              <input type="range" id="dsl-freq" min="3.0" max="12.0" step="0.1" value="${c.tremorFreq}"
+                style="width:100%;accent-color:var(--blue);" oninput="updateDrawSVG(${idx})">
+              <div style="font-size:10px;color:var(--dgrey);margin-top:1px;">PD resting tremor: 4–6 Hz · Essential tremor: 8–12 Hz</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:13px;">
+            <button onclick="resetDrawSliders(${idx})" style="background:white;color:var(--navy);border:1.5px solid var(--navy);border-radius:999px;padding:7px 16px;font-size:12.5px;font-weight:600;cursor:pointer;">↺ Reset to case</button>
+          </div>
+          <div style="margin-top:9px;font-size:11px;color:var(--dgrey);">Sliders reshape the drawing only — engine verdicts are pre-computed from the research case.</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;margin-bottom:7px;">CLINICAL INTERPRETATION</div>
+          <div class="clinical-note">${c.explain}</div>
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:800;color:var(--navy);letter-spacing:1px;margin-bottom:6px;margin-top:14px;">MOTOR ENGINE BOARD</div>
+      <table class="engine-table">
+        <thead><tr><th>Engine</th><th>PD Probability</th><th>Bar</th><th>Verdict</th></tr></thead>
+        <tbody>${engRows}</tbody>
+      </table>
+      <div style="margin-top:11px;padding:10px 13px;background:#f0f6ff;border-radius:7px;font-size:11.5px;color:#2a3a50;line-height:1.6;">
+        ⚕ Pre-computed AEGIS research study results. Motor drawing analysis (ResNet-50 + feature classifiers). Live analysis requires the AEGIS Desktop Application.
+      </div>
+    </div>`;
+  document.getElementById('case-display').classList.add('show');
+}
+
+function updateDrawSVG(idx){
+  const c=DRAW_CASES[idx];
+  const ampEl=document.getElementById('dsl-amp');
+  const spdEl=document.getElementById('dsl-spd');
+  const freqEl=document.getElementById('dsl-freq');
+  if(!ampEl||!spdEl||!freqEl)return;
+  const synth={...c, tremorAmp:+ampEl.value, speedVar:+spdEl.value, tremorFreq:+freqEl.value};
+  document.getElementById('dsl-val-amp').textContent=(+ampEl.value).toFixed(1);
+  document.getElementById('dsl-val-spd').textContent=(+spdEl.value).toFixed(2);
+  document.getElementById('dsl-val-freq').textContent=(+freqEl.value).toFixed(1);
+  const W=420, H=c.drawType==='spiral'?200:150;
+  const wrap=document.getElementById('drawSVGWrap');
+  if(wrap) wrap.innerHTML=c.drawType==='spiral'?buildSpiralSVG(synth,W,H):buildWaveSVG(synth,W,H);
+}
+
+function resetDrawSliders(idx){
+  const c=DRAW_CASES[idx];
+  document.getElementById('dsl-amp').value=c.tremorAmp;
+  document.getElementById('dsl-spd').value=c.speedVar;
+  document.getElementById('dsl-freq').value=c.tremorFreq;
+  updateDrawSVG(idx);
 }
 
 // ─── TABS ─────────────────────────────────────────────────────
