@@ -609,8 +609,12 @@ function buildWaveSVG(c, W, H){
 let qzSeq=[], qzPos=0, qzRight=0, qzTotal=0, qzLocked=false;
 
 function qzInit(){
-  // Shuffle ALL_CASES
-  qzSeq=[...ALL_CASES].sort(()=>Math.random()-0.5);
+  // Shuffle voice and drawing separately, then interleave: voice→draw→voice→draw…
+  // so the quiz always opens on a voice (Listen) case
+  const vs=[...VOICE_CASES].sort(()=>Math.random()-0.5);
+  const ds=[...DRAW_CASES].sort(()=>Math.random()-0.5);
+  qzSeq=[];
+  for(let i=0;i<4;i++){ qzSeq.push(vs[i]); qzSeq.push(ds[i]); }
   qzPos=0; qzRight=0; qzTotal=0;
   qzRender();
 }
