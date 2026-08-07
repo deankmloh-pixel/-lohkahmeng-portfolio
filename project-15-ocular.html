@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS Ocular Station — Eye-Disease Screening (P15) · Case Study | Loh Kah Meng</title>
+<meta name="description" content="The AEGIS Ocular Station: one pass over a retinal fundus photo, read by four dedicated-data specialists — diabetic retinopathy, AMD, glaucoma, hypertensive retinopathy — each with an honest score and a defer-to-clinician grey zone. Includes a public 'Spot the Disease' learning game. Illustrative, not a diagnosis.">
+<link rel="canonical" href="https://aegishumanai.com/project-15-ocular.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AEGIS Ocular Station — Eye-Disease Screening (P15) · Case Study | Loh Kah Meng">
+<meta property="og:description" content="One fundus photo, four dedicated-data eye specialists (ROC-AUC 0.90–0.99), each with an honest score and a defer-to-clinician grey zone. Play the 'Spot the Disease' game. Illustrative, not a diagnosis.">
+<meta property="og:image" content="https://aegishumanai.com/assets/spot/bg-oras.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+  .ocular-cta{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-size:15px;padding:14px 26px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.2);}
+  .indemnity{background:#fff7ec;border:1px solid #e7cfa0;border-left:5px solid #c9a24b;border-radius:14px;padding:18px 20px;font-size:13.5px;line-height:1.62;color:#4a3d24;}
+  .indemnity strong{color:#7a5b17;}
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / AEGIS Ocular</div>
+    <div class="tag tag-aqua">Healthcare &middot; Ophthalmology &middot; Multi-specialist Screening &middot; Full Case Study</div>
+    <h1>AEGIS Ocular Station &mdash; Eye-Disease Screening (P15)</h1>
+    <figure class="hero-image" style="margin:18px 0 10px;">
+      <img src="assets/spot/bg-oras.jpg" alt="AEGIS Ocular Station — retinal fundus screening" style="width:100%;height:auto;border-radius:12px;display:block;" loading="eager">
+    </figure>
+    <p class="lede">A single retinal <strong>fundus photo</strong>, read in <strong>one pass by a panel of specialists</strong> and routed to the right expert. The Ocular Station screens for <strong>diabetic retinopathy, age-related macular degeneration, glaucoma and hypertensive retinopathy</strong> &mdash; each specialist reporting <strong>its own honest score</strong> with a defer-to-clinician grey zone. It augments the eye-care professional; it never replaces them.</p>
+    <div class="button-row">
+      <a href="diagnostics/oras/" class="ocular-cta">▶ Open the live &ldquo;Spot the Disease&rdquo; station &rarr;</a>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo &mdash; feature pipelines, dedicated-data specialists, grey-zone modelling, station UI + learning game</div></div>
+      <div class="meta-item"><div class="k">Model</div><div class="v">ResNet-50 features &rarr; scaler &rarr; PCA &rarr; specialist (CatBoost / HistGB); one dedicated model per disease, seed 42</div></div>
+      <div class="meta-item"><div class="k">Method</div><div class="v">Dedicated-data specialists raise the ODIR baseline; leak-certified (content + perceptual-hash dedup); grey-zone defer 0.40&ndash;0.60</div></div>
+      <div class="meta-item"><div class="k">Status</div><div class="v">Feasibility research programme &mdash; four validated fundus specialists under one roof; illustrative, not a certified medical device</div></div>
+    </div>
+  </div>
+</header>
+
+<section style="padding:8px 0 4px;">
+  <div class="container">
+    <h2>What this is</h2>
+    <p>The AEGIS Ocular Station reads a retinal fundus photo once and runs it past <strong>four dedicated-data specialists at the same time</strong>, then routes the finding to the right expert. It is honest by construction: each specialist stands on <em>its own</em> validated metric, and any case that lands in the grey zone is <strong>flagged for a clinician, never auto-called</strong>. AEGIS scores; a clinician confirms.</p>
+
+    <div class="callout">
+      <strong>Read this first &mdash; what is built, and what it is not.</strong> This is a <em>feasibility research programme</em>: four single-disease fundus screeners, each trained and validated on dedicated public data, unified by one engine and fronted by a public learning game. Every number below is an honestly-reported validation ROC-AUC on held-out images &mdash; not a clinical-trial result. AEGIS Ocular does <strong>not diagnose</strong>. A human is always in command.
+    </div>
+
+    <h2>The specialists &mdash; honest metrics</h2>
+    <p>Each dedicated-data specialist raised its ODIR baseline. The scores are reported plainly, strong and weaker alike.</p>
+    <table class="data-table">
+      <thead><tr><th>Specialist</th><th>Disease</th><th>Champion</th><th>Validation ROC-AUC</th></tr></thead>
+      <tbody>
+        <tr><td><strong>H</strong></td><td>Hypertensive retinopathy</td><td>HistGB</td><td><strong>0.993</strong></td></tr>
+        <tr><td><strong>D</strong></td><td>Diabetic retinopathy (referable)</td><td>CatBoost</td><td><strong>0.977</strong></td></tr>
+        <tr><td><strong>A</strong></td><td>Age-related macular degeneration</td><td>CatBoost</td><td><strong>0.953</strong></td></tr>
+        <tr><td><strong>G</strong></td><td>Glaucoma</td><td>CatBoost</td><td><strong>0.899</strong></td></tr>
+        <tr><td>Myopia</td><td>Pathological myopia (ODIR base plate)</td><td>&mdash;</td><td>0.979</td></tr>
+        <tr><td>Cataract</td><td>Cataract (ODIR base plate)</td><td>&mdash;</td><td>0.904</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px;color:var(--text-muted);">Honest note: the four dedicated specialists (D/A/G/H) were each trained on disease-specific public datasets and each broke its weaker ODIR baseline; scores are leak-certified (exact + perceptual-hash dedup). Any uncertain case in the 0.40&ndash;0.60 grey zone is deferred to a clinician rather than force a call.</p>
+
+    <div class="button-row" style="margin-top:18px;">
+      <a href="diagnostics/oras/" class="ocular-cta">▶ Play the live &ldquo;Spot the Disease&rdquo; game &rarr;</a>
+    </div>
+    <p style="font-size:12.5px;color:var(--text-muted);margin-top:10px;">The live station lets you try to beat the AI on real example fundus photos &mdash; some eyes look perfectly normal but are actually diseased. A learning game and screening aid, never a diagnosis.</p>
+  </div>
+</section>
+
+<section style="padding:8px 0 6px;">
+  <div class="container">
+    <h2>Want AEGIS to look at your eye image?</h2>
+    <p>AEGIS Ocular is a research demonstration. If you would like to share your own <strong>retinal fundus image</strong> for an <strong>illustrative, educational</strong> read &mdash; not a diagnosis &mdash; you can reach the programme through the Contact channel. Please read the terms first; sending an image means you accept them.</p>
+    <div class="indemnity">
+      <strong>Please read &mdash; terms of any image you submit.</strong><br>
+      1. <strong>Not a medical device and not a diagnosis.</strong> AEGIS is a research and educational demonstration. Nothing it outputs is medical advice, a diagnosis, a screening result, or a substitute for a qualified clinician. No doctor&ndash;patient relationship is created.<br>
+      2. <strong>Do not send identifiable patient data.</strong> Remove all names, IDs, dates of birth, and any protected health information (PHI) before sending. Only submit an image you have the right to share.<br>
+      3. <strong>You release AEGIS from liability.</strong> By submitting, you agree to <strong>indemnify and hold harmless</strong> AEGIS, Dr Loh Kah Meng, and anyone associated with the programme from any and all claims, losses, or liability arising from your use of, or reliance on, anything AEGIS provides. You use it entirely at your own risk.<br>
+      4. <strong>Always consult a licensed clinician.</strong> For any real eye or health concern, see a qualified doctor or ophthalmologist. Do not delay or disregard professional medical advice because of anything here.
+    </div>
+    <div class="button-row" style="margin-top:16px;">
+      <a class="ocular-cta" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20Ocular%20%E2%80%94%20illustrative%20image%20read&body=I%20have%20read%20and%20accept%20the%20terms%20on%20the%20AEGIS%20Ocular%20page%20(not%20a%20diagnosis%3B%20no%20identifiable%20patient%20data%3B%20I%20release%20AEGIS%20from%20liability).%20My%20de-identified%20fundus%20image%20is%20attached.">✉ Contact AEGIS to submit an image</a>
+    </div>
+
+    <div class="callout" style="margin-top:22px;">
+      <strong>One programme, one honest promise.</strong> AEGIS augments, it never replaces. Every specialist reports its own real number; grey-zone cases defer to a person; nothing is auto-called. Dedicated to Professor Dhanjoo N. Ghista, whose nondimensional-index lineage this work continues.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+<script src="script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "7d3dc3aee49c49ea96443ed061a43e02"}'></script>
+<script src="/disclaimer.js" defer></script>
+<a href="/subscribe" id="aegis-sub-btn" aria-label="Subscribe for new AEGIS app alerts" style="position:fixed;right:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;padding:11px 16px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);line-height:1"><span style="font-size:15px">📬</span> Get new-app alerts</a>
+<a href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20enquiry" id="aegis-contact-btn" aria-label="Contact AEGIS" style="position:fixed;right:18px;bottom:70px;z-index:99999;display:inline-flex;align-items:center;gap:8px;background:rgba(18,28,40,.96);color:#e8eef5;font-weight:600;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;padding:10px 16px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);border:1px solid rgba(201,162,75,.45);line-height:1"><span style="font-size:15px">✉</span> Contact us</a>
+</body>
+</html>
