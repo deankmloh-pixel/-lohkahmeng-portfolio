@@ -23,6 +23,16 @@
 - [AEGIS Health - glucose wearable (P18)](https://aegishumanai.com/project-18-glucose-wearable.html)
 - [AEGIS Emotional - affective wearable (P19)](https://aegishumanai.com/project-19-affective-wearable.html)
 
+## Clinical Diagnostic Stations (neurological & imaging AI — all live, public access)
+- [P15 Ocular Station — Eye-Disease Screening](https://aegishumanai.com/project-15-ocular.html): screens retinal photos for diabetic retinopathy, AMD, glaucoma and hypertensive retinopathy. Public Spot the Disease quiz.
+- [P20 Breast Station — Unified Breast Screening](https://aegishumanai.com/project-20-breast-cancer.html): routes breast imaging modalities to dedicated specialists. Champion AUC 0.9955. Public Spot the Finding quiz.
+- [P21 Parkinson Station — Voice & Drawing Assessment](https://aegishumanai.com/project-21-parkinson.html): 11-engine consensus board on voice acoustics and spiral drawing tests. Champion AUC 0.846. Companion textbook and lab sheet.
+- [P22 NeuroScan — Alzheimer's MRI Classification](https://aegishumanai.com/project-22-alzheimer.html): 4-engine SVM ensemble with pixel-level false-colour MRI tissue mapping and NDI 0–100 scoring. Champion AUC 0.8511. Six annotated demo cases.
+- [P15 Ocular app](https://aegishumanai.com/apps/aegis-p15-ocular.html): live Spot the Disease learning station.
+- [P20 Breast app](https://aegishumanai.com/apps/aegis-p20-breast.html): live clinical imaging game.
+- [P21 Parkinson app](https://aegishumanai.com/apps/aegis-p21-parkinson.html): live voice and drawing quiz station.
+- [P22 NeuroScan app](https://aegishumanai.com/apps/aegis-p22-neuroscan.html): live false-colour MRI viewer with NDI scoring.
+
 ## Project case studies
 - [P1 Nurse Augmenting System](https://aegishumanai.com/project-1-nurse-augmenting-system.html)
 - [P2 Medication Adherence](https://aegishumanai.com/project-2-medication-adherence.html)

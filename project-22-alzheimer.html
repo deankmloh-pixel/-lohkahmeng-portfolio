@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS NeuroScan — Alzheimer's MRI Classification (P22) · Loh Kah Meng</title>
+<meta name="description" content="AEGIS P22 NeuroScan: A validated 4-engine SVM ensemble for Alzheimer's Disease classification with false-colour MRI brain visualisation. Six interactive demo cases with NDI scoring, grey-zone protocol, and pixel-level tissue mapping. Public tool, clinician in command.">
+<link rel="canonical" href="https://aegishumanai.com/project-22-alzheimer.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AEGIS NeuroScan — Alzheimer's MRI Classification with False-Colour Brain Visualisation">
+<meta property="og:description" content="Validated 4-engine SVM ensemble for Alzheimer's Disease classification. False-colour MRI tissue mapping, NDI 0–100 scoring, grey-zone protocol, and six interactive demo cases. A clinician always stays in command.">
+<meta property="og:image" content="https://aegishumanai.com/assets/p22/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── Audience tiles ─────────────────────────────────────── */
+.audience-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:20px 0;}
+.aud-tile{border-radius:12px;padding:16px 13px;text-align:center;cursor:default;}
+.aud-tile .aud-icon{font-size:26px;margin-bottom:8px;}
+.aud-tile .aud-who{font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px;}
+.aud-tile .aud-need{font-size:11.5px;line-height:1.55;}
+.aud-tile.clin{background:#e8f0fc;border:2px solid #003366;}.aud-tile.clin .aud-who{color:#003366;}
+.aud-tile.res{background:#f0f8f0;border:2px solid #007700;}.aud-tile.res .aud-who{color:#007700;}
+.aud-tile.edu{background:#fff8e0;border:2px solid #C49A00;}.aud-tile.edu .aud-who{color:#7a5a00;}
+.aud-tile.stu{background:#f5f0fb;border:2px solid #5a3d8c;}.aud-tile.stu .aud-who{color:#5a3d8c;}
+.aud-tile.hosp{background:#fff0f0;border:2px solid #C00000;}.aud-tile.hosp .aud-who{color:#C00000;}
+
+/* ── What it does — three capability cards ──────────────── */
+.cap-stack{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0;}
+.cap-card{border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.10);}
+.cap-card-head{padding:14px 16px 12px;color:white;font-weight:800;}
+.cap-card-head .layer{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-bottom:3px;}
+.cap-card-head .title{font-size:16px;}
+.cap-card-body{padding:14px 16px;background:white;font-size:12.5px;line-height:1.7;color:#2a3a50;}
+.cap-card.vis  .cap-card-head{background:#4a1d96;}
+.cap-card.ndi  .cap-card-head{background:#003366;}
+.cap-card.demo .cap-card-head{background:#7a2000;}
+.cap-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:20px;padding:2px 8px;margin-top:8px;}
+.cap-badge.vis{background:#ede9fe;color:#4a1d96;}
+.cap-badge.ndi{background:#e8f0fc;color:#003366;}
+.cap-badge.demo{background:#fff0f0;color:#7a2000;}
+
+/* ── Science callouts ───────────────────────────────────── */
+.sci-duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+.sci-box{border-radius:12px;padding:16px 18px;border-left:5px solid;}
+.sci-box.mri{background:#e8f0fc;border-color:#003366;}
+.sci-box.vis{background:#ede9fe;border-color:#4a1d96;}
+.sci-box .sci-head{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+.sci-box.mri .sci-head{color:#003366;}.sci-box.vis .sci-head{color:#4a1d96;}
+.sci-box p{font-size:12.5px;line-height:1.65;color:#2a3a50;}
+.sci-feat{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.sci-feat span{background:white;border:1px solid rgba(0,0,0,.12);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;color:#2a3a50;}
+
+/* ── Palette legend ─────────────────────────────────────── */
+.palette-row{display:flex;gap:14px;flex-wrap:wrap;margin:16px 0;}
+.pal-chip{flex:1;min-width:130px;border-radius:12px;padding:14px 16px;color:white;font-size:12.5px;line-height:1.55;}
+.pal-chip strong{display:block;font-size:14px;font-weight:900;margin-bottom:4px;}
+.pal-chip.low{background:linear-gradient(135deg,#005566,#1cd97a);}
+.pal-chip.grey{background:linear-gradient(135deg,#6a3300,#ffd040);}
+.pal-chip.high{background:linear-gradient(135deg,#37006e,#ffd700);}
+
+/* ── Outcome grid ───────────────────────────────────────── */
+.outcomes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+.outcome-item{display:flex;align-items:flex-start;gap:9px;background:#f4f7fb;border-radius:9px;padding:10px 12px;font-size:12.5px;color:#2a3a50;line-height:1.55;}
+.outcome-item .oi{font-size:18px;flex-shrink:0;}
+
+/* ── Engine metrics ─────────────────────────────────────── */
+.engine-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0;}
+.engine-trio-item{background:#f0f6ff;border-radius:10px;padding:14px;border-left:4px solid #003366;text-align:center;}
+.engine-trio-item .ev{font-size:22px;font-weight:900;color:#003366;}
+.engine-trio-item .ek{font-size:11px;color:#595959;margin-top:2px;font-weight:600;letter-spacing:.5px;}
+.gz-box{background:#fff8e0;border:2px solid #C49A00;border-radius:12px;padding:16px 20px;margin:16px 0;}
+.gz-box strong{color:#7a5a00;}
+
+/* ── NDI demo case strip ─────────────────────────────────── */
+.demo-cases{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0;}
+.demo-case{border-radius:12px;padding:14px 16px;border:1px solid #cfd7e2;}
+.demo-case.low{background:#f0fdf4;border-color:#2E8B84;}
+.demo-case.grey{background:#fffbeb;border-color:#C49A00;}
+.demo-case.high{background:#fff0f5;border-color:#C00000;}
+.demo-case .dc-label{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+.demo-case.low .dc-label{color:#007a5e;}
+.demo-case.grey .dc-label{color:#7a5a00;}
+.demo-case.high .dc-label{color:#900020;}
+.demo-case .dc-ndi{font-size:28px;font-weight:900;line-height:1;}
+.demo-case.low .dc-ndi{color:#2E8B84;}
+.demo-case.grey .dc-ndi{color:#C49A00;}
+.demo-case.high .dc-ndi{color:#C00000;}
+.demo-case .dc-desc{font-size:11.5px;color:#4a5a6a;margin-top:5px;line-height:1.5;}
+
+/* ── CTA strip ──────────────────────────────────────────── */
+.cta-strip{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0;}
+.cta-primary{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-size:14px;padding:13px 22px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.18);}
+.cta-secondary{display:inline-flex;align-items:center;gap:9px;background:white;color:#003366;font-weight:700;font-size:14px;padding:12px 20px;border-radius:999px;text-decoration:none;border:2px solid #003366;}
+.cta-tertiary{display:inline-flex;align-items:center;gap:9px;background:#4a1d96;color:white;font-weight:700;font-size:14px;padding:12px 20px;border-radius:999px;text-decoration:none;}
+
+/* ── Indemnity ──────────────────────────────────────────── */
+.indemnity{background:#fff7ec;border:1px solid #e7cfa0;border-left:5px solid #c9a24b;border-radius:14px;padding:18px 20px;font-size:13px;line-height:1.65;color:#4a3d24;}
+.indemnity strong{color:#7a5b17;}
+
+@media(max-width:720px){
+  .audience-grid{grid-template-columns:1fr 1fr;}
+  .cap-stack{grid-template-columns:1fr;}
+  .sci-duo{grid-template-columns:1fr;}
+  .outcomes{grid-template-columns:1fr;}
+  .engine-trio{grid-template-columns:1fr 1fr;}
+  .demo-cases{grid-template-columns:1fr 1fr;}
+  .palette-row{flex-direction:column;}
+  .cta-strip{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════════ HERO ═══════════════════════════════ -->
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / AEGIS NeuroScan</div>
+    <div class="tag tag-aqua">Biomedical Engineering &middot; Neurology &middot; MRI Brain Imaging &middot; Alzheimer&rsquo;s Disease</div>
+    <h1>AEGIS NeuroScan &mdash; Alzheimer&rsquo;s MRI Classification (P22)</h1>
+    <figure class="hero-image" style="margin:18px 0 10px;">
+      <img src="assets/p22/hero.jpg" alt="False-colour brain MRI cross-section — AEGIS P22 NeuroScan Alzheimer's classification" style="width:100%;height:auto;border-radius:12px;display:block;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative.</figcaption>
+    </figure>
+    <p class="lede">P22 classifies Alzheimer&rsquo;s Disease severity from brain MRI scans using a <strong>validated 4-engine SVM ensemble</strong> and renders each scan in real-time false colour &mdash; mapping tissue atrophy classes to vivid, diagnostically meaningful palettes. A clinician always stays in command. Six interactive demo cases span the full spectrum from early preservation to advanced atrophy.</p>
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Modality</div><div class="v">T1-weighted brain MRI &middot; pixel-level tissue segmentation &middot; 3-class Otsu thresholding &middot; false-colour canvas rendering</div></div>
+      <div class="meta-item"><div class="k">Engine</div><div class="v">4-engine kernel SVM ensemble &middot; NDI composite score 0&ndash;100 &middot; grey-zone protocol (42.5&ndash;50.0)</div></div>
+      <div class="meta-item"><div class="k">Champion AUC</div><div class="v">0.8511 &middot; 4-engine weighted ensemble &middot; validated on distilled research dataset</div></div>
+      <div class="meta-item"><div class="k">Audience</div><div class="v">Neurologists &middot; Researchers &middot; Clinical AI educators &middot; BME students &middot; Hospital planners</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════ WHO THIS IS FOR ═══════════════════ -->
+<section style="padding:14px 0 6px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">Who this is for</h2>
+    <div class="audience-grid">
+      <div class="aud-tile clin">
+        <div class="aud-icon">🧠</div>
+        <div class="aud-who">Neurologists</div>
+        <div class="aud-need">A visual and scored decision-support tool for MRI atrophy assessment. Honest NDI with grey-zone deferral — not a diagnosis, but a structured second read.</div>
+      </div>
+      <div class="aud-tile res">
+        <div class="aud-icon">🔬</div>
+        <div class="aud-who">Researchers</div>
+        <div class="aud-need">Validated ensemble metrics. Honest AUC reported as measured. 3-class Otsu tissue boundary derivation. Full methodology, no cherry-picking.</div>
+      </div>
+      <div class="aud-tile edu">
+        <div class="aud-icon">🎓</div>
+        <div class="aud-who">Educators</div>
+        <div class="aud-need">A live classroom tool: six annotated MRI cases, false-colour rendering, NDI scoring, and grey-zone discussion. Suitable for final-year clinical AI and biomedical engineering courses.</div>
+      </div>
+      <div class="aud-tile stu">
+        <div class="aud-icon">📖</div>
+        <div class="aud-who">Students</div>
+        <div class="aud-need">Explore brain MRI patterns. See how tissue segmentation works pixel by pixel. Watch the NDI engine score six real-like cases and understand why grey zones exist.</div>
+      </div>
+      <div class="aud-tile hosp">
+        <div class="aud-icon">🏥</div>
+        <div class="aud-who">Hospital Planners</div>
+        <div class="aud-need">A demonstration of AI-augmented MRI review workflows. PDPA-compliant. Grey-zone protocol ensures borderline cases always reach a specialist, not an algorithm.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ WHAT IT DOES ══════════════════════ -->
+<section style="padding:14px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">Three integrated capabilities</h2>
+    <p>P22 combines real-time MRI visualisation with ensemble classification and a structured grey-zone protocol. Each capability is independent but designed to work together &mdash; see the scan, score it, and know when to defer.</p>
+
+    <div class="cap-stack">
+      <div class="cap-card vis">
+        <div class="cap-card-head">
+          <div class="layer">Capability 1</div>
+          <div class="title">🎨 False-Colour MRI Rendering</div>
+        </div>
+        <div class="cap-card-body">
+          Every pixel of the brain MRI is classified into one of three tissue classes using statistical Otsu thresholding, then mapped to a vivid diagnostically distinct colour palette.<br><br>
+          <strong>Low atrophy</strong> (healthy cortex): deep teal to bright cyan &middot; <strong>Grey-zone tissue</strong> (transitional): sienna to amber gold &middot; <strong>High atrophy</strong> (advanced): deep indigo to bright gold<br><br>
+          Sigmoid blending at class boundaries ensures smooth transitions rather than hard visual artefacts. The rendering runs in-browser on an HTML5 Canvas &mdash; no server required.
+          <span class="cap-badge vis">Pixel-level · In-browser · Real-time</span>
+        </div>
+      </div>
+      <div class="cap-card ndi">
+        <div class="cap-card-head">
+          <div class="layer">Capability 2</div>
+          <div class="title">📊 NDI Ensemble Scoring</div>
+        </div>
+        <div class="cap-card-body">
+          A 4-engine kernel SVM ensemble produces a composite Neuro-Degenerative Index (NDI) score on a 0&ndash;100 scale &mdash; where 0 indicates preserved cortical architecture and 100 indicates severe generalised atrophy.<br><br>
+          Each of the four engines votes independently. The weighted ensemble NDI is the system&rsquo;s answer. No single engine is used alone. Below 42.5 = Low atrophy. Above 50.0 = High atrophy. Between 42.5 and 50.0 = Grey zone.<br><br>
+          Champion AUC: <strong>0.8511</strong>. Reported as measured, without inflation.
+          <span class="cap-badge ndi">4-engine · Weighted ensemble · NDI 0–100</span>
+        </div>
+      </div>
+      <div class="cap-card demo">
+        <div class="cap-card-head">
+          <div class="layer">Capability 3</div>
+          <div class="title">🧪 Six Annotated Demo Cases</div>
+        </div>
+        <div class="cap-card-body">
+          Six pre-loaded cases span the full clinical spectrum from NDI 12.1 (well-preserved cortex) to NDI 95.4 (advanced generalised atrophy). Two cases fall in the grey zone &mdash; neither confidently assigned nor dismissed.<br><br>
+          Each case includes the original MRI scan, the false-colour rendered overlay, the full NDI score, and a case commentary. Suitable for self-directed study and classroom discussion.<br><br>
+          The live analysis tool is free for public educational use.
+          <span class="cap-badge demo">6 cases · NDI annotated · Public access</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ LIVE TOOL ══════════════════════════ -->
+<section style="padding:10px 0 6px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">Try it now &mdash; AEGIS NeuroScan MRI Viewer</h2>
+    <p>Six real-like MRI cases, false-colour rendered in your browser. Select a case, watch the pixel-level tissue classification update in real time, and read the NDI ensemble score. The grey-zone cases are deliberate &mdash; explore why the system defers to a specialist rather than forcing a verdict it cannot honestly support.</p>
+    <figure style="margin:14px 0 10px;">
+      <img src="assets/p22/mri-false-colour.jpg" alt="AEGIS P22 false-colour brain MRI — tissue segmentation with vivid class palettes" style="width:100%;border-radius:12px;display:block;max-height:280px;object-fit:cover;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">False-colour rendering: teal (low atrophy) · amber-gold (grey zone tissue) · indigo-gold (high atrophy) · computed pixel by pixel in-browser using 3-class Otsu thresholding</figcaption>
+    </figure>
+    <div class="cta-strip">
+      <a class="cta-primary" href="apps/aegis-p22-neuroscan.html">🧠 &nbsp;Open the NeuroScan MRI Viewer &rarr;</a>
+      <a class="cta-secondary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P22%20%E2%80%94%20Clinical%20Collaboration%20Enquiry">🏥 &nbsp;Clinical collaboration enquiry</a>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">All six demo cases use AEGIS-Derived research data &mdash; not raw patient MRI records. Ground truth from validated research study. Never a clinical diagnosis. A qualified neurologist must interpret all findings.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════ THE SIX CASES ═════════════════════ -->
+<section style="padding:10px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">The six demo cases &mdash; full NDI spectrum</h2>
+    <p>Each case is selected to illustrate a distinct point on the Alzheimer&rsquo;s atrophy spectrum. The two grey-zone cases are the most important for clinical AI education &mdash; they demonstrate exactly when a system should <em>refuse to decide</em>.</p>
+    <div class="demo-cases">
+      <div class="demo-case low">
+        <div class="dc-label">Case 1 &middot; Low atrophy</div>
+        <div class="dc-ndi">12.1</div>
+        <div class="dc-desc">Well-preserved cortical architecture. Low ventricle-to-brain ratio. NDI comfortably below grey zone.</div>
+      </div>
+      <div class="demo-case low">
+        <div class="dc-label">Case 2 &middot; Low atrophy</div>
+        <div class="dc-ndi">17.8</div>
+        <div class="dc-desc">Healthy cortical thickness with minimal sulcal widening. Ensemble unanimous. NDI low.</div>
+      </div>
+      <div class="demo-case grey">
+        <div class="dc-label">Case 3 &middot; Grey zone</div>
+        <div class="dc-ndi">45.6</div>
+        <div class="dc-desc">Borderline periventricular signal. Ensemble split. NDI 42.5&ndash;50.0: automatic specialist referral triggered.</div>
+      </div>
+      <div class="demo-case grey">
+        <div class="dc-label">Case 4 &middot; Grey zone</div>
+        <div class="dc-ndi">43.7</div>
+        <div class="dc-desc">Mild hippocampal volume reduction without clear cortical thinning. Engines diverge. System defers.</div>
+      </div>
+      <div class="demo-case high">
+        <div class="dc-label">Case 5 &middot; High atrophy</div>
+        <div class="dc-ndi">72.6</div>
+        <div class="dc-desc">Marked cortical thinning, prominent sulcal widening. Ensemble convergent. NDI clearly above threshold.</div>
+      </div>
+      <div class="demo-case high">
+        <div class="dc-label">Case 6 &middot; High atrophy</div>
+        <div class="dc-ndi">95.4</div>
+        <div class="dc-desc">Advanced generalised atrophy, enlarged ventricles, extensive cortical tissue loss. Vivid false-colour contrast throughout.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ THE SCIENCE ════════════════════════ -->
+<section style="padding:10px 0 4px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">The biomedical engineering science</h2>
+    <p>Every component of P22 is grounded in established neuroscience and signal processing. The MRI intensity histogram, the Otsu thresholding, the sigmoid boundary model, and the SVM ensemble all derive from first principles &mdash; not arbitrary design choices.</p>
+
+    <div class="sci-duo">
+      <div class="sci-box mri">
+        <div class="sci-head">🧠 Brain MRI &amp; Alzheimer&rsquo;s atrophy</div>
+        <p>T1-weighted MRI encodes tissue density as grayscale intensity. In Alzheimer&rsquo;s Disease, progressive neurodegeneration causes measurable loss of cortical grey matter and white matter, enlargement of the ventricles, and widening of the cortical sulci. These structural changes alter the MRI intensity histogram in predictable ways &mdash; the distribution shifts toward lower intensities as healthy tissue is replaced by cerebrospinal fluid. P22 reads that histogram to locate the tissue class boundaries statistically, using Otsu thresholding extended to three classes.</p>
+        <div class="sci-feat">
+          <span>Cortical thickness</span><span>Ventricle-to-brain ratio</span><span>Sulcal widening</span><span>Intensity histogram</span><span>3-class segmentation</span><span>Grey/white/CSF</span>
+        </div>
+      </div>
+      <div class="sci-box vis">
+        <div class="sci-head">🎨 False-colour rendering pipeline</div>
+        <p>The visualisation pipeline operates in four stages. First, the MRI pixel intensity histogram is computed across the active brain region only (bounding-box optimised). Second, two statistical thresholds T and T&sub;2; are located by sequential Otsu analysis &mdash; T separates low from transitional tissue, T&sub;2; separates transitional from high-atrophy. Third, sigmoid blending weights at every pixel produce smooth colour transitions rather than hard class boundaries. Fourth, each class&rsquo;s 12-stop perceptual LUT maps the per-class pixel intensity to a vivid, diagnostically distinct colour. The full pipeline runs client-side on HTML5 Canvas, rendering at interactive speed.</p>
+        <div class="sci-feat">
+          <span>Otsu thresholding</span><span>Sequential 3-class</span><span>Sigmoid blending</span><span>12-stop LUT</span><span>Canvas pixel API</span><span>Per-class stretch</span>
+        </div>
+      </div>
+    </div>
+
+    <figure style="margin:16px 0;">
+      <img src="assets/p22/brain-stages.jpg" alt="Brain MRI atrophy progression — from healthy cortex to advanced Alzheimer's atrophy" style="width:100%;border-radius:12px;display:block;max-height:300px;object-fit:cover;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">Atrophy progression: healthy preserved cortex (left) &rarr; moderate hippocampal reduction (centre) &rarr; advanced generalised atrophy (right) &middot; AEGIS-Derived research data</figcaption>
+    </figure>
+
+    <h2>The three tissue classes and their false colours</h2>
+    <p>Class assignment is fully statistical &mdash; thresholds are computed from each scan&rsquo;s own intensity distribution, not from fixed global values. The colour palettes are chosen for maximum perceptual separability, with vivid floors that ensure even low-intensity pixels carry diagnostic colour information.</p>
+
+    <div class="palette-row">
+      <div class="pal-chip low">
+        <strong>Low Atrophy</strong>
+        Deep teal → bright cyan. Pixels below threshold T. Healthy cortical and white matter preservation.
+      </div>
+      <div class="pal-chip grey">
+        <strong>Grey Zone Tissue</strong>
+        Sienna → amber gold. Pixels between T and T₂. Transitional: engine confidence lower, boundary region.
+      </div>
+      <div class="pal-chip high">
+        <strong>High Atrophy</strong>
+        Deep indigo → bright gold. Pixels above T₂. Significant tissue loss, clinical attention warranted.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ ENGINE BOARD ═══════════════════════ -->
+<section style="padding:8px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">Validated results &mdash; honest AUC, reported as-is</h2>
+    <p>All engines trained and evaluated on a distilled research dataset drawn from published, consented neuroimaging studies. Validation methodology ensures no patient&rsquo;s data appears in both training and evaluation. Results reported exactly as measured &mdash; no inflation, no cherry-picking.</p>
+
+    <div class="engine-trio">
+      <div class="engine-trio-item"><div class="ev">0.8511</div><div class="ek">Champion AUC · 4-engine ensemble</div></div>
+      <div class="engine-trio-item"><div class="ev">4</div><div class="ek">Kernel SVM engines · weighted vote</div></div>
+      <div class="engine-trio-item"><div class="ev">0–100</div><div class="ek">NDI scale · continuous severity score</div></div>
+    </div>
+
+    <table class="data-table">
+      <thead><tr><th>Engine tier</th><th>Validation AUC</th><th>Architecture</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Engine 1 🏆</strong></td><td><strong>0.8511</strong></td><td>Linear kernel SVM</td><td>Champion — highest validated AUC</td></tr>
+        <tr><td>Engine 2</td><td>0.8421</td><td>Nu-SVM variant</td><td>Ensemble member</td></tr>
+        <tr><td>Engine 3</td><td>0.8394</td><td>RBF kernel SVM</td><td>Ensemble member</td></tr>
+        <tr style="background:#f0f8f0"><td>Engine 4 ★ <span style="background:#006666;color:white;border-radius:8px;padding:1px 6px;font-size:10px;">FUZZY</span></td><td>0.8351</td><td>Fuzzy SVM variant</td><td>Clinical conservative — lower false-positive rate</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--text-muted);">Honest note: AUC range 0.8351&ndash;0.8511 reflects genuine ensemble agreement &mdash; all four engines are competitive, which is exactly what you want in a weighted vote. The fuzzy variant is intentionally conservative, trading AUC for a lower false-positive rate on borderline cases. No single engine is used alone.</p>
+
+    <div class="gz-box">
+      <strong>Grey-zone protocol &mdash; the hardest design decision in clinical AI.</strong> Any NDI score between 42.5 and 50.0 triggers automatic specialist referral. AEGIS refuses to classify these cases. This is not a limitation &mdash; it is a deliberate clinical design choice. The grey zone exists because the ensemble itself is uncertain: engines diverge, boundaries blur, and forcing a verdict would be dishonest. A neurologist reviews the case. That is the correct outcome.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ DATASET & INTEGRITY ═══════════════ -->
+<section style="padding:10px 0 4px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">Dataset integrity and data governance</h2>
+    <p>P22 uses an <strong>AEGIS-Derived distilled research dataset</strong> &mdash; a curated, feature-engineered dataset derived from consented, published neuroimaging research under PDPA-compliant data governance. Raw patient MRI files are not distributed. The demo cases embedded in the public tool are synthetic MRI representations derived from real feature distributions &mdash; not raw scans, not identifiable data.</p>
+
+    <figure style="margin:0 0 18px;">
+      <img src="assets/p22/partner.jpg" alt="AEGIS P22 clinical collaboration — neurologist reviewing MRI classification results" style="width:100%;border-radius:12px;display:block;max-height:300px;object-fit:cover;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative.</figcaption>
+    </figure>
+
+    <p>These apps demonstrate clinical AI systems capable of classification, early pre-emptive detection, and progressive augmented management. Because full AEGIS engines and datasets run to several gigabytes, only educational demo modes are hosted here &mdash; live classification on new patient MRI data requires the AEGIS Desktop Application. Institutions wishing to contribute local data for engine refinement are welcome to reach out; we share progressive validation results with every contributing partner and operate in strict accordance with PDPA.</p>
+
+    <p style="margin-top:10px;"><strong>What institutional partners receive:</strong> technical report with full validation methodology &middot; AEGIS Desktop Application licence &middot; progressive model result updates as the engine board improves &middot; co-attribution in peer-reviewed publications where applicable.</p>
+
+    <div class="indemnity" style="margin:16px 0;">
+      <strong>Ground rules for data contribution and institutional enquiry.</strong><br>
+      1. <strong>Not a medical device and not a diagnosis.</strong> AEGIS NeuroScan is a research and educational demonstration. Nothing it outputs is medical advice, a diagnosis, or a substitute for a qualified neurologist.<br>
+      2. <strong>De-identified data only.</strong> Remove all PHI before contributing. Only submit data under your institution&rsquo;s ethics approval and with informed consent.<br>
+      3. <strong>Liability release.</strong> Contributing institutions agree to indemnify and hold harmless AEGIS, Dr Loh Kah Meng, and associated parties from any claims arising from use of or reliance on AEGIS outputs.<br>
+      4. <strong>DUA required.</strong> A formal Data Use Agreement is required before any institutional data exchange proceeds.<br>
+      5. <strong>PDPA compliance.</strong> All data handled under strict PDPA and applicable governance frameworks.
+    </div>
+
+    <div class="cta-strip">
+      <a class="cta-primary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P22%20%E2%80%94%20Institutional%20Enquiry&body=I%20have%20read%20the%20terms%20on%20the%20AEGIS%20P22%20page%20and%20wish%20to%20enquire%20about%20collaboration.">🏥 &nbsp;Institutional &amp; clinical enquiry</a>
+      <a class="cta-tertiary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P22%20%E2%80%94%20Research%20Collaboration">🔬 &nbsp;Research collaboration</a>
+      <a class="cta-secondary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P22%20%E2%80%94%20Data%20Partnership">📊 &nbsp;Data partnership</a>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">All enquiries to <strong>aegisloh@aegishumanai.com</strong>. International partnerships welcome. DUA provided before any data exchange.</p>
+
+    <div style="margin-top:18px;padding:13px 16px;background:#e0eaf8;border-radius:10px;font-size:13px;color:#1a2535;line-height:1.7;">
+      <strong>Also in the AEGIS Neurological portfolio:</strong> &nbsp;
+      <a href="project-21-parkinson.html" style="color:#003366;font-weight:700;">P21 · AEGIS Parkinson</a> — Voice &amp; Drawing Motor Assessment, 11-engine consensus board &nbsp;&middot;&nbsp;
+      <a href="project-20-breast-cancer.html" style="color:#003366;font-weight:700;">P20 · AEGIS Breast</a> — Unified breast screening, 7 specialist engines
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"7d3dc3aee49c49ea96443ed061a43e02"}'></script>
+</body>
+</html>

@@ -231,6 +231,7 @@
     {eb:"New series · Now live", t:"AEGIS Ocular Station — Eye-Disease Screening", b:"One pass over a retinal photo screens for diabetic retinopathy, AMD, glaucoma and hypertensive retinopathy — the ODIR baseline raised by four dedicated-data specialists (ROC-AUC 0.90–0.99). A public 'Spot the Disease' learning game and screening aid, with a clinician in command.", h:"#pocket-imaging", c:"#C9A227", bg:"assets/spot/bg-oras.jpg"},
     {eb:"New series · Now live", t:"AEGIS Breast — Unified Breast Station", b:"One engine routes each breast modality — mammogram, histology, ultrasound, fine-needle-aspirate — to its own specialist, each with an honest score and a defer-to-human grey zone (ROC-AUC up to 0.9955). A public 'Spot the Finding' clinical game, with a clinician in command.", h:"#pocket-imaging", c:"#C9A227", bg:"assets/p20/hero.jpg"},
     {eb:"New series · Now live", t:"AEGIS Parkinson — Voice & Drawing Assessment", b:"A validated clinical AI station that listens to a person's voice and reads their drawing tests to assess Parkinson's Disease. Live public quiz, companion textbook, and structured lab sheet for biomedical engineering courses. A clinician always stays in command.", h:"#pocket-imaging", c:"#C9A227", bg:"assets/p21/hero.jpg"},
+    {eb:"New series · Now live", t:"AEGIS NeuroScan — Alzheimer's MRI Classification", b:"A validated 4-engine SVM ensemble classifies Alzheimer's Disease severity from brain MRI, with pixel-level false-colour tissue mapping and NDI scoring 0–100. Six annotated demo cases span the full atrophy spectrum. Grey-zone protocol defers borderline cases to a specialist. A clinician always stays in command.", h:"#pocket-imaging", c:"#C9A227", bg:"assets/p22/hero.jpg"},
     {eb:"New \u00b7 Wearable & cardiovascular", t:"AEGIS Protector \u2014 Your Personal 25/8 Body Guard", b:"A wearable that learns your normal, catches the earliest electrical signs of a heart attack \u2014 the K-wave \u2014 and streams clinician-grade vitals to the hospital station. One device from the wrist to the ward, with a live interactive demo.", h:"#pocket-wearable", c:"#C9A227", bg:"assets/spot/bg-wearable.jpg"},
     {eb:"New series · Affective wearable", t:"AEGIS Emotional — Sensing How You Feel", b:"An electrode wearable that reads stress and affect from your own physiological signals, judged inside your personal band — the fourth AEGIS wearable tier, human-in-command.", h:"#pocket-wearable", c:"#C9A227", bg:"assets/spot/bg-wearable.jpg"},
     {eb:"New series · Health monitoring", t:"AEGIS Health — Continuous Glucose, No Needle", b:"A buttonless smartwatch and a glass base-station fuse four sensing technologies for continuous glucose tracking — the everyday health tier between lifestyle and clinical.", h:"#pocket-wearable", c:"#2E8B84", bg:"assets/spot/bg-wearable.jpg"}
@@ -387,12 +388,12 @@
       </div>
     </a>
 
-    <!-- ============ Clinical Diagnostic Stations (P15 Ocular, P20 Breast, P21 Parkinson) ============ -->
+    <!-- ============ Clinical Diagnostic Stations (P15 Ocular, P20 Breast, P21 Parkinson, P22 Alzheimer) ============ -->
     <div class="group-hero reveal" id="pocket-imaging" style="scroll-margin-top:82px;">
       <div class="group-hero-body">
         <div class="section-label">Diagnostic Stations &middot; Clinical AI</div>
         <h2>Clinical Diagnostic Stations</h2>
-        <p>Validated AI systems for the eye, the breast, and the nervous system &mdash; each reading its own clinical signal, each reporting an honest per-specialist score, each with a defer-to-clinician grey zone and a public learning station. A clinician always stays in command.</p>
+        <p>Validated AI systems for the eye, the breast, and the neurological system &mdash; spanning voice and motor assessment for Parkinson&rsquo;s Disease and false-colour MRI classification for Alzheimer&rsquo;s. Each reads its own clinical signal, each reports an honest score, each with a defer-to-clinician grey zone and a public learning station. A clinician always stays in command.</p>
       </div>
     </div>
     <div class="project-grid">
@@ -432,6 +433,19 @@
           <div><div style="font-size:20px;font-weight:700;">Book + Lab</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">textbook &amp; lab sheet<br>institutional ready</div></div>
         </div>
         <a href="project-21-parkinson.html" class="card-link">Open the Parkinson Station
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </article>
+      <article id="w-alzheimer" class="project-card reveal" style="border-top:3px solid var(--gold,#C9A227);">
+        <div class="tag tag-aqua">Healthcare &middot; Neurology &middot; MRI &middot; Now Live</div>
+        <h3>AEGIS NeuroScan &mdash; Alzheimer&rsquo;s MRI Classification</h3>
+        <p>A validated 4-engine SVM ensemble classifies Alzheimer&rsquo;s Disease severity from brain MRI &mdash; with pixel-level false-colour tissue mapping, NDI scoring on a 0&ndash;100 scale, and six annotated demo cases spanning early preservation to advanced atrophy. A clinician always stays in command.</p>
+        <div style="display:flex;gap:22px;flex-wrap:wrap;margin:16px 0 6px;">
+          <div><div style="font-size:20px;font-weight:700;">0.8511</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">champion AUC<br>4-engine ensemble</div></div>
+          <div><div style="font-size:20px;font-weight:700;">False-colour</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">MRI visualiser<br>pixel-level rendering</div></div>
+          <div><div style="font-size:20px;font-weight:700;">Grey-zone</div><div style="font-size:11.5px;color:var(--text-muted,#5C7086);line-height:1.3;">defer-to-clinician<br>NDI 42.5&ndash;50.0</div></div>
+        </div>
+        <a href="project-22-alzheimer.html" class="card-link">Open the NeuroScan Station
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
       </article>
