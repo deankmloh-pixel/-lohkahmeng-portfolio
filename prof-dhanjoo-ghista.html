@@ -77,6 +77,121 @@
   </div>
 </header>
 
+<style>
+.aegis-hero-tribute {
+  position: relative;
+  background-color: #0f1720;
+  background-image: radial-gradient(circle at 80% 20%, #172435 0%, #0f1720 70%);
+  color: #e2e8f0;
+  padding: 72px 24px;
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 100%;
+}
+.aegis-hero-tribute *, .aegis-hero-tribute *::before, .aegis-hero-tribute *::after { box-sizing: border-box; }
+.aegis-hero-tribute .watermark-seal {
+  position: absolute; top: 20px; right: 20px;
+  width: 220px; height: 220px;
+  opacity: 0.12; pointer-events: none; object-fit: contain; z-index: 0;
+}
+.aegis-hero-tribute .aht-container {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; gap: 60px;
+  position: relative; z-index: 1;
+}
+.aegis-hero-tribute .portrait-wrapper { flex-shrink: 0; text-align: center; }
+.aegis-hero-tribute .portrait-img {
+  width: 280px; height: 280px; border-radius: 50%;
+  object-fit: cover; object-position: center top;
+  border: 4px solid #c9a24b;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.5), 0 0 28px rgba(201,162,75,0.25);
+  display: block;
+}
+.aegis-hero-tribute .content-wrapper {
+  flex-grow: 1; display: flex; flex-direction: column; gap: 14px;
+}
+.aegis-hero-tribute .aht-badge {
+  display: inline-flex; align-items: center; align-self: flex-start;
+  padding: 6px 14px;
+  background: rgba(201,162,75,0.12); border: 1px solid rgba(201,162,75,0.4);
+  border-radius: 50px; color: #c9a24b;
+  font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.aegis-hero-tribute .aht-name {
+  font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: #c9a24b;
+  margin: 0; line-height: 1.15;
+  font-family: 'Times New Roman', Times, serif;
+}
+.aegis-hero-tribute .aht-subtitle {
+  font-size: 1.1rem; color: #cbd5e1; font-weight: 400; margin: 2px 0 0;
+  letter-spacing: 0.02em; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.aegis-hero-tribute .aht-tagline {
+  font-size: 1rem; color: #94a3b8; margin: 4px 0 0;
+  line-height: 1.6; font-style: italic;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.aegis-hero-tribute .affiliations-container {
+  margin-top: 10px; border-top: 1px solid rgba(201,162,75,0.2); padding-top: 18px;
+}
+.aegis-hero-tribute .affiliations-strip {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+  font-size: 0.82rem; color: #cbd5e1;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.aegis-hero-tribute .affiliation-item { white-space: nowrap; }
+.aegis-hero-tribute .aht-sep { color: #c9a24b; opacity: 0.6; font-weight: 700; }
+.aegis-hero-tribute .career-span {
+  display: block; margin-top: 12px;
+  font-size: 0.9rem; color: #c9a24b; font-style: italic;
+  font-family: 'Times New Roman', Times, serif; letter-spacing: 0.03em;
+}
+@media (max-width: 860px) {
+  .aegis-hero-tribute .aht-container { flex-direction: column; text-align: center; gap: 32px; }
+  .aegis-hero-tribute .content-wrapper { align-items: center; }
+  .aegis-hero-tribute .aht-badge { align-self: center; }
+  .aegis-hero-tribute .affiliations-strip { justify-content: center; }
+  .aegis-hero-tribute .portrait-img { width: 200px; height: 200px; }
+  .aegis-hero-tribute .watermark-seal { width: 120px; height: 120px; top: 10px; right: 10px; }
+}
+</style>
+
+<section class="aegis-hero-tribute">
+  <img src="assets/aegis-seal-gold.png" alt="" class="watermark-seal" aria-hidden="true">
+  <div class="aht-container">
+    <div class="portrait-wrapper">
+      <img src="assets/prof-ghista-portrait.jpg" alt="Prof. Dhanjoo N. Ghista" class="portrait-img">
+    </div>
+    <div class="content-wrapper">
+      <div class="aht-badge">AEGIS Tribute</div>
+      <h2 class="aht-name">Prof. Dhanjoo N. Ghista</h2>
+      <div class="aht-subtitle">Ph.D. &middot; Biomedical Engineering Pioneer</div>
+      <p class="aht-tagline">Educator. Researcher. Mentor. Author of over 500 publications and 33 books.</p>
+      <div class="affiliations-container">
+        <div class="affiliations-strip">
+          <span class="affiliation-item">NASA Ames Research Center</span>
+          <span class="aht-sep">&middot;</span>
+          <span class="affiliation-item">IIT Madras</span>
+          <span class="aht-sep">&middot;</span>
+          <span class="affiliation-item">Washington University St. Louis</span>
+          <span class="aht-sep">&middot;</span>
+          <span class="affiliation-item">Michigan Technological University</span>
+          <span class="aht-sep">&middot;</span>
+          <span class="affiliation-item">McMaster University</span>
+          <span class="aht-sep">&middot;</span>
+          <span class="affiliation-item">UAE University</span>
+          <span class="aht-sep">&middot;</span>
+          <span class="affiliation-item">NTU Singapore</span>
+          <span class="aht-sep">&middot;</span>
+          <span class="affiliation-item">University of New South Wales</span>
+        </div>
+        <div class="career-span">A career spanning six decades across five continents.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="container">
     <div class="prose reveal">
@@ -215,6 +330,85 @@
           Ghista, Kah Meng Loh, Foad Kabinejadian, Vidya Sudarshan, Yin Kwee Ng, David Chee-Eng Ng</li>
       </ul>
 
+      <h3>A textbook written in his honour</h3>
+      <p>As part of AEGIS's applied research programme, we produced a full clinical AI textbook built around
+        Parkinson's disease detection — structured for engineering students and complete with laboratory
+        exercises, worked examples, and a step-by-step guided project. This is the first textbook AEGIS has
+        dedicated to a person: Prof. Ghista, whose career in biomedical engineering laid the intellectual
+        groundwork for exactly this kind of human-centred clinical AI work.</p>
+      <p>It is freely available here as a tribute. Enter your name and email below — we will send the PDF
+        link directly to your inbox. If you use it in teaching or research, we only ask that you write
+        back to us at <a href="mailto:aegisloh@aegishumanai.com">aegisloh@aegishumanai.com</a>.</p>
+
+      <!-- P21 textbook email gate -->
+      <div id="p21-gate" style="margin:28px 0;max-width:480px;">
+        <form id="p21-form" style="background:linear-gradient(135deg,#1a2a3a,#0f1720);border:1px solid rgba(201,162,75,.35);border-radius:12px;padding:28px 28px 24px;box-shadow:0 4px 20px rgba(0,0,0,.3);">
+          <div style="color:#c9a24b;font-size:11px;letter-spacing:3px;font-weight:700;margin-bottom:18px;">GET THE TEXTBOOK</div>
+          <div style="margin-bottom:14px;">
+            <label for="p21-name" style="display:block;color:#8aa0b4;font-size:12px;letter-spacing:.5px;margin-bottom:6px;">YOUR NAME</label>
+            <input id="p21-name" type="text" placeholder="Dr Jane Smith" autocomplete="name"
+              style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.06);border:1px solid rgba(201,162,75,.25);border-radius:7px;padding:11px 14px;color:#e2e8f0;font-size:15px;outline:none;font-family:inherit;">
+          </div>
+          <div style="margin-bottom:20px;">
+            <label for="p21-email" style="display:block;color:#8aa0b4;font-size:12px;letter-spacing:.5px;margin-bottom:6px;">EMAIL ADDRESS <span style="color:#c9a24b">*</span></label>
+            <input id="p21-email" type="email" placeholder="you@institution.edu" required autocomplete="email"
+              style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.06);border:1px solid rgba(201,162,75,.25);border-radius:7px;padding:11px 14px;color:#e2e8f0;font-size:15px;outline:none;font-family:inherit;">
+          </div>
+          <button type="submit" id="p21-btn"
+            style="display:inline-flex;align-items:center;gap:9px;background:#c9a24b;color:#0f1720;font-weight:700;font-size:15px;padding:13px 26px;border-radius:9px;border:none;cursor:pointer;letter-spacing:.02em;font-family:inherit;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Send me the PDF
+          </button>
+          <div id="p21-err" style="display:none;color:#e07070;font-size:13px;margin-top:12px;"></div>
+        </form>
+
+        <div id="p21-thanks" style="display:none;background:linear-gradient(135deg,#1a2a3a,#0f1720);border:1px solid rgba(201,162,75,.35);border-radius:12px;padding:32px 28px;box-shadow:0 4px 20px rgba(0,0,0,.3);">
+          <div style="color:#c9a24b;font-size:22px;margin-bottom:10px;">&#10003; Check your inbox</div>
+          <p style="color:#c5d3df;font-size:15px;line-height:1.6;margin:0 0 10px;">The download link is on its way. If it doesn&rsquo;t arrive within a few minutes, check your spam folder or write to
+            <a href="mailto:aegisloh@aegishumanai.com" style="color:#c9a24b;">aegisloh@aegishumanai.com</a>.</p>
+        </div>
+      </div>
+
+      <script>
+      (function(){
+        var form = document.getElementById('p21-form');
+        var btn  = document.getElementById('p21-btn');
+        var err  = document.getElementById('p21-err');
+        if (!form) return;
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          var email = document.getElementById('p21-email').value.trim();
+          var name  = document.getElementById('p21-name').value.trim();
+          if (!email) { showErr('Please enter your email address.'); return; }
+          btn.disabled = true;
+          btn.textContent = 'Sending…';
+          err.style.display = 'none';
+          fetch('/api/request-textbook', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ email: email, name: name })
+          })
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            if (d.ok) {
+              document.getElementById('p21-gate').querySelector('#p21-form').style.display = 'none';
+              document.getElementById('p21-thanks').style.display = 'block';
+            } else {
+              btn.disabled = false;
+              btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send me the PDF';
+              showErr('Something went wrong. Please try again or email us directly.');
+            }
+          })
+          .catch(function(){
+            btn.disabled = false;
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send me the PDF';
+            showErr('Network error. Please try again.');
+          });
+        });
+        function showErr(msg){ err.textContent = msg; err.style.display = 'block'; }
+      })();
+      </script>
+
       <h3>Explore more</h3>
       <p>This page is a starting point, not a replacement for his own record of his work. For the full
         bibliography, career detail, and his current writing:</p>
@@ -228,7 +422,7 @@
       <div class="callout">
         This page was compiled from Prof. Ghista's own published biography, career pages, and publisher
         listings, in July 2026. If you were also a student or colleague of his and want to contribute a
-        memory or correction, reach out — <a href="mailto:dean.kmloh@gmail.com">dean.kmloh@gmail.com</a>.
+        memory or correction, reach out — <a href="mailto:aegisloh@aegishumanai.com">aegisloh@aegishumanai.com</a>.
       </div>
     </div>
   </div>
@@ -243,7 +437,7 @@
     <ul class="footer-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
-      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
+      <li><a href="mailto:aegisloh@aegishumanai.com">Email</a></li>
     </ul>
   </div>
 </footer>
