@@ -1,0 +1,45 @@
+﻿name: Broadcast to subscribers
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  broadcast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Parse commit message
+        id: parse
+        run: |
+          MSG=$(cat <<'GITMSG'
+          ${{ github.event.head_commit.message }}
+          GITMSG
+          )
+          FIRST=$(echo "$MSG" | head -1)
+          if echo "$FIRST" | grep -qE '^\[broadcast\]'; then
+            SUBJECT=$(echo "$FIRST" | sed 's/^\[broadcast\] *//')
+            BODY=$(echo "$MSG" | tail -n +2 | sed '/^[[:space:]]*$/d' | tr '\n' ' ' | sed 's/  */ /g' | sed 's/^ //;s/ $//')
+            echo "do_broadcast=true"  >> $GITHUB_OUTPUT
+            echo "subject=$SUBJECT"   >> $GITHUB_OUTPUT
+            echo "body=$BODY"         >> $GITHUB_OUTPUT
+          else
+            echo "do_broadcast=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send broadcast
+        if: steps.parse.outputs.do_broadcast == 'true'
+        run: |
+          SUBJECT="${{ steps.parse.outputs.subject }}"
+          BODY="${{ steps.parse.outputs.body }}"
+          PAYLOAD=$(printf '{"secret":"%s","subject":"%s","message":"%s"}' \
+            "${{ secrets.BROADCAST_SECRET }}" \
+            "$SUBJECT" \
+            "$BODY")
+          RESULT=$(curl -s -w "\n%{http_code}" -X POST \
+            https://aegishumanai.com/api/broadcast \
+            -H "Content-Type: application/json" \
+            -d "$PAYLOAD")
+          HTTP=$(echo "$RESULT" | tail -1)
+          BODY_R=$(echo "$RESULT" | head -1)
+          echo "Response ($HTTP): $BODY_R"
+          if [ "$HTTP" != "200" ]; then exit 1; fi
