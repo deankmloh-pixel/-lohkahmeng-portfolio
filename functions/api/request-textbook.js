@@ -38,7 +38,28 @@ export async function onRequestPost(context) {
     );
     await sendEmail(env, email, "Your AEGIS textbook — Project 21 (Parkinson’s)", visitorHtml);
 
-    // 2. Notify Dr Loh
+    // 2. Store subscriber in D1 (aegis-subs database, binding: DB)
+    if (env.DB) {
+      try {
+        await env.DB.prepare(
+          `CREATE TABLE IF NOT EXISTS subscribers (
+             id         INTEGER PRIMARY KEY AUTOINCREMENT,
+             name       TEXT,
+             email      TEXT NOT NULL,
+             source     TEXT DEFAULT 'p21-textbook',
+             created_at TEXT DEFAULT (datetime('now'))
+           )`
+        ).run();
+        await env.DB.prepare(
+          `CREATE UNIQUE INDEX IF NOT EXISTS idx_subscribers_email ON subscribers(email)`
+        ).run();
+        await env.DB.prepare(
+          `INSERT OR IGNORE INTO subscribers (name, email, source) VALUES (?, ?, ?)`
+        ).bind(name || null, email, "p21-textbook").run();
+      } catch (_) { /* D1 errors must not block email delivery */ }
+    }
+
+    // 3. Notify Dr Loh
     const notifyHtml = emailShell(
       "New textbook request.",
       `<p style="margin:0 0 12px">A visitor just requested the P21 textbook via the tribute page.</p>
