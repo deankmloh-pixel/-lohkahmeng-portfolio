@@ -559,14 +559,22 @@ function handleImgErr(el, file) {
 
 // ── Submission panel ─────────────────────────────────────
 function showSubmit() {
-  document.getElementById('welcome').style.display    = 'none';
-  document.getElementById('casePanel').style.display  = 'none';
+  document.getElementById('welcome').style.display     = 'none';
+  document.getElementById('casePanel').style.display   = 'none';
   document.getElementById('submitPanel').style.display = '';
+  document.getElementById('submitForm').style.display  = '';    // always show fresh form
+  document.getElementById('thankyouBox').style.display = 'none'; // always hide thank-you
   document.querySelectorAll('.case-btn').forEach(b => b.classList.remove('sel'));
 }
 
 function backToDemo() {
+  // Clear ?submitted=1 from URL so re-submit works cleanly
+  if (window.history.replaceState) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
   document.getElementById('submitPanel').style.display = 'none';
+  document.getElementById('submitForm').style.display  = '';    // reset for next use
+  document.getElementById('thankyouBox').style.display = 'none';
   document.getElementById('welcome').style.display     = '';
 }
 
@@ -621,6 +629,15 @@ function showCase(btn, slug) {
 
   document.querySelectorAll('.case-btn').forEach(b => b.classList.remove('sel'));
   btn.classList.add('sel');
+
+  // Ensure submit panel is hidden and reset
+  document.getElementById('submitPanel').style.display = 'none';
+  document.getElementById('submitForm').style.display  = '';
+  document.getElementById('thankyouBox').style.display = 'none';
+  // Clear ?submitted=1 from URL if present
+  if (window.location.search && window.history.replaceState) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 
   const melWarn = c.mel >= 20
     ? `<div class="mel-warn">
