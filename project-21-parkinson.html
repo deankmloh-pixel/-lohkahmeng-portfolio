@@ -318,6 +318,26 @@
 }
 .highlight-box strong { color: #C9A227; }
 
+/* Live App CTA */
+.p21-app-cta {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: linear-gradient(90deg, #0d3066 0%, #1a4a8a 50%, #0d3066 100%);
+  border: 1px solid #C9A227;
+  border-radius: 14px;
+  padding: 20px 28px;
+  text-decoration: none;
+  margin: 0 0 6px;
+  transition: filter 0.2s, transform 0.2s;
+  box-shadow: 0 4px 24px rgba(201,162,39,0.15);
+}
+.p21-app-cta:hover { filter: brightness(1.1); transform: translateY(-2px); }
+.p21-app-icon { font-size: 2.2rem; flex-shrink: 0; }
+.p21-app-text { display: flex; flex-direction: column; gap: 3px; }
+.p21-app-text strong { font-size: 1.05rem; color: #C9A227; font-weight: 800; }
+.p21-app-text span { font-size: 0.85rem; color: #8ab0d0; }
+
 @media (max-width: 600px) {
   .signal-row { grid-template-columns: 1fr; }
   .img-pair { grid-template-columns: 1fr; }
@@ -353,6 +373,15 @@
 
 <section>
   <div class="container">
+
+    <!-- Live App CTA -->
+    <a href="apps/aegis-p21-parkinson.html" class="p21-app-cta reveal" target="_blank" rel="noopener">
+      <span class="p21-app-icon">🎙️</span>
+      <span class="p21-app-text">
+        <strong>Try the Live Demo</strong>
+        <span>Voice samples &amp; spiral drawing — can you detect Parkinson&rsquo;s? &rarr;</span>
+      </span>
+    </a>
 
     <!-- Stats Strip -->
     <div class="stats-strip">
