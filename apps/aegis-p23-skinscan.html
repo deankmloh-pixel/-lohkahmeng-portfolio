@@ -120,19 +120,20 @@ header {
 .zl-r  { background: #1f0000; color: #f87171; border: 1px solid #dc2626; }
 
 /* ── Demo result layout ──────────────────────────────────── */
-.result-top { display: flex; gap: 22px; align-items: flex-start; margin-bottom: 20px; }
-.img-wrap { flex-shrink: 0; }
+.result-top { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; text-align: center; }
+.img-wrap { margin-bottom: 14px; }
 .case-img {
-  width: 170px; height: 170px; object-fit: cover;
-  border-radius: 9px; border: 1px solid #1e2f3f; display: block; background: #111c27;
+  width: 200px; height: 200px; object-fit: cover;
+  border-radius: 10px; border: 1px solid #1e2f3f; display: block; background: #111c27;
 }
 .img-placeholder {
-  width: 170px; height: 170px; border-radius: 9px;
+  width: 200px; height: 200px; border-radius: 10px;
   border: 2px dashed #1e2f3f; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   font-size: 0.72rem; color: #2e4555; text-align: center; padding: 12px; gap: 6px;
 }
 .img-placeholder span { font-size: 1.6rem; }
+.case-meta { display: flex; flex-direction: column; align-items: center; }
 .case-meta h1 { font-size: 1.22rem; color: #c9a24b; margin-bottom: 5px; }
 .tag-badge {
   display: inline-block; padding: 3px 10px; border-radius: 12px;
@@ -142,7 +143,7 @@ header {
 .tag-y  { background: #422006; color: #fcd34d; }
 .tag-am { background: #7c2d12; color: #fdba74; }
 .tag-r  { background: #450a0a; color: #fca5a5; }
-.case-commentary { font-size: 0.82rem; color: #4a6070; line-height: 1.65; max-width: 420px; }
+.case-commentary { font-size: 0.82rem; color: #4a6070; line-height: 1.65; max-width: 480px; text-align: center; }
 
 /* Zone banner */
 .zone-banner {
