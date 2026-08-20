@@ -193,7 +193,7 @@ footer a:hover { color: #5a9fd4; }
 
 /* ── Sidebar submit button ───────────────────────────────── */
 .upload-nav {
-  display: block; width: calc(100% - 24px); margin: 0 12px 8px;
+  display: block; width: 100%;
   text-align: center; padding: 10px 16px;
   background: #c9a24b; color: #0f1720;
   font-weight: 700; font-size: 0.88rem;
@@ -293,9 +293,11 @@ footer a:hover { color: #5a9fd4; }
     <button class="case-btn am" onclick="showCase(this,'vasc')" ><span class="dot"></span>Vascular Lesions</button>
     <button class="case-btn r"  onclick="showCase(this,'mel')"  ><span class="dot"></span>Melanoma</button>
 
-    <hr class="sb-divider">
+    <div style="padding: 8px 12px 4px;">
+      <button class="upload-nav" onclick="showSubmit()">&#8679; Submit Your Image</button>
+    </div>
 
-    <button class="upload-nav" onclick="showSubmit()">&#8679; Submit Your Image</button>
+    <hr class="sb-divider">
 
     <div class="sb-info">
       <div class="sb-info-box">
