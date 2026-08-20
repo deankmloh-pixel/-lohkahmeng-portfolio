@@ -190,6 +190,72 @@ footer {
 footer a { color: #3a5060; text-decoration: none; }
 footer a:hover { color: #5a9fd4; }
 
+/* ── Sidebar submit button ───────────────────────────────── */
+.upload-nav {
+  display: block; width: calc(100% - 24px); margin: 0 12px 8px;
+  text-align: center; padding: 10px 16px;
+  background: #c9a24b; color: #0f1720;
+  font-weight: 700; font-size: 0.88rem;
+  border: none; cursor: pointer; border-radius: 5px;
+  text-decoration: none; transition: opacity .15s;
+}
+.upload-nav:hover { opacity: 0.85; }
+
+/* ── Submission panel ────────────────────────────────────── */
+.sub-panel { max-width: 560px; }
+.sub-panel h1 { font-size: 1.22rem; color: #c9a24b; margin-bottom: 4px; }
+.sub-panel .subtitle { font-size: 0.84rem; color: #4a6070; margin-bottom: 18px; }
+
+.zone-pills { display: flex; gap: 7px; flex-wrap: wrap; margin: 14px 0; }
+.z-pill { padding: 4px 13px; border-radius: 20px; font-size: 0.74rem; font-weight: 700; }
+.z-pill.g { background: #14532d; color: #86efac; }
+.z-pill.y { background: #422006; color: #fcd34d; }
+.z-pill.a { background: #431407; color: #fb923c; }
+.z-pill.r { background: #450a0a; color: #fca5a5; }
+
+.upload-box {
+  border: 2px dashed #2d3f50; border-radius: 8px;
+  padding: 36px; text-align: center; transition: border-color .2s, background .2s;
+  cursor: pointer;
+}
+.upload-box:hover, .upload-box.drag { border-color: #c9a24b; background: #1a2a3a; }
+.upload-box input[type=file] { display: none; }
+.upload-label { font-size: 0.9rem; color: #7a95a8; }
+.upload-label strong { color: #e2e8f0; }
+.upload-label .browse-link { color: #5a9fd4; font-weight: 600; cursor: pointer; }
+.preview-img {
+  max-width: 280px; max-height: 220px; border-radius: 6px;
+  margin: 14px auto 0; display: block;
+  border: 1px solid #2d3f50;
+}
+.btn-submit {
+  display: inline-block; padding: 11px 28px;
+  background: #c9a24b; color: #0f1720;
+  border: none; border-radius: 6px;
+  font-size: 0.95rem; font-weight: 700;
+  cursor: pointer; margin-top: 18px; transition: opacity .15s;
+}
+.btn-submit:hover { opacity: 0.85; }
+
+.sub-notice {
+  background: #0d1820; border: 1px solid #1e2f3f;
+  border-radius: 7px; padding: 10px 14px;
+  font-size: 0.77rem; color: #3a5060;
+  margin-top: 22px; line-height: 1.6;
+}
+
+.thankyou-box {
+  text-align: center; padding: 60px 20px;
+}
+.thankyou-box h2 { font-size: 1.15rem; color: #16a34a; margin-bottom: 12px; }
+.thankyou-box p { font-size: 0.86rem; color: #4a6070; line-height: 1.8; }
+.thankyou-box .back-link {
+  display: inline-block; margin-top: 20px; padding: 9px 22px;
+  background: none; border: 1px solid #2d3f50; border-radius: 5px;
+  color: #7a95a8; font-size: 0.84rem; cursor: pointer; transition: all .15s;
+}
+.thankyou-box .back-link:hover { border-color: #c9a24b; color: #c9a24b; }
+
 @media(max-width:680px){
   .layout { flex-direction: column; }
   .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #1e2f3f; }
@@ -228,6 +294,8 @@ footer a:hover { color: #5a9fd4; }
 
     <hr class="sb-divider">
 
+    <button class="upload-nav" onclick="showSubmit()">&#8679; Submit Your Image</button>
+
     <div class="sb-info">
       <div class="sb-info-box">
         <strong>About this demo</strong>
@@ -259,6 +327,75 @@ footer a:hover { color: #5a9fd4; }
       </div>
     </div>
     <div id="casePanel" style="display:none"></div>
+
+    <!-- ── Submission panel ──────────────────────────────── -->
+    <div id="submitPanel" style="display:none" class="sub-panel">
+      <div id="submitForm">
+        <h1>Submit Your Dermoscopy Image</h1>
+        <p class="subtitle">Upload your image. Our team will be notified and will process your result.<br>
+        We will contact you directly with findings.</p>
+
+        <div class="zone-pills">
+          <span class="z-pill g">GREEN &ge;60%</span>
+          <span class="z-pill y">YELLOW 45&ndash;60%</span>
+          <span class="z-pill a">AMBER 30&ndash;45%</span>
+          <span class="z-pill r">RED &lt;30% DEFER</span>
+        </div>
+
+        <form id="uploadForm" action="https://formsubmit.co/dean.kmloh@aegishumanai.com"
+              method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="_subject" value="P23 SkinScan — New Image Submission">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" value="https://aegishumanai.com/apps/aegis-p23-skinscan.html?submitted=1">
+
+          <div class="upload-box" id="dropZone" onclick="document.getElementById('imageFile').click()">
+            <label class="upload-label" onclick="event.stopPropagation()">
+              <strong>Drag &amp; drop</strong> or
+              <span class="browse-link" onclick="document.getElementById('imageFile').click()">browse</span>
+              to upload<br>
+              <small style="color:#3a5060">JPG, PNG, BMP &mdash; max 10 MB</small>
+            </label>
+            <input type="file" name="image" id="imageFile" accept="image/*"
+                   onchange="previewFile(this)" onclick="event.stopPropagation()">
+            <img id="preview" class="preview-img" style="display:none" alt="Preview">
+          </div>
+
+          <div style="margin-top:14px">
+            <label style="font-size:0.82rem;color:#4a6070;display:block;margin-bottom:6px">
+              Your contact email <span style="color:#3a5060">(optional — for us to send results)</span>
+            </label>
+            <input type="email" name="contact_email" placeholder="your@email.com"
+                   style="width:100%;padding:8px 12px;background:#111c27;border:1px solid #2d3f50;
+                          border-radius:5px;color:#e2e8f0;font-size:0.86rem;outline:none;">
+          </div>
+
+          <div style="margin-top:10px">
+            <label style="font-size:0.82rem;color:#4a6070;display:block;margin-bottom:6px">Notes <span style="color:#3a5060">(optional)</span></label>
+            <textarea name="notes" rows="2" placeholder="Clinical notes, patient age, lesion location…"
+                      style="width:100%;padding:8px 12px;background:#111c27;border:1px solid #2d3f50;
+                             border-radius:5px;color:#e2e8f0;font-size:0.86rem;
+                             resize:vertical;outline:none;"></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit">Classify &amp; Notify Team</button>
+        </form>
+
+        <div class="sub-notice">
+          Your image is submitted securely to the AEGIS team for processing.
+          No automated clinical decision is made &mdash; a qualified dermatologist reviews all findings before any result is communicated.
+          Educational and research use only &mdash; not a certified clinical diagnostic device.
+        </div>
+      </div>
+
+      <div id="thankyouBox" class="thankyou-box" style="display:none">
+        <h2>&#10003; Image Submitted</h2>
+        <p>Thank you. Your dermoscopy image has been received.<br>
+        Our team will process it and contact you with findings.<br><br>
+        Typical turnaround: 1&ndash;2 business days.</p>
+        <button class="back-link" onclick="backToDemo()">&#8592; Back to Demo Cases</button>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -385,6 +522,63 @@ const FILL = { top:"bf-top", mel:"bf-mel", def:"bf-default" };
 function handleImgErr(el, file) {
   el.outerHTML = '<div class="img-placeholder"><span>&#128247;</span><small>' + file + '<br>HAM10000 / ISIC 2018</small></div>';
 }
+
+// ── Submission panel ─────────────────────────────────────
+function showSubmit() {
+  document.getElementById('welcome').style.display    = 'none';
+  document.getElementById('casePanel').style.display  = 'none';
+  document.getElementById('submitPanel').style.display = '';
+  document.querySelectorAll('.case-btn').forEach(b => b.classList.remove('sel'));
+}
+
+function backToDemo() {
+  document.getElementById('submitPanel').style.display = 'none';
+  document.getElementById('welcome').style.display     = '';
+}
+
+// File preview
+function previewFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('preview');
+    img.src = e.target.result;
+    img.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// Drag-and-drop
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    const dz = document.getElementById('dropZone');
+    if (!dz) return;
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+    dz.addEventListener('drop', e => {
+      e.preventDefault(); dz.classList.remove('drag');
+      if (e.dataTransfer.files.length) {
+        document.getElementById('imageFile').files = e.dataTransfer.files;
+        previewFile(document.getElementById('imageFile'));
+      }
+    });
+  });
+})();
+
+// Check if redirected back after FormSubmit submission
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('submitted') === '1') {
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('welcome').style.display     = 'none';
+      document.getElementById('casePanel').style.display   = 'none';
+      document.getElementById('submitPanel').style.display = '';
+      document.getElementById('submitForm').style.display  = 'none';
+      document.getElementById('thankyouBox').style.display = '';
+    });
+  }
+})();
 
 function showCase(btn, slug) {
   const c = CASES[slug];
