@@ -382,6 +382,10 @@ const ZONE = {
 
 const FILL = { top:"bf-top", mel:"bf-mel", def:"bf-default" };
 
+function handleImgErr(el, file) {
+  el.outerHTML = '<div class="img-placeholder"><span>&#128247;</span><small>' + file + '<br>HAM10000 / ISIC 2018</small></div>';
+}
+
 function showCase(btn, slug) {
   const c = CASES[slug];
   if (!c) return;
@@ -409,12 +413,11 @@ function showCase(btn, slug) {
     </div>`).join('');
 
   const imgSrc = `../assets/p23/samples/${c.file}`;
-  const imgFallback = `this.outerHTML='<div class="img-placeholder"><span>&#128247;</span><small>${c.file}<br>HAM10000 / ISIC 2018</small></div>'`;
 
   const html = `
     <div class="result-top">
       <div class="img-wrap">
-        <img src="${imgSrc}" class="case-img" alt="${c.label} dermoscopy" onerror="${imgFallback}">
+        <img src="${imgSrc}" class="case-img" alt="${c.label} dermoscopy" onerror="handleImgErr(this,'${c.file}')">
       </div>
       <div class="case-meta">
         <h1>${c.label}</h1>
