@@ -1,4 +1,4 @@
-﻿name: Broadcast to subscribers
+name: Broadcast to subscribers
 
 on:
   push:
