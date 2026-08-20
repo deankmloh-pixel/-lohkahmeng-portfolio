@@ -351,6 +351,7 @@ footer a:hover { color: #5a9fd4; }
           <input type="hidden" name="_cc" value="dean.kmloh@aegishumanai.com,aegisloh@gmail.com">
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_autoresponse" value="Thank you for submitting your dermoscopy image to AEGIS SkinScan. Your image has been received and forwarded to the AEGIS clinical team for review. A qualified dermatologist will assess the findings and we will contact you directly with the result. Typical turnaround is 1–2 business days. Please do not reply to this automated message — our team will reach out to you separately. AEGIS Human-AI Augmenting Systems | aegishumanai.com | Research and education use only. Not a certified clinical diagnostic device.">
           <input type="hidden" name="_next" value="https://aegishumanai.com/apps/aegis-p23-skinscan.html?submitted=1">
 
           <div class="upload-box" id="dropZone" onclick="document.getElementById('imageFile').click()">
@@ -365,18 +366,47 @@ footer a:hover { color: #5a9fd4; }
             <img id="preview" class="preview-img" style="display:none" alt="Preview">
           </div>
 
-          <div style="margin-top:14px">
-            <label style="font-size:0.82rem;color:#4a6070;display:block;margin-bottom:6px">
-              Your contact email <span style="color:#3a5060">(optional — for us to send results)</span>
-            </label>
-            <input type="email" name="email" placeholder="your@email.com"
-                   style="width:100%;padding:8px 12px;background:#111c27;border:1px solid #2d3f50;
-                          border-radius:5px;color:#e2e8f0;font-size:0.86rem;outline:none;">
+          <div style="margin-top:14px;display:flex;gap:10px;">
+            <div style="flex:1">
+              <label style="font-size:0.82rem;color:#4a6070;display:block;margin-bottom:6px">
+                Full Name <span style="color:#dc2626">*</span>
+              </label>
+              <input type="text" name="name" placeholder="Your full name" required
+                     style="width:100%;padding:8px 12px;background:#111c27;border:1px solid #2d3f50;
+                            border-radius:5px;color:#e2e8f0;font-size:0.86rem;outline:none;">
+            </div>
+            <div style="flex:1">
+              <label style="font-size:0.82rem;color:#4a6070;display:block;margin-bottom:6px">
+                Contact Email <span style="color:#dc2626">*</span>
+              </label>
+              <input type="email" name="email" placeholder="your@email.com" required
+                     style="width:100%;padding:8px 12px;background:#111c27;border:1px solid #2d3f50;
+                            border-radius:5px;color:#e2e8f0;font-size:0.86rem;outline:none;">
+            </div>
+          </div>
+
+          <div style="margin-top:10px;display:flex;gap:10px;">
+            <div style="flex:1">
+              <label style="font-size:0.82rem;color:#4a6070;display:block;margin-bottom:6px">
+                Phone <span style="color:#3a5060">(optional)</span>
+              </label>
+              <input type="tel" name="phone" placeholder="+65 XXXX XXXX"
+                     style="width:100%;padding:8px 12px;background:#111c27;border:1px solid #2d3f50;
+                            border-radius:5px;color:#e2e8f0;font-size:0.86rem;outline:none;">
+            </div>
+            <div style="flex:1">
+              <label style="font-size:0.82rem;color:#4a6070;display:block;margin-bottom:6px">
+                Country <span style="color:#3a5060">(optional)</span>
+              </label>
+              <input type="text" name="country" placeholder="e.g. Singapore"
+                     style="width:100%;padding:8px 12px;background:#111c27;border:1px solid #2d3f50;
+                            border-radius:5px;color:#e2e8f0;font-size:0.86rem;outline:none;">
+            </div>
           </div>
 
           <div style="margin-top:10px">
-            <label style="font-size:0.82rem;color:#4a6070;display:block;margin-bottom:6px">Notes <span style="color:#3a5060">(optional)</span></label>
-            <textarea name="notes" rows="2" placeholder="Clinical notes, patient age, lesion location…"
+            <label style="font-size:0.82rem;color:#4a6070;display:block;margin-bottom:6px">Clinical Notes <span style="color:#3a5060">(optional — lesion location, patient age, clinical concern)</span></label>
+            <textarea name="notes" rows="2" placeholder="e.g. 52F, lesion on left forearm, 6 months duration, changing colour…"
                       style="width:100%;padding:8px 12px;background:#111c27;border:1px solid #2d3f50;
                              border-radius:5px;color:#e2e8f0;font-size:0.86rem;
                              resize:vertical;outline:none;"></textarea>
