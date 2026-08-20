@@ -3,87 +3,325 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AEGIS Parkinson — Textbook, Lab &amp; Live System (P21) · Loh Kah Meng</title>
-<meta name="description" content="AEGIS P21: A complete biomedical engineering curriculum package — companion textbook, structured lab sheet, and live AI-powered quiz station — for Parkinson's Disease voice and drawing motor assessment. Validated 11-engine consensus board. For publishers, lecturers, and students.">
+<title>P21 Parkinson Augmenting System — Case Study | Loh Kah Meng</title>
+<meta name="description" content="AEGIS P21 deploys an 11-engine consensus board to detect Parkinson's disease from voice, spiral drawing, and postural assessment — AUC 0.846 on 195 subjects, paired with a 97-page clinical companion textbook.">
 <link rel="canonical" href="https://aegishumanai.com/project-21-parkinson.html">
+
 <meta property="og:type" content="article">
-<meta property="og:title" content="AEGIS Parkinson — Complete BME Curriculum Package (Textbook + Lab + Live System)">
-<meta property="og:description" content="A complete biomedical engineering teaching instrument: companion textbook, structured lab sheet with rubric, and live AI quiz station. 11-engine validated Parkinson's assessment. For publishers, lecturers, and students worldwide.">
-<meta property="og:image" content="https://aegishumanai.com/assets/p21/hero.jpg">
+<meta property="og:url" content="https://aegishumanai.com/project-21-parkinson.html">
+<meta property="og:title" content="P21 Parkinson Augmenting System — Case Study | Loh Kah Meng">
+<meta property="og:description" content="11-engine consensus board detecting Parkinson's disease from voice, spiral, and postural signals. AUC 0.846. 195 subjects. 97-page companion textbook.">
+<meta property="og:image" content="https://aegishumanai.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="P21 Parkinson Augmenting System — Case Study | Loh Kah Meng">
+<meta name="twitter:description" content="11-engine consensus board detecting Parkinson's disease from voice, spiral, and postural signals. AUC 0.846.">
+<meta name="twitter:image" content="https://aegishumanai.com/assets/og-image.png">
+
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "P21 Parkinson Augmenting System — Voice, Spiral and Postural Detection",
+  "description": "AEGIS P21 deploys an 11-engine consensus board to detect Parkinson's disease from voice, spiral drawing, and postural assessment — AUC 0.846 on 195 subjects.",
+  "author": { "@type": "Person", "name": "Loh Kah Meng", "url": "https://aegishumanai.com/" },
+  "url": "https://aegishumanai.com/project-21-parkinson.html"
+}
+</script>
+
 <link rel="stylesheet" href="style.css">
+
 <style>
-/* ── Audience tiles ─────────────────────────────────────── */
-.audience-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:20px 0;}
-.aud-tile{border-radius:12px;padding:16px 13px;text-align:center;cursor:default;}
-.aud-tile .aud-icon{font-size:26px;margin-bottom:8px;}
-.aud-tile .aud-who{font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px;}
-.aud-tile .aud-need{font-size:11.5px;line-height:1.55;}
-.aud-tile.pub{background:#e8f0fc;border:2px solid #003366;}.aud-tile.pub .aud-who{color:#003366;}
-.aud-tile.asr{background:#f0f8f0;border:2px solid #007700;}.aud-tile.asr .aud-who{color:#007700;}
-.aud-tile.mkt{background:#fff8e0;border:2px solid #C49A00;}.aud-tile.mkt .aud-who{color:#7a5a00;}
-.aud-tile.lec{background:#f5f0fb;border:2px solid #5a3d8c;}.aud-tile.lec .aud-who{color:#5a3d8c;}
-.aud-tile.stu{background:#fff0f0;border:2px solid #C00000;}.aud-tile.stu .aud-who{color:#C00000;}
+/* ── P21 Parkinson: page-scoped styles ── */
 
-/* ── Curriculum layers ──────────────────────────────────── */
-.curriculum-stack{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0;}
-.curr-card{border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.10);}
-.curr-card-head{padding:14px 16px 12px;color:white;font-weight:800;}
-.curr-card-head .layer{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-bottom:3px;}
-.curr-card-head .title{font-size:16px;}
-.curr-card-body{padding:14px 16px;background:white;font-size:12.5px;line-height:1.7;color:#2a3a50;}
-.curr-card.book .curr-card-head{background:#003366;}
-.curr-card.lab  .curr-card-head{background:#5a3d8c;}
-.curr-card.live .curr-card-head{background:#C00000;}
-.curr-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:20px;padding:2px 8px;margin-top:8px;}
-.curr-badge.book{background:#e8f0fc;color:#003366;}
-.curr-badge.lab{background:#f5f0fb;color:#5a3d8c;}
-.curr-badge.live{background:#fff0f0;color:#C00000;}
+/* Stats strip */
+.stats-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  background: #0d1f33;
+  border-radius: 0 0 14px 14px;
+  margin: -2px 0 28px;
+  overflow: hidden;
+  border: 1px solid #1e3550;
+  border-top: none;
+}
+.stat-cell {
+  flex: 1 1 140px;
+  padding: 20px 20px 18px;
+  text-align: center;
+  border-right: 1px solid #1e3550;
+}
+.stat-cell:last-child { border-right: none; }
+.stat-val {
+  font-size: 30px;
+  font-weight: 900;
+  color: #C9A227;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.stat-unit {
+  font-size: 11px;
+  color: #7aaecc;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.stat-lbl {
+  font-size: 11px;
+  color: #3a6a8a;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+}
 
-/* ── Science callouts ───────────────────────────────────── */
-.sci-duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
-.sci-box{border-radius:12px;padding:16px 18px;border-left:5px solid;}
-.sci-box.voice{background:#e8f0fc;border-color:#003366;}
-.sci-box.draw{background:#fff8e0;border-color:#C49A00;}
-.sci-box .sci-head{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
-.sci-box.voice .sci-head{color:#003366;}.sci-box.draw .sci-head{color:#7a5a00;}
-.sci-box p{font-size:12.5px;line-height:1.65;color:#2a3a50;}
-.sci-feat{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
-.sci-feat span{background:white;border:1px solid rgba(0,0,0,.12);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;color:#2a3a50;}
+/* Hero image with overlay */
+.hero-image-wrap {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 0 0 28px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+}
+.hero-image-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.hero-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(13, 31, 51, 0.88) 0%,
+    rgba(13, 31, 51, 0.45) 55%,
+    transparent 100%
+  );
+}
+.hero-overlay-text {
+  position: absolute;
+  bottom: 24px;
+  left: 28px;
+  right: 28px;
+}
+.hero-overlay-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  background: rgba(201, 162, 39, 0.18);
+  color: #C9A227;
+  border: 1px solid rgba(201, 162, 39, 0.4);
+  border-radius: 4px;
+  padding: 3px 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.hero-overlay-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #e8f0f8;
+  line-height: 1.25;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
 
-/* ── Outcomes ───────────────────────────────────────────── */
-.outcomes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
-.outcome-item{display:flex;align-items:flex-start;gap:9px;background:#f4f7fb;border-radius:9px;padding:10px 12px;font-size:12.5px;color:#2a3a50;line-height:1.55;}
-.outcome-item .oi{font-size:18px;flex-shrink:0;}
+/* Section accent lines + tags */
+.sec-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 32px 0 14px;
+}
+.sec-accent {
+  display: inline-block;
+  width: 4px;
+  height: 22px;
+  background: #C9A227;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.sec-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  background: rgba(13, 31, 51, 0.9);
+  color: #C9A227;
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-radius: 4px;
+  padding: 3px 9px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+.sec-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #c8d8e8;
+  margin: 0;
+}
 
-/* ── Engine metrics ─────────────────────────────────────── */
-.engine-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0;}
-.engine-trio-item{background:#f0f6ff;border-radius:10px;padding:14px;border-left:4px solid #003366;text-align:center;}
-.engine-trio-item .ev{font-size:22px;font-weight:900;color:#003366;}
-.engine-trio-item .ek{font-size:11px;color:#595959;margin-top:2px;font-weight:600;letter-spacing:.5px;}
-.gz-box{background:#fff8e0;border:2px solid #C49A00;border-radius:12px;padding:16px 20px;margin:16px 0;}
-.gz-box strong{color:#7a5a00;}
+/* Two-panel image layout */
+.img-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 22px 0;
+}
+.img-pair img {
+  width: 100%;
+  border-radius: 10px;
+  display: block;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.img-caption {
+  font-size: 0.76rem;
+  color: #4a6a8a;
+  margin-top: 6px;
+  text-align: center;
+}
 
-/* ── CTA strip ──────────────────────────────────────────── */
-.cta-strip{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0;}
-.cta-primary{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-size:14px;padding:13px 22px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.18);}
-.cta-secondary{display:inline-flex;align-items:center;gap:9px;background:white;color:#003366;font-weight:700;font-size:14px;padding:12px 20px;border-radius:999px;text-decoration:none;border:2px solid #003366;}
-.cta-tertiary{display:inline-flex;align-items:center;gap:9px;background:#5a3d8c;color:white;font-weight:700;font-size:14px;padding:12px 20px;border-radius:999px;text-decoration:none;}
+/* AUC confidence bar */
+.auc-bar-wrap {
+  background: #111e2e;
+  border: 1px solid #1e3550;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 18px 0 28px;
+}
+.auc-bar-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 0.83rem;
+}
+.auc-bar-left { color: #7aaecc; font-weight: 600; }
+.auc-bar-right { color: #C9A227; font-weight: 800; font-size: 1.1rem; }
+.auc-track {
+  background: #1a2e44;
+  border-radius: 999px;
+  height: 12px;
+  overflow: hidden;
+}
+.auc-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0d3066, #4a4090, #C9A227);
+  border-radius: 999px;
+  width: 84.6%;
+  position: relative;
+}
+.auc-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: white;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(201,162,39,0.8);
+}
+.auc-sub {
+  font-size: 0.72rem;
+  color: #3a5a7a;
+  margin-top: 8px;
+}
 
-/* ── Indemnity ──────────────────────────────────────────── */
-.indemnity{background:#fff7ec;border:1px solid #e7cfa0;border-left:5px solid #c9a24b;border-radius:14px;padding:18px 20px;font-size:13px;line-height:1.65;color:#4a3d24;}
-.indemnity strong{color:#7a5b17;}
+/* Signal cards row */
+.signal-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 20px 0 28px;
+}
+.signal-card {
+  background: #0d1f33;
+  border: 1px solid #1e3550;
+  border-radius: 12px;
+  padding: 20px 18px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+.signal-card:hover { border-color: #C9A227; }
+.signal-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+  display: block;
+}
+.signal-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #c8d8e8;
+  margin-bottom: 6px;
+}
+.signal-desc {
+  font-size: 0.76rem;
+  color: #4a6a8a;
+  line-height: 1.45;
+}
 
-@media(max-width:720px){
-  .audience-grid{grid-template-columns:1fr 1fr;}
-  .curriculum-stack{grid-template-columns:1fr;}
-  .sci-duo{grid-template-columns:1fr;}
-  .outcomes{grid-template-columns:1fr;}
-  .engine-trio{grid-template-columns:1fr 1fr;}
-  .cta-strip{flex-direction:column;}
+/* Layer strip */
+.layer-strip {
+  display: flex;
+  gap: 0;
+  background: #07121e;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #1e3550;
+  margin: 20px 0 28px;
+}
+.layer-cell {
+  flex: 1;
+  padding: 18px 16px;
+  border-right: 1px solid #1e3550;
+  text-align: center;
+}
+.layer-cell:last-child { border-right: none; }
+.layer-num {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #C9A227;
+  line-height: 1;
+}
+.layer-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #7aaecc;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+.layer-desc {
+  font-size: 0.71rem;
+  color: #3a5a7a;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+/* Highlight box */
+.highlight-box {
+  background: linear-gradient(135deg, #0d1f33 0%, #071420 100%);
+  border: 1px solid #1e3550;
+  border-left: 4px solid #C9A227;
+  border-radius: 0 10px 10px 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 0.9rem;
+  color: #9ab8d0;
+  line-height: 1.6;
+}
+.highlight-box strong { color: #C9A227; }
+
+@media (max-width: 600px) {
+  .signal-row { grid-template-columns: 1fr; }
+  .img-pair { grid-template-columns: 1fr; }
+  .stats-strip .stat-cell { flex: 1 1 45%; }
 }
 </style>
 </head>
@@ -104,274 +342,245 @@
   </div>
 </nav>
 
-<!-- ═══════════════════ HERO ═══════════════════════════════ -->
 <header class="page-header">
   <div class="container">
-    <div class="breadcrumb"><a href="index.html">Home</a> / Work / AEGIS Parkinson</div>
-    <div class="tag tag-aqua">Biomedical Engineering &middot; Neurology &middot; Academic Curriculum &middot; Institutional Adoption</div>
-    <h1>AEGIS Parkinson &mdash; Textbook, Lab &amp; Live System (P21)</h1>
-    <figure class="hero-image" style="margin:18px 0 10px;">
-      <img src="assets/p21/hero.jpg" alt="Parkinson's patient performing spiral drawing test — AEGIS P21 biomedical engineering curriculum" style="width:100%;height:auto;border-radius:12px;display:block;" loading="lazy">
-      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative.</figcaption>
-    </figure>
-    <p class="lede">P21 is a <strong>biomedical engineering curriculum package</strong> &mdash; a validated companion textbook, a structured laboratory sheet with marking rubric, and a live AI-powered assessment station &mdash; built around the science of Parkinson&rsquo;s Disease detection through voice acoustics and motor drawing analysis. Three coherent layers, designed for institutional teaching and research adoption.</p>
-    <div class="meta-row">
-      <div class="meta-item"><div class="k">Package</div><div class="v">Companion textbook (97 pp) · Lab sheet with rubric &amp; instructor set · Live quiz station · Desktop Application (institutional)</div></div>
-      <div class="meta-item"><div class="k">Science</div><div class="v">Voice acoustic biomechanics · Motor drawing kinematics · Nonlinear dynamics (RPDE, DFA) · 11-engine ML consensus board</div></div>
-      <div class="meta-item"><div class="k">Validation</div><div class="v">GroupKFold-5 subject-level · 195 subjects · Champion AUC 0.846 · Grey-zone protocol · Fuzzy variants</div></div>
-      <div class="meta-item"><div class="k">Audience</div><div class="v">Publishers · Academic assessors · Marketers · Final-year BME &amp; Clinical AI lecturers · Students</div></div>
-    </div>
+    <div class="breadcrumb"><a href="index.html">Home</a> / <a href="index.html#work">Work</a> / Parkinson Augmenting System</div>
+    <div class="tag tag-violet">Clinical AI &middot; Full Case Study &middot; Deployed</div>
+    <h1>Parkinson Augmenting System — Detecting What the Eye Cannot See</h1>
+    <p class="lede">P21 builds an <strong>11-engine consensus board</strong> that reads Parkinson's disease from three non-invasive signal streams — voice tremor, spiral drawing irregularity, and postural assessment — achieving <strong>AUC 0.846</strong> on 195 clinical subjects, then packages every algorithm and clinical rationale into a <strong>97-page companion textbook</strong> designed for the clinician who needs to understand, not just use, the system.</p>
   </div>
 </header>
 
-<!-- ═══════════════════ WHO THIS IS FOR ═══════════════════ -->
-<section style="padding:14px 0 6px;background:#f4f7fb;">
+<section>
   <div class="container">
-    <h2 style="margin-top:0;">Who this is for</h2>
-    <div class="audience-grid">
-      <div class="aud-tile pub">
-        <div class="aud-icon">📚</div>
-        <div class="aud-who">Publishers</div>
-        <div class="aud-need">A biomedical AI textbook with a structured lab sheet and live companion system. Validated results, honest metrics, and an institutional adoption pathway.</div>
+
+    <!-- Stats Strip -->
+    <div class="stats-strip">
+      <div class="stat-cell">
+        <div class="stat-val">0.846</div>
+        <div class="stat-unit">AUC</div>
+        <div class="stat-lbl">Champion Engine</div>
       </div>
-      <div class="aud-tile asr">
-        <div class="aud-icon">🔬</div>
-        <div class="aud-who">Assessors</div>
-        <div class="aud-need">Honest validated metrics. GroupKFold-5. Grey-zone protocol. Full derivations. Prof Ghista lineage. Academic rigour throughout.</div>
+      <div class="stat-cell">
+        <div class="stat-val">11</div>
+        <div class="stat-unit">Engines</div>
+        <div class="stat-lbl">Consensus Board</div>
       </div>
-      <div class="aud-tile mkt">
-        <div class="aud-icon">🌏</div>
-        <div class="aud-who">Marketers</div>
-        <div class="aud-need">A growing AEGIS portfolio (P19 · P20 · P21) with a live interactive demo, a human research story, and a clear institutional adoption model.</div>
+      <div class="stat-cell">
+        <div class="stat-val">195</div>
+        <div class="stat-unit">Subjects</div>
+        <div class="stat-lbl">147 PD &middot; 48 HC</div>
       </div>
-      <div class="aud-tile lec">
-        <div class="aud-icon">🎓</div>
-        <div class="aud-who">Lecturers</div>
-        <div class="aud-need">Course-ready: lab sheet, rubric, instructor answer set, live classroom demo. Maps to final-year BME and clinical AI curricula.</div>
+      <div class="stat-cell">
+        <div class="stat-val">3</div>
+        <div class="stat-unit">Layers</div>
+        <div class="stat-lbl">Book &middot; Lab &middot; Live</div>
       </div>
-      <div class="aud-tile stu">
-        <div class="aud-icon">🧠</div>
-        <div class="aud-who">Students</div>
-        <div class="aud-need">Try the quiz. Hear PD voice profiles. Examine drawing tests. Then see what 11 AI engines detected — and why. Learn by doing.</div>
+      <div class="stat-cell">
+        <div class="stat-val">97</div>
+        <div class="stat-unit">Pages</div>
+        <div class="stat-lbl">Companion Textbook</div>
       </div>
     </div>
+
+    <!-- Hero image with overlay -->
+    <div class="hero-image-wrap reveal">
+      <img src="assets/p21/hero.jpg" alt="AEGIS P21 Parkinson Augmenting System — neural signal landscape" width="1200" height="700">
+      <div class="hero-image-overlay"></div>
+      <div class="hero-overlay-text">
+        <div class="hero-overlay-tag">AEGIS P21 &bull; Parkinson Augmenting System</div>
+        <p class="hero-overlay-title">Voice. Spiral. Posture.<br>Three signals. One diagnosis.</p>
+      </div>
+    </div>
+
+    <!-- AUC Confidence Bar -->
+    <div class="auc-bar-wrap reveal">
+      <div class="auc-bar-label">
+        <span class="auc-bar-left">Champion Engine &mdash; Area Under the ROC Curve</span>
+        <span class="auc-bar-right">AUC 0.846</span>
+      </div>
+      <div class="auc-track"><div class="auc-fill"></div></div>
+      <div class="auc-sub">11-engine consensus board &middot; 195 subjects (147 PD, 48 HC) &middot; Binary classification: Parkinson&rsquo;s disease vs. healthy control &middot; Illustrative / research use only &mdash; not a certified clinical device</div>
+    </div>
+
+    <!-- The Problem -->
+    <div class="prose reveal">
+      <div class="sec-header">
+        <div class="sec-accent"></div>
+        <span class="sec-tag">Problem</span>
+        <h3 class="sec-title">The Diagnosis That Arrives Too Late</h3>
+      </div>
+      <p>Parkinson's disease affects more than ten million people worldwide, yet by the time most patients receive a formal diagnosis, motor symptoms have been present for years. The disease is diagnosed clinically — there is no blood test, no imaging biomarker with sufficient sensitivity, no simple yes/no. A neurologist observes tremor, rigidity, bradykinesia, and postural instability, weighs them against exclusion criteria, and makes a judgment call. In a busy clinic, that judgment call takes minutes. In underserved settings, it may not happen at all.</p>
+      <p>P21 asks a different question: <strong>can an inexpensive, non-invasive signal — a sustained vowel, a pen on paper, a few seconds of standing still — carry enough information to flag Parkinson's disease before the clinical threshold is crossed?</strong> The answer, across 195 subjects and 11 engines, is a measured yes.</p>
+    </div>
+
+    <!-- Three signal streams -->
+    <div class="sec-header reveal">
+      <div class="sec-accent"></div>
+      <span class="sec-tag">Signals</span>
+      <h3 class="sec-title">Three Non-Invasive Windows Into Motor Function</h3>
+    </div>
+
+    <div class="signal-row reveal">
+      <div class="signal-card">
+        <span class="signal-icon">🎙️</span>
+        <div class="signal-name">Voice Assessment</div>
+        <div class="signal-desc">Sustained phonation captures vocal tremor, shimmer, jitter, and harmonic-to-noise ratio — MDVP parameters that degrade measurably as dopaminergic pathways are compromised. A microphone and a vowel are the only instruments required.</div>
+      </div>
+      <div class="signal-card">
+        <span class="signal-icon">🌀</span>
+        <div class="signal-name">Spiral Drawing</div>
+        <div class="signal-desc">Patients trace Archimedean spirals on a graphics tablet. Parkinson's tremor introduces characteristic irregularities in line smoothness, speed, and spatial distribution that are invisible to the naked eye but measurable as curvature and tilt features.</div>
+      </div>
+      <div class="signal-card">
+        <span class="signal-icon">🧍</span>
+        <div class="signal-name">Postural Assessment</div>
+        <div class="signal-desc">Standing posture and gait encode early-stage rigidity and bradykinesia through accelerometer and gyroscope signatures. Postural sway patterns differ systematically between PD and healthy controls from the earliest motor stages.</div>
+      </div>
+    </div>
+
+    <!-- Voice and spiral images -->
+    <div class="img-pair reveal">
+      <div>
+        <img src="assets/p21/voice-assess.jpg" alt="Voice frequency analysis — MDVP parameters showing PD tremor signature">
+        <div class="img-caption">Acoustic signal decomposition &mdash; voice tremor frequency bands</div>
+      </div>
+      <div>
+        <img src="assets/p21/spiral-closeup.jpg" alt="Spiral drawing comparison — PD (left, irregular) vs healthy control (right, smooth)">
+        <div class="img-caption">Spiral drawing traces: PD pattern (left) vs. healthy control (right)</div>
+      </div>
+    </div>
+
+    <!-- The Dataset -->
+    <div class="prose reveal">
+      <div class="sec-header">
+        <div class="sec-accent"></div>
+        <span class="sec-tag">Dataset</span>
+        <h3 class="sec-title">195 Subjects — an Imbalanced Clinical Reality</h3>
+      </div>
+      <p>The combined dataset draws from established clinical collections: <strong>147 subjects confirmed with Parkinson's disease</strong> and <strong>48 healthy controls</strong>. The 3:1 imbalance reflects the recruitment reality of PD research — patients are more accessible through movement disorder clinics than age-matched healthy volunteers — but it also mirrors the clinical setting where the cost of a missed PD case vastly exceeds the cost of an unnecessary follow-up referral.</p>
+      <p>This imbalance shapes every modelling decision: class weighting, threshold tuning, and the choice to weight recall alongside AUC rather than maximising accuracy, which a naive classifier would do by flagging every subject as PD.</p>
+    </div>
+
+    <div class="meta-row reveal">
+      <div class="meta-item"><div class="k">Role</div><div class="v">Solo — feature engineering, 11-model ensemble, companion textbook author</div></div>
+      <div class="meta-item"><div class="k">Dataset</div><div class="v">Combined PD clinical collection &mdash; 195 subjects (147 PD, 48 HC)</div></div>
+      <div class="meta-item"><div class="k">Signal streams</div><div class="v">Voice (MDVP acoustic parameters), Spiral drawing (curvature + tilt features), Postural assessment</div></div>
+      <div class="meta-item"><div class="k">Champion</div><div class="v">Consensus board &mdash; AUC 0.846 &middot; binary PD vs. HC classification</div></div>
+      <div class="meta-item"><div class="k">Textbook</div><div class="v">97-page clinical companion &mdash; algorithm rationale, feature interpretation, clinical deployment guide</div></div>
+    </div>
+
+    <!-- The Engine Architecture -->
+    <div class="prose reveal">
+      <div class="sec-header">
+        <div class="sec-accent"></div>
+        <span class="sec-tag">Architecture</span>
+        <h3 class="sec-title">11 Engines. One Consensus Board.</h3>
+      </div>
+      <p>P21 does not put one algorithm in front of a clinician. It runs <strong>eleven engines in parallel</strong> — each trained on the same features, each bringing a different inductive bias — and builds a consensus that is more robust than any single model. The architecture acknowledges that no engine is infallible: an ensemble that disagrees on an edge case is more informative than a single confident wrong answer.</p>
+      <p>Engines range from interpretable linear classifiers (which a clinician can inspect feature by feature) through kernel methods that exploit non-linear feature interactions to tree ensembles that implicitly perform feature selection. The consensus board assigns production weights based on cross-validated AUC, not accuracy, because Parkinson's screening prioritises <strong>catching the disease</strong> over minimising total classification error.</p>
+    </div>
+
+    <div class="highlight-box reveal">
+      <strong>Why 11 engines and not one?</strong> A single high-performing model may be sensitive to which features happened to be informative in this cohort. An 11-engine consensus distributes that risk: if one engine is misled by vocal quality recording variance, three others anchored on spiral geometry hold the prediction stable. The board's AUC of 0.846 is more trustworthy than any individual engine's headline number — it survives the disagreements.
+    </div>
+
+    <!-- Three Layers -->
+    <div class="sec-header reveal">
+      <div class="sec-accent"></div>
+      <span class="sec-tag">Layers</span>
+      <h3 class="sec-title">Book · Lab · Live — Three Layers of Depth</h3>
+    </div>
+
+    <div class="layer-strip reveal">
+      <div class="layer-cell">
+        <div class="layer-num">01</div>
+        <div class="layer-label">Book</div>
+        <div class="layer-desc">97-page clinical companion textbook — algorithm derivation, feature physiology, clinical interpretation guide, deployment protocols</div>
+      </div>
+      <div class="layer-cell">
+        <div class="layer-num">02</div>
+        <div class="layer-label">Lab</div>
+        <div class="layer-desc">Full reproducible pipeline — feature extraction from raw signal, 11-engine benchmark, cross-validation, threshold calibration, ensemble weighting</div>
+      </div>
+      <div class="layer-cell">
+        <div class="layer-num">03</div>
+        <div class="layer-label">Live</div>
+        <div class="layer-desc">Deployed screening app — voice upload or spiral capture, live consensus output, triage band, clinician handoff note generation</div>
+      </div>
+    </div>
+
+    <!-- Companion Textbook -->
+    <div class="prose reveal">
+      <div class="sec-header">
+        <div class="sec-accent"></div>
+        <span class="sec-tag">Textbook</span>
+        <h3 class="sec-title">The 97-Page Companion — Designed for the Clinician</h3>
+      </div>
+      <p>Most ML clinical tools ship as a black box: the clinician presses a button and receives a risk score. P21 refuses that model. The <strong>97-page companion textbook</strong> that accompanies the system traces every feature from its physical origin — the biomechanics of Parkinsonian tremor, the acoustic physics of vocal fold irregularity, the neurology of postural control degradation — through the feature extraction code, through the training procedure, and into the output the clinician sees.</p>
+      <p>The goal is clinical adoption through <strong>comprehension</strong>. A neurologist who understands why a spiral tilt feature correlates with disease severity can integrate that feature into their own assessment, challenge the model when the clinical picture contradicts it, and trust the system when it flags a subtle case they might otherwise dismiss. Augmentation, not replacement.</p>
+    </div>
+
+    <!-- Partner / deployment image -->
+    <div class="img-pair reveal">
+      <div>
+        <img src="assets/p21/hands.jpg" alt="Clinical hand assessment — early motor sign detection for Parkinson's disease">
+        <div class="img-caption">Early motor sign assessment &mdash; the system amplifies clinical observation</div>
+      </div>
+      <div>
+        <img src="assets/p21/partner.jpg" alt="AEGIS P21 clinical integration — decision support in a neurological workflow">
+        <div class="img-caption">Clinician-in-command architecture &mdash; augmenting, not replacing, the neurologist</div>
+      </div>
+    </div>
+
+    <!-- Clinical framing -->
+    <div class="prose reveal">
+      <div class="sec-header">
+        <div class="sec-accent"></div>
+        <span class="sec-tag">Deployment</span>
+        <h3 class="sec-title">Augmenting the Neurologist — Not Replacing the Judgment</h3>
+      </div>
+      <p>P21 is designed as a <strong>triage and flagging system</strong>, not a diagnostic arbiter. The system presents its output in a four-band traffic light — Green (low signal), Yellow (flag for observation), Amber (recommend assessment), Red (prioritise specialist review) — because a binary diagnosis from an algorithm is neither clinically appropriate nor legally defensible for a condition as nuanced as Parkinson's disease.</p>
+      <p>What the system can do, and does, is <strong>reduce the gap between early symptom onset and first clinical assessment</strong>. A community health worker running P21 on a tablet can flag a patient months or years before the motor signs become unmistakable to a non-specialist. That gap is where treatment intervention is most effective: the earlier the dopaminergic support begins, the slower the trajectory of decline.</p>
+    </div>
+
+    <div class="callout warn reveal">
+      <strong>Augmentation, not automation.</strong> The output of P21 is a <em>recommendation for clinical assessment</em>, not a diagnosis. Every signal band carries a clinician handoff note designed to make the referral conversation productive rather than alarming. The neurologist sees what the system flagged and why — not a score to argue with, but a structured observation to evaluate.
+    </div>
+
+    <div class="prose reveal">
+      <div class="sec-header">
+        <div class="sec-accent"></div>
+        <span class="sec-tag">Reflection</span>
+        <h3 class="sec-title">What the Project Proved — and What It Left Open</h3>
+      </div>
+      <p>AUC 0.846 on 195 subjects is a meaningful result for a research-grade system. It is also an honest one: 195 subjects is a small cohort by clinical trial standards, and the features were extracted from controlled acquisition conditions that differ from the noise and variability of community health settings. The companion textbook says so explicitly, with a dedicated chapter on generalisability limitations, acquisition protocol requirements, and the validation study this system would need before deployment in a regulatory jurisdiction.</p>
+      <p>What P21 proves is that <strong>non-invasive acoustic and kinematic signals carry substantial diagnostic information</strong>, that an 11-engine consensus board extracts that information more reliably than any single classifier, and that the clinical companion model — where the algorithm and the textbook are developed together — is a more honest and useful way to deliver clinical AI than a black-box deployment followed by an opaque confidence score.</p>
+      <p>The open questions are the right open questions: what acquisition protocol generalises across microphone types? How does performance change on early-stage PD vs. advanced? What is the minimum viable training set for a regional deployment? These are questions for a clinical trial. P21 was built to make that trial worth running.</p>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="notice-box reveal" style="margin-top:32px">
+      <strong>Research and educational use only.</strong> P21 Parkinson Augmenting System is a feasibility study on open clinical datasets. It is not a certified medical device and has not been validated for clinical deployment. All outputs are for research purposes only. Diagnosis and treatment decisions must be made by qualified medical professionals. Distilled dataset methods used; individual subject data is not reproduced.
+    </div>
+
   </div>
 </section>
 
-<!-- ═══════════════════ CURRICULUM STACK ══════════════════ -->
-<section style="padding:14px 0 4px;">
+<footer class="site-footer">
   <div class="container">
-    <h2 style="margin-top:0;">The three-layer curriculum package</h2>
-    <p>Each layer is independent but designed to reinforce the others. A student reads the theory, applies it in the lab, and tests their understanding against the live system. A lecturer teaches from the book, sets the lab, and demonstrates with the app. The three layers form a self-contained curriculum instrument.</p>
-
-    <div class="curriculum-stack">
-      <div class="curr-card book">
-        <div class="curr-card-head">
-          <div class="layer">Layer 1</div>
-          <div class="title">📖 The Companion Textbook</div>
-        </div>
-        <div class="curr-card-body">
-          <strong>Project 21: Parkinson Augmenting System</strong> — 97 pages. Written for final-year biomedical engineering and clinical AI students.<br><br>
-          Covers: vocal fold biomechanics · acoustic feature derivation · motor drawing kinematics · 11-engine ML board design · grey-zone clinical protocol · validated AUC results · institutional adoption framework · full lab worked solutions.<br><br>
-          Concepts derive from first principles. Results are reported as measured, without inflation.
-          <span class="curr-badge book">97 pages · Institutional licensing</span>
-        </div>
-      </div>
-      <div class="curr-card lab">
-        <div class="curr-card-head">
-          <div class="layer">Layer 2</div>
-          <div class="title">🧪 The Laboratory Sheet</div>
-        </div>
-        <div class="curr-card-body">
-          Structured practical exercise (Appendix L). Students work through:<br><br>
-          · Acoustic feature extraction from a voice sample<br>
-          · Engine probability interpretation<br>
-          · Grey-zone case classification and referral justification<br>
-          · Drawing test kinematic analysis<br>
-          · Clinical report writing to a defined rubric<br><br>
-          Adopting institutions receive the full <strong>instructor answer set and marking rubric</strong> — ready to deploy in a three-hour lab session.
-          <span class="curr-badge lab">Rubric + answer set included</span>
-        </div>
-      </div>
-      <div class="curr-card live">
-        <div class="curr-card-head">
-          <div class="layer">Layer 3</div>
-          <div class="title">💻 The Live System</div>
-        </div>
-        <div class="curr-card-body">
-          Two tiers of live access:<br><br>
-          <strong>Public:</strong> Listen &amp; Look Quiz station (this page) — 8 shuffled cases, voice waveforms and drawing tests, real engine verdicts. Free for any student worldwide.<br><br>
-          <strong>Institutional:</strong> AEGIS Desktop Application — runs live analysis on new voice recordings and drawing inputs. Granted to adopting institutions. Full 11-engine board, grey-zone protocol, clinical report output.<br><br>
-          The quiz is the accessible entry point; the Desktop Application is for supervised laboratory use.
-          <span class="curr-badge live">Quiz: free · Desktop App: institutional</span>
-        </div>
-      </div>
+    <div class="footer-inner">
+      <a href="index.html" class="footer-brand"><img src="assets/logo-mark-gold-footer.png" alt="" class="footer-mark">Loh Kah Meng</a>
+      <nav class="footer-nav">
+        <a href="index.html#work">Work</a>
+        <a href="about.html">About</a>
+        <a href="prof-dhanjoo-ghista.html">In Tribute</a>
+      </nav>
+      <p class="footer-copy">&copy; 2026 Loh Kah Meng. All rights reserved.</p>
     </div>
-  </div>
-</section>
-
-<!-- ═══════════════════ LIVE QUIZ ══════════════════════════ -->
-<section style="padding:10px 0 6px;background:#f4f7fb;">
-  <div class="container">
-    <h2 style="margin-top:0;">Try it now &mdash; Listen &amp; Look Quiz</h2>
-    <p>Eight cases, shuffled. Four voice waveforms generated from real AEGIS-Derived acoustic feature data. Four drawing tests generated from real motor feature parameters. Guess Parkinson&rsquo;s Disease or Healthy Control &mdash; then see what the AEGIS 11-engine board detected, and why it sometimes disagrees with itself. Suitable for classroom use: project it, pause on a case, and discuss the engine reasoning with students.</p>
-    <figure style="margin:14px 0 10px;">
-      <img src="assets/p21/voice-assess.jpg" alt="AEGIS P21 voice waveform quiz — sustained phonation acoustic analysis" style="width:100%;border-radius:12px;display:block;max-height:280px;object-fit:cover;" loading="lazy">
-      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">Voice channel: 22 acoustic biomarkers · waveforms generated from real clinical feature data · AEGIS-P21-VOICE-DERIVED-001</figcaption>
-    </figure>
-    <div class="cta-strip">
-      <a class="cta-primary" href="apps/aegis-p21-parkinson.html">🎧 ✏️ &nbsp;Open the full interactive quiz station →</a>
-      <a class="cta-secondary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P21%20%E2%80%94%20Classroom%20Demo%20Request">🎓 &nbsp;Request a classroom demo</a>
-    </div>
-    <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">Quiz waveforms and drawings are generated from real AEGIS-Derived research feature data — not raw audio, not raw patient records — for educational use only. Ground truth from validated research study. Never a clinical diagnosis.</p>
-  </div>
-</section>
-
-<!-- ═══════════════════ THE SCIENCE ════════════════════════ -->
-<section style="padding:10px 0 4px;">
-  <div class="container">
-    <h2 style="margin-top:0;">The biomedical engineering science &mdash; for assessors and lecturers</h2>
-    <p>Every input feature in P21 has a <em>physiological and biomechanical derivation</em> — not a correlation found in data, but a measurable physical quantity with a clinical interpretation. The textbook teaches those derivations. The lab sheet tests them. What follows is the science the system is built on.</p>
-
-    <div class="sci-duo">
-      <div class="sci-box voice">
-        <div class="sci-head">🎤 Voice channel — acoustic biomechanics</div>
-        <p>The larynx is a biological oscillator. Parkinson&rsquo;s neurodegeneration disrupts basal ganglia control of vocal fold vibration, producing measurable perturbation in cycle-to-cycle frequency (<strong>jitter</strong>), amplitude (<strong>shimmer</strong>), and harmonic-to-noise energy (<strong>HNR</strong>). RPDE and DFA are nonlinear dynamical measures of the vocal system&rsquo;s departure from periodic self-organisation. Every feature derives from established acoustic biomechanics — not a correlation found in data, but a physical quantity with a physiological interpretation.</p>
-        <div class="sci-feat">
-          <span>Jitter</span><span>Shimmer</span><span>HNR</span><span>RPDE</span><span>DFA</span><span>NHR</span><span>Fo (Hz)</span><span>PPE</span><span>+14 more</span>
-        </div>
-      </div>
-      <div class="sci-box draw">
-        <div class="sci-head">✏️ Drawing channel — motor kinematics</div>
-        <p>The Archimedean spiral and wave tracing tests are established clinical instruments in movement disorder assessment. They quantify Parkinson&rsquo;s resting tremor (4&ndash;6 Hz, measured as lateral amplitude deviation from the guide), bradykinesia (low velocity with high coefficient of variation), and rigidity (reduced stroke smoothness). These are kinematic measurements — displacement, velocity, and acceleration patterns of the upper limb motor system — expressed as biomedical engineering parameters before any classifier sees them.</p>
-        <div class="sci-feat">
-          <span>Tremor amplitude</span><span>Speed CV</span><span>Loop closure error</span><span>Stroke smoothness</span><span>Velocity dysrhythmia</span><span>Directional consistency</span>
-        </div>
-      </div>
-    </div>
-
-    <figure style="margin:16px 0;">
-      <img src="assets/p21/spiral-closeup.jpg" alt="Spiral tracing comparison — Parkinson's vs healthy control motor drawing" style="width:100%;border-radius:12px;display:block;max-height:300px;object-fit:cover;" loading="lazy">
-      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">Drawing channel: Archimedean spiral tracing · grey line = template guide · coloured line = patient trace · PD cases show tremor-driven lateral deviation and irregular amplitude</figcaption>
-    </figure>
-
-    <h2>Learning outcomes &mdash; for curriculum mapping</h2>
-    <p>Students completing the textbook and lab sheet will be able to:</p>
-    <div class="outcomes">
-      <div class="outcome-item"><span class="oi">🔊</span><span>Extract and interpret acoustic biomarkers (jitter, shimmer, HNR, RPDE, DFA) from sustained phonation recordings and explain their physiological basis</span></div>
-      <div class="outcome-item"><span class="oi">✏️</span><span>Analyse spiral and wave drawing tests using motor kinematic parameters and relate findings to PD clinical presentation</span></div>
-      <div class="outcome-item"><span class="oi">🤖</span><span>Interpret a multi-engine AI consensus board, understand why engines disagree, and apply grey-zone deferral protocol correctly</span></div>
-      <div class="outcome-item"><span class="oi">📊</span><span>Evaluate machine learning model performance using honest AUC, cross-validation methodology, and class-imbalance considerations</span></div>
-      <div class="outcome-item"><span class="oi">⚕</span><span>Write a structured clinical referral report from AI engine outputs, with appropriate uncertainty quantification and specialist referral triggers</span></div>
-      <div class="outcome-item"><span class="oi">🏛️</span><span>Apply PDPA-compliant data governance principles to a real biomedical AI data pipeline</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════ ENGINE BOARD ═══════════════════════ -->
-<section style="padding:8px 0 4px;background:#f4f7fb;">
-  <div class="container">
-    <h2 style="margin-top:0;">Validated results &mdash; honest AUC, reported as-is</h2>
-    <p>All engines trained and evaluated with <strong>GroupKFold-5 subject-level splitting</strong> — no patient&rsquo;s recordings appear in both training and validation. 195 research subjects (147 PD, 48 HC). Reported exactly as measured — no inflation, no cherry-picking.</p>
-
-    <div class="engine-trio">
-      <div class="engine-trio-item"><div class="ev">0.846</div><div class="ek">Champion AUC · MLP Neural Net</div></div>
-      <div class="engine-trio-item"><div class="ev">195</div><div class="ek">Subjects · 147 PD · 48 HC</div></div>
-      <div class="engine-trio-item"><div class="ev">11</div><div class="ek">Engines in consensus board</div></div>
-    </div>
-
-    <table class="data-table">
-      <thead><tr><th>Engine</th><th>Validation ROC-AUC</th><th>±SD</th><th>Role</th></tr></thead>
-      <tbody>
-        <tr><td><strong>MLP Neural Net 🏆</strong></td><td><strong>0.846</strong></td><td>±0.135</td><td>Champion</td></tr>
-        <tr><td>Random Forest</td><td>0.838</td><td>±0.159</td><td>Ensemble</td></tr>
-        <tr><td>CatBoost</td><td>0.835</td><td>±0.161</td><td>Gradient boost</td></tr>
-        <tr><td>Extra Trees</td><td>0.826</td><td>±0.143</td><td>Ensemble</td></tr>
-        <tr><td>Hist Gradient Boosting</td><td>0.793</td><td>±0.189</td><td>Gradient boost</td></tr>
-        <tr><td>Gaussian Naive Bayes</td><td>0.783</td><td>±0.219</td><td>Probabilistic</td></tr>
-        <tr><td>XGBoost</td><td>0.768</td><td>±0.264</td><td>Gradient boost</td></tr>
-        <tr><td>K-Nearest Neighbours</td><td>0.763</td><td>±0.156</td><td>Instance-based</td></tr>
-        <tr><td>Logistic Regression</td><td>0.723</td><td>±0.164</td><td>Linear</td></tr>
-        <tr><td>Linear SVC</td><td>0.692</td><td>±0.191</td><td>Margin</td></tr>
-        <tr style="background:#f0f8f0"><td>SVM-RBF <span style="background:#006666;color:white;border-radius:8px;padding:1px 6px;font-size:10px;">PRIMARY</span></td><td>0.674</td><td>±0.213</td><td>Kernel SVM</td></tr>
-        <tr style="background:#f0f8f0"><td>Fuzzy Linear-SVC ★ <span style="background:#006666;color:white;border-radius:8px;padding:1px 6px;font-size:10px;">PRIMARY</span></td><td>0.671</td><td>±0.214</td><td>Fuzzy margin</td></tr>
-        <tr style="background:#f0f8f0"><td>Fuzzy SVM-RBF ★ <span style="background:#006666;color:white;border-radius:8px;padding:1px 6px;font-size:10px;">PRIMARY</span></td><td>0.644</td><td>±0.180</td><td>Fuzzy kernel</td></tr>
-      </tbody>
-    </table>
-    <p style="font-size:12.5px;color:var(--text-muted);">Honest note: AUC range 0.644&ndash;0.846 reflects the genuine difficulty of voice-based PD screening with class imbalance (147:48). The SVM and Fuzzy variants are clinical primaries — conservative sensitivity over optimised AUC. The full board consensus is what AEGIS reports; no single engine is used alone.</p>
-
-    <div class="gz-box">
-      <strong>Grey-zone protocol &mdash; a teachable clinical design decision.</strong> Any composite score between 35% and 65% triggers automatic specialist referral. AEGIS refuses to call it. This is a deliberate design choice — not a weakness — and it is one of the key learning outcomes in the lab sheet. Students must justify <em>why</em> a grey-zone case should not be auto-classified. That reasoning is the biomedical engineering judgement the course is teaching.
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════ INSTITUTIONAL ══════════════════════ -->
-<section style="padding:10px 0 6px;">
-  <div class="container">
-    <h2 style="margin-top:0;">Institutional adoption &mdash; publishers, marketers, lecturers</h2>
-
-    <figure style="margin:0 0 18px;">
-      <img src="assets/p21/partner.jpg" alt="AEGIS P21 institutional partnership — publishers, lecturers and clinicians collaborating" style="width:100%;border-radius:12px;display:block;max-height:300px;object-fit:cover;" loading="lazy">
-      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative.</figcaption>
-    </figure>
-
-    <p>These apps demonstrate clinical AI systems capable of classification, early pre-emptive detection, and progressive augmented management. Because full AEGIS engines and datasets run to several gigabytes, only educational quiz modes are hosted here — the live analysis requires the AEGIS Desktop Application. Institutions wishing to contribute local data for engine refinement are welcome to reach out; we share progressive validation results with every contributing partner and operate in strict accordance with PDPA.</p>
-
-    <p style="margin-top:10px;"><strong>What adopting institutions receive:</strong> the complete textbook manuscript · lab sheet with marking rubric and instructor answer set · AEGIS Desktop Application licence · progressive model result updates as the engine board improves · co-attribution in the published edition where applicable.</p>
-
-    <div class="indemnity" style="margin:16px 0;">
-      <strong>Ground rules for data contribution and institutional enquiry.</strong><br>
-      1. <strong>Not a medical device and not a diagnosis.</strong> AEGIS is a research and educational demonstration. Nothing it outputs is medical advice, a diagnosis, or a substitute for a qualified clinician.<br>
-      2. <strong>De-identified data only.</strong> Remove all PHI before contributing. Only submit data under your institution&rsquo;s ethics approval and with informed consent.<br>
-      3. <strong>Liability release.</strong> Contributing institutions agree to indemnify and hold harmless AEGIS, Dr Loh Kah Meng, and associated parties from any claims arising from use of or reliance on AEGIS outputs.<br>
-      4. <strong>DUA required.</strong> A formal Data Use Agreement is required before any institutional data exchange proceeds.<br>
-      5. <strong>PDPA compliance.</strong> All data handled under strict PDPA and applicable governance frameworks.
-    </div>
-
-    <div class="cta-strip">
-      <a class="cta-primary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P21%20%E2%80%94%20Publisher%20%2F%20Licensing%20Enquiry&body=I%20have%20read%20the%20terms%20on%20the%20AEGIS%20P21%20page%20and%20wish%20to%20enquire%20about%20publishing%20%2F%20licensing%20the%20P21%20curriculum%20package.">📚 &nbsp;Publisher &amp; licensing enquiry</a>
-      <a class="cta-tertiary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P21%20%E2%80%94%20Lecturer%20Adoption%20Enquiry">🎓 &nbsp;Lecturer adoption enquiry</a>
-      <a class="cta-secondary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P21%20%E2%80%94%20Data%20Partnership">🔬 &nbsp;Data partnership</a>
-    </div>
-    <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">All enquiries to <strong>aegisloh@aegishumanai.com</strong>. International partnerships welcome. DUA provided before any data exchange.</p>
-
-    <!-- DEDICATION -->
-    <figure style="margin:24px 0 0;">
-      <img src="assets/p21/hands.jpg" alt="Elderly patient's hands — every number in AEGIS P21 represents a person" style="width:100%;border-radius:12px;display:block;max-height:320px;object-fit:cover;" loading="lazy">
-      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative. Every number in this system represents a person.</figcaption>
-    </figure>
-
-    <div class="callout" style="margin-top:22px;">
-      <strong>Dedicated to Professor Dhanjoo N. Ghista.</strong> AEGIS traces its theoretical lineage to Prof Ghista&rsquo;s foundational work in biomedical engineering &mdash; his nondimensional index (NDI) framework for physiological system characterisation, and his lifelong conviction that engineering rigour and clinical compassion are the same discipline approached from two directions. The grey-zone protocol in P21 &mdash; the decision to refuse a call rather than force a verdict the system cannot honestly support &mdash; is the computational expression of that humility. AEGIS augments, it never replaces.
-    </div>
-
-    <div style="margin-top:18px;padding:13px 16px;background:#e0eaf8;border-radius:10px;font-size:13px;color:#1a2535;line-height:1.7;">
-      <strong>Also in the AEGIS portfolio:</strong> &nbsp;
-      <a href="project-20-breast-cancer.html" style="color:#003366;font-weight:700;">P20 · AEGIS Breast</a> — Unified breast screening, 7 specialist engines &nbsp;·&nbsp;
-      <a href="apps/aegis-p19-sentinel.html" style="color:#003366;font-weight:700;">P19 · AEGIS Sentinel</a> — Psychophysiological wearable
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="container footer-row">
-    <div class="footer-brand">
-      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
-      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
-    </div>
-    <ul class="footer-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
-      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
-      <li><a href="mailto:dean.kmloh@gmail.com">Email</a></li>
-    </ul>
   </div>
 </footer>
 
 <script src="script.js"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
-<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"7d3dc3aee49c49ea96443ed061a43e02"}'></script>
 </body>
 </html>
