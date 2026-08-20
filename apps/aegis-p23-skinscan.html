@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS P23 SkinScan — Demo Console · aegishumanai.com</title>
+<meta name="description" content="AEGIS P23 SkinScan live demo: 7 HAM10000 dermoscopy cases with confidence zone triage, melanoma flag, and per-class probability bars. Educational research demo. Not a clinical device.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+  background: #0f1720;
+  color: #e2e8f0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+header {
+  background: #16212e;
+  border-bottom: 1px solid #253447;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 16px;
+}
+.brand      { font-size: 1.05rem; font-weight: 700; color: #c9a24b; letter-spacing: .04em; }
+.brand-sub  { font-size: 0.72rem; color: #4a6070; margin-top: 2px; }
+.hdr-links  { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.hdr-links a {
+  font-size: 0.8rem; color: #4a6070; text-decoration: none;
+  padding: 4px 10px; border-radius: 4px; border: 1px solid transparent; transition: all .15s;
+}
+.hdr-links a:hover { color: #94a3b8; border-color: #253447; }
+.hdr-links a.site-link { color: #c9a24b; border-color: #c9a24b44; }
+.hdr-links a.site-link:hover { color: #f4d47a; border-color: #c9a24b88; }
+
+/* ── Layout ─────────────────────────────────────────────── */
+.layout { display: flex; flex: 1; overflow: hidden; }
+
+/* ── Sidebar ────────────────────────────────────────────── */
+.sidebar {
+  width: 236px;
+  flex-shrink: 0;
+  background: #0d1820;
+  border-right: 1px solid #1e2f3f;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.sb-heading {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: #3a5060;
+  padding: 16px 16px 8px;
+}
+.case-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 9px 16px;
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  text-align: left;
+  font-size: 0.84rem;
+  color: #7a95a8;
+  cursor: pointer;
+  transition: all .14s;
+  line-height: 1.2;
+}
+.case-btn:hover           { background: #141f2a; color: #c8d8e4; }
+.case-btn.sel             { background: #141f2a; color: #e2e8f0; }
+.dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.g  .dot { background: #16a34a; }  .g.sel  { border-left-color: #16a34a; }
+.y  .dot { background: #ca8a04; }  .y.sel  { border-left-color: #ca8a04; }
+.am .dot { background: #ea580c; }  .am.sel { border-left-color: #ea580c; }
+.r  .dot { background: #dc2626; }  .r.sel  { border-left-color: #dc2626; }
+
+.sb-divider { border: none; border-top: 1px solid #1a2a38; margin: 10px 0; }
+
+/* ── Sidebar info box ────────────────────────────────────── */
+.sb-info { padding: 0 12px 16px; }
+.sb-info-box {
+  background: #111c27;
+  border: 1px solid #1e2f3f;
+  border-radius: 7px;
+  padding: 12px;
+  font-size: 0.75rem;
+  color: #4a6070;
+  line-height: 1.6;
+}
+.sb-info-box strong { color: #7a95a8; display: block; margin-bottom: 5px; font-size: 0.7rem; letter-spacing: .08em; text-transform: uppercase; }
+
+/* ── Main panel ─────────────────────────────────────────── */
+.panel {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 34px;
+}
+
+/* ── Welcome ─────────────────────────────────────────────── */
+.welcome { text-align: center; padding: 60px 20px; }
+.welcome h2 { font-size: 1.1rem; color: #5a9fd4; margin-bottom: 12px; }
+.welcome p  { font-size: 0.86rem; color: #4a6070; line-height: 1.8; }
+.welcome .zone-legend { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+.zl-chip { font-size: 0.74rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; }
+.zl-g  { background: #0d2918; color: #4ade80; border: 1px solid #16a34a; }
+.zl-y  { background: #1f1000; color: #fbbf24; border: 1px solid #ca8a04; }
+.zl-am { background: #1f0a00; color: #fb923c; border: 1px solid #ea580c; }
+.zl-r  { background: #1f0000; color: #f87171; border: 1px solid #dc2626; }
+
+/* ── Demo result layout ──────────────────────────────────── */
+.result-top { display: flex; gap: 22px; align-items: flex-start; margin-bottom: 20px; }
+.img-wrap { flex-shrink: 0; }
+.case-img {
+  width: 170px; height: 170px; object-fit: cover;
+  border-radius: 9px; border: 1px solid #1e2f3f; display: block; background: #111c27;
+}
+.img-placeholder {
+  width: 170px; height: 170px; border-radius: 9px;
+  border: 2px dashed #1e2f3f; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  font-size: 0.72rem; color: #2e4555; text-align: center; padding: 12px; gap: 6px;
+}
+.img-placeholder span { font-size: 1.6rem; }
+.case-meta h1 { font-size: 1.22rem; color: #c9a24b; margin-bottom: 5px; }
+.tag-badge {
+  display: inline-block; padding: 3px 10px; border-radius: 12px;
+  font-size: 0.71rem; font-weight: 700; letter-spacing: .04em; margin-bottom: 10px;
+}
+.tag-g  { background: #14532d; color: #86efac; }
+.tag-y  { background: #422006; color: #fcd34d; }
+.tag-am { background: #7c2d12; color: #fdba74; }
+.tag-r  { background: #450a0a; color: #fca5a5; }
+.case-commentary { font-size: 0.82rem; color: #4a6070; line-height: 1.65; max-width: 420px; }
+
+/* Zone banner */
+.zone-banner {
+  border-radius: 9px; padding: 15px 20px;
+  margin-bottom: 16px; text-align: center;
+}
+.zone-label { font-size: 1.2rem; font-weight: 700; letter-spacing: .02em; }
+.bg-g  { background: #0d2918; border: 2px solid #16a34a; }  .lbl-g  { color: #16a34a; }
+.bg-y  { background: #1f1000; border: 2px solid #ca8a04; }  .lbl-y  { color: #ca8a04; }
+.bg-am { background: #1f0a00; border: 2px solid #ea580c; }  .lbl-am { color: #ea580c; }
+.bg-r  { background: #1f0000; border: 2px solid #dc2626; }  .lbl-r  { color: #dc2626; }
+
+.sec { font-size: 0.7rem; font-weight: 700; color: #c9a24b; margin: 18px 0 9px; text-transform: uppercase; letter-spacing: .1em; }
+
+.info-row { display: flex; padding: 7px 0; border-bottom: 1px solid #141f2a; font-size: 0.86rem; }
+.info-lbl { color: #3a5060; width: 40%; }
+
+.mel-warn {
+  background: #250000; border: 1px solid #dc2626;
+  border-radius: 6px; padding: 9px 13px;
+  font-size: 0.84rem; color: #fca5a5; margin: 11px 0;
+  display: flex; align-items: flex-start; gap: 8px;
+}
+
+.bar-row { display: flex; align-items: center; gap: 9px; margin-bottom: 6px; }
+.bar-lbl { width: 182px; flex-shrink: 0; font-size: 0.79rem; color: #7a95a8; }
+.bar-track { flex: 1; background: #141f2a; border-radius: 20px; height: 11px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 20px; transition: width .5s ease; }
+.bf-default { background: linear-gradient(90deg, #2563eb, #5a9fd4); }
+.bf-mel     { background: linear-gradient(90deg, #991b1b, #ef4444); }
+.bf-top     { background: linear-gradient(90deg, #1e6a3a, #16a34a); }
+.bar-pct { width: 42px; text-align: right; font-size: 0.77rem; color: #3a5060; }
+
+.notice {
+  background: #0d1820; border: 1px solid #1e2f3f;
+  border-radius: 7px; padding: 10px 14px;
+  font-size: 0.77rem; color: #3a5060; margin-top: 18px; line-height: 1.6;
+}
+.notice a { color: #5a9fd4; }
+
+footer {
+  text-align: center; font-size: 0.7rem; color: #1e2f3f;
+  padding: 12px; border-top: 1px solid #141f2a; flex-shrink: 0;
+}
+footer a { color: #3a5060; text-decoration: none; }
+footer a:hover { color: #5a9fd4; }
+
+@media(max-width:680px){
+  .layout { flex-direction: column; }
+  .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #1e2f3f; }
+  .panel { padding: 18px 16px; }
+  .result-top { flex-direction: column; }
+  header { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="brand">AEGIS P23 SkinScan</div>
+    <div class="brand-sub">Skin Disease Augmenting System &mdash; HAM10000 / ISIC 2018 Task 3 &mdash; Demo Console</div>
+  </div>
+  <div class="hdr-links">
+    <a href="../project-23-skin-disease.html">About P23</a>
+    <a href="../index.html" class="site-link">&#8592; aegishumanai.com</a>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- ── Sidebar ─────────────────────────────────────────── -->
+  <nav class="sidebar">
+    <div class="sb-heading">7 Demo Cases</div>
+
+    <button class="case-btn g"  onclick="showCase(this,'nv')"   ><span class="dot"></span>Melanocytic Nevi</button>
+    <button class="case-btn g"  onclick="showCase(this,'bcc')"  ><span class="dot"></span>Basal Cell Carcinoma</button>
+    <button class="case-btn g"  onclick="showCase(this,'bkl')"  ><span class="dot"></span>Benign Keratosis</button>
+    <button class="case-btn y"  onclick="showCase(this,'akiec')"><span class="dot"></span>Actinic Keratoses</button>
+    <button class="case-btn y"  onclick="showCase(this,'df')"   ><span class="dot"></span>Dermatofibroma</button>
+    <button class="case-btn am" onclick="showCase(this,'vasc')" ><span class="dot"></span>Vascular Lesions</button>
+    <button class="case-btn r"  onclick="showCase(this,'mel')"  ><span class="dot"></span>Melanoma</button>
+
+    <hr class="sb-divider">
+
+    <div class="sb-info">
+      <div class="sb-info-box">
+        <strong>About this demo</strong>
+        Seven HAM10000 dermoscopy cases with pre-computed engine output. Each case shows the primary classification, triage zone, melanoma flag, and per-class probability bars across all 7 disease classes.
+        <br><br>
+        Engine: Nu-SVC &middot; SVM &middot; XGBoost zone-adaptive ensemble (3 engines).
+        <br><br>
+        <strong style="color:#c9a24b;font-size:0.68rem;">⚠ Research &amp; education only.</strong> Not a clinical diagnostic device. A dermatologist must review all findings.
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Main panel ──────────────────────────────────────── -->
+  <div class="panel" id="panel">
+    <div class="welcome" id="welcome">
+      <h2>AEGIS P23 SkinScan &mdash; Demo Console</h2>
+      <p>
+        Select any of the <strong style="color:#c9a24b">7 demo cases</strong> from the sidebar<br>
+        to view the zone-adaptive ensemble classification result.<br><br>
+        Each case shows the primary classification, confidence zone, melanoma flag,<br>
+        and the full per-class probability distribution across all 7 skin disease classes.<br><br>
+        Dataset: <strong style="color:#7a95a8">HAM10000 / ISIC 2018 Task 3</strong> &middot; 13,611 dermoscopy images
+      </p>
+      <div class="zone-legend">
+        <span class="zl-chip zl-g">GREEN — High Confidence</span>
+        <span class="zl-chip zl-y">YELLOW — Mid Confidence</span>
+        <span class="zl-chip zl-am">AMBER — Low Confidence</span>
+        <span class="zl-chip zl-r">RED — Defer. Specialist Required.</span>
+      </div>
+    </div>
+    <div id="casePanel" style="display:none"></div>
+  </div>
+
+</div>
+
+<footer>
+  AEGIS SkinScan &mdash; Educational and research demonstration only. Not a certified clinical diagnostic device. &nbsp;&middot;&nbsp;
+  <a href="../project-23-skin-disease.html">P23 Project Page</a> &nbsp;&middot;&nbsp;
+  <a href="../index.html">aegishumanai.com</a> &nbsp;&middot;&nbsp;
+  HAM10000 / ISIC 2018 Task 3 &mdash; 13,611 dermoscopy images &mdash; 7 disease classes &nbsp;&middot;&nbsp;
+  &copy; 2026 Loh Kah Meng
+</footer>
+
+<script>
+const CASES = {
+  nv: {
+    label:"Melanocytic Nevi", tag:"NV", zc:"g", zone:"GREEN", zoneLabel:"HIGH CONFIDENCE",
+    file:"ISIC_0024306.jpg", conf:81.4, mel:2.1,
+    commentary:"Symmetric pigment network with regular borders and uniform colour distribution. Classic dermoscopic features of a benign melanocytic naevus. High-confidence classification — melanoma probability low.",
+    probs:[
+      {c:"Melanocytic Nevi",     p:81.4, t:"top"},
+      {c:"Benign Keratosis",     p: 8.3, t:"def"},
+      {c:"Actinic Keratoses",    p: 3.9, t:"def"},
+      {c:"Dermatofibroma",       p: 2.0, t:"def"},
+      {c:"Melanoma",             p: 2.1, t:"mel"},
+      {c:"Basal Cell Carcinoma", p: 1.5, t:"def"},
+      {c:"Vascular Lesions",     p: 0.8, t:"def"},
+    ]
+  },
+  bcc: {
+    label:"Basal Cell Carcinoma", tag:"BCC", zc:"g", zone:"GREEN", zoneLabel:"HIGH CONFIDENCE",
+    file:"ISIC_0024331.jpg", conf:77.2, mel:3.4,
+    commentary:"Arborizing telangiectasia with ulceration. Leaf-like structures visible. High-confidence BCC classification — clinical excision typically indicated. Dermatologist review recommended.",
+    probs:[
+      {c:"Basal Cell Carcinoma", p:77.2, t:"top"},
+      {c:"Melanocytic Nevi",     p: 8.1, t:"def"},
+      {c:"Benign Keratosis",     p: 4.6, t:"def"},
+      {c:"Actinic Keratoses",    p: 3.8, t:"def"},
+      {c:"Melanoma",             p: 3.4, t:"mel"},
+      {c:"Dermatofibroma",       p: 1.9, t:"def"},
+      {c:"Vascular Lesions",     p: 1.0, t:"def"},
+    ]
+  },
+  bkl: {
+    label:"Benign Keratosis", tag:"BKL", zc:"g", zone:"GREEN", zoneLabel:"HIGH CONFIDENCE",
+    file:"ISIC_0024312.jpg", conf:74.8, mel:1.8,
+    commentary:"Milia-like cysts and comedo-like openings present. Surface texture consistent with seborrhoeic keratosis. High-confidence benign classification. Melanoma probability low.",
+    probs:[
+      {c:"Benign Keratosis",     p:74.8, t:"top"},
+      {c:"Melanocytic Nevi",     p:11.2, t:"def"},
+      {c:"Actinic Keratoses",    p: 5.6, t:"def"},
+      {c:"Dermatofibroma",       p: 3.1, t:"def"},
+      {c:"Basal Cell Carcinoma", p: 2.3, t:"def"},
+      {c:"Melanoma",             p: 1.8, t:"mel"},
+      {c:"Vascular Lesions",     p: 1.2, t:"def"},
+    ]
+  },
+  akiec: {
+    label:"Actinic Keratoses", tag:"AK", zc:"y", zone:"YELLOW", zoneLabel:"MID CONFIDENCE",
+    file:"ISIC_0024329.jpg", conf:62.3, mel:8.4,
+    commentary:"Scaly erythematous patch on sun-damaged skin. Mid-confidence — dermatologist notification advised. Potential for progression to squamous cell carcinoma. Melanoma probability elevated: specialist input recommended.",
+    probs:[
+      {c:"Actinic Keratoses",    p:62.3, t:"top"},
+      {c:"Benign Keratosis",     p:11.1, t:"def"},
+      {c:"Melanoma",             p: 8.4, t:"mel"},
+      {c:"Melanocytic Nevi",     p: 7.9, t:"def"},
+      {c:"Basal Cell Carcinoma", p: 5.2, t:"def"},
+      {c:"Dermatofibroma",       p: 3.1, t:"def"},
+      {c:"Vascular Lesions",     p: 2.0, t:"def"},
+    ]
+  },
+  df: {
+    label:"Dermatofibroma", tag:"DF", zc:"y", zone:"YELLOW", zoneLabel:"MID CONFIDENCE",
+    file:"ISIC_0024318.jpg", conf:58.9, mel:6.2,
+    commentary:"Central white scar-like patch with peripheral pigmented network. Pinch sign pattern. Mid-confidence — clinical review recommended to exclude atypical features. Melanoma probability low but note elevated background.",
+    probs:[
+      {c:"Dermatofibroma",       p:58.9, t:"top"},
+      {c:"Melanocytic Nevi",     p:15.4, t:"def"},
+      {c:"Benign Keratosis",     p: 9.8, t:"def"},
+      {c:"Melanoma",             p: 6.2, t:"mel"},
+      {c:"Actinic Keratoses",    p: 4.5, t:"def"},
+      {c:"Basal Cell Carcinoma", p: 3.2, t:"def"},
+      {c:"Vascular Lesions",     p: 2.0, t:"def"},
+    ]
+  },
+  vasc: {
+    label:"Vascular Lesions", tag:"VASC", zc:"am", zone:"AMBER", zoneLabel:"LOW CONFIDENCE",
+    file:"ISIC_0024370.jpg", conf:46.1, mel:11.3,
+    commentary:"Red lacunae suggestive of haemangioma. Low confidence with elevated melanoma probability. Human review required before any clinical decision. Do not act on the primary label alone.",
+    probs:[
+      {c:"Vascular Lesions",     p:46.1, t:"top"},
+      {c:"Melanocytic Nevi",     p:14.2, t:"def"},
+      {c:"Melanoma",             p:11.3, t:"mel"},
+      {c:"Benign Keratosis",     p:10.4, t:"def"},
+      {c:"Actinic Keratoses",    p: 8.6, t:"def"},
+      {c:"Dermatofibroma",       p: 5.4, t:"def"},
+      {c:"Basal Cell Carcinoma", p: 4.0, t:"def"},
+    ]
+  },
+  mel: {
+    label:"Melanoma", tag:"MEL", zc:"r", zone:"RED", zoneLabel:"DEFER — SPECIALIST",
+    file:"ISIC_0024310.jpg", conf:34.7, mel:34.7,
+    commentary:"Irregular pigmentation, asymmetric borders, atypical vascular structures, regression areas. RED triage — mandatory immediate specialist referral. Melanoma flag active. No AI output from this system is sufficient to act on.",
+    probs:[
+      {c:"Melanoma",             p:34.7, t:"mel"},
+      {c:"Melanocytic Nevi",     p:22.8, t:"def"},
+      {c:"Benign Keratosis",     p:16.3, t:"def"},
+      {c:"Actinic Keratoses",    p:10.4, t:"def"},
+      {c:"Dermatofibroma",       p: 7.8, t:"def"},
+      {c:"Basal Cell Carcinoma", p: 5.1, t:"def"},
+      {c:"Vascular Lesions",     p: 2.9, t:"def"},
+    ]
+  }
+};
+
+const ZONE = {
+  g:  {bg:"bg-g",  lbl:"lbl-g",  tag:"tag-g",  traffic:"GREEN"},
+  y:  {bg:"bg-y",  lbl:"lbl-y",  tag:"tag-y",  traffic:"YELLOW"},
+  am: {bg:"bg-am", lbl:"lbl-am", tag:"tag-am", traffic:"AMBER"},
+  r:  {bg:"bg-r",  lbl:"lbl-r",  tag:"tag-r",  traffic:"RED"},
+};
+
+const FILL = { top:"bf-top", mel:"bf-mel", def:"bf-default" };
+
+function showCase(btn, slug) {
+  const c = CASES[slug];
+  if (!c) return;
+  const z = ZONE[c.zc];
+
+  document.querySelectorAll('.case-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+
+  const melWarn = c.mel >= 20
+    ? `<div class="mel-warn">
+        <span style="font-size:1.1rem">&#9888;</span>
+        <span><strong>Melanoma flag active &mdash; ${c.mel.toFixed(1)}% melanoma probability.</strong>
+        Specialist review strongly recommended regardless of primary classification.</span>
+       </div>`
+    : '';
+
+  const sorted = [...c.probs].sort((a,b) => b.p - a.p);
+  const bars = sorted.map(({c:cls, p, t}) => `
+    <div class="bar-row">
+      <div class="bar-lbl">${cls}</div>
+      <div class="bar-track">
+        <div class="bar-fill ${FILL[t]}" style="width:${p.toFixed(1)}%"></div>
+      </div>
+      <div class="bar-pct">${p.toFixed(1)}%</div>
+    </div>`).join('');
+
+  const imgSrc = `../assets/p23/samples/${c.file}`;
+  const imgFallback = `this.outerHTML='<div class="img-placeholder"><span>&#128247;</span><small>${c.file}<br>HAM10000 / ISIC 2018</small></div>'`;
+
+  const html = `
+    <div class="result-top">
+      <div class="img-wrap">
+        <img src="${imgSrc}" class="case-img" alt="${c.label} dermoscopy" onerror="${imgFallback}">
+      </div>
+      <div class="case-meta">
+        <h1>${c.label}</h1>
+        <span class="tag-badge ${z.tag}">${c.tag} &mdash; HAM10000 / ${c.file.replace('.jpg','')}</span>
+        <p class="case-commentary">${c.commentary}</p>
+      </div>
+    </div>
+
+    <div class="zone-banner ${z.bg}">
+      <div class="zone-label ${z.lbl}">${z.traffic} &mdash; ${c.zoneLabel}</div>
+    </div>
+
+    <div class="sec">Primary Classification</div>
+    <div class="info-row"><span class="info-lbl">Classification</span><strong>${c.label}</strong></div>
+    <div class="info-row"><span class="info-lbl">Ensemble Confidence</span>${c.conf.toFixed(1)}%</div>
+    <div class="info-row"><span class="info-lbl">Triage Zone</span>${c.zone}</div>
+    <div class="info-row"><span class="info-lbl">Melanoma Probability</span>${c.mel.toFixed(1)}%</div>
+    ${melWarn}
+
+    <div class="sec">Per-Class Probabilities (all 7 classes)</div>
+    ${bars}
+
+    <div class="notice">
+      Demo case from HAM10000 / ISIC 2018 Task 3 dataset. Results are illustrative of production engine
+      output (Nu-SVC / SVM / XGBoost zone-adaptive ensemble &mdash; AUC 0.9131 in high-confidence zone).<br><br>
+      <strong>Educational and research use only. Not a certified clinical diagnostic device.
+      Always consult a qualified dermatologist before any clinical decision.</strong><br><br>
+      <a href="../project-23-skin-disease.html">Full P23 project write-up</a> &nbsp;&middot;&nbsp;
+      <a href="../index.html">aegishumanai.com</a>
+    </div>
+  `;
+
+  document.getElementById('welcome').style.display = 'none';
+  document.getElementById('casePanel').innerHTML = html;
+  document.getElementById('casePanel').style.display = '';
+}
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"7d3dc3aee49c49ea96443ed061a43e02"}'></script>
+</body>
+</html>

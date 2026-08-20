@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS SkinScan — Skin Disease Triage Classifier (P23) · Loh Kah Meng</title>
+<meta name="description" content="AEGIS P23 SkinScan: A zone-adaptive 3-engine ensemble (Nu-SVC, SVM, XGBoost) for dermoscopy skin disease triage across 7 classes. MobileNetV2 transfer learning, confidence-zone triage, melanoma flag. Public demo console. Clinician always in command.">
+<link rel="canonical" href="https://aegishumanai.com/project-23-skin-disease.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AEGIS SkinScan — Dermoscopy Skin Disease Triage AI (P23)">
+<meta property="og:description" content="Zone-adaptive 3-engine ensemble for dermoscopy skin disease triage — 7 classes, confidence-zone scoring, melanoma flag, 13,000+ training images. A dermatologist always stays in command.">
+<meta property="og:image" content="https://aegishumanai.com/assets/p23/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── Audience tiles ─────────────────────────────────────── */
+.audience-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:20px 0;}
+.aud-tile{border-radius:12px;padding:16px 13px;text-align:center;cursor:default;}
+.aud-tile .aud-icon{font-size:26px;margin-bottom:8px;}
+.aud-tile .aud-who{font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px;}
+.aud-tile .aud-need{font-size:11.5px;line-height:1.55;}
+.aud-tile.clin{background:#e8f0fc;border:2px solid #003366;}.aud-tile.clin .aud-who{color:#003366;}
+.aud-tile.res{background:#f0f8f0;border:2px solid #007700;}.aud-tile.res .aud-who{color:#007700;}
+.aud-tile.edu{background:#fff8e0;border:2px solid #C49A00;}.aud-tile.edu .aud-who{color:#7a5a00;}
+.aud-tile.stu{background:#f5f0fb;border:2px solid #5a3d8c;}.aud-tile.stu .aud-who{color:#5a3d8c;}
+.aud-tile.hosp{background:#fff0f0;border:2px solid #C00000;}.aud-tile.hosp .aud-who{color:#C00000;}
+
+/* ── Capability cards ───────────────────────────────────── */
+.cap-stack{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0;}
+.cap-card{border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.10);}
+.cap-card-head{padding:14px 16px 12px;color:white;font-weight:800;}
+.cap-card-head .layer{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-bottom:3px;}
+.cap-card-head .title{font-size:16px;}
+.cap-card-body{padding:14px 16px;background:white;font-size:12.5px;line-height:1.7;color:#2a3a50;}
+.cap-card.triage  .cap-card-head{background:#7a2000;}
+.cap-card.mel     .cap-card-head{background:#900020;}
+.cap-card.cls     .cap-card-head{background:#003366;}
+.cap-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:20px;padding:2px 8px;margin-top:8px;}
+.cap-badge.triage{background:#fff0f0;color:#7a2000;}
+.cap-badge.mel{background:#ffe8ec;color:#900020;}
+.cap-badge.cls{background:#e8f0fc;color:#003366;}
+
+/* ── Science callouts ───────────────────────────────────── */
+.sci-duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+.sci-box{border-radius:12px;padding:16px 18px;border-left:5px solid;}
+.sci-box.derm{background:#e8f0fc;border-color:#003366;}
+.sci-box.ml{background:#f0f8f0;border-color:#007700;}
+.sci-box .sci-head{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+.sci-box.derm .sci-head{color:#003366;}.sci-box.ml .sci-head{color:#007700;}
+.sci-box p{font-size:12.5px;line-height:1.65;color:#2a3a50;}
+.sci-feat{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.sci-feat span{background:white;border:1px solid rgba(0,0,0,.12);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;color:#2a3a50;}
+
+/* ── Zone strip ─────────────────────────────────────────── */
+.zone-strip{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0;}
+.zone-chip{flex:1;min-width:130px;border-radius:12px;padding:14px 16px;font-size:12.5px;line-height:1.55;}
+.zone-chip strong{display:block;font-size:14px;font-weight:900;margin-bottom:4px;}
+.zone-chip.green{background:#0d2918;border:2px solid #16a34a;color:#86efac;}.zone-chip.green strong{color:#4ade80;}
+.zone-chip.yellow{background:#1f1000;border:2px solid #ca8a04;color:#fcd34d;}.zone-chip.yellow strong{color:#fbbf24;}
+.zone-chip.amber{background:#1f0a00;border:2px solid #ea580c;color:#fdba74;}.zone-chip.amber strong{color:#fb923c;}
+.zone-chip.red{background:#1f0000;border:2px solid #dc2626;color:#fca5a5;}.zone-chip.red strong{color:#f87171;}
+
+/* ── 7 class grid ───────────────────────────────────────── */
+.class-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0;}
+.class-card{border-radius:10px;padding:12px 14px;border:1px solid #cfd7e2;}
+.class-card.mal{background:#fff0f0;border-color:#C00000;}
+.class-card.sus{background:#fff8e0;border-color:#C49A00;}
+.class-card.ben{background:#f0fdf4;border-color:#2E8B84;}
+.class-card .cc-tag{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px;}
+.class-card.mal .cc-tag{color:#C00000;}.class-card.sus .cc-tag{color:#7a5a00;}.class-card.ben .cc-tag{color:#007a5e;}
+.class-card .cc-name{font-size:13px;font-weight:700;color:#2a3a50;margin-bottom:4px;}
+.class-card .cc-desc{font-size:11.5px;color:#4a5a6a;line-height:1.5;}
+
+/* ── Engine metrics ─────────────────────────────────────── */
+.engine-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0;}
+.engine-trio-item{background:#f0f6ff;border-radius:10px;padding:14px;border-left:4px solid #003366;text-align:center;}
+.engine-trio-item .ev{font-size:22px;font-weight:900;color:#003366;}
+.engine-trio-item .ek{font-size:11px;color:#595959;margin-top:2px;font-weight:600;letter-spacing:.5px;}
+.mel-box{background:#ffe8ec;border:2px solid #C00000;border-radius:12px;padding:16px 20px;margin:16px 0;}
+.mel-box strong{color:#900020;}
+
+/* ── CTA strip ──────────────────────────────────────────── */
+.cta-strip{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0;}
+.cta-primary{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-size:14px;padding:13px 22px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.18);}
+.cta-secondary{display:inline-flex;align-items:center;gap:9px;background:white;color:#003366;font-weight:700;font-size:14px;padding:12px 20px;border-radius:999px;text-decoration:none;border:2px solid #003366;}
+.cta-tertiary{display:inline-flex;align-items:center;gap:9px;background:#900020;color:white;font-weight:700;font-size:14px;padding:12px 20px;border-radius:999px;text-decoration:none;}
+
+/* ── Indemnity ──────────────────────────────────────────── */
+.indemnity{background:#fff7ec;border:1px solid #e7cfa0;border-left:5px solid #c9a24b;border-radius:14px;padding:18px 20px;font-size:13px;line-height:1.65;color:#4a3d24;}
+.indemnity strong{color:#7a5b17;}
+
+@media(max-width:720px){
+  .audience-grid{grid-template-columns:1fr 1fr;}
+  .cap-stack{grid-template-columns:1fr;}
+  .sci-duo{grid-template-columns:1fr;}
+  .class-grid{grid-template-columns:1fr 1fr;}
+  .engine-trio{grid-template-columns:1fr 1fr;}
+  .zone-strip{flex-direction:column;}
+  .cta-strip{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════════ HERO ═══════════════════════════════ -->
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / AEGIS SkinScan</div>
+    <div class="tag tag-aqua">Biomedical Engineering &middot; Dermatology &middot; Dermoscopy &middot; Skin Disease Triage</div>
+    <h1>AEGIS SkinScan &mdash; Skin Disease Triage Classifier (P23)</h1>
+    <figure class="hero-image" style="margin:18px 0 10px;">
+      <img src="assets/p23/hero.jpg" alt="AEGIS P23 SkinScan — dermoscopy AI skin disease triage classifier" style="width:100%;height:auto;border-radius:12px;display:block;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative.</figcaption>
+    </figure>
+    <p class="lede">P23 classifies dermoscopy images across <strong>7 skin disease classes</strong> using a <strong>zone-adaptive 3-engine ensemble</strong> and routes every case to one of four triage zones &mdash; from high-confidence benign to immediate specialist referral. A dedicated melanoma probability flag fires independently of the primary classification. A clinician always stays in command. Seven annotated demo cases span the full spectrum from high-confidence benign lesions to red-zone specialist deferral.</p>
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Modality</div><div class="v">Dermoscopy images &middot; MobileNetV2 transfer learning &middot; 7 skin disease classes &middot; HAM10000 / ISIC 2018 Task 3</div></div>
+      <div class="meta-item"><div class="k">Engine</div><div class="v">3-engine zone-adaptive ensemble (Nu-SVC &middot; SVM &middot; XGBoost) &middot; 4-zone confidence triage &middot; independent melanoma flag</div></div>
+      <div class="meta-item"><div class="k">High-Confidence Zone</div><div class="v">AUC 0.9131 &middot; 91.24% accuracy &middot; validated on distilled research dataset</div></div>
+      <div class="meta-item"><div class="k">Audience</div><div class="v">Dermatologists &middot; GPs &middot; Researchers &middot; Clinical AI educators &middot; BME students &middot; Hospital planners</div></div>
+    </div>
+    <div class="cta-strip" style="margin-top:18px;">
+      <a class="cta-primary" href="apps/aegis-p23-skinscan.html">🔬 &nbsp;Open the SkinScan Demo Console &rarr;</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════ WHO THIS IS FOR ═══════════════════ -->
+<section style="padding:14px 0 6px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">Who this is for</h2>
+    <div class="audience-grid">
+      <div class="aud-tile clin">
+        <div class="aud-icon">🩺</div>
+        <div class="aud-who">Dermatologists</div>
+        <div class="aud-need">A confidence-zoned triage aid for dermoscopy review. Independent melanoma flag with specialist deferral on all red-zone and high-melanoma cases. Honest score, not a verdict.</div>
+      </div>
+      <div class="aud-tile res">
+        <div class="aud-icon">🔬</div>
+        <div class="aud-who">Researchers</div>
+        <div class="aud-need">Validated ensemble metrics on HAM10000. Honest per-class accuracy reported as measured. MobileNetV2 transfer learning pipeline with zone-adaptive weighting. Full methodology, no cherry-picking.</div>
+      </div>
+      <div class="aud-tile edu">
+        <div class="aud-icon">🎓</div>
+        <div class="aud-who">Educators</div>
+        <div class="aud-need">A live classroom tool: seven annotated dermoscopy cases across 7 disease classes, confidence zones, melanoma flag discussion. Companion textbook and lab sheet for biomedical AI courses.</div>
+      </div>
+      <div class="aud-tile stu">
+        <div class="aud-icon">📖</div>
+        <div class="aud-who">Students</div>
+        <div class="aud-need">Explore how dermoscopy features translate to AI classification. See how an ensemble distributes probability across 7 classes and why a dermatologist must always review the result.</div>
+      </div>
+      <div class="aud-tile hosp">
+        <div class="aud-icon">🏥</div>
+        <div class="aud-who">Hospital Planners</div>
+        <div class="aud-need">A demonstration of AI-augmented dermoscopy triage. PDPA-compliant. Zone protocol ensures borderline and melanoma-flag cases always reach a specialist, never a silent algorithmic verdict.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ WHAT IT DOES ══════════════════════ -->
+<section style="padding:14px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">Three integrated capabilities</h2>
+    <p>P23 combines confidence-zone triage with a dedicated melanoma safety flag and a seven-class dermoscopy classification engine. Each capability is designed to work together &mdash; classify the lesion, flag the melanoma risk, and know exactly when to defer.</p>
+
+    <div class="cap-stack">
+      <div class="cap-card triage">
+        <div class="cap-card-head">
+          <div class="layer">Capability 1</div>
+          <div class="title">🚦 Zone-Adaptive Confidence Triage</div>
+        </div>
+        <div class="cap-card-body">
+          Every dermoscopy case is routed to one of four triage zones based on the ensemble&rsquo;s confidence in its primary classification. Zone assignment drives the clinical recommendation &mdash; not just the label.<br><br>
+          <strong>GREEN</strong>: High confidence &mdash; classification well-supported &middot; <strong>YELLOW</strong>: Mid confidence &mdash; dermatologist notification advised &middot; <strong>AMBER</strong>: Low confidence &mdash; human review required &middot; <strong>RED</strong>: Defer &mdash; mandatory specialist referral<br><br>
+          The zone-adaptive ensemble adjusts model weights according to the confidence zone, giving the most reliable engine a stronger voice when certainty is high.
+          <span class="cap-badge triage">4 zones · Zone-adaptive weights · Specialist deferral</span>
+        </div>
+      </div>
+      <div class="cap-card mel">
+        <div class="cap-card-head">
+          <div class="layer">Capability 2</div>
+          <div class="title">⚠️ Independent Melanoma Flag</div>
+        </div>
+        <div class="cap-card-body">
+          A dedicated melanoma probability flag fires independently of the primary classification result. When the ensemble assigns elevated melanoma probability &mdash; regardless of the top-ranked class &mdash; a specialist review warning is triggered.<br><br>
+          This means a case classified as &ldquo;Benign Keratosis&rdquo; with elevated background melanoma probability still surfaces the warning. The primary label and the melanoma flag are reported separately; a clinician weighs both before any action.<br><br>
+          The melanoma flag does not override the primary classification &mdash; it augments it.
+          <span class="cap-badge mel">Independent of top class · Always reported · Clinician decides</span>
+        </div>
+      </div>
+      <div class="cap-card cls">
+        <div class="cap-card-head">
+          <div class="layer">Capability 3</div>
+          <div class="title">📊 7-Class Dermoscopy Classification</div>
+        </div>
+        <div class="cap-card-body">
+          The 3-engine ensemble classifies across all seven skin disease classes from the HAM10000 / ISIC 2018 Task 3 benchmark. Per-class probabilities are returned for all seven classes &mdash; not just the top label.<br><br>
+          The full probability distribution tells a clinician more than a single label: a 71% primary confidence with 18% on a malignant class is a different clinical situation than a 71% reading with the rest split evenly across benigns.<br><br>
+          All seven demo cases are pre-loaded with real HAM10000 dermoscopy images and full probability bars.
+          <span class="cap-badge cls">7 classes · Full probability bars · HAM10000</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ LIVE TOOL ══════════════════════════ -->
+<section style="padding:10px 0 6px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">Try it now &mdash; AEGIS SkinScan Demo Console</h2>
+    <p>Seven dermoscopy cases from the HAM10000 dataset, each showing the full ensemble output: primary classification, confidence zone, melanoma flag status, and per-class probability bars across all seven disease classes. Select a case and explore why the system defers high-melanoma cases to a specialist rather than forcing a verdict.</p>
+    <figure style="margin:14px 0 10px;">
+      <img src="assets/p23/dermoscopy-grid.jpg" alt="AEGIS P23 SkinScan — dermoscopy image grid showing 7 skin disease classes" style="width:100%;border-radius:12px;display:block;max-height:280px;object-fit:cover;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">Seven HAM10000 dermoscopy cases: Melanocytic Nevi &middot; Basal Cell Carcinoma &middot; Benign Keratosis &middot; Actinic Keratoses &middot; Dermatofibroma &middot; Vascular Lesions &middot; Melanoma</figcaption>
+    </figure>
+    <div class="cta-strip">
+      <a class="cta-primary" href="apps/aegis-p23-skinscan.html">🔬 &nbsp;Open the SkinScan Demo Console &rarr;</a>
+      <a class="cta-secondary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P23%20%E2%80%94%20Clinical%20Collaboration%20Enquiry">🏥 &nbsp;Clinical collaboration enquiry</a>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">All seven demo cases use HAM10000 / ISIC 2018 Task 3 dermoscopy images &mdash; open research dataset, consented and published. Never a clinical diagnosis. A qualified dermatologist must interpret all findings.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════ THE 4 ZONES ════════════════════════ -->
+<section style="padding:10px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">The four triage zones &mdash; confidence drives the clinical recommendation</h2>
+    <p>Zone assignment is computed from ensemble confidence in the primary classification. The four zones map directly to clinical action: higher confidence enables a firmer recommendation, lower confidence triggers mandatory human review. The melanoma flag operates independently of zone assignment.</p>
+    <div class="zone-strip">
+      <div class="zone-chip green">
+        <strong>GREEN &mdash; High Confidence</strong>
+        Ensemble strongly supports the primary classification. Clinical recommendation can be acted on with the primary label as the leading signal. Melanoma flag still checked independently.
+      </div>
+      <div class="zone-chip yellow">
+        <strong>YELLOW &mdash; Mid Confidence</strong>
+        Ensemble reasonably supports the classification but with lower certainty. Dermatologist notification advised before any clinical decision. Melanoma flag reviewed carefully.
+      </div>
+      <div class="zone-chip amber">
+        <strong>AMBER &mdash; Low Confidence</strong>
+        Ensemble uncertainty is elevated. Human review required before any clinical decision. Do not act on the primary label alone. Treat as equivalent to specialist consult.
+      </div>
+      <div class="zone-chip red">
+        <strong>RED &mdash; Defer. Specialist Required.</strong>
+        Ensemble confidence is insufficient for any clinical recommendation. Mandatory immediate specialist referral. No AI output from this system is sufficient to act on. Clinician must review.
+      </div>
+    </div>
+    <div class="mel-box">
+      <strong>The melanoma flag &mdash; the most important safety feature in P23.</strong> Melanoma is the deadliest form of skin cancer. The melanoma flag fires independently of the primary classification: a lesion classified as &ldquo;Benign Keratosis&rdquo; can still trigger the melanoma flag if the ensemble assigns elevated melanoma probability. When the flag fires, specialist review is always recommended, regardless of triage zone. This is a deliberate clinical design choice &mdash; a missed melanoma is a far greater harm than an unnecessary referral. A clinician always makes the final call.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ THE 7 CLASSES ══════════════════════ -->
+<section style="padding:10px 0 4px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">The seven skin disease classes</h2>
+    <p>AEGIS P23 classifies across the seven HAM10000 / ISIC 2018 Task 3 categories, spanning malignant, potentially malignant, and benign lesions. The full per-class probability distribution is returned for every case &mdash; not just the top label.</p>
+    <div class="class-grid">
+      <div class="class-card mal">
+        <div class="cc-tag">⚠️ Malignant</div>
+        <div class="cc-name">MEL — Melanoma</div>
+        <div class="cc-desc">Deadliest skin cancer. Irregular pigmentation, atypical dermoscopic patterns. Any elevated melanoma probability triggers the independent melanoma flag regardless of zone.</div>
+      </div>
+      <div class="class-card mal">
+        <div class="cc-tag">⚠️ Malignant</div>
+        <div class="cc-name">BCC — Basal Cell Carcinoma</div>
+        <div class="cc-desc">Most common skin cancer. Arborizing telangiectasia, leaf-like structures, rolled borders. High-confidence BCC classification triggers specialist referral recommendation.</div>
+      </div>
+      <div class="class-card sus">
+        <div class="cc-tag">🟡 Suspicious</div>
+        <div class="cc-name">AK — Actinic Keratoses</div>
+        <div class="cc-desc">Pre-malignant lesion with potential for SCC progression. Scaly erythematous patch on sun-damaged skin. Dermatologist notification recommended in all zones.</div>
+      </div>
+      <div class="class-card sus">
+        <div class="cc-tag">🟡 Watch</div>
+        <div class="cc-name">VASC — Vascular Lesions</div>
+        <div class="cc-desc">Haemangiomas, angiokeratomas, pyogenic granulomas. Red lacunae, irregular vessel patterns. Often classified with lower ensemble confidence — watch the zone carefully.</div>
+      </div>
+      <div class="class-card ben">
+        <div class="cc-tag">✅ Benign</div>
+        <div class="cc-name">NV — Melanocytic Nevi</div>
+        <div class="cc-desc">Common mole. Symmetric pigment network, regular borders. Most frequent benign category in HAM10000. High-confidence NV classification is a reassuring signal.</div>
+      </div>
+      <div class="class-card ben">
+        <div class="cc-tag">✅ Benign</div>
+        <div class="cc-name">BKL — Benign Keratosis</div>
+        <div class="cc-desc">Seborrhoeic keratosis, lichen planus-like keratosis. Milia-like cysts, comedo-like openings. Melanoma flag still checked even on high-confidence BKL results.</div>
+      </div>
+      <div class="class-card ben">
+        <div class="cc-tag">✅ Benign</div>
+        <div class="cc-name">DF — Dermatofibroma</div>
+        <div class="cc-desc">Central white scar-like patch, peripheral pigmented network, positive pinch sign. Benign but often classified at lower confidence — mid-zone result is common for DF.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ THE SCIENCE ════════════════════════ -->
+<section style="padding:10px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">The biomedical engineering science</h2>
+    <p>P23 is grounded in dermoscopy science, transfer learning theory, and clinical AI safety design. The feature extraction pipeline, ensemble architecture, and zone-adaptive weighting all derive from first principles &mdash; not arbitrary choices.</p>
+
+    <div class="sci-duo">
+      <div class="sci-box derm">
+        <div class="sci-head">🩺 Dermoscopy and skin lesion classification</div>
+        <p>Dermoscopy (epiluminescence microscopy) illuminates sub-surface skin structures invisible to the naked eye &mdash; pigment network, vascular patterns, regression structures, and architectural disorder. These dermoscopic features encode clinically meaningful information about lesion biology. Melanoma, for example, shows irregular pigmentation, atypical vascular structures, and regression areas that are visible dermoscopically but not clinically. AEGIS P23 learns to read these features from the HAM10000 / ISIC 2018 Task 3 dataset &mdash; 13,611 dermoscopy images across 7 disease classes, the benchmark established by the International Skin Imaging Collaboration.</p>
+        <div class="sci-feat">
+          <span>Pigment network</span><span>Vascular patterns</span><span>Regression structures</span><span>ISIC 2018 Task 3</span><span>HAM10000</span><span>13,611 images</span>
+        </div>
+      </div>
+      <div class="sci-box ml">
+        <div class="sci-head">⚙️ Transfer learning and ensemble pipeline</div>
+        <p>P23 uses MobileNetV2 pre-trained on ImageNet as the feature extractor &mdash; a lightweight convolutional architecture that captures rich visual representations from dermoscopy images without requiring millions of labelled training examples. The extracted feature representation is passed through a dimensionality reduction stage to produce a compact, discriminative feature vector. Three independently trained classifiers &mdash; Nu-SVC, SVM, and XGBoost &mdash; each learn from this feature space and vote on the classification. The zone-adaptive ensemble adjusts the voting weights based on confidence zone, ensuring the most reliable signal leads when certainty is high. The full per-class probability distribution is derived from ensemble output.</p>
+        <div class="sci-feat">
+          <span>MobileNetV2</span><span>Transfer learning</span><span>ImageNet features</span><span>Nu-SVC</span><span>SVM</span><span>XGBoost</span><span>Zone-adaptive ensemble</span>
+        </div>
+      </div>
+    </div>
+
+    <figure style="margin:16px 0;">
+      <img src="assets/p23/seven-classes.jpg" alt="AEGIS P23 SkinScan — seven skin disease classes dermoscopy examples" style="width:100%;border-radius:12px;display:block;max-height:300px;object-fit:cover;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">Seven disease classes: MEL (Melanoma) &middot; BCC (Basal Cell Carcinoma) &middot; AK (Actinic Keratoses) &middot; VASC (Vascular Lesions) &middot; NV (Melanocytic Nevi) &middot; BKL (Benign Keratosis) &middot; DF (Dermatofibroma) &middot; HAM10000 / ISIC 2018 Task 3 &mdash; Illustration, AI-generated</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ═══════════════════ ENGINE BOARD ═══════════════════════ -->
+<section style="padding:8px 0 4px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">Validated results &mdash; honest accuracy, reported as-is</h2>
+    <p>All engines trained and evaluated on distilled datasets drawn from HAM10000 / ISIC 2018 Task 3 under strict train/test separation. Validation methodology ensures no test image appears in training. Results reported exactly as measured &mdash; no inflation, no cherry-picking.</p>
+
+    <div class="engine-trio">
+      <div class="engine-trio-item"><div class="ev">0.9131</div><div class="ek">AUC · High-confidence zone ensemble</div></div>
+      <div class="engine-trio-item"><div class="ev">91.24%</div><div class="ek">Accuracy · High-confidence zone cases</div></div>
+      <div class="engine-trio-item"><div class="ev">55.9%</div><div class="ek">Cases routed to high-confidence zone</div></div>
+    </div>
+
+    <table class="data-table">
+      <thead><tr><th>Engine</th><th>Architecture</th><th>Validation Accuracy</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Nu-SVC</strong></td><td>Nu-Support Vector Classifier</td><td><strong>70.5%</strong></td><td>Ensemble member — zone-adaptive vote</td></tr>
+        <tr><td><strong>SVM</strong></td><td>Support Vector Machine (RBF)</td><td><strong>70.5%</strong></td><td>Ensemble member — zone-adaptive vote</td></tr>
+        <tr><td>XGBoost</td><td>Gradient Boosted Trees</td><td>63.7%</td><td>Ensemble member — zone-adaptive vote</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--text-muted);">Honest note: individual model accuracy of 70.5% on a 7-class dermoscopy problem is a meaningful result on an imbalanced dataset with 13,611 images. The zone-adaptive ensemble substantially improves on this for the 55.9% of cases it classifies with high confidence (AUC 0.9131, accuracy 91.24%). The remaining 44.1% are routed to lower-confidence zones &mdash; not silently misclassified, but explicitly flagged for human review. That is the correct clinical design.</p>
+
+    <div class="mel-box">
+      <strong>Zone-adaptive ensemble &mdash; the key architectural decision.</strong> Rather than using a fixed ensemble weighting for all cases, P23 adapts the engine weights according to the confidence zone. When the ensemble is most certain, the weights favour the engines that perform best in that regime. When uncertainty is higher, the weighting adjusts to be more conservative. This is why the high-confidence zone achieves AUC 0.9131 while the overall system correctly identifies and defers the harder cases rather than guessing.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ DATASET & INTEGRITY ═══════════════ -->
+<section style="padding:10px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">Dataset integrity and data governance</h2>
+    <p>P23 is trained and validated on a <strong>distilled research dataset</strong> derived from HAM10000 / ISIC 2018 Task 3 &mdash; a publicly available, consented dermoscopy image archive from the International Skin Imaging Collaboration. Raw patient dermoscopy images are not distributed in the public demo. The seven demo cases embedded in the public console are HAM10000 images released for open research use under their original dataset licence.</p>
+
+    <figure style="margin:0 0 18px;">
+      <img src="assets/p23/partner.jpg" alt="AEGIS P23 clinical collaboration — dermatologist reviewing skin AI classification" style="width:100%;border-radius:12px;display:block;max-height:300px;object-fit:cover;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative.</figcaption>
+    </figure>
+
+    <p>These apps demonstrate clinical AI systems capable of classification, early pre-emptive detection, and progressive augmented management. Because full AEGIS engines and datasets run to several gigabytes, only educational demo modes are hosted here &mdash; live classification on new patient dermoscopy images requires the AEGIS Desktop Application. Institutions wishing to contribute local data for engine refinement are welcome to reach out; we share progressive validation results with every contributing partner and operate in strict accordance with PDPA.</p>
+
+    <p style="margin-top:10px;"><strong>What institutional partners receive:</strong> technical report with full validation methodology &middot; AEGIS Desktop Application licence &middot; progressive model result updates as the engine board improves &middot; co-attribution in peer-reviewed publications where applicable.</p>
+
+    <div class="indemnity" style="margin:16px 0;">
+      <strong>Ground rules for data contribution and institutional enquiry.</strong><br>
+      1. <strong>Not a medical device and not a diagnosis.</strong> AEGIS SkinScan is a research and educational demonstration. Nothing it outputs is medical advice, a diagnosis, or a substitute for a qualified dermatologist.<br>
+      2. <strong>De-identified data only.</strong> Remove all PHI before contributing. Only submit data under your institution&rsquo;s ethics approval and with informed consent.<br>
+      3. <strong>Liability release.</strong> Contributing institutions agree to indemnify and hold harmless AEGIS, Dr Loh Kah Meng, and associated parties from any claims arising from use of or reliance on AEGIS outputs.<br>
+      4. <strong>DUA required.</strong> A formal Data Use Agreement is required before any institutional data exchange proceeds.<br>
+      5. <strong>PDPA compliance.</strong> All data handled under strict PDPA and applicable governance frameworks.
+    </div>
+
+    <div class="cta-strip">
+      <a class="cta-primary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P23%20%E2%80%94%20Institutional%20Enquiry&body=I%20have%20read%20the%20terms%20on%20the%20AEGIS%20P23%20page%20and%20wish%20to%20enquire%20about%20collaboration.">🏥 &nbsp;Institutional &amp; clinical enquiry</a>
+      <a class="cta-tertiary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P23%20%E2%80%94%20Research%20Collaboration">🔬 &nbsp;Research collaboration</a>
+      <a class="cta-secondary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P23%20%E2%80%94%20Data%20Partnership">📊 &nbsp;Data partnership</a>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">All enquiries to <strong>aegisloh@aegishumanai.com</strong>. International partnerships welcome. DUA provided before any data exchange.</p>
+
+    <div style="margin-top:18px;padding:13px 16px;background:#e0eaf8;border-radius:10px;font-size:13px;color:#1a2535;line-height:1.7;">
+      <strong>Also in the AEGIS Clinical AI portfolio:</strong> &nbsp;
+      <a href="project-22-alzheimer.html" style="color:#003366;font-weight:700;">P22 &middot; AEGIS NeuroScan</a> — Alzheimer&rsquo;s MRI Classification, 4-engine SVM ensemble, NDI scoring &nbsp;&middot;&nbsp;
+      <a href="project-20-breast-cancer.html" style="color:#003366;font-weight:700;">P20 &middot; AEGIS Breast</a> — Unified breast screening, 7 specialist engines &nbsp;&middot;&nbsp;
+      <a href="project-21-parkinson.html" style="color:#003366;font-weight:700;">P21 &middot; AEGIS Parkinson</a> — Voice &amp; Drawing Assessment, 11-engine consensus board
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:aegisloh@aegishumanai.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"7d3dc3aee49c49ea96443ed061a43e02"}'></script>
+</body>
+</html>

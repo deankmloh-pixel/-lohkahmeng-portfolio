@@ -28,10 +28,12 @@
 - [P20 Breast Station — Unified Breast Screening](https://aegishumanai.com/project-20-breast-cancer.html): routes breast imaging modalities to dedicated specialists. Champion AUC 0.9955. Public Spot the Finding quiz.
 - [P21 Parkinson Station — Voice & Drawing Assessment](https://aegishumanai.com/project-21-parkinson.html): 11-engine consensus board on voice acoustics and spiral drawing tests. Champion AUC 0.846. Companion textbook and lab sheet.
 - [P22 NeuroScan — Alzheimer's MRI Classification](https://aegishumanai.com/project-22-alzheimer.html): 4-engine SVM ensemble with pixel-level false-colour MRI tissue mapping and NDI 0–100 scoring. Champion AUC 0.8511. Six annotated demo cases.
-- [P15 Ocular app](https://aegishumanai.com/apps/aegis-p15-ocular.html): live Spot the Disease learning station.
+- [P23 SkinScan — Skin Disease Triage Classifier](https://aegishumanai.com/project-23-skin-disease.html): zone-adaptive 3-engine ensemble (Nu-SVC, SVM, XGBoost) on dermoscopy images, 7 skin disease classes (MEL/BCC/AK/VASC/NV/BKL/DF), independent melanoma safety flag, HIGH-zone AUC 0.9131. Seven annotated demo cases from HAM10000.
+- [P15 Ocular Station — Spot the Disease](https://aegishumanai.com/diagnostics/oras/): live Spot the Disease learning station.
 - [P20 Breast app](https://aegishumanai.com/apps/aegis-p20-breast.html): live clinical imaging game.
 - [P21 Parkinson app](https://aegishumanai.com/apps/aegis-p21-parkinson.html): live voice and drawing quiz station.
 - [P22 NeuroScan app](https://aegishumanai.com/apps/aegis-p22-neuroscan.html): live false-colour MRI viewer with NDI scoring.
+- [P23 SkinScan app](https://aegishumanai.com/apps/aegis-p23-skinscan.html): live skin disease triage demo console with zone-adaptive confidence display.
 
 ## Project case studies
 - [P1 Nurse Augmenting System](https://aegishumanai.com/project-1-nurse-augmenting-system.html)
@@ -44,6 +46,8 @@
 - [P8 Turbofan RUL](https://aegishumanai.com/project-8-turbofan-rul.html)
 - [P9 Attrition Target List](https://aegishumanai.com/project-9-attrition-target-list.html)
 - [P17 Cardiac Fuzzy](https://aegishumanai.com/project-17-cardiac.html)
+- [P18 AEGIS Health — Glucose Wearable](https://aegishumanai.com/project-18-glucose-wearable.html)
+- [P19 AEGIS Emotional — Affective Wearable](https://aegishumanai.com/project-19-affective-wearable.html)
 
 ## Interactive apps (run fully in-browser, no server, models embedded)
 - [Nurse readmission](https://aegishumanai.com/apps/nurse-readmission.html)
