@@ -1,11 +1,11 @@
-// POST /api/broadcast  { secret, subject, message }
+// POST /api/broadcast  { secret, subject, message, url?, btnText? }
 // Protected by BROADCAST_SECRET env var.
 // Queries D1 (binding: DB, database: aegis-subs) and sends via Resend batch API.
 export async function onRequestPost(context) {
   const { request, env } = context;
   try {
     const body = await request.json();
-    const { secret, subject, message } = body;
+    const { secret, subject, message, url, btnText } = body;
 
     if (!env.BROADCAST_SECRET || secret !== env.BROADCAST_SECRET)
       return json({ ok: false, error: "unauthorized" }, 401);
@@ -24,14 +24,12 @@ export async function onRequestPost(context) {
     if (!results || results.length === 0)
       return json({ ok: true, sent: 0, note: "no subscribers yet" });
 
-    const FROM    = env.FROM_EMAIL || "Dr Loh Kah Meng · AEGIS <aegisloh@aegishumanai.com>";
-    const bodyTxt = message ? escHtml(message) : "Visit aegishumanai.com to see the latest.";
-    const html    = emailShell(
-      subject,
-      `<p style="margin:0 0 16px">${bodyTxt}</p>`,
-      "Visit aegishumanai.com",
-      "https://aegishumanai.com"
-    );
+    const FROM      = env.FROM_EMAIL || "Dr Loh Kah Meng · AEGIS <aegisloh@aegishumanai.com>";
+    const bodyTxt   = message  ? escHtml(message)  : "Visit aegishumanai.com to see the latest.";
+    const ctaUrl    = url      ? url                : "https://aegishumanai.com";
+    const ctaLabel  = btnText  ? btnText            : "Visit aegishumanai.com";
+
+    const html = emailShell(subject, `<p style="margin:0 0 16px">${bodyTxt}</p>`, ctaLabel, ctaUrl);
 
     // Resend batch: up to 100 per call — we use 50 to stay safe
     const BATCH = 50;
@@ -71,7 +69,7 @@ export async function onRequestOptions() {
   });
 }
 
-// ── helpers ───────────────────────────────────────────────────────────────────
+// -- helpers ------------------------------------------------------------------
 
 function escHtml(s) {
   return String(s)

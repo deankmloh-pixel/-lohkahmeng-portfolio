@@ -18,10 +18,22 @@ jobs:
           FIRST=$(echo "$MSG" | head -1)
           if echo "$FIRST" | grep -qE '^\[broadcast\]'; then
             SUBJECT=$(echo "$FIRST" | sed 's/^\[broadcast\] *//')
-            BODY=$(echo "$MSG" | tail -n +2 | sed '/^[[:space:]]*$/d' | tr '\n' ' ' | sed 's/  */ /g' | sed 's/^ //;s/ $//')
-            echo "do_broadcast=true"  >> $GITHUB_OUTPUT
-            echo "subject=$SUBJECT"   >> $GITHUB_OUTPUT
-            echo "body=$BODY"         >> $GITHUB_OUTPUT
+
+            # Body = everything after first line, strip blank lines
+            BODY_RAW=$(echo "$MSG" | tail -n +2)
+
+            # Extract optional url: and btn: directives (case-insensitive)
+            URL=$(echo "$BODY_RAW" | grep -iE '^url:' | head -1 | sed 's/^[Uu][Rr][Ll]: *//')
+            BTN=$(echo "$BODY_RAW" | grep -iE '^btn:' | head -1 | sed 's/^[Bb][Tt][Nn]: *//')
+
+            # Body text = lines that are NOT url:/btn: directives, collapsed to single line
+            BODY=$(echo "$BODY_RAW" | grep -viE '^(url:|btn:)' | sed '/^[[:space:]]*$/d' | tr '\n' ' ' | sed 's/  */ /g' | sed 's/^ //;s/ $//')
+
+            echo "do_broadcast=true" >> $GITHUB_OUTPUT
+            echo "subject=$SUBJECT"  >> $GITHUB_OUTPUT
+            echo "body=$BODY"        >> $GITHUB_OUTPUT
+            echo "url=$URL"          >> $GITHUB_OUTPUT
+            echo "btn=$BTN"          >> $GITHUB_OUTPUT
           else
             echo "do_broadcast=false" >> $GITHUB_OUTPUT
           fi
@@ -31,10 +43,21 @@ jobs:
         run: |
           SUBJECT="${{ steps.parse.outputs.subject }}"
           BODY="${{ steps.parse.outputs.body }}"
-          PAYLOAD=$(printf '{"secret":"%s","subject":"%s","message":"%s"}' \
-            "${{ secrets.BROADCAST_SECRET }}" \
-            "$SUBJECT" \
-            "$BODY")
+          URL="${{ steps.parse.outputs.url }}"
+          BTN="${{ steps.parse.outputs.btn }}"
+
+          # Build payload - include url/btnText only if provided
+          if [ -n "$URL" ] && [ -n "$BTN" ]; then
+            PAYLOAD=$(printf '{"secret":"%s","subject":"%s","message":"%s","url":"%s","btnText":"%s"}' \
+              "${{ secrets.BROADCAST_SECRET }}" "$SUBJECT" "$BODY" "$URL" "$BTN")
+          elif [ -n "$URL" ]; then
+            PAYLOAD=$(printf '{"secret":"%s","subject":"%s","message":"%s","url":"%s"}' \
+              "${{ secrets.BROADCAST_SECRET }}" "$SUBJECT" "$BODY" "$URL")
+          else
+            PAYLOAD=$(printf '{"secret":"%s","subject":"%s","message":"%s"}' \
+              "${{ secrets.BROADCAST_SECRET }}" "$SUBJECT" "$BODY")
+          fi
+
           RESULT=$(curl -s -w "\n%{http_code}" -X POST \
             https://aegishumanai.com/api/broadcast \
             -H "Content-Type: application/json" \
