@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS TumorSentinel — Brain Tumour MRI Classification (P24) · Loh Kah Meng</title>
+<meta name="description" content="AEGIS P24 TumorSentinel: 15-engine ensemble brain tumour MRI classification system. 4 classes — Glioma, Meningioma, Pituitary, No Tumour. Binary AUC 0.9997 · 4-class accuracy 99.03% · 4-zone governance routing.">
+<link rel="canonical" href="https://aegishumanai.com/project-24-brain-tumor.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://aegishumanai.com/project-24-brain-tumor.html">
+<meta property="og:title" content="AEGIS TumorSentinel — Brain Tumour MRI Classification (P24)">
+<meta property="og:description" content="15-engine ensemble brain tumour MRI classification. Binary AUC 0.9997 · 99.03% 4-class accuracy · 4-zone confidence routing.">
+<meta property="og:image" content="https://aegishumanai.com/assets/og-image.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── P24 project page — supplemental styles ── */
+.p24-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 340px;
+  display: flex;
+  align-items: flex-end;
+  background: radial-gradient(ellipse 120% 100% at 70% 40%, #0d2137 0%, #081420 55%, #050d18 100%);
+  border-bottom: 1px solid var(--hairline, #e2e8f0);
+}
+.p24-hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 320px at 72% 50%, rgba(46,139,132,0.18) 0%, transparent 70%),
+    radial-gradient(circle 160px at 78% 46%, rgba(58,168,160,0.12) 0%, transparent 60%);
+}
+.p24-hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(46,139,132,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46,139,132,0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.p24-hero-mri {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.35;
+}
+.p24-hero-mri svg { width: 100%; max-width: 380px; height: auto; }
+.p24-hero-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(8,20,32,1) 0%, rgba(8,20,32,0.92) 40%, rgba(8,20,32,0.3) 70%, rgba(8,20,32,0) 100%);
+}
+.p24-hero-body {
+  position: relative;
+  z-index: 2;
+  padding: 48px 0 44px;
+  max-width: 58%;
+}
+.p24-breadcrumb {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 14px;
+}
+.p24-breadcrumb a { color: #64748b; text-decoration: none; }
+.p24-breadcrumb a:hover { color: #94a3b8; }
+.p24-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.p24-tag {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #3ba8a0;
+  background: rgba(46,139,132,0.15);
+  border: 1px solid rgba(46,139,132,0.3);
+  border-radius: 4px;
+  padding: 3px 8px;
+}
+.p24-hero-title {
+  font-size: clamp(26px, 4vw, 42px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #f1f5f9;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+.p24-hero-desc {
+  font-size: 15px;
+  color: #94a3b8;
+  line-height: 1.65;
+  max-width: 52ch;
+  margin-bottom: 24px;
+}
+.p24-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+.p24-stat { display: flex; flex-direction: column; gap: 2px; }
+.p24-stat-val {
+  font-size: 22px;
+  font-weight: 800;
+  color: #3ba8a0;
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.p24-stat-lbl { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+.p24-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #2e8b84, #3ba8a0);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.15s;
+  letter-spacing: 0.01em;
+}
+.p24-cta:hover { opacity: 0.92; transform: translateY(-1px); color: #fff; }
+
+/* ── Page body ── */
+.p24-section { padding: 52px 0; border-bottom: 1px solid var(--hairline, #e8ecf2); }
+.p24-section:last-of-type { border-bottom: none; }
+.p24-section-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #2e8b84;
+  margin-bottom: 8px;
+}
+.p24-section-title {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  color: var(--ink, #111827);
+}
+.p24-section-lead {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--body, #374151);
+  max-width: 68ch;
+  margin-bottom: 32px;
+}
+
+/* ── Audience grid ── */
+.p24-audience { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.p24-audience-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+}
+.p24-audience-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: #111827; }
+.p24-audience-card p { font-size: 13px; line-height: 1.6; color: #4b5563; margin: 0; }
+
+/* ── Capabilities ── */
+.p24-caps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.p24-cap {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 22px;
+}
+.p24-cap-num {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #2e8b84;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.p24-cap h4 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: #111827; }
+.p24-cap p { font-size: 13px; line-height: 1.6; color: #4b5563; margin: 0 0 12px; }
+.p24-cap-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.p24-cap-tag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(46,139,132,0.1);
+  color: #2e8b84;
+  border: 1px solid rgba(46,139,132,0.25);
+}
+
+/* ── Try it now ── */
+.p24-try-box {
+  background: linear-gradient(135deg, #0b1420 0%, #0d2137 100%);
+  border-radius: 16px;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  border: 1px solid rgba(46,139,132,0.25);
+}
+.p24-try-box p { font-size: 15px; color: #94a3b8; max-width: 56ch; line-height: 1.65; margin: 0; }
+.p24-try-cases {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 4px 0;
+}
+.p24-try-case {
+  background: rgba(46,139,132,0.12);
+  border: 1px solid rgba(46,139,132,0.25);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #3ba8a0;
+}
+.p24-try-note { font-size: 12px; color: #475569; margin: 0; }
+
+/* ── Zones ── */
+.p24-zones { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.p24-zone {
+  border-radius: 10px;
+  padding: 18px 16px;
+  border: 1px solid;
+}
+.p24-zone.verified { background: rgba(22,163,74,0.08); border-color: rgba(22,163,74,0.25); }
+.p24-zone.high    { background: rgba(202,138,4,0.08);  border-color: rgba(202,138,4,0.25); }
+.p24-zone.mid     { background: rgba(234,88,12,0.08);  border-color: rgba(234,88,12,0.25); }
+.p24-zone.low     { background: rgba(192,57,43,0.08);  border-color: rgba(192,57,43,0.25); }
+.p24-zone-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-bottom: 8px;
+}
+.verified .p24-zone-badge { background: rgba(22,163,74,0.2); color: #16a34a; }
+.high .p24-zone-badge     { background: rgba(202,138,4,0.2);  color: #b45309; }
+.mid .p24-zone-badge      { background: rgba(234,88,12,0.2);  color: #c2410c; }
+.low .p24-zone-badge      { background: rgba(192,57,43,0.2);  color: #b91c1c; }
+.p24-zone h4 { font-size: 13px; font-weight: 700; margin-bottom: 5px; color: #111827; }
+.p24-zone p { font-size: 12px; line-height: 1.55; color: #4b5563; margin: 0; }
+
+/* ── Classes ── */
+.p24-classes { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+.p24-class {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 18px;
+  background: #f8fafc;
+}
+.p24-class-type {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.p24-class-type.malignant { color: #b91c1c; }
+.p24-class-type.benign    { color: #16a34a; }
+.p24-class-type.none      { color: #0369a1; }
+.p24-class h4 { font-size: 14px; font-weight: 700; margin-bottom: 5px; color: #111827; }
+.p24-class p  { font-size: 12px; line-height: 1.55; color: #4b5563; margin: 0; }
+
+/* ── Results table ── */
+.p24-metric-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.p24-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.p24-metric-val {
+  font-size: 36px;
+  font-weight: 800;
+  color: #2e8b84;
+  line-height: 1;
+  font-feature-settings: "tnum";
+}
+.p24-metric-lbl { font-size: 12px; color: #64748b; font-weight: 600; }
+.p24-table-wrap { overflow-x: auto; }
+.p24-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.p24-table th {
+  background: #f1f5f9;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #64748b;
+  padding: 10px 14px;
+  text-align: left;
+  border: 1px solid #e2e8f0;
+}
+.p24-table td {
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  color: #374151;
+  vertical-align: top;
+}
+.p24-table tr:nth-child(even) td { background: #f8fafc; }
+.p24-note {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: #78350f;
+  margin-top: 20px;
+  line-height: 1.6;
+}
+
+/* ── Governance ── */
+.p24-gov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.p24-gov-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 18px;
+}
+.p24-gov-item h5 { font-size: 13px; font-weight: 700; margin-bottom: 5px; color: #111827; }
+.p24-gov-item p { font-size: 12px; line-height: 1.55; color: #4b5563; margin: 0; }
+
+/* ── Related ── */
+.p24-related { display: flex; flex-wrap: wrap; gap: 12px; }
+.p24-related a {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2e8b84;
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 1px solid rgba(46,139,132,0.3);
+  border-radius: 6px;
+  background: rgba(46,139,132,0.05);
+  transition: background 0.15s;
+}
+.p24-related a:hover { background: rgba(46,139,132,0.12); }
+
+/* ── CTA bar ── */
+.p24-cta-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.p24-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  padding: 10px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+.p24-cta-secondary:hover { border-color: #2e8b84; color: #2e8b84; }
+.p24-disclaimer {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 14px;
+  line-height: 1.6;
+}
+
+/* ── Responsive ── */
+@media (max-width: 760px) {
+  .p24-hero-body { max-width: 100%; }
+  .p24-hero-mri { display: none; }
+  .p24-hero { min-height: 280px; }
+  .p24-hero-fade { background: rgba(8,20,32,0.85); }
+  .p24-try-box { padding: 24px 18px; }
+  .p24-stats { gap: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work" class="active">Work</a></li>
+      <li><a href="/diagnostics/">Diagnostics</a></li>
+      <li><a href="wearable-technology.html">Wearables</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<header class="p24-hero">
+  <div class="p24-hero-bg"></div>
+  <div class="p24-hero-grid"></div>
+  <!-- Decorative brain MRI SVG (right side) -->
+  <div class="p24-hero-mri">
+    <svg viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="180" cy="180" r="155" stroke="rgba(46,139,132,0.25)" stroke-width="1"/>
+      <circle cx="180" cy="180" r="120" stroke="rgba(46,139,132,0.2)" stroke-width="1" stroke-dasharray="4 4"/>
+      <circle cx="180" cy="180" r="85"  stroke="rgba(46,139,132,0.15)" stroke-width="1"/>
+      <!-- Stylised brain outline -->
+      <path d="M180 60 C230 60 280 90 290 140 C305 170 295 205 270 220 C285 240 280 270 255 280 C245 300 215 310 190 305 C180 320 160 320 150 305 C125 310 95 300 85 280 C60 270 55 240 70 220 C45 205 35 170 50 140 C60 90 130 60 180 60 Z" stroke="rgba(58,168,160,0.4)" stroke-width="1.5" fill="rgba(46,139,132,0.08)"/>
+      <!-- Sulci / gyri suggestion -->
+      <path d="M140 120 C160 110 200 115 215 130" stroke="rgba(58,168,160,0.3)" stroke-width="1" fill="none"/>
+      <path d="M120 160 C145 145 175 148 200 160 C220 168 240 162 255 150" stroke="rgba(58,168,160,0.3)" stroke-width="1" fill="none"/>
+      <path d="M115 200 C140 188 165 192 185 205 C205 215 230 210 248 198" stroke="rgba(58,168,160,0.3)" stroke-width="1" fill="none"/>
+      <path d="M135 240 C155 230 175 235 195 240 C215 245 235 237 248 228" stroke="rgba(58,168,160,0.25)" stroke-width="1" fill="none"/>
+      <!-- Central fissure -->
+      <line x1="180" y1="65" x2="180" y2="300" stroke="rgba(58,168,160,0.2)" stroke-width="0.8" stroke-dasharray="3 5"/>
+      <!-- Scan cross-hairs -->
+      <line x1="50" y1="180" x2="310" y2="180" stroke="rgba(46,139,132,0.15)" stroke-width="0.5"/>
+      <circle cx="180" cy="180" r="4" fill="rgba(58,168,160,0.5)"/>
+      <!-- Classification markers -->
+      <circle cx="148" cy="145" r="14" stroke="rgba(58,168,160,0.5)" stroke-width="1" fill="rgba(46,139,132,0.1)"/>
+      <text x="148" y="149" text-anchor="middle" font-size="8" fill="rgba(58,168,160,0.8)" font-family="monospace">GLI</text>
+      <circle cx="218" cy="160" r="12" stroke="rgba(202,138,4,0.5)" stroke-width="1" fill="rgba(202,138,4,0.08)"/>
+      <text x="218" y="164" text-anchor="middle" font-size="8" fill="rgba(202,138,4,0.8)" font-family="monospace">MEN</text>
+      <circle cx="175" cy="215" r="11" stroke="rgba(59,130,246,0.5)" stroke-width="1" fill="rgba(59,130,246,0.08)"/>
+      <text x="175" y="219" text-anchor="middle" font-size="8" fill="rgba(59,130,246,0.8)" font-family="monospace">PIT</text>
+    </svg>
+  </div>
+  <div class="p24-hero-fade"></div>
+  <div class="container">
+    <div class="p24-hero-body">
+      <div class="p24-breadcrumb">
+        <a href="index.html">Home</a> / <a href="index.html#work">Work</a> / AEGIS TumorSentinel
+      </div>
+      <div class="p24-tags">
+        <span class="p24-tag">Biomedical Engineering</span>
+        <span class="p24-tag">Radiology</span>
+        <span class="p24-tag">Brain MRI</span>
+        <span class="p24-tag">Tumour Classification</span>
+      </div>
+      <h1 class="p24-hero-title">AEGIS TumorSentinel — Brain Tumour MRI Classification System (P24)</h1>
+      <p class="p24-hero-desc">
+        P24 classifies brain MRI scans across four tumour categories using a 15-engine AEGIS AI ensemble,
+        routing every case to one of four governance zones based on classification confidence.
+      </p>
+      <div class="p24-stats">
+        <div class="p24-stat">
+          <span class="p24-stat-val">0.9997</span>
+          <span class="p24-stat-lbl">Binary AUC</span>
+        </div>
+        <div class="p24-stat">
+          <span class="p24-stat-val">99.03%</span>
+          <span class="p24-stat-lbl">4-Class Accuracy</span>
+        </div>
+        <div class="p24-stat">
+          <span class="p24-stat-val">15</span>
+          <span class="p24-stat-lbl">Ensemble Engines</span>
+        </div>
+        <div class="p24-stat">
+          <span class="p24-stat-val">7,200+</span>
+          <span class="p24-stat-lbl">MRI Images</span>
+        </div>
+      </div>
+      <a href="apps/aegis-p24-tumorsentinel.html" class="p24-cta">🧠 Open the TumorSentinel Demo Console →</a>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main>
+<div class="container">
+
+<!-- ── WHO THIS IS FOR ── -->
+<section class="p24-section">
+  <div class="p24-section-label">Audience</div>
+  <h2 class="p24-section-title">Who this is for</h2>
+  <div class="p24-audience">
+    <div class="p24-audience-card">
+      <h4>Neurologists &amp; Radiologists</h4>
+      <p>A confidence-zoned decision-support reference for brain MRI review. Four-zone routing surfaces cases requiring specialist deferral before any clinical action is taken.</p>
+    </div>
+    <div class="p24-audience-card">
+      <h4>Researchers</h4>
+      <p>Validated ensemble metrics on a distilled MRI research dataset. Honest per-class accuracy reported as-is. 15-engine AEGIS ensemble with binary and 4-class outputs.</p>
+    </div>
+    <div class="p24-audience-card">
+      <h4>Educators</h4>
+      <p>A live classroom tool: 16 annotated MRI cases across all four tumour classes and all four confidence zones — demonstrating AI-augmented radiology for BME students and clinical AI courses.</p>
+    </div>
+    <div class="p24-audience-card">
+      <h4>Students</h4>
+      <p>See how MRI features translate to AI classification. Explore how a multi-engine ensemble distributes probability across Glioma, Meningioma, Pituitary, and No Tumour categories.</p>
+    </div>
+    <div class="p24-audience-card">
+      <h4>Hospital Planners</h4>
+      <p>A demonstration of AI-augmented brain tumour triage. Zero PHI storage. Zone protocol ensures borderline cases receive mandatory human review before any workflow action.</p>
+    </div>
+    <div class="p24-audience-card">
+      <h4>Clinical AI Developers</h4>
+      <p>A reference implementation of 4-zone confidence routing applied to MRI classification — a design pattern for responsible AI deployment in high-stakes medical imaging contexts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CAPABILITIES ── -->
+<section class="p24-section">
+  <div class="p24-section-label">System Design</div>
+  <h2 class="p24-section-title">Three integrated capabilities</h2>
+  <p class="p24-section-lead">
+    P24 combines confidence-zone governance with a four-class MRI tumour classifier and a binary tumour-detection screen,
+    all running through the 15-engine AEGIS AI ensemble on every case.
+  </p>
+  <div class="p24-caps">
+    <div class="p24-cap">
+      <div class="p24-cap-num">Capability 1</div>
+      <h4>🚦 4-Zone Confidence Triage</h4>
+      <p>Every MRI case is routed to one of four governance zones based on the ensemble's classification confidence. Zone assignment drives the clinical recommendation — from VERIFIED (act) through LOW (mandatory specialist deferral).</p>
+      <div class="p24-cap-tags">
+        <span class="p24-cap-tag">4 zones</span>
+        <span class="p24-cap-tag">Confidence-driven routing</span>
+        <span class="p24-cap-tag">Specialist deferral</span>
+      </div>
+    </div>
+    <div class="p24-cap">
+      <div class="p24-cap-num">Capability 2</div>
+      <h4>🧬 4-Class MRI Classification</h4>
+      <p>The AEGIS AI ensemble classifies across all four brain tumour categories — Glioma, Meningioma, Pituitary Tumour, and No Tumour — with 99.03% validated accuracy on the distilled research dataset.</p>
+      <div class="p24-cap-tags">
+        <span class="p24-cap-tag">4 classes</span>
+        <span class="p24-cap-tag">99.03% accuracy</span>
+        <span class="p24-cap-tag">AEGIS ensemble</span>
+      </div>
+    </div>
+    <div class="p24-cap">
+      <div class="p24-cap-num">Capability 3</div>
+      <h4>⚡ Binary Tumour Detection</h4>
+      <p>An independent binary screen separates Tumour from No Tumour across all 7,200+ training MRI images, validated at AUC 0.9997 — the highest-confidence output in the system for preliminary screening.</p>
+      <div class="p24-cap-tags">
+        <span class="p24-cap-tag">AUC 0.9997</span>
+        <span class="p24-cap-tag">Binary Tumour / No Tumour</span>
+        <span class="p24-cap-tag">Independent screen</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRY IT NOW ── -->
+<section class="p24-section">
+  <div class="p24-section-label">Interactive Demo</div>
+  <h2 class="p24-section-title">Try it now — AEGIS TumorSentinel Demo Console</h2>
+  <p class="p24-section-lead">
+    16 pre-loaded MRI cases spanning all four tumour classes and all four governance zones.
+    Each case shows the full ensemble output: class, confidence percentage, binary screen result, zone assignment,
+    and the clinical recommendation the zone drives.
+  </p>
+  <div class="p24-try-box">
+    <p>16 pre-loaded demo cases — 4 tumour classes × 4 confidence zones.
+    Click any case to see the full AEGIS AI ensemble result instantly.
+    Upload your own MRI in Live Mode to generate a shareable retrieval code.</p>
+    <div class="p24-try-cases">
+      <span class="p24-try-case">Glioma — VERIFIED</span>
+      <span class="p24-try-case">Glioma — HIGH</span>
+      <span class="p24-try-case">Glioma — MID</span>
+      <span class="p24-try-case">Glioma — LOW</span>
+      <span class="p24-try-case">Meningioma — VERIFIED</span>
+      <span class="p24-try-case">Meningioma — HIGH</span>
+      <span class="p24-try-case">Meningioma — MID</span>
+      <span class="p24-try-case">Meningioma — LOW</span>
+      <span class="p24-try-case">Pituitary — VERIFIED</span>
+      <span class="p24-try-case">Pituitary — HIGH</span>
+      <span class="p24-try-case">Pituitary — MID</span>
+      <span class="p24-try-case">Pituitary — LOW</span>
+      <span class="p24-try-case">No Tumour — VERIFIED</span>
+      <span class="p24-try-case">No Tumour — HIGH</span>
+      <span class="p24-try-case">No Tumour — MID</span>
+      <span class="p24-try-case">No Tumour — LOW</span>
+    </div>
+    <a href="apps/aegis-p24-tumorsentinel.html" class="p24-cta">🧠 Open the TumorSentinel Demo Console →</a>
+    <p class="p24-try-note">All demo cases use synthetic pre-set values drawn from the research dataset. No real patient data. Zero PHI storage.</p>
+  </div>
+</section>
+
+<!-- ── ZONES ── -->
+<section class="p24-section">
+  <div class="p24-section-label">Governance Framework</div>
+  <h2 class="p24-section-title">The four governance zones</h2>
+  <p class="p24-section-lead">
+    Zone assignment is computed from the AEGIS ensemble's classification confidence.
+    The four zones map ensemble confidence to a specific clinical recommendation —
+    protecting patients by ensuring low-confidence cases are never acted on without specialist review.
+  </p>
+  <div class="p24-zones">
+    <div class="p24-zone verified">
+      <span class="p24-zone-badge">VERIFIED</span>
+      <h4>High Confidence</h4>
+      <p>Ensemble strongly supports the primary classification. Result can be used to inform the clinical workflow. Clinician confirms before action.</p>
+    </div>
+    <div class="p24-zone high">
+      <span class="p24-zone-badge">HIGH</span>
+      <h4>Good Confidence</h4>
+      <p>Ensemble reasonably supports the classification but with lower certainty. Radiologist notification recommended before acting on the result.</p>
+    </div>
+    <div class="p24-zone mid">
+      <span class="p24-zone-badge">MID</span>
+      <h4>Elevated Uncertainty</h4>
+      <p>Ensemble uncertainty is elevated. Human review required before any clinical decision. Do not use the classification as a primary determinant.</p>
+    </div>
+    <div class="p24-zone low">
+      <span class="p24-zone-badge">LOW</span>
+      <h4>Defer — Specialist Required</h4>
+      <p>Ensemble confidence is insufficient for any clinical use. Mandatory immediate specialist referral. The result must not drive any clinical decision.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CLASSES ── -->
+<section class="p24-section">
+  <div class="p24-section-label">Classification Categories</div>
+  <h2 class="p24-section-title">The four brain tumour classes</h2>
+  <p class="p24-section-lead">
+    AEGIS P24 classifies across all four categories from the brain tumour MRI research dataset,
+    spanning malignant primary tumours, benign tumours, and normal (no tumour) scans.
+  </p>
+  <div class="p24-classes">
+    <div class="p24-class">
+      <div class="p24-class-type malignant">⚠️ Malignant</div>
+      <h4>Glioma</h4>
+      <p>Primary brain tumour arising from glial cells. Includes GBM (Grade IV), the most aggressive form. Irregular enhancement pattern on MRI. Any Glioma result requires immediate neurosurgical review.</p>
+    </div>
+    <div class="p24-class">
+      <div class="p24-class-type malignant">⚠️ Potentially Malignant</div>
+      <h4>Meningioma</h4>
+      <p>Arises from the meninges surrounding the brain and spinal cord. Usually slow-growing; majority benign (WHO Grade I) but higher grades exist. Often presents with dural tail sign on MRI.</p>
+    </div>
+    <div class="p24-class">
+      <div class="p24-class-type benign">✅ Benign</div>
+      <h4>Pituitary Tumour</h4>
+      <p>Adenoma of the pituitary gland. Typically benign with characteristic sellar/suprasellar location on MRI. Endocrine consequences may require management independent of malignancy classification.</p>
+    </div>
+    <div class="p24-class">
+      <div class="p24-class-type none">✅ Normal</div>
+      <h4>No Tumour</h4>
+      <p>No tumour mass identified in the MRI scan. Validated against 7,200+ MRI images including normal scans. Binary AUC 0.9997 for Tumour vs No Tumour detection.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── SCIENCE ── -->
+<section class="p24-section">
+  <div class="p24-section-label">Biomedical Engineering Science</div>
+  <h2 class="p24-section-title">The biomedical engineering science</h2>
+  <p class="p24-section-lead">
+    P24 is grounded in neuroimaging science, deep learning transfer, and clinical AI safety design.
+    The system uses a 15-engine AEGIS AI ensemble trained on distilled datasets derived from
+    publicly available brain MRI research data.
+  </p>
+  <div class="p24-gov-grid">
+    <div class="p24-gov-item">
+      <h5>🧠 Brain MRI and tumour classification</h5>
+      <p>Brain MRI distinguishes tumour subtypes through signal intensity, contrast enhancement patterns, mass effect, and anatomical location. T1 post-contrast, T2, and FLAIR sequences carry distinct diagnostic weight. The AEGIS P24 training corpus spans axial MRI slices across all four categories.</p>
+    </div>
+    <div class="p24-gov-item">
+      <h5>⚙️ AEGIS AI ensemble pipeline</h5>
+      <p>P24 runs a 15-engine AEGIS AI ensemble drawing on deep learning feature extraction and ensemble inference across multiple algorithmic approaches. Engine identity, weights, and architecture are IP-protected under the AEGIS research framework. The output is a class probability distribution and confidence score.</p>
+    </div>
+    <div class="p24-gov-item">
+      <h5>📐 Adaptive governance zone routing</h5>
+      <p>Confidence scores are routed through a zone classifier that assigns each result to VERIFIED, HIGH, MID, or LOW — with each zone carrying a specific clinical recommendation. Zone thresholds are class constants defined in the research framework.</p>
+    </div>
+    <div class="p24-gov-item">
+      <h5>🔒 Zero PHI storage</h5>
+      <p>The web application performs all inference client-side. No MRI image or patient identifier is transmitted or stored. Retrieval codes are self-decoding tokens containing only the classification result — no imaging data.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── RESULTS ── -->
+<section class="p24-section">
+  <div class="p24-section-label">Validated Results</div>
+  <h2 class="p24-section-title">Validated results — honest accuracy, reported as-is</h2>
+  <p class="p24-section-lead">
+    All engines trained and evaluated on distilled datasets drawn from the brain tumour MRI research corpus
+    under strict train/test separation. Results reported as measured.
+  </p>
+  <div class="p24-metric-row">
+    <div class="p24-metric">
+      <span class="p24-metric-val">0.9997</span>
+      <span class="p24-metric-lbl">Binary AUC · Tumour vs No Tumour</span>
+    </div>
+    <div class="p24-metric">
+      <span class="p24-metric-val">99.03%</span>
+      <span class="p24-metric-lbl">4-Class Accuracy · AEGIS ensemble</span>
+    </div>
+    <div class="p24-metric">
+      <span class="p24-metric-val">15</span>
+      <span class="p24-metric-lbl">Ensemble engines · AEGIS AI</span>
+    </div>
+  </div>
+  <div class="p24-table-wrap">
+    <table class="p24-table">
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>System</th>
+          <th>Metric</th>
+          <th>Value</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Binary detection</td>
+          <td>AEGIS AI ensemble (15 engines)</td>
+          <td>AUC</td>
+          <td><strong>0.9997</strong></td>
+          <td>Tumour vs No Tumour · distilled research dataset</td>
+        </tr>
+        <tr>
+          <td>4-class classification</td>
+          <td>AEGIS AI ensemble (15 engines)</td>
+          <td>Accuracy</td>
+          <td><strong>99.03%</strong></td>
+          <td>Glioma / Meningioma / Pituitary / No Tumour</td>
+        </tr>
+        <tr>
+          <td>Training corpus</td>
+          <td>—</td>
+          <td>MRI images</td>
+          <td><strong>7,200+</strong></td>
+          <td>Brain tumour MRI research dataset</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="p24-note">
+    <strong>Honest note:</strong> P24 results are validated on a distilled research dataset.
+    Real-world clinical deployment would require prospective validation on independent institutional data,
+    regulatory review, and full clinical trial. These results demonstrate the system's capability
+    as a research and educational tool — not as a certified medical device.
+  </div>
+</section>
+
+<!-- ── GOVERNANCE ── -->
+<section class="p24-section">
+  <div class="p24-section-label">Data Governance</div>
+  <h2 class="p24-section-title">Dataset integrity and data governance</h2>
+  <p class="p24-section-lead">
+    P24 is trained and validated on a distilled research dataset derived from the brain tumour MRI
+    public research corpus — a widely used benchmark in neuro-oncology AI research.
+  </p>
+  <div class="p24-gov-grid">
+    <div class="p24-gov-item">
+      <h5>Not a medical device</h5>
+      <p>AEGIS TumorSentinel is a research and educational demonstration. Nothing it outputs is medical advice. Results must not substitute for clinical assessment by a qualified neurologist or radiologist.</p>
+    </div>
+    <div class="p24-gov-item">
+      <h5>De-identified data only</h5>
+      <p>No real patient data was used in training or demo. All demo cases are pre-set synthetic values. No MRI is stored on any server. The system processes images locally in the browser.</p>
+    </div>
+    <div class="p24-gov-item">
+      <h5>PDPA compliance</h5>
+      <p>Zero PHI storage architecture. Retrieval codes contain only classification meta — no imaging data. Institutional use requires a Data Use Agreement before any data exchange.</p>
+    </div>
+    <div class="p24-gov-item">
+      <h5>Institutional partners receive</h5>
+      <p>Full technical report with validation methodology · AEGIS Desktop Application licence · Progressive clinical trial protocol · DUA provided before any data exchange.</p>
+    </div>
+  </div>
+  <div class="p24-cta-bar">
+    <a href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P24%20%E2%80%94%20Institutional%20Enquiry&body=I%20have%20read%20the%20terms%20on%20the%20AEGIS%20P24%20page%20and%20wish%20to%20enquire%20about%20collaboration." class="p24-cta">🏥 Institutional &amp; clinical enquiry</a>
+    <a href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P24%20%E2%80%94%20Research%20Collaboration" class="p24-cta-secondary">🔬 Research collaboration</a>
+    <a href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P24%20%E2%80%94%20Data%20Partnership" class="p24-cta-secondary">📊 Data partnership</a>
+  </div>
+  <p class="p24-disclaimer">All enquiries to aegisloh@aegishumanai.com. International partnerships welcome. DUA provided before any data exchange.</p>
+
+  <div style="margin-top:36px; padding-top:28px; border-top:1px solid #e2e8f0;">
+    <div class="p24-section-label">Also in the AEGIS Clinical AI portfolio</div>
+    <div class="p24-related" style="margin-top:10px;">
+      <a href="project-23-skin-disease.html">P23 · AEGIS SkinScan — Skin Disease Triage</a>
+      <a href="project-22-alzheimer.html">P22 · AEGIS NeuroScan — Alzheimer's MRI</a>
+      <a href="project-20-breast-cancer.html">P20 · AEGIS Breast — Unified Breast Screening</a>
+      <a href="project-21-parkinson.html">P21 · AEGIS Parkinson — Gait Analysis</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.container -->
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <div class="container">
+    <img src="assets/logo-mark-nav.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+    <p>© 2026 Loh Kah Meng. Built with real data and honest write-ups.</p>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21">LinkedIn</a></li>
+      <li><a href="mailto:aegisloh@aegishumanai.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+// Mobile nav toggle (matches portfolio script)
+const navToggle = document.getElementById('navToggle');
+const navLinks  = document.getElementById('navLinks');
+if (navToggle && navLinks) {
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+}
+</script>
+</body>
+</html>
