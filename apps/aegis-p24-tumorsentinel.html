@@ -203,7 +203,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.92);backdrop-fi
     <div class="hero-content">
       <div class="hero-eyebrow">AEGIS Project 24 · Clinical Decision Support</div>
       <h1 class="hero-title">Brain Tumour MRI<br><span>Classification System</span></h1>
-      <p class="hero-sub">ResNet-50 CNN feature extraction · AEGIS AI ensemble · 4-class tumour detection · Adaptive governance zone routing</p>
+      <p class="hero-sub">AEGIS AI ensemble · 4-class tumour detection · Adaptive governance zone routing</p>
       <div class="hero-badges">
         <span class="badge badge-teal">AUC 0.9997</span>
         <span class="badge badge-teal">Accuracy 99.03%</span>
@@ -260,11 +260,11 @@ nav{position:sticky;top:0;z-index:100;background:rgba(11,15,26,0.92);backdrop-fi
 <div id="view-processing" class="view">
   <div class="spinner"></div>
   <div class="processing-title">AEGIS AI Ensemble Running</div>
-  <div class="processing-sub">ResNet-50 · PCA-512 · Ensemble inference</div>
+  <div class="processing-sub">AEGIS AI ensemble · Adaptive inference</div>
   <div class="processing-steps">
     <div class="proc-step done" id="ps1">✓ Image pre-processing complete</div>
-    <div class="proc-step active" id="ps2">⟳ Feature extraction — ResNet-50 backbone</div>
-    <div class="proc-step" id="ps3">○ PCA projection · 512-dim feature space</div>
+    <div class="proc-step active" id="ps2">⟳ Feature extraction — AEGIS backbone</div>
+    <div class="proc-step" id="ps3">○ Feature projection · High-dim feature space</div>
     <div class="proc-step" id="ps4">○ AEGIS AI ensemble classification</div>
     <div class="proc-step" id="ps5">○ Governance zone routing</div>
   </div>
@@ -397,7 +397,6 @@ function buildDemoGrid() {
     <div class="demo-card" onclick="runDemo('${c.id}')">
       <div class="dc-class">${c.cls}</div>
       <span class="dc-zone zone-${c.zone}">${c.zone}</span>
-      <div class="dc-id">${c.id}</div>
     </div>
   `).join('');
 }
@@ -464,7 +463,7 @@ function genCode(meta) {
 
 // ── Display result (internal — renders DOM from meta + code) ───────────────
 function _displayResult(meta, mriSrc, code) {
-  document.getElementById('result-mri-img').src = mriSrc || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="240"><rect fill="%23111827" width="300" height="240"/><text x="150" y="125" text-anchor="middle" fill="%2364748B" font-size="13" font-family="monospace">Demo Case: ' + meta.id + '</text></svg>';
+  document.getElementById('result-mri-img').src = mriSrc || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="240"><rect fill="%23111827" width="300" height="240"/><circle cx="150" cy="110" r="70" fill="none" stroke="%2320B2AA" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.4"/><circle cx="150" cy="110" r="45" fill="none" stroke="%2320B2AA" stroke-width="1" stroke-dasharray="2,4" opacity="0.25"/><text x="150" y="200" text-anchor="middle" fill="%2364748B" font-size="10" font-family="monospace">Demo Mode · No PHI</text></svg>';
 
   const zoneBar = document.getElementById('zone-bar');
   zoneBar.className = 'result-zone-bar ' + meta.zone;
@@ -495,8 +494,8 @@ function showResult(meta, mriSrc) {
 const STEPS = ['ps1','ps2','ps3','ps4','ps5'];
 const STEP_LABELS = [
   '✓ Image pre-processing complete',
-  '✓ Feature extraction — ResNet-50 backbone',
-  '✓ PCA projection · 512-dim feature space',
+  '✓ Feature extraction — AEGIS backbone',
+  '✓ Feature projection · High-dim feature space',
   '✓ AEGIS AI ensemble classification',
   '✓ Governance zone routing complete',
 ];
