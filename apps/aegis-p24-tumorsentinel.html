@@ -885,11 +885,14 @@ function doClassify() {
   const overlay = document.getElementById('proc-overlay');
   overlay.innerHTML = '<div style="color:#3ba8a0;font-size:.9rem;font-weight:700;">Sending&#8230;</div>';
   overlay.classList.add('active');
-  fetch('/api/p24-submit', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({name: uName, email: uEmail, filename: file.name})
-  })
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const b64 = e.target.result.split(',')[1];
+    fetch('/api/p24-submit', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({name: uName, email: uEmail, filename: file.name, filedata: b64})
+    })
   .then(function(r){ return r.json(); })
   .then(function(d) {
     overlay.innerHTML = '<div style="background:#161b22;border:1px solid #21262d;border-radius:12px;padding:36px 40px;max-width:420px;text-align:center;">'
@@ -909,7 +912,9 @@ function doClassify() {
       + '<button onclick="document.getElementById(\'proc-overlay\').classList.remove(\'active\');document.getElementById(\'proc-overlay\').innerHTML=\'\'" '
       + 'style="padding:8px 24px;background:#2E8B84;color:#fff;border:none;border-radius:6px;font-size:.84rem;font-weight:700;cursor:pointer;">Close</button>'
       + '</div>';
-  });
+    });
+  };
+  reader.readAsDataURL(file);
 }
 
 function showLiveResult(data, imgDataUrl, filename) {

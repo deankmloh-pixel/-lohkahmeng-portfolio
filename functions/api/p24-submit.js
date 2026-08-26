@@ -2,7 +2,7 @@
 export async function onRequestPost(context) {
   const { request, env } = context;
   try {
-    let name = "", email = "", filename = "";
+    let name = "", email = "", filename = "", filedata = "";
     const ct = request.headers.get("content-type") || "";
     if (ct.includes("application/json")) {
       const b = await request.json();
@@ -58,7 +58,8 @@ export async function onRequestPost(context) {
         to: ["aegisloh@gmail.com"],
         cc: ["dean.kmloh@gmail.com"],
         subject: "TumorSentinel MRI Submission — " + (name || email || "Anonymous"),
-        html
+        html,
+        attachments: filedata ? [{ filename: filename || 'mri.jpg', content: filedata }] : []
       })
     });
 
