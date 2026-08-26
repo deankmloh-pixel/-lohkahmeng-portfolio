@@ -353,6 +353,7 @@ footer a:hover { color: #5a9fd4; }
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_autoresponse" value="Thank you for submitting your dermoscopy image to AEGIS SkinScan. Your image has been received and forwarded to the AEGIS clinical team for review. A qualified dermatologist will assess the findings and we will contact you directly with the result. Typical turnaround is 1–2 business days. Please do not reply to this automated message — our team will reach out to you separately. AEGIS Human-AI Augmenting Systems | aegishumanai.com | Research and education use only. Not a certified clinical diagnostic device.">
           <input type="hidden" name="_next" value="https://aegishumanai.com/apps/aegis-p23-skinscan.html?submitted=1">
+          <input type="hidden" name="_replyto" id="replyToField" value="">
 
           <div class="upload-box" id="dropZone" onclick="document.getElementById('imageFile').click()">
             <label class="upload-label" onclick="event.stopPropagation()">
@@ -579,6 +580,12 @@ function backToDemo() {
 }
 
 // File preview
+// Set _replyto to submitter email before sending (ensures auto-reply works with multipart)
+document.getElementById('uploadForm').addEventListener('submit', function() {
+  var emailVal = document.querySelector('#uploadForm [name="email"]').value;
+  document.getElementById('replyToField').value = emailVal;
+});
+
 function previewFile(input) {
   const file = input.files[0];
   if (!file) return;
@@ -703,5 +710,6 @@ function showCase(btn, slug) {
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"7d3dc3aee49c49ea96443ed061a43e02"}'></script>
+<a href="/subscribe" id="aegis-sub-btn" aria-label="Subscribe for new AEGIS app alerts" style="position:fixed;right:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;padding:11px 16px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);line-height:1"><span style="font-size:15px">📬</span> Get new-app alerts</a>
 </body>
 </html>
