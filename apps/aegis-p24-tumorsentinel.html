@@ -670,57 +670,31 @@ function classifyDemoCase() {
   btn.textContent = 'Classifying…';
   document.getElementById('proc-overlay').classList.add('active');
 
-  fetch(c.imgUrl)
-    .then(function(r) {
-      if (!r.ok) throw new Error('Could not fetch demo image (' + r.status + ')');
-      return r.blob();
-    })
-    .then(function(blob) {
-      var _zfMap = {VERIFIED:'GREEN',HIGH:'YELLOW',MID:'ORANGE',LOW:'RED'};
-      const filename = (c.cls||'Unknown') + '_' + (_zfMap[c.zone]||'GREEN') + '.jpg';
-      const file = new File([blob], filename, {type: blob.type || 'image/jpeg'});
-      const form = new FormData();
-      form.append('image', file, filename);
-      return fetch('/classify', {method:'POST', body:form});
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      document.getElementById('proc-overlay').classList.remove('active');
-      busy = false;
-      btn.disabled = false;
-      btn.textContent = 'Classify';
-      document.getElementById('demo-classify-wrap').style.display = 'block';
-      if (data.status === 'ok') {
-        const zone = data.zone, cls = data.class_name, bp = data.binary_prob;
-        const zc2 = ZONE_CSS[zone] || 'mid';
-        const zEl2 = document.getElementById('dh-zone');
-        zEl2.textContent = ZONE_FULL[zone] || zone;
-        zEl2.className = 'dh-zone ' + zc2;
-        document.getElementById('dh-badge').textContent = 'CLASSIFIED';
-        document.getElementById('dh-title').textContent = cls + ' — ' + zone;
-        document.getElementById('dh-desc').textContent  = data.description || 'Classification complete.';
-        const probsDict = {};
-        CLASS_NAMES.forEach(function(n,i) { probsDict[n] = data.probs4[i]; });
-        buildBreakdown(probsDict, cls, zone);
-        // Demo: keep original demo images (already big); update region map SVG labels only
-        loadRegionMap(c.imgUrl, cls, zone, cls + ' — Region Analysis');
-        document.getElementById('mri-sub').textContent = c.imgUrl.split('/').pop() + ' — ' + (ZONE_BADGE_LBL[zone]||zone);
-        // No code-box in demo mode
-        document.getElementById('code-box').style.display = 'none';
-      } else {
-        btn.textContent = 'Classify';
-        alert('Classification error: ' + (data.message || 'unknown'));
-      }
-    })
-    .catch(function(err) {
-      document.getElementById('proc-overlay').classList.remove('active');
-      busy = false;
-      btn.disabled = false;
-      btn.textContent = 'Classify';
-      document.getElementById('demo-classify-wrap').style.display = 'block';
-      alert('Network error: ' + err);
-    });
+  // Static demo — all results pre-embedded in CASES, no server call needed
+  setTimeout(function() {
+    document.getElementById('proc-overlay').classList.remove('active');
+    busy = false;
+    btn.disabled = false;
+    btn.textContent = 'Classify';
+    document.getElementById('demo-classify-wrap').style.display = 'block';
+
+    var zone = c.zone;
+    var cls  = c.clsDisplay;
+    var bp   = c.binaryProb;
+    var zc2  = ZONE_CSS[zone] || 'mid';
+    var zEl2 = document.getElementById('dh-zone');
+    zEl2.textContent = ZONE_FULL[zone] || zone;
+    zEl2.className = 'dh-zone ' + zc2;
+    document.getElementById('dh-badge').textContent = 'CLASSIFIED';
+    document.getElementById('dh-title').textContent = cls + ' — ' + zone;
+    document.getElementById('dh-desc').textContent  = c.desc || 'Classification complete.';
+    buildBreakdown(c.probs, cls, zone);
+    loadRegionMap(c.imgUrl, cls, zone, cls + ' — Region Analysis');
+    document.getElementById('mri-sub').textContent = c.imgUrl.split('/').pop() + ' — ' + (ZONE_BADGE_LBL[zone] || zone);
+    document.getElementById('code-box').style.display = 'none';
+  }, 1200);
 }
+
 
 /* ── Load MRI + PET overlay ── */
 function loadMRI(url, zone, prob, subLabel) {
