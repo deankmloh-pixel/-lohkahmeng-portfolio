@@ -510,7 +510,7 @@ body{display:flex;flex-direction:column;}
                  font-size:.84rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:background .15s;"
           onmouseover="this.style.background='#3ba8a0'" onmouseout="this.style.background='#2E8B84'"
           onclick="classifyDemoCase()">
-          View Analysis
+          Classify
         </button>
       </div>
       <div class="db">
@@ -609,7 +609,7 @@ function selectCase(id) {
   document.getElementById('code-box').style.display = 'none';
   document.getElementById('demo-classify-wrap').style.display = 'block';
   document.getElementById('demo-classify-btn').disabled = false;
-  document.getElementById('demo-classify-btn').textContent = 'View Analysis';
+  document.getElementById('demo-classify-btn').textContent = 'Classify';
 
   const zc = ZONE_CSS[c.zone] || 'mid';
   const zEl = document.getElementById('dh-zone');
@@ -640,7 +640,7 @@ function classifyDemoCase() {
   busy = true;
   const btn = document.getElementById('demo-classify-btn');
   btn.disabled = true;
-  btn.textContent = 'Loading…';
+  btn.textContent = 'Classifying…';
   document.getElementById('proc-overlay').classList.add('active');
 
   fetch(c.imgUrl)
@@ -661,7 +661,7 @@ function classifyDemoCase() {
       document.getElementById('proc-overlay').classList.remove('active');
       busy = false;
       btn.disabled = false;
-      btn.textContent = 'View Analysis';
+      btn.textContent = 'Classify';
       document.getElementById('demo-classify-wrap').style.display = 'block';
       if (data.status === 'ok') {
         const zone = data.zone, cls = data.class_name, bp = data.binary_prob;
@@ -681,7 +681,7 @@ function classifyDemoCase() {
         // No code-box in demo mode
         document.getElementById('code-box').style.display = 'none';
       } else {
-        btn.textContent = 'View Analysis';
+        btn.textContent = 'Classify';
         alert('Classification error: ' + (data.message || 'unknown'));
       }
     })
@@ -689,7 +689,7 @@ function classifyDemoCase() {
       document.getElementById('proc-overlay').classList.remove('active');
       busy = false;
       btn.disabled = false;
-      btn.textContent = 'View Analysis';
+      btn.textContent = 'Classify';
       document.getElementById('demo-classify-wrap').style.display = 'block';
       alert('Network error: ' + err);
     });
