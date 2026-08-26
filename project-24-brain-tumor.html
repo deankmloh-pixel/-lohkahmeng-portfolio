@@ -215,20 +215,28 @@
 }
 .p24-try-box p { font-size: 15px; color: #94a3b8; max-width: 56ch; line-height: 1.65; margin: 0; }
 .p24-try-cases {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  margin: 4px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin: 8px 0;
 }
 .p24-try-case {
-  background: rgba(46,139,132,0.12);
+  background: rgba(46,139,132,0.10);
   border: 1px solid rgba(46,139,132,0.25);
-  border-radius: 6px;
-  padding: 5px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #3ba8a0;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform .15s, border-color .15s;
+  text-align: center;
+}
+.p24-try-case:hover { transform: translateY(-2px); border-color: rgba(46,139,132,0.6); }
+.p24-try-case img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.p24-try-case-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 2px;
+  line-height: 1.4;
+  letter-spacing: .03em;
 }
 .p24-try-note { font-size: 12px; color: #475569; margin: 0; }
 
@@ -589,22 +597,22 @@
     Click any case to see the full AEGIS AI ensemble result instantly.
     Upload your own MRI in Live Mode to generate a shareable retrieval code.</p>
     <div class="p24-try-cases">
-      <span class="p24-try-case">Glioma — VERIFIED</span>
-      <span class="p24-try-case">Glioma — HIGH</span>
-      <span class="p24-try-case">Glioma — MID</span>
-      <span class="p24-try-case">Glioma — LOW</span>
-      <span class="p24-try-case">Meningioma — VERIFIED</span>
-      <span class="p24-try-case">Meningioma — HIGH</span>
-      <span class="p24-try-case">Meningioma — MID</span>
-      <span class="p24-try-case">Meningioma — LOW</span>
-      <span class="p24-try-case">Pituitary — VERIFIED</span>
-      <span class="p24-try-case">Pituitary — HIGH</span>
-      <span class="p24-try-case">Pituitary — MID</span>
-      <span class="p24-try-case">Pituitary — LOW</span>
-      <span class="p24-try-case">No Tumour — VERIFIED</span>
-      <span class="p24-try-case">No Tumour — HIGH</span>
-      <span class="p24-try-case">No Tumour — MID</span>
-      <span class="p24-try-case">No Tumour — LOW</span>
+      <div class="p24-try-case" style="border-color:#16A34A44"><img src="assets/p24/Glioma_GREEN.jpg" alt="Glioma VERIFIED" loading="lazy"><div class="p24-try-case-lbl" style="color:#16A34A">Glioma<br>VERIFIED</div></div>
+      <div class="p24-try-case" style="border-color:#CA8A0444"><img src="assets/p24/Glioma_YELLOW.jpg" alt="Glioma HIGH" loading="lazy"><div class="p24-try-case-lbl" style="color:#CA8A04">Glioma<br>HIGH</div></div>
+      <div class="p24-try-case" style="border-color:#EA580C44"><img src="assets/p24/Glioma_ORANGE.jpg" alt="Glioma MID" loading="lazy"><div class="p24-try-case-lbl" style="color:#EA580C">Glioma<br>MID</div></div>
+      <div class="p24-try-case" style="border-color:#C0392B44"><img src="assets/p24/Glioma_RED.jpg" alt="Glioma LOW" loading="lazy"><div class="p24-try-case-lbl" style="color:#C0392B">Glioma<br>LOW</div></div>
+      <div class="p24-try-case" style="border-color:#16A34A44"><img src="assets/p24/Meningioma_GREEN.jpg" alt="Meningioma VERIFIED" loading="lazy"><div class="p24-try-case-lbl" style="color:#16A34A">Meningioma<br>VERIFIED</div></div>
+      <div class="p24-try-case" style="border-color:#CA8A0444"><img src="assets/p24/Meningioma_YELLOW.jpg" alt="Meningioma HIGH" loading="lazy"><div class="p24-try-case-lbl" style="color:#CA8A04">Meningioma<br>HIGH</div></div>
+      <div class="p24-try-case" style="border-color:#EA580C44"><img src="assets/p24/Meningioma_ORANGE.jpg" alt="Meningioma MID" loading="lazy"><div class="p24-try-case-lbl" style="color:#EA580C">Meningioma<br>MID</div></div>
+      <div class="p24-try-case" style="border-color:#C0392B44"><img src="assets/p24/Meningioma_RED.jpg" alt="Meningioma LOW" loading="lazy"><div class="p24-try-case-lbl" style="color:#C0392B">Meningioma<br>LOW</div></div>
+      <div class="p24-try-case" style="border-color:#16A34A44"><img src="assets/p24/Pituitary_GREEN.jpg" alt="Pituitary VERIFIED" loading="lazy"><div class="p24-try-case-lbl" style="color:#16A34A">Pituitary<br>VERIFIED</div></div>
+      <div class="p24-try-case" style="border-color:#CA8A0444"><img src="assets/p24/Pituitary_YELLOW.jpg" alt="Pituitary HIGH" loading="lazy"><div class="p24-try-case-lbl" style="color:#CA8A04">Pituitary<br>HIGH</div></div>
+      <div class="p24-try-case" style="border-color:#EA580C44"><img src="assets/p24/Pituitary_ORANGE.jpg" alt="Pituitary MID" loading="lazy"><div class="p24-try-case-lbl" style="color:#EA580C">Pituitary<br>MID</div></div>
+      <div class="p24-try-case" style="border-color:#C0392B44"><img src="assets/p24/Pituitary_RED.jpg" alt="Pituitary LOW" loading="lazy"><div class="p24-try-case-lbl" style="color:#C0392B">Pituitary<br>LOW</div></div>
+      <div class="p24-try-case" style="border-color:#16A34A44"><img src="assets/p24/No_Tumor_GREEN.jpg" alt="No Tumour VERIFIED" loading="lazy"><div class="p24-try-case-lbl" style="color:#16A34A">No Tumour<br>VERIFIED</div></div>
+      <div class="p24-try-case" style="border-color:#CA8A0444"><img src="assets/p24/No_Tumor_YELLOW.jpg" alt="No Tumour HIGH" loading="lazy"><div class="p24-try-case-lbl" style="color:#CA8A04">No Tumour<br>HIGH</div></div>
+      <div class="p24-try-case" style="border-color:#EA580C44"><img src="assets/p24/No_Tumor_ORANGE.jpg" alt="No Tumour MID" loading="lazy"><div class="p24-try-case-lbl" style="color:#EA580C">No Tumour<br>MID</div></div>
+      <div class="p24-try-case" style="border-color:#C0392B44"><img src="assets/p24/No_Tumor_RED.jpg" alt="No Tumour LOW" loading="lazy"><div class="p24-try-case-lbl" style="color:#C0392B">No Tumour<br>LOW</div></div>
     </div>
     <a href="apps/aegis-p24-tumorsentinel.html" class="p24-cta">🧠 Open the TumorSentinel Demo Console →</a>
     <p class="p24-try-note">All demo cases use synthetic pre-set values drawn from the research dataset. No real patient data. Zero PHI storage.</p>
