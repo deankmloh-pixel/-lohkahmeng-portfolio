@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS P25T — Ocular Tumor Diagnostic Tool (Intraocular Tumour Triage) · Loh Kah Meng</title>
+<meta name="description" content="AEGIS P25T Ocular Tumor Diagnostic Tool: a 13-engine ensemble for intraocular tumour triage from colour fundus photographs. 6 classes (Normal, Retinoblastoma, Uveal Melanoma, Retinal Capillary Hemangioma, Choroidal Osteoma, Choroidal Hemangioma) plus an independent out-of-distribution safety gate. System AUC 0.9521. Public demo console. An eye-care professional always stays in command.">
+<link rel="canonical" href="https://aegishumanai.com/project-25-ocular-tumor.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AEGIS P25T — Ocular Tumor Diagnostic Tool (P25)">
+<meta property="og:description" content="13-engine ensemble for intraocular tumour triage from fundus photographs — 6 classes, severity-based 4-zone triage, independent out-of-distribution safety gate, System AUC 0.9521. An eye-care professional always stays in command.">
+<meta property="og:image" content="https://aegishumanai.com/assets/p25/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── Audience tiles ─────────────────────────────────────── */
+.audience-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:20px 0;}
+.aud-tile{border-radius:12px;padding:16px 13px;text-align:center;cursor:default;}
+.aud-tile .aud-icon{font-size:26px;margin-bottom:8px;}
+.aud-tile .aud-who{font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px;}
+.aud-tile .aud-need{font-size:11.5px;line-height:1.55;}
+.aud-tile.clin{background:#e8f0fc;border:2px solid #003366;}.aud-tile.clin .aud-who{color:#003366;}
+.aud-tile.res{background:#f0f8f0;border:2px solid #007700;}.aud-tile.res .aud-who{color:#007700;}
+.aud-tile.edu{background:#fff8e0;border:2px solid #C49A00;}.aud-tile.edu .aud-who{color:#7a5a00;}
+.aud-tile.stu{background:#f5f0fb;border:2px solid #5a3d8c;}.aud-tile.stu .aud-who{color:#5a3d8c;}
+.aud-tile.hosp{background:#fff0f0;border:2px solid #C00000;}.aud-tile.hosp .aud-who{color:#C00000;}
+
+/* ── Capability cards ───────────────────────────────────── */
+.cap-stack{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0;}
+.cap-card{border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.10);}
+.cap-card-head{padding:14px 16px 12px;color:white;font-weight:800;}
+.cap-card-head .layer{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.8;margin-bottom:3px;}
+.cap-card-head .title{font-size:16px;}
+.cap-card-body{padding:14px 16px;background:white;font-size:12.5px;line-height:1.7;color:#2a3a50;}
+.cap-card.triage  .cap-card-head{background:#7a2000;}
+.cap-card.ood     .cap-card-head{background:#900020;}
+.cap-card.cls     .cap-card-head{background:#003366;}
+.cap-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:20px;padding:2px 8px;margin-top:8px;}
+.cap-badge.triage{background:#fff0f0;color:#7a2000;}
+.cap-badge.ood{background:#ffe8ec;color:#900020;}
+.cap-badge.cls{background:#e8f0fc;color:#003366;}
+
+/* ── Science callouts ───────────────────────────────────── */
+.sci-duo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+.sci-box{border-radius:12px;padding:16px 18px;border-left:5px solid;}
+.sci-box.derm{background:#e8f0fc;border-color:#003366;}
+.sci-box.ml{background:#f0f8f0;border-color:#007700;}
+.sci-box .sci-head{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+.sci-box.derm .sci-head{color:#003366;}.sci-box.ml .sci-head{color:#007700;}
+.sci-box p{font-size:12.5px;line-height:1.65;color:#2a3a50;}
+.sci-feat{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.sci-feat span{background:white;border:1px solid rgba(0,0,0,.12);border-radius:6px;font-size:11px;font-weight:600;padding:3px 8px;color:#2a3a50;}
+
+/* ── Zone strip ─────────────────────────────────────────── */
+.zone-strip{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0;}
+.zone-chip{flex:1;min-width:130px;border-radius:12px;padding:14px 16px;font-size:12.5px;line-height:1.55;}
+.zone-chip strong{display:block;font-size:14px;font-weight:900;margin-bottom:4px;}
+.zone-chip.green{background:#0d2918;border:2px solid #16a34a;color:#86efac;}.zone-chip.green strong{color:#4ade80;}
+.zone-chip.yellow{background:#1f1000;border:2px solid #ca8a04;color:#fcd34d;}.zone-chip.yellow strong{color:#fbbf24;}
+.zone-chip.orange{background:#1f0a00;border:2px solid #ea580c;color:#fdba74;}.zone-chip.orange strong{color:#fb923c;}
+.zone-chip.red{background:#1f0000;border:2px solid #dc2626;color:#fca5a5;}.zone-chip.red strong{color:#f87171;}
+
+/* ── 6 class grid ───────────────────────────────────────── */
+.class-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0;}
+.class-card{border-radius:10px;padding:12px 14px;border:1px solid #cfd7e2;}
+.class-card.mal{background:#fff0f0;border-color:#C00000;}
+.class-card.sus{background:#fff8e0;border-color:#C49A00;}
+.class-card.ben{background:#f0fdf4;border-color:#2E8B84;}
+.class-card .cc-tag{font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px;}
+.class-card.mal .cc-tag{color:#C00000;}.class-card.sus .cc-tag{color:#7a5a00;}.class-card.ben .cc-tag{color:#007a5e;}
+.class-card .cc-name{font-size:13px;font-weight:700;color:#2a3a50;margin-bottom:4px;}
+.class-card .cc-desc{font-size:11.5px;color:#4a5a6a;line-height:1.5;}
+
+/* ── Engine metrics ─────────────────────────────────────── */
+.engine-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0;}
+.engine-trio-item{background:#f0f6ff;border-radius:10px;padding:14px;border-left:4px solid #003366;text-align:center;}
+.engine-trio-item .ev{font-size:22px;font-weight:900;color:#003366;}
+.engine-trio-item .ek{font-size:11px;color:#595959;margin-top:2px;font-weight:600;letter-spacing:.5px;}
+.mel-box{background:#ffe8ec;border:2px solid #C00000;border-radius:12px;padding:16px 20px;margin:16px 0;}
+.mel-box strong{color:#900020;}
+
+/* ── CTA strip ──────────────────────────────────────────── */
+.cta-strip{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0;}
+.cta-primary{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-size:14px;padding:13px 22px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.18);}
+.cta-secondary{display:inline-flex;align-items:center;gap:9px;background:white;color:#003366;font-weight:700;font-size:14px;padding:12px 20px;border-radius:999px;text-decoration:none;border:2px solid #003366;}
+.cta-tertiary{display:inline-flex;align-items:center;gap:9px;background:#900020;color:white;font-weight:700;font-size:14px;padding:12px 20px;border-radius:999px;text-decoration:none;}
+
+/* ── Indemnity ──────────────────────────────────────────── */
+.indemnity{background:#fff7ec;border:1px solid #e7cfa0;border-left:5px solid #c9a24b;border-radius:14px;padding:18px 20px;font-size:13px;line-height:1.65;color:#4a3d24;}
+.indemnity strong{color:#7a5b17;}
+
+/* ── Validated results table ─────────────────────────────── */
+.data-table td.num, .data-table th.num { text-align:right; }
+
+@media(max-width:720px){
+  .audience-grid{grid-template-columns:1fr 1fr;}
+  .cap-stack{grid-template-columns:1fr;}
+  .sci-duo{grid-template-columns:1fr;}
+  .class-grid{grid-template-columns:1fr 1fr;}
+  .engine-trio{grid-template-columns:1fr 1fr;}
+  .zone-strip{flex-direction:column;}
+  .cta-strip{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container">
+    <a href="index.html" class="brand"><img src="assets/logo-mark-nav.png" alt="" class="brand-mark">Loh Kah Meng<span class="dot">.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════════════════ HERO ═══════════════════════════════ -->
+<header class="page-header">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Work / AEGIS P25T Ocular Tumor</div>
+    <div class="tag tag-aqua">Biomedical Engineering &middot; Ophthalmology &middot; Fundus Imaging &middot; Intraocular Tumour Triage</div>
+    <h1>AEGIS P25T &mdash; Ocular Tumor Diagnostic Tool (P25)</h1>
+    <figure class="hero-image" style="margin:18px 0 10px;">
+      <img src="assets/p25/hero.jpg" alt="AEGIS P25T Ocular Tumor Diagnostic Tool — intraocular tumour triage from fundus photography" style="width:100%;height:auto;border-radius:12px;display:block;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative.</figcaption>
+    </figure>
+    <p class="lede">P25T classifies colour fundus photographs across <strong>6 intraocular disease classes</strong> using a <strong>13-engine ensemble</strong> and routes every case to one of four triage zones by clinical severity &mdash; from non-diseased to immediate specialist referral. An independent out-of-distribution safety gate catches anything that is not a genuine fundus photograph before it can be classified at all. An eye-care professional always stays in command. Seven annotated demo cases span the full spectrum from a healthy fundus to the out-of-distribution safety gate itself.</p>
+    <div class="meta-row">
+      <div class="meta-item"><div class="k">Modality</div><div class="v">Colour fundus photography &middot; ResNet-50 transfer learning &middot; 6 intraocular disease classes &middot; ultra-widefield fundus research dataset</div></div>
+      <div class="meta-item"><div class="k">Engine</div><div class="v">13-engine ensemble (ResNet-50 features, PCA k=256) &middot; severity-based 4-zone triage &middot; independent out-of-distribution safety gate</div></div>
+      <div class="meta-item"><div class="k">Validated Result</div><div class="v">System AUC 0.9521 &middot; per-class recall 52.9%&ndash;95.7% (out-of-fold) &middot; validated on a distilled research dataset</div></div>
+      <div class="meta-item"><div class="k">Audience</div><div class="v">Ophthalmologists &middot; GPs &middot; Researchers &middot; Clinical AI educators &middot; BME students &middot; Hospital planners</div></div>
+    </div>
+    <div class="cta-strip" style="margin-top:18px;">
+      <a class="cta-primary" href="apps/aegis-p25-oculartumor.html">&#128065; &nbsp;Open the P25T Demo Console &rarr;</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════ WHO THIS IS FOR ═══════════════════ -->
+<section style="padding:14px 0 6px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">Who this is for</h2>
+    <div class="audience-grid">
+      <div class="aud-tile clin">
+        <div class="aud-icon">&#128065;</div>
+        <div class="aud-who">Ophthalmologists</div>
+        <div class="aud-need">A severity-zoned triage aid for fundus review. Independent out-of-distribution gate defers anything that is not a genuine fundus photograph. Honest score, not a verdict.</div>
+      </div>
+      <div class="aud-tile res">
+        <div class="aud-icon">&#128300;</div>
+        <div class="aud-who">Researchers</div>
+        <div class="aud-need">Validated ensemble metrics reported out-of-fold, per class. Honest per-class recall reported as measured. ResNet-50 transfer learning pipeline with a 13-engine ensemble. Full methodology, no cherry-picking.</div>
+      </div>
+      <div class="aud-tile edu">
+        <div class="aud-icon">&#127891;</div>
+        <div class="aud-who">Educators</div>
+        <div class="aud-need">A live classroom tool: seven annotated fundus cases across 6 disease classes, severity zones, and an out-of-distribution gate demonstration. Companion textbook and lab sheet for biomedical AI courses.</div>
+      </div>
+      <div class="aud-tile stu">
+        <div class="aud-icon">&#128214;</div>
+        <div class="aud-who">Students</div>
+        <div class="aud-need">Explore how fundus features translate to AI classification. See how an ensemble routes cases by severity and why an eye-care professional must always review the result.</div>
+      </div>
+      <div class="aud-tile hosp">
+        <div class="aud-icon">&#127973;</div>
+        <div class="aud-who">Hospital Planners</div>
+        <div class="aud-need">A demonstration of AI-augmented fundus triage. PDPA-compliant. Zone protocol ensures every Tumor, Cancer, and out-of-distribution case reaches a specialist, never a silent algorithmic verdict.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ WHAT IT DOES ══════════════════════ -->
+<section style="padding:14px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">Three integrated capabilities</h2>
+    <p>P25T combines severity-based zone triage with an independent out-of-distribution safety gate and a six-class fundus classification engine. Each capability is designed to work together &mdash; classify the fundus image, catch anything that should never have been classified at all, and know exactly when to defer.</p>
+
+    <div class="cap-stack">
+      <div class="cap-card triage">
+        <div class="cap-card-head">
+          <div class="layer">Capability 1</div>
+          <div class="title">&#128677; Severity-Based Zone Triage</div>
+        </div>
+        <div class="cap-card-body">
+          Every fundus case is routed to one of four triage zones based on the clinical severity of the predicted class itself &mdash; not the model&rsquo;s confidence in it. Clinicians act on the colour, not a percentage figure.<br><br>
+          <strong>GREEN</strong>: Normal &mdash; non-diseased &middot; <strong>YELLOW</strong>: Tumor group (RCH / CO / CH) &mdash; potential, advise referral to consultant &middot; <strong>ORANGE</strong>: Cancer group (RB / UM) &mdash; strongly advised to refer to consultant &middot; <strong>RED</strong>: Unknown &mdash; refer to consultant immediately<br><br>
+          This is a deliberate clinical design choice: the zone reflects what the class means for the patient, so a clinician never has to translate a confidence percentage into an urgency decision themselves.
+          <span class="cap-badge triage">4 zones · Severity-based, not confidence-based · Specialist referral</span>
+        </div>
+      </div>
+      <div class="cap-card ood">
+        <div class="cap-card-head">
+          <div class="layer">Capability 2</div>
+          <div class="title">&#9888;&#65039; Independent Out-of-Distribution Safety Gate</div>
+        </div>
+        <div class="cap-card-body">
+          Before any classification is offered, the system checks whether the submitted image actually resembles a fundus photograph at all. Anything that does not &mdash; a photo of the wrong body part, a non-medical image, a corrupted upload &mdash; is flagged <strong>Unknown</strong> and routed to the most urgent zone, RED, rather than forced into one of the six disease classes.<br><br>
+          This means the system never guesses a diagnosis out of an image it was never designed to read. An unclassifiable image is treated as the highest-uncertainty case, not the least informative one.<br><br>
+          The gate operates independently of the 6-class classifier &mdash; it decides whether to classify at all, before the classifier ever runs.
+          <span class="cap-badge ood">Fires before classification · Routed to RED · Always disclosed</span>
+        </div>
+      </div>
+      <div class="cap-card cls">
+        <div class="cap-card-head">
+          <div class="layer">Capability 3</div>
+          <div class="title">&#128202; 6-Class Fundus Classification with Subtype Detail</div>
+        </div>
+        <div class="cap-card-body">
+          The 13-engine ensemble classifies across Normal plus five disease subtypes: Retinoblastoma (RB) and Uveal Melanoma (UM) under Cancer; Retinal Capillary Hemangioma (RCH), Choroidal Osteoma (CO), and Choroidal Hemangioma (CH) under Tumor.<br><br>
+          Once a case is classified Tumor or Cancer, a secondary research-grade subtype estimate names the specific disease and reports its own honest accuracy against chance level &mdash; never a silent guess dressed up as certainty.<br><br>
+          All seven demo cases are pre-loaded with real de-identified fundus images from the validation set.
+          <span class="cap-badge cls">6 classes · Subtype detail · Honest accuracy figures</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ LIVE TOOL ══════════════════════════ -->
+<section style="padding:10px 0 6px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">Try it now &mdash; AEGIS P25T Demo Console</h2>
+    <p>Seven fundus cases, each showing the full ensemble output: primary classification, severity zone, subtype estimate where applicable, and (for the out-of-distribution case) the safety gate firing as designed. Select a case and explore why the system refuses to guess when an image was never a fundus photograph to begin with.</p>
+    <figure style="margin:14px 0 10px;">
+      <img src="assets/p25/fundus-grid.jpg" alt="AEGIS P25T — fundus image grid showing six intraocular disease classes" style="width:100%;border-radius:12px;display:block;max-height:280px;object-fit:cover;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;">Six disease classes: Normal &middot; Retinoblastoma (RB) &middot; Uveal Melanoma (UM) &middot; Retinal Capillary Hemangioma (RCH) &middot; Choroidal Osteoma (CO) &middot; Choroidal Hemangioma (CH)</figcaption>
+    </figure>
+    <div class="cta-strip">
+      <a class="cta-primary" href="apps/aegis-p25-oculartumor.html">&#128065; &nbsp;Open the P25T Demo Console &rarr;</a>
+      <a class="cta-secondary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P25%20%E2%80%94%20Clinical%20Collaboration%20Enquiry">&#127973; &nbsp;Clinical collaboration enquiry</a>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">All seven demo cases use de-identified research fundus images from the system&rsquo;s own validation set. Never a clinical diagnosis. A qualified eye-care professional must interpret all findings.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════ THE 4 ZONES ════════════════════════ -->
+<section style="padding:10px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">The four triage zones &mdash; severity drives the clinical recommendation</h2>
+    <p>Zone assignment is computed from the clinical severity of the predicted class itself, not the ensemble&rsquo;s confidence in it &mdash; a deliberate design choice so a clinician reads urgency straight off the colour. The out-of-distribution gate operates independently, ahead of classification.</p>
+    <div class="zone-strip">
+      <div class="zone-chip green">
+        <strong>GREEN &mdash; Normal</strong>
+        Non-diseased fundus. The lowest-severity outcome the system can return. An eye-care professional&rsquo;s routine review remains the standard of care.
+      </div>
+      <div class="zone-chip yellow">
+        <strong>YELLOW &mdash; Tumor (RCH / CO / CH)</strong>
+        Potential intraocular tumour identified. Advise referral to a consultant. Subtype estimate shown alongside the honest accuracy figure it is built on.
+      </div>
+      <div class="zone-chip orange">
+        <strong>ORANGE &mdash; Cancer (RB / UM)</strong>
+        Malignant intraocular disease identified. Strongly advised to refer to consultant. Subtype estimate (Retinoblastoma or Uveal Melanoma) shown with its own honest accuracy figure.
+      </div>
+      <div class="zone-chip red">
+        <strong>RED &mdash; Unknown. Refer Immediately.</strong>
+        Either the out-of-distribution gate fired (the image was not recognisable as a fundus photograph) or the classifier could not resolve a confident class. Mandatory immediate specialist referral.
+      </div>
+    </div>
+    <div class="mel-box">
+      <strong>The out-of-distribution gate &mdash; the most important safety feature in P25T.</strong> A model trained on fundus photographs has no basis for classifying an image of anything else. The gate checks this before classification runs at all: an image that does not resemble the training distribution is flagged Unknown and routed straight to RED, the most urgent zone &mdash; rather than the classifier confidently assigning it to Normal, Tumor, or Cancer regardless. This is a deliberate clinical design choice &mdash; a system that guesses on the wrong kind of image is a far greater harm than one that honestly says it cannot tell. A clinician always makes the final call.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ THE 6 CLASSES ══════════════════════ -->
+<section style="padding:10px 0 4px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">The six intraocular disease classes</h2>
+    <p>AEGIS P25T classifies across six categories drawn from an ultra-widefield fundus imaging research dataset for intraocular tumor diagnosis. Once a case is classified Tumor or Cancer, a secondary subtype estimate names the specific disease.</p>
+    <div class="class-grid">
+      <div class="class-card ben">
+        <div class="cc-tag">&#9989; Non-Diseased</div>
+        <div class="cc-name">Normal</div>
+        <div class="cc-desc">Healthy fundus. Highest-recall class in validation (94.3% out-of-fold). GREEN zone &mdash; routine review remains standard of care.</div>
+      </div>
+      <div class="class-card mal">
+        <div class="cc-tag">&#9888;&#65039; Malignant &middot; Cancer</div>
+        <div class="cc-name">RB — Retinoblastoma</div>
+        <div class="cc-desc">Malignant intraocular tumour, most common in young children. ORANGE zone &mdash; strongly advised to refer. Subtype recall 95.7% out-of-fold.</div>
+      </div>
+      <div class="class-card mal">
+        <div class="cc-tag">&#9888;&#65039; Malignant &middot; Cancer</div>
+        <div class="cc-name">UM — Uveal Melanoma</div>
+        <div class="cc-desc">Most common primary intraocular malignancy in adults. ORANGE zone &mdash; strongly advised to refer. Subtype recall 52.9% out-of-fold &mdash; the hardest class in the panel; flagged honestly, not smoothed over.</div>
+      </div>
+      <div class="class-card sus">
+        <div class="cc-tag">&#128993; Tumor</div>
+        <div class="cc-name">RCH — Retinal Capillary Hemangioma</div>
+        <div class="cc-desc">Benign vascular tumour of the retina. YELLOW zone &mdash; potential, advise referral. Subtype recall 74.2% out-of-fold.</div>
+      </div>
+      <div class="class-card sus">
+        <div class="cc-tag">&#128993; Tumor</div>
+        <div class="cc-name">CO — Choroidal Osteoma</div>
+        <div class="cc-desc">Benign ossifying tumour of the choroid. YELLOW zone &mdash; potential, advise referral. Subtype recall 61.3% out-of-fold.</div>
+      </div>
+      <div class="class-card sus">
+        <div class="cc-tag">&#128993; Tumor</div>
+        <div class="cc-name">CH — Choroidal Hemangioma</div>
+        <div class="cc-desc">Benign vascular tumour of the choroid. YELLOW zone &mdash; potential, advise referral. Subtype recall 54.9% out-of-fold &mdash; the main source of confusion is with CO, disclosed openly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ THE SCIENCE ════════════════════════ -->
+<section style="padding:10px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">The biomedical engineering science</h2>
+    <p>P25T is grounded in fundus imaging science, transfer learning theory, and clinical AI safety design. The feature extraction pipeline, 13-engine ensemble, and severity-based zone routing all derive from first principles &mdash; not arbitrary choices.</p>
+
+    <div class="sci-duo">
+      <div class="sci-box derm">
+        <div class="sci-head">&#128065; Fundus imaging and intraocular tumour classification</div>
+        <p>Colour fundus photography captures the retina, optic disc, and posterior pole of the eye, revealing structural and vascular abnormalities associated with intraocular tumours &mdash; irregular pigmentation, mass elevation, calcification patterns, and vascular anomalies. AEGIS P25T learns to read these features from an ultra-widefield fundus imaging research dataset for intraocular tumor diagnosis, spanning Normal fundi and five distinct tumour subtypes across the retina and choroid.</p>
+        <div class="sci-feat">
+          <span>Colour fundus photography</span><span>Ultra-widefield imaging</span><span>Retinal &amp; choroidal pathology</span><span>6 disease classes</span><span>Out-of-distribution gate</span>
+        </div>
+      </div>
+      <div class="sci-box ml">
+        <div class="sci-head">&#9881;&#65039; Transfer learning and ensemble pipeline</div>
+        <p>P25T uses ResNet-50 pre-trained on ImageNet as the feature extractor &mdash; a deep convolutional architecture that captures rich visual representations from fundus images without requiring millions of labelled training examples. The extracted feature representation is reduced to a compact k=256 principal-component feature vector. Thirteen independently trained engines vote on the classification, and the same feature vector feeds two secondary subtype classifiers (Cancer: RB vs UM; Tumor: RCH vs CO vs CH) once the primary decision is Tumor or Cancer. Exact engine identities, thresholds, and internal weighting remain protected under the AEGIS IP Shield policy; the architecture itself is disclosed openly.</p>
+        <div class="sci-feat">
+          <span>ResNet-50</span><span>Transfer learning</span><span>PCA k=256</span><span>13-engine ensemble</span><span>Subtype classifiers</span><span>Out-of-fold validation</span>
+        </div>
+      </div>
+    </div>
+
+    <figure style="margin:16px 0;">
+      <img src="assets/p25/fundus-pattern.jpg" alt="AEGIS P25T — stylised radial fundus vasculature illustration" style="width:100%;border-radius:12px;display:block;max-height:300px;object-fit:cover;background:#0d1820;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ═══════════════════ ENGINE BOARD ═══════════════════════ -->
+<section style="padding:8px 0 4px;background:#f4f7fb;">
+  <div class="container">
+    <h2 style="margin-top:0;">Validated results &mdash; honest accuracy, reported as-is</h2>
+    <p>The system was trained and evaluated on a distilled research dataset under strict group-aware out-of-fold validation, so no image from the same source patient appears in both training and evaluation. Results reported exactly as measured &mdash; no inflation, no cherry-picking.</p>
+
+    <div class="engine-trio">
+      <div class="engine-trio-item"><div class="ev">0.9521</div><div class="ek">System AUC &middot; macro, across all classes</div></div>
+      <div class="engine-trio-item"><div class="ev">94.3%</div><div class="ek">Recall &middot; Normal class, out-of-fold</div></div>
+      <div class="engine-trio-item"><div class="ev">95.7%</div><div class="ek">Recall &middot; Retinoblastoma, out-of-fold</div></div>
+    </div>
+
+    <table class="data-table">
+      <thead><tr><th>Class</th><th>Zone</th><th class="num">Recall (out-of-fold)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Normal</strong></td><td>GREEN</td><td class="num"><strong>94.3%</strong></td></tr>
+        <tr><td><strong>RB</strong> — Retinoblastoma</td><td>ORANGE (Cancer)</td><td class="num"><strong>95.7%</strong></td></tr>
+        <tr><td>UM — Uveal Melanoma</td><td>ORANGE (Cancer)</td><td class="num">52.9%</td></tr>
+        <tr><td>RCH — Retinal Capillary Hemangioma</td><td>YELLOW (Tumor)</td><td class="num">74.2%</td></tr>
+        <tr><td>CO — Choroidal Osteoma</td><td>YELLOW (Tumor)</td><td class="num">61.3%</td></tr>
+        <tr><td>CH — Choroidal Hemangioma</td><td>YELLOW (Tumor)</td><td class="num">54.9%</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--text-muted);">Honest note: Uveal Melanoma and the Tumor-group subtypes (RCH, CO, CH) are meaningfully harder than Normal and Retinoblastoma &mdash; CH and CO are the main source of mutual confusion. These figures are stated plainly rather than smoothed over. This is exactly why every Tumor and Cancer case is routed to a mandatory-referral zone regardless of the subtype estimate&rsquo;s own confidence: the zone protects the patient even where the subtype call is uncertain.</p>
+
+    <table class="data-table" style="margin-top:14px;">
+      <thead><tr><th>Subtype task</th><th>Classes</th><th class="num">n</th><th class="num">Balanced accuracy (out-of-fold)</th><th class="num">Chance level</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Cancer subtype</strong></td><td>RB vs UM</td><td class="num">340</td><td class="num"><strong>93.1%</strong></td><td class="num">50.0%</td></tr>
+        <tr><td><strong>Tumor subtype</strong></td><td>RCH vs CO vs CH</td><td class="num">337</td><td class="num"><strong>72.7%</strong></td><td class="num">33.3%</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--text-muted);">Both subtype tasks are conditioned on the parent class already being correctly identified as Cancer or Tumor. Both are well above chance and are shown to the user as a research-grade estimate &mdash; not a substitute for histopathological diagnosis.</p>
+
+    <div class="mel-box">
+      <strong>Severity-based zone design &mdash; the key architectural decision.</strong> Rather than routing cases by how confident the ensemble is, P25T routes by what the predicted class means for the patient. A Cancer-class prediction always reaches ORANGE and a Tumor-class prediction always reaches YELLOW, regardless of the model&rsquo;s own confidence score, because the cost of under-triaging a malignant or tumour finding is far greater than the inconvenience of an extra referral. The out-of-distribution gate sits above all of this: it decides whether the image should be classified at all before any zone is assigned.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ DATASET & INTEGRITY ═══════════════ -->
+<section style="padding:10px 0 4px;">
+  <div class="container">
+    <h2 style="margin-top:0;">Dataset integrity and data governance</h2>
+    <p>P25T is trained and validated on a <strong>distilled research dataset</strong> derived from a publicly documented ultra-widefield fundus imaging dataset for intraocular tumor diagnosis. Raw patient fundus images are not distributed in the public demo. The seven demo cases embedded in the public console are de-identified research fundus images from the system&rsquo;s own validation set, released for educational and research use.</p>
+
+    <figure style="margin:0 0 18px;">
+      <img src="assets/p25/eye-emblem.jpg" alt="AEGIS P25T clinical collaboration — stylised eye emblem" style="width:100%;border-radius:12px;display:block;max-height:300px;object-fit:cover;background:#0d1820;" loading="lazy">
+      <figcaption style="font-size:11.5px;color:var(--text-muted);margin-top:6px;text-align:right;">Illustration &mdash; AI-generated, decorative.</figcaption>
+    </figure>
+
+    <p>These apps demonstrate clinical AI systems capable of classification, early pre-emptive detection, and progressive augmented management. Because the full AEGIS engine and dataset run to several gigabytes, only educational demo modes are hosted here &mdash; live classification on new patient fundus images requires the AEGIS Desktop Application. Institutions wishing to contribute local data for engine refinement are welcome to reach out; we share progressive validation results with every contributing partner and operate in strict accordance with PDPA.</p>
+
+    <p style="margin-top:10px;"><strong>What institutional partners receive:</strong> technical report with full validation methodology &middot; AEGIS Desktop Application licence &middot; progressive model result updates as the engine board improves &middot; co-attribution in peer-reviewed publications where applicable.</p>
+
+    <div class="indemnity" style="margin:16px 0;">
+      <strong>Ground rules for data contribution and institutional enquiry.</strong><br>
+      1. <strong>Not a medical device and not a diagnosis.</strong> AEGIS P25T is a research-stage tool. Nothing it outputs is medical advice, a diagnosis, or a substitute for a qualified eye-care professional. It does not diagnose, treat, cure, or prevent any condition.<br>
+      2. <strong>De-identified data only.</strong> Remove all PHI before contributing. Only submit data under your institution&rsquo;s ethics approval and with informed consent.<br>
+      3. <strong>Liability release.</strong> Contributing institutions agree to indemnify and hold harmless AEGIS, Dr Loh Kah Meng, and associated parties from any claims arising from use of or reliance on AEGIS outputs.<br>
+      4. <strong>DUA required.</strong> A formal Data Use Agreement is required before any institutional data exchange proceeds.<br>
+      5. <strong>PDPA compliance.</strong> All data handled under strict PDPA and applicable governance frameworks.
+    </div>
+
+    <div class="cta-strip">
+      <a class="cta-primary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P25%20%E2%80%94%20Institutional%20Enquiry&body=I%20have%20read%20the%20terms%20on%20the%20AEGIS%20P25%20page%20and%20wish%20to%20enquire%20about%20collaboration.">&#127973; &nbsp;Institutional &amp; clinical enquiry</a>
+      <a class="cta-tertiary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P25%20%E2%80%94%20Research%20Collaboration">&#128300; &nbsp;Research collaboration</a>
+      <a class="cta-secondary" href="mailto:aegisloh@aegishumanai.com?subject=AEGIS%20P25%20%E2%80%94%20Data%20Partnership">&#128202; &nbsp;Data partnership</a>
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:8px;">All enquiries to <strong>aegisloh@aegishumanai.com</strong>. International partnerships welcome. DUA provided before any data exchange.</p>
+
+    <div style="margin-top:18px;padding:13px 16px;background:#e0eaf8;border-radius:10px;font-size:13px;color:#1a2535;line-height:1.7;">
+      <strong>Also in the AEGIS Clinical AI portfolio:</strong> &nbsp;
+      <a href="project-24-brain-tumor.html" style="color:#003366;font-weight:700;">P24 &middot; AEGIS TumorSentinel</a> — Brain Tumour MRI Classification, AEGIS AI ensemble, 4-zone governance &nbsp;&middot;&nbsp;
+      <a href="project-23-skin-disease.html" style="color:#003366;font-weight:700;">P23 &middot; AEGIS SkinScan</a> — Dermoscopy Skin Disease Triage, 3-engine ensemble, melanoma flag &nbsp;&middot;&nbsp;
+      <a href="project-22-alzheimer.html" style="color:#003366;font-weight:700;">P22 &middot; AEGIS NeuroScan</a> — Alzheimer&rsquo;s MRI Classification, 4-engine SVM ensemble, NDI scoring
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <div class="footer-brand">
+      <img src="assets/logo-mark-gold-footer.png" alt="Loh Kah Meng signature mark" class="footer-mark">
+      <div class="copyright">&copy; 2026 Loh Kah Meng. Built with real data and honest write-ups.</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="prof-dhanjoo-ghista.html">In Tribute</a></li>
+      <li><a href="https://www.linkedin.com/in/kah-meng-loh-5b57bb21" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:aegisloh@aegishumanai.com">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-E5ZR5LF113');</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"7d3dc3aee49c49ea96443ed061a43e02"}'></script>
+<a href="/subscribe" id="aegis-sub-btn" aria-label="Subscribe for new AEGIS app alerts" style="position:fixed;right:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;padding:11px 16px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);line-height:1"><span style="font-size:15px">&#128235;</span> Get new-app alerts</a>
+</body>
+</html>
