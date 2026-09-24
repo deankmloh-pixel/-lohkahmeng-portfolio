@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AEGIS NeuroSentinel</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0d1117; --sf:#161b22; --sf2:#1c2128;
+  --bd:#21262d; --bdl:#30363d;
+  --tx:#e6edf3; --txm:#8b949e; --txd:#6e7681;
+  --ac:#2E8B84; --acl:#3ba8a0; --acd:#1a5c58;
+  --vr:#16A34A; --hi:#CA8A04; --mi:#EA580C; --lo:#C0392B;
+  --vbg:#0d2e14; --vbd:#1a4d22;
+  --hbg:#2d2000; --hbd:#5c4200;
+  --mbg:#2d1400; --mbd:#7a3200;
+  --lbg:#2d0a0a; --lbd:#7a1a1a;
+}
+html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);}
+.topbar{height:50px;background:linear-gradient(135deg,#0d1a35,#0f2a2a);border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:14px;padding:0 20px;flex-shrink:0;}
+.brand-hex{color:var(--acl);font-size:1.1rem;}
+.brand-name{font-size:.92rem;font-weight:800;color:var(--acl);}
+.brand-sub{font-size:.65rem;color:var(--txm);margin-top:1px;}
+.tb-nav{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:.7rem;color:var(--txm);}
+.tb-badge{background:var(--sf2);border:1px solid var(--bdl);border-radius:4px;padding:3px 9px;font-size:.66rem;font-weight:700;color:var(--txm);}
+body{display:flex;flex-direction:column;}
+.main{display:flex;flex:1;overflow:hidden;}
+.lp{width:340px;flex-shrink:0;background:var(--sf);border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden;}
+.lp-hdr{padding:12px 14px 9px;border-bottom:1px solid var(--bd);flex-shrink:0;}
+.lp-title{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txm);}
+.lp-sub{font-size:.66rem;color:var(--txd);margin-top:2px;}
+.cards{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:6px;}
+.cards::-webkit-scrollbar{width:3px;}
+.cards::-webkit-scrollbar-thumb{background:var(--bdl);border-radius:2px;}
+.case-card{display:flex;flex-direction:column;gap:4px;background:var(--sf2);border:1px solid var(--bd);
+  border-radius:8px;cursor:pointer;transition:border-color .15s,background .15s;padding:9px 12px;}
+.case-card:hover{border-color:var(--acl);}
+.case-card.selected.zone-verified{border-color:var(--vr);background:var(--vbg);}
+.case-card.selected.zone-high    {border-color:var(--hi);background:var(--hbg);}
+.case-card.selected.zone-mid     {border-color:var(--mi);background:var(--mbg);}
+.case-card.selected.zone-low     {border-color:var(--lo);background:var(--lbg);}
+.card-case{font-size:.56rem;font-weight:600;color:var(--txd);text-transform:uppercase;letter-spacing:.06em;}
+.card-title{font-size:.8rem;font-weight:700;color:var(--tx);line-height:1.25;margin-top:1px;}
+.card-desc{font-size:.66rem;color:var(--txm);line-height:1.35;margin-top:2px;}
+.card-foot{display:flex;align-items:center;gap:6px;margin-top:5px;}
+.card-score{font-size:.9rem;font-weight:800;font-variant-numeric:tabular-nums;}
+.card-score.verified{color:var(--vr);} .card-score.high{color:var(--hi);}
+.card-score.mid{color:var(--mi);}      .card-score.low{color:var(--lo);}
+.zone-badge{font-size:.55rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 5px;border-radius:3px;}
+.zone-badge.verified{background:var(--vbg);color:var(--vr);border:1px solid var(--vbd);}
+.zone-badge.high    {background:var(--hbg);color:var(--hi);border:1px solid var(--hbd);}
+.zone-badge.mid     {background:var(--mbg);color:var(--mi);border:1px solid var(--mbd);}
+.zone-badge.low     {background:var(--lbg);color:var(--lo);border:1px solid var(--lbd);}
+.submit-area{padding:8px 10px;border-top:1px solid var(--bd);flex-shrink:0;}
+.submit-btn{width:100%;padding:9px;border:none;border-radius:7px;cursor:pointer;
+  background:var(--ac);color:#fff;font-size:.8rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s;}
+.submit-btn:hover{background:var(--acl);}
+.rp{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);}
+.idle-st{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--txd);}
+.idle-ic{font-size:2.8rem;opacity:.2;}
+.idle-tx{font-size:.82rem;}
+.detail{flex:1;display:flex;flex-direction:column;overflow:hidden;overflow-y:auto;}
+.dh{padding:14px 20px 10px;border-bottom:1px solid var(--bd);flex-shrink:0;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.dh-zone{font-size:.62rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;margin-bottom:3px;}
+.dh-zone.verified{color:var(--vr);} .dh-zone.high{color:var(--hi);}
+.dh-zone.mid{color:var(--mi);}      .dh-zone.low{color:var(--lo);}
+.dh-title{font-size:.98rem;font-weight:800;color:var(--tx);}
+.dh-desc{font-size:.72rem;color:var(--txm);margin-top:2px;max-width:52ch;}
+.dh-badge{background:var(--sf2);border:1px solid var(--bdl);border-radius:4px;
+  padding:3px 8px;font-size:.64rem;font-weight:700;color:var(--txm);white-space:nowrap;flex-shrink:0;}
+.demo-classify-wrap{margin:14px 20px 0;}
+.demo-classify-btn{padding:8px 28px;background:var(--ac);color:#fff;border:none;border-radius:6px;
+  font-size:.84rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:background .15s;}
+.demo-classify-btn:hover{background:var(--acl);}
+.db{padding:18px 20px 24px;display:flex;flex-direction:column;gap:16px;}
+.zone-banner{border-radius:10px;padding:18px 20px;border:1px solid var(--bd);}
+.zone-banner-title{font-size:1.05rem;font-weight:800;margin-bottom:4px;}
+.zone-banner-rec{font-size:.82rem;color:var(--tx);line-height:1.5;}
+.zone-banner-prob{font-size:.72rem;color:var(--txm);margin-top:8px;}
+.sec-lbl{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txd);margin-bottom:8px;}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;}
+.feat-item{background:var(--sf2);border:1px solid var(--bd);border-radius:7px;padding:11px 13px;}
+.feat-name{font-size:.62rem;color:var(--txd);line-height:1.3;margin-bottom:4px;}
+.feat-val{font-size:1.0rem;font-weight:800;color:var(--tx);font-variant-numeric:tabular-nums;}
+.ip-note{background:var(--sf2);border:1px solid var(--bd);border-radius:8px;padding:12px 16px;font-size:.7rem;
+  color:var(--txd);line-height:1.55;}
+.ip-note b{color:var(--txm);}
+.proc-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
+  flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+.proc-overlay.active{display:flex;}
+.spinner{width:34px;height:34px;border:3px solid var(--bdl);border-top-color:var(--ac);
+  border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.proc-tx{font-size:.78rem;color:var(--txm);}
+.upload-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:150;align-items:center;justify-content:center;}
+.upload-modal.active{display:flex;}
+.upload-box{background:var(--sf);border:2px dashed var(--ac);border-radius:12px;padding:36px 48px;text-align:center;max-width:400px;width:90%;}
+.up-icon{font-size:2.4rem;margin-bottom:8px;}
+.up-title{font-size:.95rem;font-weight:800;margin-bottom:6px;}
+.up-sub{font-size:.74rem;color:var(--txm);margin-bottom:18px;}
+.up-btn{background:var(--ac);color:#fff;border:none;border-radius:7px;padding:9px 22px;font-size:.8rem;font-weight:700;cursor:pointer;transition:background .15s;}
+.up-btn:hover{background:var(--acl);}
+.up-close{display:block;margin-top:10px;font-size:.68rem;color:var(--txd);cursor:pointer;}
+.up-close:hover{color:var(--txm);}
+.up-field{width:100%;padding:9px 12px;background:#0d1117;border:1px solid #21262d;border-radius:6px;
+  color:#e6edf3;font-size:.88rem;margin-bottom:10px;outline:none;box-sizing:border-box;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="brand-hex">⬡</span>
+  <div>
+    <div class="brand-name">AEGIS NeuroSentinel</div>
+    <div class="brand-sub">Traumatic Brain Injury &middot; Intracranial Haemorrhage Screening &middot; AEGIS AI Ensemble</div>
+  </div>
+  <div class="tb-nav">
+    <span>← Case Study</span><span>·</span><span>All Systems</span><span>·</span>
+    <span class="tb-badge">AEGIS NeuroSentinel · WEB LIVE · v1.0.0-WEB</span>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="lp">
+    <div class="lp-hdr">
+      <div class="lp-title">Reference CT Samples</div>
+      <div class="lp-sub">8 demo cases · all 4 governance zones · click to review</div>
+    </div>
+    <div class="cards" id="cards"></div>
+    <div class="submit-area">
+      <button class="submit-btn" onclick="openUpload()">⬆ Submit Your CT Scan</button>
+    </div>
+  </div>
+
+  <div class="rp" id="rp">
+    <div class="idle-st" id="idle-st">
+      <div class="idle-ic">🧠</div>
+      <div class="idle-tx">Select a reference case or submit your CT scan</div>
+    </div>
+
+    <div class="detail" id="detail" style="display:none">
+      <div class="dh">
+        <div>
+          <div class="dh-zone" id="dh-zone">—</div>
+          <div class="dh-title" id="dh-title">—</div>
+          <div class="dh-desc" id="dh-desc">—</div>
+        </div>
+        <span class="dh-badge" id="dh-badge">DEMO</span>
+      </div>
+      <div class="demo-classify-wrap" id="demo-classify-wrap">
+        <button class="demo-classify-btn" id="demo-classify-btn" onclick="classifyDemoCase()">Analyse</button>
+      </div>
+      <div class="db">
+        <div class="zone-banner" id="zone-banner">
+          <div class="zone-banner-title" id="zb-title">—</div>
+          <div class="zone-banner-rec" id="zb-rec">—</div>
+          <div class="zone-banner-prob" id="zb-prob">—</div>
+        </div>
+        <div>
+          <div class="sec-lbl">CT Radiomic Feature Summary (5 of 26 modelled features)</div>
+          <div class="feat-grid" id="feat-grid"></div>
+        </div>
+        <div class="ip-note">
+          <b>How this result was produced.</b> Every case is scored by the AEGIS AI ensemble — 3 decision engines
+          voting by majority, cross-checked against 4 reference engines. Engine identity, architecture, and internal
+          weighting are protected AEGIS research IP and are never disclosed; only the ensemble's governance-zone
+          result is shown here. System AUC on RSNA validation: 90.15%.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="proc-overlay" id="proc-overlay">
+  <div class="spinner"></div>
+  <div class="proc-tx">Running AEGIS AI ensemble…</div>
+</div>
+
+<div class="upload-modal" id="upload-modal" onclick="if(event.target===this)closeUpload()">
+  <div class="upload-box">
+    <div class="up-icon">🧠</div>
+    <div class="up-title">Submit Your CT Scan</div>
+    <div class="up-sub">Select a head CT image or DICOM export (JPEG, PNG, or PDF report)</div>
+    <form id="p26-form" action="https://formsubmit.co/61e85a09f4cd056788bd23d6cf953b67"
+          method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="_subject" value="AEGIS NeuroSentinel (P26) CT Submission">
+      <input type="hidden" name="_cc" value="dean.kmloh@gmail.com">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://aegishumanai.com/apps/aegis-p26-neurosentinel.html?submitted=1">
+      <input type="hidden" name="_replyto" id="replyToField" value="">
+      <input type="text" id="user-name" name="name" placeholder="Your Name" autocomplete="name" class="up-field"
+             onfocus="this.style.borderColor='#3ba8a0'" onblur="this.style.borderColor='#21262d'">
+      <input type="email" id="user-email" name="email" placeholder="Your Email (to receive the report)" autocomplete="email" class="up-field"
+             onfocus="this.style.borderColor='#3ba8a0'" onblur="this.style.borderColor='#21262d'">
+      <input type="file" id="file-input" name="ct_image" accept="image/jpeg,image/png,application/pdf" style="display:none" onchange="handleFile(event)">
+      <button type="button" class="up-btn" onclick="document.getElementById('file-input').click()">Select File</button>
+      <button id="up-classify-btn" type="button" class="up-btn" onclick="doClassify()"
+              style="display:none;margin-top:8px;background:#16A34A;">▶ Send Enquiry</button>
+    </form>
+    <span class="up-close" onclick="closeUpload()">✕ Cancel</span>
+  </div>
+</div>
+
+<script>
+(function() {
+  if (new URLSearchParams(window.location.search).get('submitted') === '1') {
+    window.addEventListener('DOMContentLoaded', function() {
+      var overlay = document.getElementById('proc-overlay');
+      overlay.innerHTML = '<div style="background:#161b22;border:1px solid #21262d;border-radius:12px;padding:36px 40px;max-width:420px;text-align:center;">'
+        + '<div style="font-size:2rem;margin-bottom:12px;">📨</div>'
+        + '<div style="font-size:1rem;font-weight:700;color:#3ba8a0;margin-bottom:8px;">Submission Received</div>'
+        + '<div style="font-size:.84rem;color:#8b949e;margin-bottom:14px;">Thank you. Your CT scan has been forwarded to the AEGIS team. Your report will be sent to your email.</div>'
+        + '<div style="font-size:.72rem;color:#6e7681;margin-bottom:20px;">AEGIS NeuroSentinel · Clinical decision-support research tool</div>'
+        + '<button onclick="document.getElementById(\'proc-overlay\').classList.remove(\'active\');document.getElementById(\'proc-overlay\').innerHTML=\'\';history.replaceState(null,\'\',location.pathname)" '
+        + 'style="padding:8px 28px;background:#2E8B84;color:#fff;border:none;border-radius:6px;font-size:.84rem;font-weight:700;cursor:pointer;">Close</button>'
+        + '</div>';
+      overlay.classList.add('active');
+    });
+  }
+})();
+
+// Representative demo cases — synthetic values for illustration, not real patient scans.
+// Zone thresholds and recommendation text match the AEGIS NeuroSentinel desktop tool exactly
+// (p = ensemble decision-board probability of ICH; <0.15 VERIFIED, 0.15–0.35 HIGH, 0.35–0.65 MID, ≥0.65 LOW).
+const CASES = [
+  {id:0, zone:'VERIFIED', p:0.06, title:'Clear CT, No Bleed', desc:'Normal-density scan across all slices — no hyperdense focus identified.',
+    feats:{'Blood-window voxel fraction':'0.4%','HU 99th percentile':'58 HU','Hyperdense focus count':'0','Left/right asymmetry':'0.02','CT slices analysed':'32'}},
+  {id:1, zone:'VERIFIED', p:0.11, title:'Post-Op Scan, Clear', desc:'Post-craniotomy follow-up scan — surgical site clear, no new haemorrhage.',
+    feats:{'Blood-window voxel fraction':'0.9%','HU 99th percentile':'64 HU','Hyperdense focus count':'1','Left/right asymmetry':'0.05','CT slices analysed':'30'}},
+  {id:2, zone:'HIGH', p:0.22, title:'Trace Density, Low Probability', desc:'A small area of slightly elevated density noted — most consistent with imaging artefact.',
+    feats:{'Blood-window voxel fraction':'2.1%','HU 99th percentile':'71 HU','Hyperdense focus count':'1','Left/right asymmetry':'0.09','CT slices analysed':'34'}},
+  {id:3, zone:'HIGH', p:0.30, title:'Small Hyperdensity, Watch', desc:'Small focal hyperdensity in the frontal region — low ensemble confidence of true haemorrhage.',
+    feats:{'Blood-window voxel fraction':'3.4%','HU 99th percentile':'78 HU','Hyperdense focus count':'1','Left/right asymmetry':'0.12','CT slices analysed':'32'}},
+  {id:4, zone:'MID', p:0.48, title:'Equivocal Density, Ambiguous', desc:'Findings are equivocal — density profile sits between the normal and haemorrhage ranges.',
+    feats:{'Blood-window voxel fraction':'6.8%','HU 99th percentile':'84 HU','Hyperdense focus count':'2','Left/right asymmetry':'0.18','CT slices analysed':'28'}},
+  {id:5, zone:'MID', p:0.58, title:'Focal Hyperdensity, Caution', desc:'A focal hyperdense region with irregular margins — full ensemble disagreement is elevated.',
+    feats:{'Blood-window voxel fraction':'9.2%','HU 99th percentile':'89 HU','Hyperdense focus count':'2','Left/right asymmetry':'0.24','CT slices analysed':'30'}},
+  {id:6, zone:'LOW', p:0.74, title:'Acute SDH Pattern, Likely', desc:'Crescentic hyperdense collection along the convexity — pattern consistent with acute subdural haemorrhage.',
+    feats:{'Blood-window voxel fraction':'14.6%','HU 99th percentile':'96 HU','Hyperdense focus count':'3','Left/right asymmetry':'0.37','CT slices analysed':'30'}},
+  {id:7, zone:'LOW', p:0.91, title:'Large ICH Pattern, Urgent', desc:'Extensive hyperdense region with mass effect and marked asymmetry — pattern consistent with large intracranial haemorrhage.',
+    feats:{'Blood-window voxel fraction':'21.3%','HU 99th percentile':'103 HU','Hyperdense focus count':'4','Left/right asymmetry':'0.52','CT slices analysed':'26'}},
+];
+const ZONE_CSS  = {VERIFIED:'verified',HIGH:'high',MID:'mid',LOW:'low'};
+const ZONE_COLORS = {VERIFIED:'#16A34A',HIGH:'#CA8A04',MID:'#EA580C',LOW:'#C0392B'};
+// Recommendation text copied verbatim from the AEGIS NeuroSentinel desktop tool's ZONE_LABELS.
+const ZONE_LABELS = {
+  VERIFIED: 'NO HAEMORRHAGE DETECTED — AI confidence high',
+  HIGH: 'LOW PROBABILITY — Review recommended',
+  MID: 'AMBIGUOUS — Caution: reduced confidence, radiologist review advised',
+  LOW: 'HAEMORRHAGE LIKELY — Refer immediately',
+};
+// AEGIS 4-Zone Clinical Display Standard (DIEDIE_MUSTREAD.md, 2026-08-26): the
+// clinician-facing display must show the universal colour-zone name, never
+// this project's internal zone codenames (VERIFIED/HIGH/MID/LOW) -- matches
+// the same fix applied to the Desktop App (P26_TBI_App.py v1.2.0, 2026-09-24).
+const ZONE_DISPLAY = {VERIFIED:'GREEN', HIGH:'YELLOW', MID:'ORANGE', LOW:'RED'};
+
+let busy = false, _currentId = null;
+
+function renderCards() {
+  const wrap = document.getElementById('cards');
+  wrap.innerHTML = CASES.map(function(c, i) {
+    const zc = ZONE_CSS[c.zone];
+    return `<div class="case-card zone-${zc}" id="card-${i}" onclick="selectCase(${i})">
+      <div class="card-case">Case ${i+1}</div>
+      <div class="card-title">${c.title}</div>
+      <div class="card-desc">${c.desc}</div>
+      <div class="card-foot">
+        <span class="card-score ${zc}">${(c.p*100).toFixed(0)}%</span>
+        <span class="zone-badge ${zc}">${ZONE_DISPLAY[c.zone]}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectCase(id) {
+  if (busy) return;
+  const c = CASES[id];
+  if (!c) return;
+  _currentId = id;
+  document.querySelectorAll('.case-card').forEach(el => el.classList.remove('selected'));
+  const card = document.getElementById('card-' + id);
+  if (card) card.classList.add('selected');
+
+  document.getElementById('idle-st').style.display = 'none';
+  document.getElementById('detail').style.display  = 'flex';
+  document.getElementById('demo-classify-wrap').style.display = 'block';
+  document.getElementById('demo-classify-btn').disabled = false;
+  document.getElementById('demo-classify-btn').textContent = 'Analyse';
+  document.getElementById('dh-badge').textContent = 'DEMO';
+
+  const zc = ZONE_CSS[c.zone];
+  const zEl = document.getElementById('dh-zone');
+  zEl.textContent = ZONE_DISPLAY[c.zone];
+  zEl.className = 'dh-zone ' + zc;
+  document.getElementById('dh-title').textContent = c.title;
+  document.getElementById('dh-desc').textContent = c.desc;
+
+  document.getElementById('zone-banner').style.cssText = `background:${ZONE_COLORS[c.zone]}18;border-color:${ZONE_COLORS[c.zone]};border-radius:10px;padding:18px 20px;border-width:1px;border-style:solid;`;
+  document.getElementById('zb-title').textContent = '';
+  document.getElementById('zb-title').style.color = ZONE_COLORS[c.zone];
+  document.getElementById('zb-rec').textContent = '';
+  document.getElementById('zb-prob').textContent = '';
+  renderFeats(c.feats);
+}
+
+function classifyDemoCase() {
+  const id = _currentId;
+  if (id === null || busy) return;
+  const c = CASES[id];
+  busy = true;
+  const btn = document.getElementById('demo-classify-btn');
+  btn.disabled = true; btn.textContent = 'Analysing…';
+  document.getElementById('proc-overlay').classList.add('active');
+  setTimeout(function() {
+    document.getElementById('proc-overlay').classList.remove('active');
+    busy = false; btn.disabled = false; btn.textContent = 'Analyse';
+    document.getElementById('dh-badge').textContent = 'ANALYSED';
+    document.getElementById('zb-title').textContent = '● ' + ZONE_DISPLAY[c.zone];
+    document.getElementById('zb-rec').textContent = ZONE_LABELS[c.zone];
+    document.getElementById('zb-prob').textContent = 'AEGIS AI ensemble — decision-board probability of ICH: ' + (c.p*100).toFixed(1) + '%';
+  }, 1100);
+}
+
+function renderFeats(feats) {
+  const grid = document.getElementById('feat-grid');
+  grid.innerHTML = Object.keys(feats).map(function(k) {
+    return `<div class="feat-item"><div class="feat-name">${k}</div><div class="feat-val">${feats[k]}</div></div>`;
+  }).join('');
+}
+
+function openUpload()  { document.getElementById('upload-modal').classList.add('active'); }
+function closeUpload() {
+  document.getElementById('upload-modal').classList.remove('active');
+  document.getElementById('file-input').value = '';
+  document.getElementById('up-classify-btn').style.display = 'none';
+}
+function handleFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  document.getElementById('up-classify-btn').style.display = 'block';
+}
+function doClassify() {
+  const file = document.getElementById('file-input').files[0];
+  if (!file) return;
+  const uEmail = (document.getElementById('user-email')||{}).value || '';
+  document.getElementById('replyToField').value = uEmail;
+  document.getElementById('p26-form').submit();
+}
+
+renderCards();
+window.addEventListener('load', function() { selectCase(0); });
+</script>
+<a href="/subscribe" id="aegis-sub-btn" aria-label="Subscribe for new AEGIS app alerts" style="position:fixed;right:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;padding:11px 16px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);line-height:1"><span style="font-size:15px">📬</span> Get new-app alerts</a>
+<script>
+// Embedded-mode: when this app is loaded inside an iframe (e.g. the seal-team-injuries.html
+// "pocket"), hide the floating subscribe button so it doesn't duplicate the host page's own.
+(function(){
+  try {
+    if (window !== window.top) {
+      var btn = document.getElementById('aegis-sub-btn');
+      if (btn) btn.style.display = 'none';
+    }
+  } catch (e) {
+    // Cross-origin access to window.top can throw in some embed contexts -- if we can't tell,
+    // leave the button visible rather than break anything.
+  }
+})();
+</script>
+</body>
+</html>

@@ -116,6 +116,25 @@
 .st-live-status { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
 .st-live-status.busy { color: #8a7030; }
 
+/* -- App pocket: every AEGIS project ships as its own real, self-contained app,
+   never a flattened-down widget. This is the window chrome around the embedded
+   AEGIS NeuroSentinel console (apps/aegis-p26-neurosentinel.html). -- */
+.st-pocket { margin-top: 26px; border-radius: 10px; overflow: hidden; border: 1px solid #21262d; box-shadow: 0 18px 40px rgba(0,0,0,0.28); background: #0d1117; }
+.st-pocket-bar { height: 42px; background: linear-gradient(135deg,#0d1a35,#0f2a2a); border-bottom: 1px solid #21262d; display: flex; align-items: center; gap: 10px; padding: 0 16px; }
+.st-pocket-dots { display: flex; gap: 6px; }
+.st-pocket-dots span { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.st-pocket-dots span:nth-child(1) { background: #C0392B; }
+.st-pocket-dots span:nth-child(2) { background: #CA8A04; }
+.st-pocket-dots span:nth-child(3) { background: #16A34A; }
+.st-pocket-title { font-size: 12.5px; font-weight: 700; color: #8b949e; letter-spacing: 0.02em; margin-left: 4px; }
+.st-pocket-title b { color: #3ba8a0; }
+.st-pocket-badge { margin-left: auto; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #8b949e; background: #1c2128; border: 1px solid #30363d; border-radius: 4px; padding: 3px 8px; }
+.st-pocket-frame-wrap { position: relative; }
+.st-pocket iframe { display: block; width: 100%; height: 720px; border: 0; background: #0d1117; }
+.st-pocket-caption { padding: 12px 18px; font-size: 12.5px; color: var(--text-muted); background: var(--surface-2); border-top: 1px solid var(--hairline); line-height: 1.5; }
+@media (max-width: 640px) { .st-pocket iframe { height: 620px; } }
+
+
 .st-submit { margin-top: 18px; border-top: 1px dashed var(--hairline); padding-top: 18px; }
 .st-submit-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
 .st-submit p { font-size: 13.5px; color: var(--text-secondary); margin: 0 0 14px; line-height: 1.55; }
@@ -269,8 +288,20 @@
         <div class="honesty">Research-stage. Not an approved diagnostic device. Human-in-command, always.</div>
       </div>
 
-      <div class="st-live" id="p26-live-app">
-        <div class="st-live-eyebrow"><span class="dot"></span>Not a screenshot — live, in your browser</div>
+      <div class="st-pocket" id="p26-live-app">
+        <div class="st-pocket-bar">
+          <div class="st-pocket-dots"><span></span><span></span><span></span></div>
+          <div class="st-pocket-title">AEGIS <b>NeuroSentinel</b> — Project 26A Console</div>
+          <div class="st-pocket-badge">Interactive demo</div>
+        </div>
+        <div class="st-pocket-frame-wrap">
+          <iframe src="/apps/aegis-p26-neurosentinel.html" title="AEGIS NeuroSentinel — Project 26A interactive console" loading="lazy"></iframe>
+        </div>
+        <div class="st-pocket-caption">This is the same AEGIS console the clinical team uses internally, running right here in the page — pick a case on the left, see the governance-zone result on the right. Cases shown are representative demo cases; engine identities, internal weighting, and exact decision thresholds are protected AEGIS research IP and are not disclosed.</div>
+      </div>
+
+      <div class="st-live" id="p26-live-onnx">
+        <div class="st-live-eyebrow"><span class="dot"></span>Also try: the fully live, on-device version — real CT cases, real models, right now</div>
         <p>Pick one of these seven real, de-identified CT cases from our own validation set. Your browser will run the actual trained AEGIS ensemble on it — right now, on your device — and show you what it outputs. Nothing is uploaded anywhere; the computation happens entirely client-side.</p>
         <div class="st-live-thumbs" id="p26ThumbRow"></div>
         <div class="st-live-result" id="p26Result">
