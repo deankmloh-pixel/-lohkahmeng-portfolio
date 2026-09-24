@@ -62,6 +62,9 @@
 - [P18 base station](https://aegishumanai.com/apps/p18-base-station.html)
 - [P19 Sentinel](https://aegishumanai.com/apps/aegis-p19-sentinel.html)
 
+## Editorial
+- [The War Comes Home With Them — SEAL Team's two real injuries](https://aegishumanai.com/seal-team-injuries.html) — honest bridge from the Netflix show's TBI and phantom-limb storylines to AEGIS Project 26 and Project 27, including each project's real, current research stage.
+
 ## Notes for agents
 - All apps run entirely client-side; there is no backend REST API. Models are embedded and reproducible.
 - Content is illustrative research for augmenting human experts - not a certified medical device.
