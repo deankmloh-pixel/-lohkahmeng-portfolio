@@ -285,40 +285,10 @@
 
       <a href="apps/aegis-p26-neurosentinel.html" class="p26-cta" id="p26-live-app" target="_blank" rel="noopener">&#129504; Open the NeuroSentinel Demo Console &rarr;</a>
 
-
-      <div class="st-submit">
+      <div class="st-submit" id="p26-submit">
         <div class="st-submit-eyebrow">Have a real head CT study?</div>
-        <p>The demo above runs on our own validation cases. If you have your own head CT and want the AEGIS team to actually look at it, send the whole DICOM study as a single .zip file (not a single image or a screenshot) &mdash; export the full study folder from your PACS/viewer and zip it before uploading. This is not automated — it goes to a real person.</p>
-        <div class="indemnity">
-          <strong>Ground rules for CT submission.</strong><br>
-          1. <strong>Not a medical device and not a diagnosis.</strong> AEGIS NeuroSentinel is a research-stage tool. Nothing it outputs is medical advice, a diagnosis, or a substitute for a qualified radiologist or clinician. It does not diagnose, treat, cure, or prevent any condition.<br>
-          2. <strong>De-identified data only, as a DICOM study .zip.</strong> Remove all patient-identifying information (name, MRN, date of birth, institution) before submitting. Submit the full DICOM study (all slices, zipped) rather than a single exported image or screenshot, and only your own study or one you have the right and consent to share.<br>
-          3. <strong>Liability release.</strong> By submitting, you agree to indemnify and hold harmless AEGIS, Dr Loh Kah Meng, and associated parties from any claims arising from use of or reliance on AEGIS outputs.<br>
-          4. <strong>Not for emergencies.</strong> This is not an emergency service. If you have symptoms of concern, seek immediate medical care &mdash; do not wait for a response here.<br>
-          5. <strong>PDPA compliance.</strong> All data handled under strict PDPA and applicable governance frameworks.
-        </div>
-        <form id="p26SubmitForm" action="https://formsubmit.co/61e85a09f4cd056788bd23d6cf953b67" method="POST" enctype="multipart/form-data">
-          <input type="hidden" name="_subject" value="AEGIS NeuroTriage (P26) CT Submission -- Seal Team page">
-          <input type="hidden" name="_cc" value="dean.kmloh@gmail.com">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_next" value="https://aegishumanai.com/seal-team-injuries.html?submitted=1">
-          <input type="hidden" name="_replyto" id="p26ReplyTo" value="">
-          <div class="st-submit-row">
-            <input type="text" id="p26Name" name="name" placeholder="Your name" autocomplete="name">
-            <input type="email" id="p26Email" name="email" placeholder="Your email (to receive the report)" autocomplete="email">
-          </div>
-          <div class="st-submit-row" style="margin-top:10px;">
-            <input type="file" id="p26File" name="ct_image" accept="image/jpeg,image/png,application/pdf,application/zip,application/x-zip-compressed,.zip" style="display:none" onchange="p26HandleFile(event)">
-            <button type="button" class="st-submit-filebtn" onclick="document.getElementById('p26File').click()">Choose CT image, PDF, or DICOM study (.zip)</button>
-            <span class="st-submit-filename" id="p26FileName"></span>
-            <button type="button" id="p26SubmitBtn" class="st-submit-send" onclick="p26DoSubmit()">Send for AEGIS review &rarr;</button>
-          </div>
-        </form>
-        <div class="st-submit-note">This goes to a real person, not an automated system. Dean personally reviews every submission, runs it through the full AEGIS desktop application himself, and emails you back a PDF result &mdash; typically within 1&ndash;2 business days. Research-stage software only; not a diagnosis, and it doesn't replace your own clinician.</div>
-        <div class="st-submit-confirm" id="p26SubmitConfirm">
-          <b>Submission received.</b> Thank you &mdash; your scan has been forwarded to the AEGIS team. Your report will be sent to the email you provided.
-        </div>
+        <p>The demo above runs on our own validation cases. If you have your own head CT and want the AEGIS team to actually look at it, open the console and use the "Submit a real DICOM study" button inside it &mdash; send the whole study as a single .zip file (not a single image or a screenshot). This is not automated — it goes to a real person.</p>
+        <a href="apps/aegis-p26-neurosentinel.html" class="p26-cta" target="_blank" rel="noopener" style="margin-top:0;">&#129504; Open the NeuroSentinel Demo Console &rarr;</a>
       </div>
     </div>
   </div>
@@ -705,30 +675,6 @@ let CURRENT_SUBJECT = 'S112';
       updateSubjectNote();
     })();
 
-    function p26HandleFile(e) {
-      const file = e.target.files[0];
-      document.getElementById('p26FileName').textContent = file ? file.name : '';
-      document.getElementById('p26SubmitBtn').style.display = file ? 'inline-block' : 'none';
-    }
-    function p26DoSubmit() {
-      const file = document.getElementById('p26File').files[0];
-      if (!file) return;
-      const email = (document.getElementById('p26Email') || {}).value || '';
-      document.getElementById('p26ReplyTo').value = email;
-      document.getElementById('p26SubmitForm').submit();
-    }
-    (function () {
-      if (new URLSearchParams(window.location.search).get('submitted') === '1') {
-        window.addEventListener('DOMContentLoaded', function () {
-          const box = document.getElementById('p26SubmitConfirm');
-          if (box) {
-            box.classList.add('show');
-            box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-          history.replaceState(null, '', location.pathname);
-        });
-      }
-    })();
 
     </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E5ZR5LF113"></script>
