@@ -148,6 +148,13 @@
 .st-submit-confirm.show { display: block; }
 .st-submit-confirm b { color: var(--text-primary); }
 
+/* -- Indemnity: same box used on every other AEGIS clinical-submission page
+   (P15/P20/P22/P23/P25) -- required ground rules wherever a visitor can
+   submit real scan data. -- */
+.indemnity { background: #fff7ec; border: 1px solid #e7cfa0; border-left: 5px solid #c9a24b; border-radius: 14px; padding: 18px 20px; font-size: 13px; line-height: 1.65; color: #4a3d24; margin: 14px 0; }
+.indemnity strong { color: #7a5b17; }
+
+
 .st-limbwatch { margin-top: 22px; border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: 22px; background: linear-gradient(180deg, var(--surface-2), transparent); }
 .st-limbwatch-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #8a7030; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
 .st-limbwatch-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: #ab8a3f; box-shadow: 0 0 0 0 rgba(171,138,63,0.5); animation: st-pulse 1.8s infinite; }
@@ -293,6 +300,14 @@
       <div class="st-submit">
         <div class="st-submit-eyebrow">Have a real CT scan?</div>
         <p>The demo above runs on our own validation cases. If you have your own head CT and want the AEGIS team to actually look at it, send it here. This is not automated — it goes to a real person.</p>
+        <div class="indemnity">
+          <strong>Ground rules for CT submission.</strong><br>
+          1. <strong>Not a medical device and not a diagnosis.</strong> AEGIS NeuroSentinel is a research-stage tool. Nothing it outputs is medical advice, a diagnosis, or a substitute for a qualified radiologist or clinician. It does not diagnose, treat, cure, or prevent any condition.<br>
+          2. <strong>De-identified data only.</strong> Remove all patient-identifying information (name, MRN, date of birth, institution) before submitting. Only submit your own scan, or a scan you have the right and consent to share.<br>
+          3. <strong>Liability release.</strong> By submitting, you agree to indemnify and hold harmless AEGIS, Dr Loh Kah Meng, and associated parties from any claims arising from use of or reliance on AEGIS outputs.<br>
+          4. <strong>Not for emergencies.</strong> This is not an emergency service. If you have symptoms of concern, seek immediate medical care &mdash; do not wait for a response here.<br>
+          5. <strong>PDPA compliance.</strong> All data handled under strict PDPA and applicable governance frameworks.
+        </div>
         <form id="p26SubmitForm" action="https://formsubmit.co/61e85a09f4cd056788bd23d6cf953b67" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="_subject" value="AEGIS NeuroTriage (P26) CT Submission -- Seal Team page">
           <input type="hidden" name="_cc" value="dean.kmloh@gmail.com">
