@@ -116,14 +116,12 @@
 .st-live-status { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
 .st-live-status.busy { color: #8a7030; }
 
-/* -- App pocket launcher: every AEGIS project links out to its own real app page,
-   same convention as the other project pages (P21/P24/P25 .cta-primary pattern). -- */
-.p26-app-cta { margin-top: 26px; display: flex; align-items: center; gap: 16px; border: 1px solid var(--hairline); border-radius: var(--radius-sm); padding: 18px 20px; background: linear-gradient(180deg, var(--surface-2), transparent); text-decoration: none; transition: border-color .15s, transform .15s; }
-.p26-app-cta:hover { border-color: #ab8a3f; transform: translateY(-1px); }
-.p26-app-icon { font-size: 1.9rem; flex-shrink: 0; }
-.p26-app-text { display: flex; flex-direction: column; gap: 4px; }
-.p26-app-text strong { font-size: 15px; color: var(--text-primary); font-weight: 700; }
-.p26-app-text span { font-size: 13.5px; color: var(--text-muted); line-height: 1.5; }
+/* -- App pocket launcher: identical .p26-cta pill button used on project-26-tbi.html,
+   so this page's pocket is the same as every other AEGIS project pocket. -- */
+.p26-cta { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #2e8b84, #3ba8a0);
+  color: #fff; font-size: 14px; font-weight: 700; padding: 12px 24px; border-radius: 8px; text-decoration: none;
+  transition: opacity 0.15s, transform 0.15s; letter-spacing: 0.01em; margin-top: 26px; }
+.p26-cta:hover { opacity: 0.92; transform: translateY(-1px); color: #fff; }
 
 
 
@@ -285,13 +283,7 @@
         <div class="honesty">Research-stage. Not an approved diagnostic device. Human-in-command, always.</div>
       </div>
 
-      <a href="apps/aegis-p26-neurosentinel.html" class="p26-app-cta" id="p26-live-app" target="_blank" rel="noopener">
-        <span class="p26-app-icon">&#129504;</span>
-        <span class="p26-app-text">
-          <strong>Open the NeuroSentinel Demo Console</strong>
-          <span>The same AEGIS console the clinical team uses internally — pick a case, see the governance-zone result. &rarr;</span>
-        </span>
-      </a>
+      <a href="apps/aegis-p26-neurosentinel.html" class="p26-cta" id="p26-live-app" target="_blank" rel="noopener">&#129504; Open the NeuroSentinel Demo Console &rarr;</a>
 
 
       <div class="st-submit">
