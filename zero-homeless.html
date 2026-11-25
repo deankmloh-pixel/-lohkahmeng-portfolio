@@ -46,6 +46,11 @@
   .step{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;position:relative}
   .step b{display:block;font-size:18px;margin:6px 0}
   .step .n{width:40px;height:40px;border-radius:50%;background:var(--gold);color:#15110a;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .tform{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 0;max-width:820px}
+  .tform input{flex:1 1 220px;min-width:0;padding:13px 18px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:16px}
+  .tform input:focus{outline:2px solid var(--gold);outline-offset:1px}
+  .tform button{border:0;cursor:pointer}
+  .tform button[disabled]{opacity:.6;cursor:default}
   footer{margin:60px 0 0;padding:24px 0 90px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
   footer a{margin-right:16px}
   @media(max-width:760px){h1{font-size:32px}.lead{font-size:18px}.shots,.cols,.steps{grid-template-columns:1fr}}
@@ -61,10 +66,13 @@
   <h1><span>AEGIS™</span> Zero Homeless</h1>
   <p class="lead"><strong>For people who want to end homelessness, not just talk about it.</strong> Ending homelessness takes the right policies, in the right place, at the right cost. AEGIS™ Zero Homeless lets you test them first: pick any US state or one of 187 countries, choose the policy mix, and see how an index of the conditions linked to homelessness moves year by year, from recorded data up to 2024 and an outlook to 2040.</p>
   <p class="lead" style="font-size:18px;color:var(--gold);margin-top:-4px">Think it through. Test it. Then lead.</p>
-  <div class="cta">
-    <a class="btn gold" href="mailto:aegisloh@aegishumanai.com?subject=Tester&amp;body=I%20would%20like%20to%20test%20AEGIS%20Zero%20Homeless.%20My%20Gmail%20address%20for%20Google%20Play%20is%3A%20">Become a tester</a>
-    <a class="btn line" href="/subscribe">Tell me when it launches</a>
-  </div>
+  <form class="tform" id="testerForm" novalidate>
+    <input type="text" id="tName" placeholder="Your name" autocomplete="name" aria-label="Your name" maxlength="120">
+    <input type="email" id="tEmail" placeholder="Your Gmail address (for Google Play)" autocomplete="email" aria-label="Your Gmail address" required maxlength="200">
+    <button class="btn gold" type="submit">Become a tester</button>
+  </form>
+  <p class="note" id="testerMsg" aria-live="polite" style="margin:6px 0 0"></p>
+  <div class="cta" style="margin-top:12px"><a class="btn line" href="/subscribe">Tell me when it launches</a></div>
   <p class="note">Before it goes live on Google Play we are running a 14-day closed test and are looking for 12 or more testers with an Android phone or tablet.</p>
 
   <h2>Built for leaders who decide</h2>
@@ -110,7 +118,7 @@
 
   <h2>Join the closed test</h2>
   <div class="steps">
-    <div class="step"><div class="n">1</div><b>Email us your Gmail address</b>to <a href="mailto:aegisloh@aegishumanai.com?subject=Tester">aegisloh@aegishumanai.com</a> with the subject "Tester".</div>
+    <div class="step"><div class="n">1</div><b>Leave your Gmail address</b>Use the <a href="#testerForm">sign-up form</a> at the top of this page, or email <a href="mailto:aegisloh@aegishumanai.com?subject=Tester">aegisloh@aegishumanai.com</a> with the subject "Tester".</div>
     <div class="step"><div class="n">2</div><b>Get your invitation</b>We add you to the closed test and send you the Google Play link with a free access code.</div>
     <div class="step"><div class="n">3</div><b>Keep it for 14 days</b>Use it, then tell us what works and what doesn't.</div>
   </div>
@@ -122,6 +130,27 @@
   </footer>
 </div>
 
+<script>
+(function(){
+  var f=document.getElementById('testerForm'),m=document.getElementById('testerMsg');
+  function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  var fallback='Please email <a href="mailto:aegisloh@aegishumanai.com?subject=Tester">aegisloh@aegishumanai.com</a> with the subject "Tester" and your Gmail address.';
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var em=document.getElementById('tEmail').value.trim(),nm=document.getElementById('tName').value.trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){m.textContent='Please enter a valid Gmail address.';return;}
+    var b=f.querySelector('button');b.disabled=true;b.textContent='Sending\u2026';m.textContent='';
+    fetch('/api/tester-signup',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({name:nm,email:em})})
+      .then(function(r){return r.json();})
+      .then(function(j){
+        if(!j||!j.ok) throw 0;
+        f.style.display='none';
+        m.innerHTML='<strong style="color:var(--gold)">Thank you, you are on the tester list.</strong> A confirmation is on its way to '+esc(em)+'. We will email you the Google Play link when the closed test opens.';
+      })
+      .catch(function(){b.disabled=false;b.textContent='Become a tester';m.innerHTML='Sorry, that did not go through. '+fallback;});
+  });
+})();
+</script>
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"7d3dc3aee49c49ea96443ed061a43e02"}'></script>
 <a href="/subscribe" id="aegis-sub-btn" aria-label="Subscribe for new AEGIS app alerts" style="position:fixed;right:18px;bottom:18px;z-index:99999;display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#c9a24b,#b28c33);color:#0f1720;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;padding:11px 16px;border-radius:999px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);line-height:1"><span style="font-size:15px">&#128235;</span> Get new-app alerts</a>
 </body>
