@@ -218,6 +218,7 @@
 <script>
 (function(){
   var items=[
+    {eb:"New · Coming soon to Google Play", t:"AEGIS™ Zero Homeless — Homelessness Policy Simulator", b:"For people who want to end homelessness, not just talk about it. Pick any US state or one of 187 countries, choose the policy mix within a budget, and see where it leads, year by year, to 2040. Built for leaders who decide. Testers wanted for the closed test.", h:"zero-homeless", c:"#C9A227", bg:"assets/zero-homeless/feature.jpg"},
     {eb:"Healthcare · Core project", t:"Nurse Augmenting System for Biomedical Intelligence", b:"Eight independently trained models converged on the same five predictors of 30-day heart-failure readmission. The point was a clinical score a nurse can actually use — not raw accuracy.", h:"#pocket-biomed", c:"#2E8B84", bg:"assets/spot/bg-nurse.jpg"},
     {eb:"Healthcare · Core project", t:"Medication Adherence & Healthcare Claims Analysis", b:"A star-schema claims model and a five-model adherence benchmark on 24,084 diabetes and hypertension patients — surfacing that non-adherent patients cost 2.5× more, with an honest report of the one model that failed.", h:"#pocket-biomed", c:"#2E8B84", bg:"assets/spot/bg-adherence.jpg"},
     {eb:"New series · Now live", t:"Diagnostic Augmenting Systems (DRAS)", b:"Three-class diabetes risk from a 2-hour OGTT, grounded in glucose-insulin kinetics, with a confidence score and hospital-resource planning across 24 countries. The first release of the DAS series.", h:"diagnostics/", c:"#C9A227", bg:"assets/spot/bg-dras.jpg"},
@@ -242,7 +243,7 @@
   ];
   var N=items.length;
   var day=Math.floor(Date.now()/86400000);
-  var cur=((day%N)+N)%N;   // start on today's daily pick, then auto-advance
+  var cur=0;   // Zero Homeless launch (25 Nov 2026): always open on slide 1. To restore the daily pick: var cur=((day%N)+N)%N;
   var scrim="linear-gradient(90deg,#fff 0%,rgba(255,255,255,.93) 42%,rgba(255,255,255,.5) 72%,rgba(255,255,255,.2) 100%)";
   var dotsWrap=document.getElementById('spotDots');
   items.forEach(function(_,i){ var b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label','Feature '+(i+1)); b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();cur=i;render(cur);resetProg();}); dotsWrap.appendChild(b); });
